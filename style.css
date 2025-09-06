@@ -1,4 +1,3 @@
-/* आधुनिक फ़ॉन्ट्स के लिए */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 * {
@@ -13,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #6b48ff, #00ddeb); /* रंग-बिरंगा ढाल पृष्ठभूमि */
+    background: linear-gradient(135deg, #6b48ff, #00ddeb);
 }
 
 .quiz-container {
@@ -74,7 +73,7 @@ body {
 }
 
 .option {
-    background: linear-gradient(135deg, #ff6f61, #ff8a65); /* रंग-बिरंगे बटन */
+    background: linear-gradient(135deg, #ff6f61, #ff8a65);
     color: #fff;
     padding: 15px;
     border-radius: 10px;
@@ -91,12 +90,12 @@ body {
 }
 
 .option.correct {
-    background: linear-gradient(135deg, #28a745, #34c759); /* सही जवाब के लिए हरा */
+    background: linear-gradient(135deg, #28a745, #34c759);
     animation: pulse 0.5s;
 }
 
 .option.wrong {
-    background: linear-gradient(135deg, #dc3545, #ff6b6b); /* गलत जवाब के लिए लाल */
+    background: linear-gradient(135deg, #dc3545, #ff6b6b);
     animation: shake 0.3s;
 }
 

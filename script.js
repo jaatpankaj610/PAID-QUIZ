@@ -12,12 +12,20 @@ const quizContainer = document.querySelector('.quiz-container');
 
 // सवालों को questions.json से लाएँ
 fetch('questions.json')
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('questions.json लोड नहीं हुआ');
+        }
+        return response.json();
+    })
     .then(data => {
         quizData = data;
         showQuestion();
     })
-    .catch(error => console.error('सवाल लोड करने में त्रुटि:', error));
+    .catch(error => {
+        console.error('सवाल लोड करने में त्रुटि:', error);
+        questionElement.innerText = 'सवाल लोड करने में त्रुटि हुई।';
+    });
 
 // वर्तमान सवाल और विकल्प दिखाएँ
 function showQuestion() {
@@ -51,7 +59,7 @@ function startTimer() {
         timerElement.innerText = timeLeft;
         if (timeLeft <= 0) {
             clearInterval(timer);
-            selectAnswer(null); // समय खत्म होने पर सही जवाब दिखाएँ
+            selectAnswer(null);
         }
     }, 1000);
 }
@@ -68,7 +76,7 @@ function selectAnswer(selectedOption) {
         } else if (button.innerText === selectedOption && selectedOption !== correctAnswer) {
             button.classList.add('wrong');
         }
-        button.style.pointerEvents = 'none'; // दोबारा क्लिक न हो
+        button.style.pointerEvents = 'none';
     });
 
     if (selectedOption === correctAnswer) {
@@ -84,17 +92,17 @@ function selectAnswer(selectedOption) {
 
 // अंतिम परिणाम दिखाएँ
 function showResult() {
-    quizContainer.innerHTML = 
+    quizContainer.innerHTML = `
         <div class="result-container">
             <h2>क्विज़ पूरा हुआ!</h2>
             <p>आपका स्कोर: <span id="score">${score}</span>/${quizData.length}</p>
             <button class="restart-btn">फिर से शुरू करें</button>
         </div>
-    ;
+    `;
     document.querySelector('.restart-btn').addEventListener('click', () => {
         currentQuestion = 0;
         score = 0;
-        quizContainer.innerHTML = 
+        quizContainer.innerHTML = `
             <header class="quiz-header">
                 <h2>क्विज़ ऐप</h2>
                 <div class="quiz-timer">
@@ -111,7 +119,7 @@ function showResult() {
                 <p>आपका स्कोर: <span id="score">0</span></p>
                 <button class="restart-btn">फिर से शुरू करें</button>
             </div>
-        ;
+        `;
         showQuestion();
     });
 }
