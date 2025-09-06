@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>Paid Quiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="paymentScreen" class="screen">
+    <h2>Quiz Access के लिए Payment करें</h2>
+    <img src="qr.png" alt="Amazon Pay QR" class="qr">
+    <input type="text" id="name" placeholder="नाम दर्ज करें">
+    <input type="text" id="mobile" placeholder="मोबाइल नंबर दर्ज करें">
+    <input type="email" id="email" placeholder="Email दर्ज करें">
+    <input type="file" id="screenshot" accept="image/*">
+    <button onclick="paymentDone()">✅ Submit</button>
+  </div>
+
+  <div id="quizScreen" class="screen hidden">
+    <h2>Quiz शुरू करें</h2>
+    <div id="quiz"></div>
+    <button onclick="nextQuestion()">अगला सवाल</button>
+  </div>
+
+  <div id="resultScreen" class="screen hidden">
+    <h2>आपका Score: <span id="score"></span></h2>
+    <button onclick="restartQuiz()">🔁 फिर से खेलें</button>
+  </div>
+
+  <script>
+    let questions = [];
+    let current = 0, score = 0;
+
+    async function loadQuestions() {
+      const res = await fetch("questions.json");
+      questions = await res.json();
+      showQuestion();
+    }
+
+    function checkAccess() {
+      let expiry = localStorage.getItem("paid_access");
+      if (expiry && new Date(expiry) > new Date()) {
+        document.getElementById("paymentScreen").classList.add("hidden");
+        document.getElementById("quizScreen").classList.remove("hidden");
+        loadQuestions();
+      }
+    }
+
+    function paymentDone() {
+      let expiry = new Date();
+      expiry.setDate(expiry.getDate() + 30);
+      localStorage.setItem("paid_access", expiry);
+      checkAccess();
+    }
+
+    function showQuestion() {
+      if (current < questions.length) {
+        let q = questions[current];
+        let html = <h3>${q.question}</h3>;
+        q.options.forEach(opt => {
+          html += <button onclick="answer('${opt}')">${opt}</button>;
+        });
+        document.getElementById("quiz").innerHTML = html;
+      } else {
+        document.getElementById("quizScreen").classList.add("hidden");
+        document.getElementById("resultScreen").classList.remove("hidden");
+        document.getElementById("score").innerText = score + "/" + questions.length;
+      }
+    }
+
+    function answer(opt) {
+      if (opt === questions[current].answer) score++;
+      current++;
+      showQuestion();
+    }
+
+    function nextQuestion() {
+      showQuestion();
+    }
+
+    function restartQuiz() {
+      current = 0;
+      score = 0;
+      document.getElementById("resultScreen").classList.add("hidden");
+      document.getElementById("quizScreen").classList.remove("hidden");
+      showQuestion();
+    }
+
+    checkAccess();
+  </script>
+</body>
+</html>
