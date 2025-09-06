@@ -1,37 +1,134 @@
+/* आधुनिक फ़ॉन्ट्स के लिए */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: white;
-  min-height: 100vh;
-  padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #6b48ff, #00ddeb); /* रंग-बिरंगा ढाल पृष्ठभूमि */
 }
 
-.screen {
-  display: block;
+.quiz-container {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-in;
 }
 
-.hidden {
-  display: none;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.qr {
-  width: 200px;
-  margin: 10px;
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 2px solid #eee;
 }
 
-input, button {
-  display: block;
-  margin: 10px auto;
-  padding: 10px;
-  width: 80%;
-  max-width: 300px;
-  border-radius: 8px;
-  border: none;
+.quiz-header h2 {
+    font-size: 1.8rem;
+    color: #333;
 }
 
-button {
-  background: #ffcc00;
-  font-weight: bold;
-  cursor: pointer;
+.quiz-timer {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    color: #ff4b5c;
+}
+
+.quiz-timer i {
+    margin-right: 5px;
+}
+
+.question-container {
+    margin: 20px 0;
+}
+
+#question {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.options-container {
+    display: grid;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.option {
+    background: linear-gradient(135deg, #ff6f61, #ff8a65); /* रंग-बिरंगे बटन */
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.option.correct {
+    background: linear-gradient(135deg, #28a745, #34c759); /* सही जवाब के लिए हरा */
+    animation: pulse 0.5s;
+}
+
+.option.wrong {
+    background: linear-gradient(135deg, #dc3545, #ff6b6b); /* गलत जवाब के लिए लाल */
+    animation: shake 0.3s;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+.result-container {
+    margin-top: 20px;
+}
+
+.restart-btn {
+    background: linear-gradient(135deg, #007bff, #00ddeb);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.restart-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #00b7c2);
 }
