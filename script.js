@@ -10,8 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreEl = document.getElementById('score');
     const progressBar = document.getElementById('progress');
     const daysLeftEl = document.getElementById('days-left');
-    const paymentOverlay = document.getElementById('payment-overlay');
-    const payNowBtn = document.getElementById('pay-now-btn');
+    const paymentBtn = document.getElementById('payment-btn');
+    const paymentModal = document.getElementById('payment-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const confirmPaymentBtn = document.getElementById('confirm-payment');
     
     let currentQuestion = 0;
     let score = 0;
@@ -38,26 +40,76 @@ document.addEventListener('DOMContentLoaded', () => {
                 // पेमेंट एक्सपायर्ड हो गया
                 localStorage.removeItem('paymentStatus');
                 localStorage.removeItem('paymentExpiry');
-                showPaymentOverlay();
+                showPaymentSection();
             }
         } else {
             // पेमेंट नहीं किया गया
-            showPaymentOverlay();
+            showPaymentSection();
         }
     }
     
-    // पेमेंट ओवरले दिखाने का फंक्शन
-    function showPaymentOverlay() {
-        paymentOverlay.classList.add('active');
-        
-        // पेमेंट बटन क्लिक इवेंट
-        payNowBtn.addEventListener('click', () => {
-            window.location.href = 'payment.html';
-        });
+    // पेमेंट सेक्शन दिखाने का फंक्शन
+    function showPaymentSection() {
+        paymentBtn.style.display = 'flex';
+        document.querySelector('.payment-note').style.display = 'block';
+        questionText.textContent = "प्रीमियम क्विज़ एक्सेस के लिए पेमेंट करें";
+        optionsContainer.innerHTML = '';
     }
+    
+    // पेमेंट बटन क्लिक इवेंट
+    paymentBtn.addEventListener('click', () => {
+        paymentModal.style.display = 'block';
+    });
+    
+    // मोडल बंद करने का इवेंट
+    closeModal.addEventListener('click', () => {
+        paymentModal.style.display = 'none';
+    });
+    
+    // मोडल के बाहर क्लिक करने पर बंद करें
+    window.addEventListener('click', (event) => {
+        if (event.target === paymentModal) {
+            paymentModal.style.display = 'none';
+        }
+    });
+    
+    // पेमेंट विधि चयन
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    paymentOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            paymentOptions.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+        });
+    });
+    
+    // कन्फर्म पेमेंट बटन
+    confirmPaymentBtn.addEventListener('click', () => {
+        // लोडिंग स्टेटस दिखाएं
+        confirmPaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> प्रोसेसिंग...';
+        confirmPaymentBtn.disabled = true;
+        
+        // सिमुलेट पेमेंट प्रोसेसिंग
+        setTimeout(() => {
+            // पेमेंट सफलता स्टोर करें
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 30); // 30 दिन बाद एक्सपायरी
+            localStorage.setItem('paymentStatus', 'paid');
+            localStorage.setItem('paymentExpiry', expiryDate.toISOString());
+            
+            // पेमेंट मोडल बंद करें
+            paymentModal.style.display = 'none';
+            
+            // यूजर को रीडायरेक्ट करें
+            window.location.href = 'welcome.html';
+        }, 2000);
+    });
     
     // क्विज़ लोड करने का फंक्शन
     function loadQuiz() {
+        // पेमेंट बटन छुपाएं
+        paymentBtn.style.display = 'none';
+        document.querySelector('.payment-note').style.display = 'none';
+        
         // क्वेश्चन लोड करें
         fetch('questions.json')
             .then(response => response.json())
@@ -182,11 +234,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryCards = document.querySelectorAll('.category-card');
     categoryCards.forEach(card => {
         card.addEventListener('click', () => {
+            // अगर पेमेंट नहीं किया गया है, तो पेमेंट मोडल दिखाएं
+            if (localStorage.getItem('paymentStatus') !== 'paid') {
+                paymentModal.style.display = 'block';
+                return;
+            }
+            
             categoryCards.forEach(c => c.classList.remove('active'));
             card.classList.add('active');
             
             // कैटेगरी का नाम प्राप्त करें
-            currentCategory = card.querySelector('span').textContent;
+            currentCategory = card.dataset.category;
             
             // क्विज़ रीसेट करें
             currentQuestion = 0;
