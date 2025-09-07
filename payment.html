@@ -9,13 +9,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
         :root {
-            --primary: #6a11cb;
-            --secondary: #2575fc;
-            --success: #4caf50;
-            --danger: #f44336;
-            --warning: #ff9800;
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
             --light: #f8f9fa;
-            --dark: #343a40;
+            --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
             --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -37,7 +37,10 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
         
         .container {
@@ -45,11 +48,11 @@
             max-width: 600px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.18);
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.8s ease;
         }
         
         .header {
@@ -58,6 +61,23 @@
             text-align: center;
             color: white;
             position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 8s infinite linear;
+        }
+        
+        @keyframes pulse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .logo {
@@ -69,7 +89,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
         }
         
         .logo i {
@@ -82,11 +104,15 @@
             font-weight: 700;
             margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
         }
         
         .header p {
             font-size: 16px;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
         
         .content {
@@ -99,6 +125,7 @@
             padding: 25px;
             margin-bottom: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .payment-info h2 {
@@ -171,7 +198,7 @@
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
         }
         
         .qr-section {
@@ -181,6 +208,7 @@
             margin: 25px 0;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .qr-section h3 {
@@ -201,18 +229,32 @@
             font-weight: 600;
             color: #666;
             border: 2px dashed #ddd;
-            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         
         .qr-code i {
             font-size: 50px;
             color: var(--primary);
-            margin-bottom: 10px;
         }
         
-        .qr-code p {
-            font-size: 14px;
-            margin: 0;
+        .upi-id {
+            background: rgba(74, 0, 224, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 15px 0;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .payment-methods {
@@ -249,7 +291,7 @@
         
         .payment-option.selected {
             border-color: var(--primary);
-            background: rgba(106, 17, 203, 0.05);
+            background: rgba(74, 0, 224, 0.05);
         }
         
         .payment-option i {
@@ -287,6 +329,8 @@
             border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
         }
         
         .file-input-wrapper:hover {
@@ -300,6 +344,8 @@
             top: 0;
             opacity: 0;
             cursor: pointer;
+            width: 100%;
+            height: 100%;
         }
         
         .image-preview {
@@ -371,23 +417,23 @@
         }
         
         .status-message.success {
-            background: rgba(76, 175, 80, 0.1);
+            background: rgba(0, 184, 148, 0.1);
             color: var(--success);
-            border: 1px solid rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(0, 184, 148, 0.2);
             display: block;
         }
         
         .status-message.error {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(214, 48, 49, 0.1);
             color: var(--danger);
-            border: 1px solid rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(214, 48, 49, 0.2);
             display: block;
         }
         
         .status-message.pending {
-            background: rgba(255, 152, 0, 0.1);
+            background: rgba(253, 203, 110, 0.1);
             color: var(--warning);
-            border: 1px solid rgba(255, 152, 0, 0.2);
+            border: 1px solid rgba(253, 203, 110, 0.2);
             display: block;
         }
         
@@ -449,18 +495,22 @@
                 </div>
                 
                 <div class="qr-section">
-                    <h3>अमेज़न पे QR कोड स्कैन करें</h3>
+                    <h3>QR कोड स्कैन करें</h3>
                     <div class="qr-code">
-                        <i class="fas fa-qrcode"></i>
-                        <p>अपना QR कोड यहां डालें</p>
+                        <!-- यहां अपना अमेज़न पे QR कोड डालें -->
+                        <img src="https://i.imgur.com/example.jpg" alt="Amazon Pay QR Code">
                     </div>
-                    <p>या UPI ID: <strong>your-amazon-pay-id@upi</strong></p>
+                    <div class="upi-id">
+                        <i class="fas fa-copy"></i>
+                        <span id="upi-id-text">your-amazon-pay@upi</span>
+                    </div>
+                    <p>किसी भी UPI ऐप से स्कैन करें</p>
                 </div>
                 
                 <div class="payment-methods">
                     <h3>पेमेंट विधि चुनें</h3>
                     <div class="payment-options">
-                        <div class="payment-option" data-method="upi">
+                        <div class="payment-option selected" data-method="upi">
                             <i class="fas fa-mobile-alt"></i>
                             <span>UPI</span>
                         </div>
@@ -513,8 +563,20 @@
             <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक क्विज़ मास्टर प्रो तक पहुंच मिलेगी</p>
         </div>
     </div>
-
+    
     <script>
+        // UPI ID कॉपी करने का फंक्शन
+        document.querySelector('.upi-id').addEventListener('click', function() {
+            const upiId = document.getElementById('upi-id-text').textContent;
+            navigator.clipboard.writeText(upiId).then(function() {
+                const originalText = document.getElementById('upi-id-text').textContent;
+                document.getElementById('upi-id-text').textContent = 'कॉपी हो गया!';
+                setTimeout(function() {
+                    document.getElementById('upi-id-text').textContent = originalText;
+                }, 2000);
+            });
+        });
+        
         function previewImage(event) {
             const file = event.target.files[0];
             if (file) {
@@ -558,16 +620,23 @@
             setTimeout(function() {
                 // पेमेंट डेटा सेव करें
                 const paymentData = {
+                    id: Date.now(), // यूनीक ID
                     user_id: userId,
                     transaction_id: transactionId,
                     amount: amount,
                     payment_note: document.getElementById('payment_note').value,
                     submission_date: new Date().toISOString(),
-                    status: 'pending'
+                    status: 'pending',
+                    payment_method: document.querySelector('.payment-option.selected').dataset.method
                 };
                 
-                // लोकल स्टोरेज में सेव करें
-                localStorage.setItem('paymentData', JSON.stringify(paymentData));
+                // पेमेंट्स लिस्ट में जोड़ें
+                let payments = JSON.parse(localStorage.getItem('payments')) || [];
+                payments.push(paymentData);
+                localStorage.setItem('payments', JSON.stringify(payments));
+                
+                // एडमिन को SMS भेजें (सिमुलेशन)
+                sendAdminNotification();
                 
                 // सफलता संदेश दिखाएं
                 statusElement.textContent = 'आपका पेमेंट सबमिट किया गया है! वेरिफिकेशन के बाद आपको ईमेल/SMS द्वारा सूचित किया जाएगा।';
@@ -576,12 +645,40 @@
                 // फॉर्म हाइड करें
                 document.getElementById('payment-form').style.display = 'none';
                 
+                // यूजर को धन्यवाद SMS/ईमेल भेजें (सिमुलेशन)
+                sendUserThankYouMessage(userId);
+                
                 // 5 सेकंड बाद रीडायरेक्ट करें
                 setTimeout(function() {
+                    // यहां आप यूजर को क्विज़ पेज पर रीडायरेक्ट कर सकते हैं
                     alert('पेमेंट सफलतापूर्वक सबमिट किया गया! अब आप क्विज़ खेल सकते हैं।');
                     window.location.href = 'quiz.html';
                 }, 5000);
             }, 2000);
+        }
+        
+        // एडमिन को नोटिफिकेशन भेजने का फंक्शन (सिमुलेशन)
+        function sendAdminNotification() {
+            // वास्तविक एप्लिकेशन में, यह एक SMS API कॉल होगा
+            console.log('एडमिन को SMS: नया पेमेंट रिक्वेस्ट आया है।');
+            
+            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS के बजाय
+            const notification = document.createElement('div');
+            notification.className = 'status-message pending';
+            notification.textContent = 'एडमिन को SMS भेजा गया: नया पेमेंट रिक्वेस्ट आया है।';
+            document.querySelector('.content').appendChild(notification);
+        }
+        
+        // यूजर को धन्यवाद संदेश भेजने का फंक्शन (सिमुलेशन)
+        function sendUserThankYouMessage(userId) {
+            // वास्तविक एप्लिकेशन में, यह SMS या ईमेल API कॉल होगा
+            console.log(`${userId} को धन्यवाद संदेश भेजा गया।`);
+            
+            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS/ईमेल के बजाय
+            const notification = document.createElement('div');
+            notification.className = 'status-message success';
+            notification.textContent = `${userId} को धन्यवाद संदेश भेजा गया।`;
+            document.querySelector('.content').appendChild(notification);
         }
     </script>
 </body>
