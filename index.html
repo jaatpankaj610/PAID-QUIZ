@@ -4,8 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>क्विज़ मास्टर प्रो</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* सभी CSS यहाँ है */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-2: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -140,11 +154,31 @@
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .payment-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            z-index: -1;
         }
         
         .payment-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(245, 87, 108, 0.5);
+        }
+        
+        .payment-btn:hover:before {
+            transform: translateX(0);
         }
         
         .payment-modal {
@@ -154,343 +188,49 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
+            animation: fadeIn 0.3s ease;
         }
         
         .modal-content {
-            background: white;
-            margin: 10% auto;
-            padding: 30px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            margin: 5% auto;
+            padding: 0;
             border-radius: 20px;
             width: 90%;
             max-width: 500px;
             position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s ease;
         }
         
-        .close-modal {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 28px;
-            cursor: pointer;
-        }
-        
-        .confirm-payment-btn {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-        
-        .result-container {
+        .modal-header {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            padding: 25px;
             text-align: center;
-            padding: 20px;
-        }
-        
-        .score-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: #6a11cb;
-            margin: 15px 0;
-        }
-        
-        .restart-btn {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
             color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 10px;
+            position: relative;
         }
-    </style>
-</head>
-<body>
-    <div class="app-container">
-        <div class="quiz-header">
-            <h1>क्विज़ मास्टर प्रो</h1>
-        </div>
         
-        <div class="quiz-container">
-            <div id="question-text">कृपया एक कैटेगरी चुनें</div>
-            
-            <div class="options-section" id="options-container">
-                <!-- ऑप्शन जावास्क्रिप्ट से जेनरेट होंगे -->
-            </div>
-        </div>
+        .modal-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
         
-        <div class="quiz-categories">
-            <h3>क्विज़ कैटेगरी</h3>
-            <div class="category-grid">
-                <div class="category-card active" data-category="सामान्य ज्ञान">
-                    <span>सामान्य ज्ञान</span>
-                </div>
-                <div class="category-card" data-category="विज्ञान">
-                    <span>विज्ञान</span>
-                </div>
-                <div class="category-card" data-category="इतिहास">
-                    <span>इतिहास</span>
-                </div>
-                <div class="category-card" data-category="गणित">
-                    <span>गणित</span>
-                </div>
-                <div class="category-card" data-category="मनोरंजन">
-                    <span>मनोरंजन</span>
-                </div>
-                <div class="category-card" data-category="खेल">
-                    <span>खेल</span>
-                </div>
-            </div>
-        </div>
+        .modal-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
         
-        <div class="payment-section">
-            <button class="payment-btn" id="payment-btn">पेमेंट करें (₹49)</button>
-            <p style="margin-top: 10px; color: #666;">30 दिन की प्रीमियम एक्सेस</p>
-        </div>
-    </div>
-    
-    <!-- पेमेंट मोडल -->
-    <div class="payment-modal" id="payment-modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>प्रीमियम प्लान</h2>
-            <p>30 दिन की असीमित एक्सेस</p>
-            <div style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 20px; border-radius: 15px; margin: 20px 0; text-align: center;">
-                <div style="font-size: 32px; font-weight: bold;">₹49</div>
-                <div>30 दिन</div>
-            </div>
-            <ul style="list-style: none; padding: 0;">
-                <li style="margin-bottom: 10px;">✓ सभी क्विज़ कैटेगरी</li>
-                <li style="margin-bottom: 10px;">✓ असीमित क्विज़ प्रयास</li>
-                <li style="margin-bottom: 10px;">✓ विस्तृत प्रगति रिपोर्ट</li>
-            </ul>
-            <button class="confirm-payment-btn" id="confirm-payment">सुरक्षित पेमेंट करें</button>
-        </div>
-    </div>
-
-    <script>
-        // सभी JavaScript यहाँ है
-        document.addEventListener('DOMContentLoaded', function() {
-            // वेरिएबल्स
-            const questionText = document.getElementById('question-text');
-            const optionsContainer = document.getElementById('options-container');
-            const paymentBtn = document.getElementById('payment-btn');
-            const paymentModal = document.getElementById('payment-modal');
-            const closeModal = document.querySelector('.close-modal');
-            const confirmPaymentBtn = document.getElementById('confirm-payment');
-            
-            let currentQuestion = 0;
-            let score = 0;
-            let questions = [];
-            let currentCategory = "सामान्य ज्ञान";
-            
-            // क्विज़ डेटा
-            const quizData = {
-                "सामान्य ज्ञान": [
-                    {
-                        question: "भारत की राजधानी क्या है?",
-                        options: ["मुंबई", "नई दिल्ली", "कोलकाता", "चेन्नई"],
-                        correctAnswer: "नई दिल्ली"
-                    },
-                    {
-                        question: "जल का रासायनिक सूत्र क्या है?",
-                        options: ["H2O", "CO2", "O2", "NaCl"],
-                        correctAnswer: "H2O"
-                    }
-                ],
-                "विज्ञान": [
-                    {
-                        question: "प्रकाश की गति कितनी होती है?",
-                        options: ["3,00,000 किमी/सेकंड", "1,50,000 किमी/सेकंड", "4,50,000 किमी/सेकंड", "6,00,000 किमी/सेकंड"],
-                        correctAnswer: "3,00,000 किमी/सेकंड"
-                    }
-                ],
-                "इतिहास": [
-                    {
-                        question: "भारत का संविधान कब लागू हुआ था?",
-                        options: ["26 जनवरी 1950", "15 अगस्त 1947", "26 नवंबर 1949", "2 अक्टूबर 1950"],
-                        correctAnswer: "26 जनवरी 1950"
-                    }
-                ],
-                "गणित": [
-                    {
-                        question: "π (पाई) का मान कितना होता है?",
-                        options: ["3.14159", "2.71828", "1.41421", "1.73205"],
-                        correctAnswer: "3.14159"
-                    }
-                ],
-                "मनोरंजन": [
-                    {
-                        question: "शाहरुख खान को किस नाम से भी जाना जाता है?",
-                        options: ["किंग खान", "बॉलीवुड का बादशाह", "रोमियो", "ये सभी"],
-                        correctAnswer: "ये सभी"
-                    }
-                ],
-                "खेल": [
-                    {
-                        question: "क्रिकेट में एक ओवर में कितनी गेंदें होती हैं?",
-                        options: ["6", "7", "8", "5"],
-                        correctAnswer: "6"
-                    }
-                ]
-            };
-            
-            // पेमेंट स्टेटस चेक
-            function checkPaymentStatus() {
-                const paymentStatus = localStorage.getItem('paymentStatus');
-                if (paymentStatus === 'paid') {
-                    // क्विज़ लोड करें
-                    loadQuiz();
-                } else {
-                    // पेमेंट सेक्शन दिखाएं
-                    questionText.textContent = "प्रीमियम क्विज़ एक्सेस के लिए पेमेंट करें";
-                    optionsContainer.innerHTML = '';
-                }
-            }
-            
-            // पेमेंट बटन इवेंट
-            paymentBtn.addEventListener('click', function() {
-                paymentModal.style.display = 'block';
-            });
-            
-            // मोडल बंद करें
-            closeModal.addEventListener('click', function() {
-                paymentModal.style.display = 'none';
-            });
-            
-            // कन्फर्म पेमेंट
-            confirmPaymentBtn.addEventListener('click', function() {
-                // पेमेंट सफलता सिमुलेट करें
-                localStorage.setItem('paymentStatus', 'paid');
-                paymentModal.style.display = 'none';
-                
-                // सफलता संदेश दिखाएं
-                questionText.textContent = "पेमेंट सफल! अब आप क्विज़ खेल सकते हैं। कृपया एक कैटेगरी चुनें।";
-                optionsContainer.innerHTML = '<div style="text-align: center; padding: 20px;"><button class="restart-btn" id="start-quiz-btn">क्विज़ शुरू करें</button></div>';
-                
-                // स्टार्ट बटन इवेंट
-                document.getElementById('start-quiz-btn').addEventListener('click', function() {
-                    loadQuiz();
-                });
-            });
-            
-            // क्विज़ लोड करें
-            function loadQuiz() {
-                questions = quizData[currentCategory] || [];
-                
-                if (questions.length > 0) {
-                    showQuestion();
-                } else {
-                    questionText.textContent = currentCategory + " कैटेगरी में कोई प्रश्न उपलब्ध नहीं है।";
-                    optionsContainer.innerHTML = '';
-                }
-            }
-            
-            // प्रश्न दिखाएं
-            function showQuestion() {
-                if (currentQuestion >= questions.length) {
-                    showResults();
-                    return;
-                }
-                
-                const question = questions[currentQuestion];
-                questionText.textContent = question.question;
-                
-                // ऑप्शन क्लियर करें
-                optionsContainer.innerHTML = '';
-                
-                // ऑप्शन बनाएं
-                question.options.forEach(function(option) {
-                    const optionBtn = document.createElement('button');
-                    optionBtn.className = 'option-btn';
-                    optionBtn.textContent = option;
-                    
-                    // ऑप्शन क्लिक इवेंट
-                    optionBtn.addEventListener('click', function() {
-                        // सभी ऑप्शन डिसेबल करें
-                        document.querySelectorAll('.option-btn').forEach(function(btn) {
-                            btn.disabled = true;
-                        });
-                        
-                        // सही/गलत चेक करें
-                        if (option === question.correctAnswer) {
-                            optionBtn.classList.add('correct');
-                            score++;
-                        } else {
-                            optionBtn.classList.add('incorrect');
-                        }
-                        
-                        // 1 सेकंड बाद अगला प्रश्न
-                        setTimeout(function() {
-                            currentQuestion++;
-                            showQuestion();
-                        }, 1000);
-                    });
-                    
-                    optionsContainer.appendChild(optionBtn);
-                });
-            }
-            
-            // रिजल्ट दिखाएं
-            function showResults() {
-                questionText.textContent = "क्विज़ पूरा हुआ!";
-                optionsContainer.innerHTML = `
-                    <div class="result-container">
-                        <h2>आपका स्कोर</h2>
-                        <div class="score-value">${score} / ${questions.length}</div>
-                        <button class="restart-btn" id="restart-btn">क्विज़ फिर से शुरू करें</button>
-                    </div>
-                `;
-                
-                // रीस्टार्ट बटन इवेंट
-                document.getElementById('restart-btn').addEventListener('click', function() {
-                    currentQuestion = 0;
-                    score = 0;
-                    showQuestion();
-                });
-            }
-            
-            // कैटेगरी कार्ड्स इवेंट
-            document.querySelectorAll('.category-card').forEach(function(card) {
-                card.addEventListener('click', function() {
-                    // अगर पेमेंट नहीं किया गया है, तो पेमेंट मोडल दिखाएं
-                    if (localStorage.getItem('paymentStatus') !== 'paid') {
-                        paymentModal.style.display = 'block';
-                        return;
-                    }
-                    
-                    // सभी कार्ड्स से एक्टिव क्लास हटाएं
-                    document.querySelectorAll('.category-card').forEach(function(c) {
-                        c.classList.remove('active');
-                    });
-                    
-                    // वर्तमान कार्ड पर एक्टिव क्लास जोड़ें
-                    card.classList.add('active');
-                    
-                    // कैटेगरी सेट करें
-                    currentCategory = card.dataset.category;
-                    
-                    // क्विज़ रीसेट करें
-                    currentQuestion = 0;
-                    score = 0;
-                    
-                    // नई कैटेगरी लोड करें
-                    loadQuiz();
-                });
-            });
-            
-            // पेमेंट स्टेटस चेक करें
-            checkPaymentStatus();
-        });
-    </script>
-</body>
-</html>
+        .modal-body {
+            padding: 30px;
+            color: white;
+        }
+        
+        .plan-details {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
