@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentQuestion = 0;
     let score = 0;
     let questions = [];
+    let currentCategory = "सामान्य ज्ञान"; // डिफॉल्ट कैटेगरी
     
     // पेमेंट स्टेटस चेक फंक्शन
     function checkPaymentStatus() {
@@ -61,13 +62,20 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('questions.json')
             .then(response => response.json())
             .then(data => {
-                questions = data;
+                questions = data[currentCategory] || [];
                 totalQuestionsEl.textContent = questions.length;
-                showQuestion();
+                
+                if (questions.length > 0) {
+                    showQuestion();
+                } else {
+                    questionText.textContent = `${currentCategory} कैटेगरी में कोई प्रश्न उपलब्ध नहीं है। कृपया दूसरी कैटेगरी चुनें।`;
+                    optionsContainer.innerHTML = '';
+                }
             })
             .catch(error => {
                 console.error('क्वेश्चन लोड करने में त्रुटि:', error);
                 questionText.textContent = "क्वेश्चन लोड करने में समस्या हुई। कृपया बाद में पुनः प्रयास करें।";
+                optionsContainer.innerHTML = '';
             });
     }
     
@@ -146,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         '<i class="fas fa-redo"></i> अभ्यास करने की जरूरत है! फिर से कोशिश करें!'}
                 </div>
                 <button id="restart-btn" class="restart-btn">क्विज़ फिर से शुरू करें</button>
+                <button id="category-btn" class="category-btn">कैटेगरी बदलें</button>
             </div>
         `;
         
@@ -157,6 +166,16 @@ document.addEventListener('DOMContentLoaded', () => {
             progressBar.style.width = '0%';
             showQuestion();
         });
+        
+        // कैटेगरी बदलें बटन इवेंट
+        document.getElementById('category-btn').addEventListener('click', () => {
+            currentQuestion = 0;
+            score = 0;
+            scoreEl.textContent = score;
+            progressBar.style.width = '0%';
+            questionText.textContent = "कृपया एक कैटेगरी चुनें";
+            optionsContainer.innerHTML = '';
+        });
     }
     
     // कैटेगरी कार्ड्स के लिए इवेंट लिसनर
@@ -166,13 +185,17 @@ document.addEventListener('DOMContentLoaded', () => {
             categoryCards.forEach(c => c.classList.remove('active'));
             card.classList.add('active');
             
-            // यहां आप कैटेगरी के आधार पर क्वेश्चन लोड कर सकते हैं
-            // अभी के लिए सिर्फ UI प्रतिक्रिया दिखा रहे हैं
+            // कैटेगरी का नाम प्राप्त करें
+            currentCategory = card.querySelector('span').textContent;
+            
+            // क्विज़ रीसेट करें
             currentQuestion = 0;
             score = 0;
             scoreEl.textContent = score;
             progressBar.style.width = '0%';
-            showQuestion();
+            
+            // नई कैटेगरी के लिए क्विज़ लोड करें
+            loadQuiz();
         });
     });
 });
