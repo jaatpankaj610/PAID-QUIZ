@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>क्विज़ मास्टर प्रो - पेमेंट</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -32,41 +32,33 @@
         
         body {
             background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
+            padding: 20px;
+            overflow-y: auto;
         }
         
-        .app-container {
+        .container {
             width: 100%;
-            height: 100%;
-            max-width: 1200px;
-            max-height: 900px;
+            max-width: 600px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.18);
-            display: flex;
-            flex-direction: column;
             animation: fadeIn 0.8s ease;
         }
         
         .header {
             background: var(--gradient);
-            padding: 25px 20px;
+            padding: 30px 20px;
             text-align: center;
             color: white;
             position: relative;
             overflow: hidden;
-            flex-shrink: 0;
         }
         
         .header::before {
@@ -86,148 +78,57 @@
         }
         
         .logo {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             background: white;
             border-radius: 50%;
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 1;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
         }
         
         .logo i {
-            font-size: 35px;
+            font-size: 40px;
             color: var(--primary);
-            animation: iconRotate 10s linear infinite;
-        }
-        
-        @keyframes iconRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
         .header h1 {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 1;
-            color: white;
         }
         
         .header p {
-            font-size: 15px;
+            font-size: 16px;
             opacity: 0.9;
             position: relative;
             z-index: 1;
-            color: white;
-        }
-        
-        .header-badges {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .badge i {
-            font-size: 10px;
-        }
-        
-        .shimmer-bar {
-            height: 4px;
-            background: linear-gradient(90deg, 
-                rgba(255,255,255,0) 0%, 
-                rgba(255,255,255,0.8) 50%, 
-                rgba(255,255,255,0) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 2;
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
         }
         
         .content {
-            padding: 15px;
-            overflow-y: auto;
-            flex-grow: 1;
-            min-height: 0;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) #f1f1f1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .content::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        
-        .content::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
+            padding: 30px;
         }
         
         .payment-info {
             background: rgba(255, 255, 255, 0.7);
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            min-height: 150px;
-            overflow: visible;
-        }
-        
-        .payment-details {
-            flex: 1;
         }
         
         .payment-info h2 {
             color: var(--primary);
-            font-size: 20px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
         }
@@ -235,148 +136,150 @@
         .payment-info h2 i {
             margin-right: 10px;
             color: var(--warning);
-            font-size: 20px;
         }
         
         .price-tag {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: 700;
             color: var(--secondary);
-            margin: 8px 0;
+            margin: 15px 0;
+            text-align: center;
         }
         
         .price-period {
-            font-size: 16px;
+            font-size: 18px;
             color: #666;
-            margin-bottom: 15px;
+            text-align: center;
+            margin-bottom: 20px;
         }
         
         .features {
             list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 25px;
         }
         
         .features li {
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            font-size: 14px;
+            font-size: 16px;
             color: #333;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 6px 12px;
-            border-radius: 20px;
         }
         
         .features li i {
-            margin-right: 6px;
+            margin-right: 10px;
             color: var(--success);
-            font-size: 12px;
         }
         
-        .payment-visual {
-            width: 110px;
-            height: 110px;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 32px;
-            font-weight: 700;
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+        }
+        
+        .form-group.hint {
             position: relative;
-            flex-shrink: 0;
-            min-width: 110px; /* फिक्स्ड साइज */
-            min-height: 110px;
         }
         
-        .payment-visual::before {
-            content: '';
+        .form-group.hint .input-hint {
             position: absolute;
-            width: 115%;
-            height: 115%;
-            border-radius: 50%;
-            border: 2px dashed rgba(255, 255, 255, 0.5);
-            animation: rotate 20s linear infinite;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #888;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 8px;
+            border-radius: 4px;
         }
         
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .qr-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
-        .veklapic-message,
+        .qr-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #666;
+            border: 2px dashed #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .qr-code i {
+            font-size: 50px;
+            color: var(--primary);
+        }
+        
+        .upi-id {
+            background: rgba(74, 0, 224, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 15px 0;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            word-break: break-all;
+        }
+        
         .payment-steps {
             background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
             border-radius: 15px;
-            padding: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
             border: 1px solid rgba(74, 0, 224, 0.1);
             position: relative;
-            overflow: visible;
-            min-height: fit-content;
-            height: auto;
-        }
-        
-        .veklapic-message::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 60px;
-            height: 60px;
-            background: rgba(74, 0, 224, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-        
-        .veklapic-message h4 {
-            color: var(--primary);
-            margin-bottom: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-        }
-        
-        .veklapic-message h4 i {
-            margin-right: 8px;
-            color: var(--warning);
-            font-size: 14px;
-        }
-        
-        .veklapic-message p {
-            color: #555;
-            font-size: 14px;
-            line-height: 1.5;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 12px;
-        }
-        
-        .veklapic-contact {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 10px;
-            border-radius: 8px;
-            position: relative;
-            z-index: 1;
-            font-size: 14px;
-        }
-        
-        .veklapic-contact i {
-            margin-right: 8px;
-            color: var(--primary);
-            font-size: 14px;
-        }
-        
-        .veklapic-contact span {
-            font-weight: 600;
-            color: var(--primary);
+            overflow: hidden;
         }
         
         .payment-steps::before {
@@ -405,8 +308,8 @@
         
         .payment-steps h3 {
             color: var(--primary);
-            margin-bottom: 12px;
-            font-size: 18px;
+            margin-bottom: 20px;
+            font-size: 22px;
             font-weight: 700;
             position: relative;
             z-index: 1;
@@ -415,6 +318,7 @@
         .steps-container {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 20px;
             position: relative;
             z-index: 1;
         }
@@ -427,157 +331,34 @@
         }
         
         .step-icon {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             background: var(--gradient);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
         }
         
         .step-text {
             text-align: center;
-            font-size: 13px;
+            font-size: 14px;
             color: #555;
-            line-height: 1.3;
-        }
-        
-        .form-and-qr {
-            display: flex;
-            gap: 15px;
-            flex-grow: 1;
-        }
-        
-        .form-section {
-            flex: 1;
-        }
-        
-        .qr-section {
-            flex: 1;
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .qr-section h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .qr-code {
-            width: 150px;
-            height: 150px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #666;
-            border: 2px dashed #ddd;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .qr-code img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        
-        .qr-code i {
-            font-size: 40px;
-            color: var(--primary);
-        }
-        
-        .upi-id {
-            background: rgba(74, 0, 224, 0.05);
-            border-radius: 10px;
-            padding: 10px;
-            margin: 12px 0;
-            font-weight: 600;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            word-break: break-all;
-            font-size: 14px;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.3s ease;
-        }
-        .upi-id:hover {
-            background-color: rgba(74, 0, 224, 0.15);
-        }
-        
-        .form-group {
-            margin-bottom: 12px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-        
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-        
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
-        }
-        
-        .form-group.hint {
-            position: relative;
-        }
-        
-        .form-group.hint .input-hint {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 11px;
-            color: #888;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 2px 6px;
-            border-radius: 4px;
+            line-height: 1.4;
         }
         
         .file-upload {
-            margin: 15px 0;
+            margin: 25px 0;
         }
         
         .file-upload label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: #333;
-            font-size: 14px;
         }
         
         .file-input-wrapper {
@@ -587,13 +368,12 @@
             cursor: pointer;
             background: var(--gradient-3);
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s ease;
             width: 100%;
             text-align: center;
-            font-size: 14px;
         }
         
         .file-input-wrapper:hover {
@@ -612,14 +392,14 @@
         }
         
         .image-preview {
-            margin-top: 10px;
+            margin-top: 15px;
             text-align: center;
             display: none;
         }
         
         .image-preview img {
             max-width: 100%;
-            max-height: 150px;
+            max-height: 200px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
@@ -629,8 +409,8 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 14px 20px;
-            font-size: 16px;
+            padding: 18px 30px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
@@ -638,7 +418,7 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
-            margin-top: 12px;
+            margin-top: 10px;
         }
         
         .submit-btn:before {
@@ -663,14 +443,20 @@
             transform: translateX(0);
         }
         
+        .note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
         .status-message {
-            padding: 12px;
+            padding: 15px;
             border-radius: 10px;
-            margin-top: 12px;
+            margin-top: 20px;
             text-align: center;
             font-weight: 600;
             display: none;
-            font-size: 14px;
         }
         
         .status-message.success {
@@ -694,33 +480,6 @@
             display: block;
         }
         
-        .access-info {
-            background: var(--gradient-4);
-            border-radius: 15px;
-            padding: 15px;
-            margin-top: 10px;
-            text-align: center;
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 16px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(67, 233, 123, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(67, 233, 123, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(67, 233, 123, 0); }
-        }
-        
-        .access-info i {
-            font-size: 18px;
-        }
-        
         /* एनिमेशन */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -728,75 +487,30 @@
         }
         
         /* रेस्पॉन्सिव डिज़ाइन */
-        @media (max-width: 768px) {
-            .app-container {
+        @media (max-width: 600px) {
+            .container {
                 border-radius: 0;
-                max-height: 100vh;
+                min-height: 100vh;
             }
             
             .header h1 {
-                font-size: 22px;
-            }
-            
-            .header p {
-                font-size: 12px;
+                font-size: 28px;
             }
             
             .price-tag {
-                font-size: 36px; /* मोबाइल में थोड़ा बड़ा रखा ताकि पढ़ने में आसान हो */
-            }
-            
-            .payment-info {
-                flex-direction: column;
-                text-align: center;
-                padding: 18px 15px;
-                gap: 20px;
-            }
-            
-            .payment-visual {
-                width: 110px !important;  /* फिक्स्ड रखो */
-                height: 110px !important;
-                font-size: 32px !important;
-                margin: 0 auto;
-                min-width: 110px !important;
-                min-height: 110px !important;
-            }
-            
-            .payment-details {
-                width: 100%;
-            }
-            
-            .payment-info h2 {
-                justify-content: center;
-                font-size: 22px;
-            }
-            
-            .payment-info h2 i {
-                margin-right: 8px;
-            }
-            
-            .features {
-                justify-content: center;
-            }
-            
-            .features li {
-                font-size: 13px;
-            }
-            
-            .form-and-qr {
-                flex-direction: column;
+                font-size: 36px;
             }
             
             .steps-container {
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px;
             }
             
             .step {
                 width: 100%;
                 flex-direction: row;
                 text-align: left;
-                gap: 12px;
+                gap: 15px;
             }
             
             .step-icon {
@@ -804,44 +518,56 @@
             }
         }
         
-        @media (min-width: 769px) {
-            .app-container {
-                margin: 20px;
-                height: calc(100vh - 40px);
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 14px;
+            }
+            
+            .payment-info h2 {
+                font-size: 20px;
+            }
+            
+            .price-tag {
+                font-size: 32px;
+            }
+            
+            .form-group input, .form-group textarea {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .payment-steps h3 {
+                font-size: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <div class="header">
             <div class="logo">
                 <i class="fas fa-brain"></i>
             </div>
             <h1>क्विज़ मास्टर प्रो</h1>
             <p>भारत का सबसे बड़ा क्विज़ प्लेटफॉर्म</p>
-            <div class="header-badges">
-                <div class="badge"><i class="fas fa-star"></i> 4.8 रेटिंग</div>
-                <div class="badge"><i class="fas fa-users"></i> 10 लाख+ यूजर</div>
-                <div class="badge"><i class="fas fa-trophy"></i> 50+ कैटेगरी</div>
-            </div>
-            <div class="shimmer-bar"></div>
         </div>
         
         <div class="content">
             <div class="payment-info">
-                <div class="payment-details">
-                    <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
-                    <div class="price-tag">₹49</div>
-                    <div class="price-period">30 दिन की असीमित एक्सेस</div>
-                    <ul class="features">
-                        <li><i class="fas fa-check-circle"></i> सभी क्विज़ कैटेगरी</li>
-                        <li><i class="fas fa-check-circle"></i> असीमित प्रयास</li>
-                        <li><i class="fas fa-check-circle"></i> प्रगति रिपोर्ट</li>
-                        <li><i class="fas fa-check-circle"></i> नए अपडेट</li>
-                    </ul>
-                </div>
-                <div class="payment-visual">₹49</div>
+                <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
+                <div class="price-tag">₹49</div>
+                <div class="price-period">30 दिन की असीमित एक्सेस</div>
+                
+                <ul class="features">
+                    <li><i class="fas fa-check-circle"></i> सभी क्विज़ कैटेगरी तक पहुंच</li>
+                    <li><i class="fas fa-check-circle"></i> असीमित क्विज़ प्रयास</li>
+                    <li><i class="fas fa-check-circle"></i> विस्तृत प्रगति रिपोर्ट</li>
+                    <li><i class="fas fa-check-circle"></i> नए क्विज़ अपडेट</li>
+                </ul>
             </div>
             
             <div class="payment-steps">
@@ -868,80 +594,64 @@
                 </div>
             </div>
             
-            <div class="form-and-qr">
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="user_id">ईमेल या फोन नंबर</label>
+                    <input type="text" id="user_id" name="user_id" placeholder="अपना ईमेल या फोन नंबर दर्ज करें" required>
+                </div>
+                
+                <div class="form-group hint">
+                    <label for="mobile_number">मोबाइल नंबर (वैकल्पिक)</label>
+                    <input type="text" id="mobile_number" name="mobile_number" placeholder="अपना मोबाइल नंबर दर्ज करें">
+                    <span class="input-hint">वैकल्पिक</span>
+                </div>
+                
                 <div class="qr-section">
                     <h3>QR कोड स्कैन करें</h3>
                     <div class="qr-code">
                         <!-- यहां अपना अमेज़न पे QR कोड डालें -->
                         <img src="https://i.imgur.com/example.jpg" alt="Amazon Pay QR Code">
                     </div>
-                    <div class="upi-id" title="UPI ID कॉपी करें">
+                    <div class="upi-id">
                         <i class="fas fa-copy"></i>
                         <span id="upi-id-text">your-amazon-pay@upi</span>
                     </div>
                     <p>किसी भी UPI ऐप से स्कैन करें</p>
                 </div>
                 
-                <div class="form-section">
-                    <form id="payment-form">
-                        <div class="form-group">
-                            <label for="user_id">ईमेल या फोन नंबर</label>
-                            <input type="text" id="user_id" name="user_id" placeholder="अपना ईमेल या फोन नंबर दर्ज करें" required>
-                        </div>
-                        
-                        <div class="form-group hint">
-                            <label for="mobile_number">वेक्लपिक मोबाइल नंबर</label>
-                            <input type="text" id="mobile_number" name="mobile_number" placeholder="अपना वेक्लपिक मोबाइल नंबर दर्ज करें">
-                            <span class="input-hint">पेमेंट वेरिफिकेशन में समस्या होने पर संपर्क के लिए</span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="transaction_id">ट्रांजैक्शन ID</label>
-                            <input type="text" id="transaction_id" name="transaction_id" placeholder="अपना ट्रांजैक्शन ID दर्ज करें" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="amount">पेमेंट राशि</label>
-                            <input type="text" id="amount" name="amount" placeholder="पेमेंट की गई राशि दर्ज करें" required>
-                        </div>
-                        
-                        <div class="file-upload">
-                            <label>पेमेंट स्क्रीनशॉट अपलोड करें</label>
-                            <div class="file-input-wrapper">
-                                <input type="file" id="payment_proof" name="payment_proof" accept="image/*" onchange="previewImage(event)">
-                                <span>फाइल चुनें</span>
-                            </div>
-                            <div id="image-preview" class="image-preview"></div>
-                        </div>
-                        
-                        <div class="form-group hint">
-                            <label for="payment_note">संदेश (वैकल्पिक)</label>
-                            <textarea id="payment_note" name="payment_note" rows="2" placeholder="कोई संदेश दर्ज करें..."></textarea>
-                            <span class="input-hint">वैकल्पिक</span>
-                        </div>
-                        
-                        <button type="button" class="submit-btn" onclick="submitPayment()">
-                            <i class="fas fa-paper-plane"></i> पेमेंट वेरिफिकेशन के लिए सबमिट करें
-                        </button>
-                    </form>
-                    
-                    <div id="status-message" class="status-message"></div>
+                <div class="form-group">
+                    <label for="transaction_id">ट्रांजैक्शन ID</label>
+                    <input type="text" id="transaction_id" name="transaction_id" placeholder="अपना ट्रांजैक्शन ID दर्ज करें" required>
                 </div>
-            </div>
-            
-            <div class="veklapic-message">
-                <h4><i class="fas fa-info-circle"></i> वेक्लपिक संदेश</h4>
-                <p>हमारी टीम आपके पेमेंट को जल्द से जल्द वेरिफाई करेगी। किसी भी समस्या की स्थिति में, आप हमारे वेक्लपिक मोबाइल नंबर पर संपर्क कर सकते हैं।</p>
-                <div class="veklapic-contact">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>वेक्लपिक सपोर्ट: +91 98765 43210</span>
+                
+                <div class="form-group">
+                    <label for="amount">पेमेंट राशि</label>
+                    <input type="text" id="amount" name="amount" placeholder="पेमेंट की गई राशि दर्ज करें" required>
                 </div>
-            </div>
+                
+                <div class="file-upload">
+                    <label>पेमेंट स्क्रीनशॉट अपलोड करें</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="payment_proof" name="payment_proof" accept="image/*" onchange="previewImage(event)">
+                        <span>फाइल चुनें</span>
+                    </div>
+                    <div id="image-preview" class="image-preview"></div>
+                </div>
+                
+                <div class="form-group hint">
+                    <label for="payment_note">संदेश (वैकल्पिक)</label>
+                    <textarea id="payment_note" name="payment_note" rows="3" placeholder="कोई संदेश दर्ज करें..."></textarea>
+                    <span class="input-hint">वैकल्पिक</span>
+                </div>
+                
+                <button type="button" class="submit-btn" onclick="submitPayment()">
+                    <i class="fas fa-paper-plane"></i> पेमेंट वेरिफिकेशन के लिए सबमिट करें
+                </button>
+            </form>
             
-            <div class="access-info">
-                <i class="fas fa-unlock-alt"></i>
-                <span>पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक क्विज़ मास्टर प्रो तक पहुंच मिलेगी</span>
-            </div>
+            <div id="status-message" class="status-message"></div>
+            
+            <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक क्विज़ मास्टर प्रो तक पहुंच मिलेगी</p>
         </div>
     </div>
     
@@ -1038,7 +748,7 @@
             const notification = document.createElement('div');
             notification.className = 'status-message pending';
             notification.textContent = 'एडमिन को SMS भेजा गया: नया पेमेंट रिक्वेस्ट आया है।';
-            document.querySelector('.form-section').appendChild(notification);
+            document.querySelector('.content').appendChild(notification);
         }
         
         // यूजर को धन्यवाद संदेश भेजने का फंक्शन (सिमुलेशन)
@@ -1050,7 +760,7 @@
             const notification = document.createElement('div');
             notification.className = 'status-message success';
             notification.textContent = `${userId} को धन्यवाद संदेश भेजा गया।`;
-            document.querySelector('.form-section').appendChild(notification);
+            document.querySelector('.content').appendChild(notification);
         }
     </script>
 </body>
