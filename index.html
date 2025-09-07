@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>क्विज़ मास्टर प्रो - पेमेंट</title>
+    <title>क्विज़ मास्टर प्रो</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -37,10 +37,9 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
         }
         
-        .container {
+        .app-container {
             width: 100%;
             max-width: 600px;
             background: rgba(255, 255, 255, 0.95);
@@ -52,179 +51,185 @@
             animation: fadeIn 0.5s ease;
         }
         
-        .header {
+        .quiz-header {
             background: var(--gradient);
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
             color: white;
             position: relative;
         }
         
-        .logo {
-            width: 80px;
-            height: 80px;
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            margin-bottom: 10px;
             background: white;
-            border-radius: 50%;
-            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .app-icon i {
+            font-size: 30px;
+            color: var(--primary);
+        }
+        
+        .quiz-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .user-info {
             display: flex;
             justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .user-status, .days-left {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
             align-items: center;
+            gap: 5px;
+        }
+        
+        .quiz-container {
+            padding: 25px;
+        }
+        
+        .question-section {
+            margin-bottom: 25px;
+        }
+        
+        .question-count {
+            font-size: 14px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        #question-text {
+            font-size: 22px;
+            color: var(--dark);
+            line-height: 1.4;
+            font-weight: 600;
+        }
+        
+        .options-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+            z-index: 0;
+        }
+        
+        .option-btn:hover {
+            transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
-        .logo i {
-            font-size: 40px;
-            color: var(--primary);
-        }
-        
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 30px;
-        }
-        
-        .payment-info {
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .payment-info h2 {
-            color: var(--primary);
-            font-size: 24px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .payment-info h2 i {
-            margin-right: 10px;
-            color: var(--warning);
-        }
-        
-        .price-tag {
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--secondary);
-            margin: 15px 0;
-            text-align: center;
-        }
-        
-        .price-period {
-            font-size: 18px;
-            color: #666;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .features {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-        
-        .features li {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            font-size: 16px;
-            color: #333;
-        }
-        
-        .features li i {
-            margin-right: 10px;
-            color: var(--success);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .form-group input, .form-group textarea {
+        .option-btn:hover:before {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
+        }
+        
+        .option-btn span {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+        
+        .option-btn:hover span {
+            color: white;
+        }
+        
+        .option-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .option-btn.incorrect {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+        
+        .quiz-footer {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
             border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-        
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
-        }
-        
-        .qr-section {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .qr-section h3 {
-            color: #333;
             margin-bottom: 15px;
-            font-size: 18px;
+            overflow: hidden;
         }
         
-        .qr-code {
-            width: 200px;
-            height: 200px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        #progress {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .score-display {
+            text-align: right;
             font-weight: 600;
-            color: #666;
-            border: 2px dashed #ddd;
+            color: var(--dark);
         }
         
-        .qr-code i {
-            font-size: 50px;
-            color: var(--primary);
+        .quiz-categories {
+            padding: 0 25px 25px;
         }
         
-        .payment-methods {
-            margin: 25px 0;
-        }
-        
-        .payment-methods h3 {
-            color: #333;
+        .quiz-categories h3 {
+            color: var(--dark);
             margin-bottom: 15px;
             font-size: 18px;
+            font-weight: 600;
         }
         
-        .payment-options {
+        .category-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
         
-        .payment-option {
+        .category-card {
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
@@ -234,154 +239,78 @@
             transition: all 0.3s ease;
         }
         
-        .payment-option:hover {
-            border-color: var(--primary);
+        .category-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
-        .payment-option.selected {
-            border-color: var(--primary);
-            background: rgba(106, 17, 203, 0.05);
+        .category-card.active {
+            background: var(--gradient);
+            border-color: transparent;
+            color: white;
         }
         
-        .payment-option i {
+        .category-card i {
             font-size: 24px;
-            color: var(--primary);
             margin-bottom: 8px;
             display: block;
         }
         
-        .payment-option span {
-            display: block;
+        .category-card span {
             font-size: 14px;
-            color: #555;
+            font-weight: 500;
         }
         
-        .file-upload {
-            margin: 25px 0;
-        }
-        
-        .file-upload label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            cursor: pointer;
-            background: var(--gradient-3);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .file-input-wrapper:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
-        }
-        
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-        
-        .image-preview {
-            margin-top: 15px;
+        .result-container {
             text-align: center;
-            display: none;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
-        .image-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .result-score h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 24px;
         }
         
-        .submit-btn {
-            background: var(--gradient-2);
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        .result-message {
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: var(--dark);
+        }
+        
+        .result-message i {
+            font-size: 24px;
+            margin-right: 8px;
+            color: var(--warning);
+        }
+        
+        .restart-btn, .category-btn {
+            background: var(--gradient);
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 18px 30px;
-            font-size: 18px;
+            padding: 12px 25px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            width: 100%;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+            margin: 0 10px 10px;
         }
         
-        .submit-btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-            z-index: -1;
-        }
-        
-        .submit-btn:hover {
+        .restart-btn:hover, .category-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.5);
-        }
-        
-        .submit-btn:hover:before {
-            transform: translateX(0);
-        }
-        
-        .note {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .status-message {
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
-        
-        .status-message.success {
-            background: rgba(76, 175, 80, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(76, 175, 80, 0.2);
-            display: block;
-        }
-        
-        .status-message.error {
-            background: rgba(244, 67, 54, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(244, 67, 54, 0.2);
-            display: block;
-        }
-        
-        .status-message.pending {
-            background: rgba(255, 152, 0, 0.1);
-            color: var(--warning);
-            border: 1px solid rgba(255, 152, 0, 0.2);
-            display: block;
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.5);
         }
         
         /* एनिमेशन */
@@ -391,191 +320,383 @@
         }
         
         /* रेस्पॉन्सिव डिज़ाइन */
-        @media (max-width: 600px) {
-            .container {
+        @media (max-width: 500px) {
+            .app-container {
                 border-radius: 0;
                 min-height: 100vh;
             }
             
-            .header h1 {
-                font-size: 28px;
+            .quiz-header h1 {
+                font-size: 22px;
             }
             
-            .price-tag {
-                font-size: 36px;
+            #question-text {
+                font-size: 18px;
             }
             
-            .payment-options {
-                grid-template-columns: 1fr;
+            .option-btn {
+                padding: 12px 15px;
+                font-size: 15px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
+    <div class="app-container">
+        <div class="quiz-header">
+            <div class="app-icon">
                 <i class="fas fa-brain"></i>
             </div>
             <h1>क्विज़ मास्टर प्रो</h1>
-            <p>भारत का सबसे बड़ा क्विज़ प्लेटफॉर्म</p>
+            <div class="user-info">
+                <div class="user-status">
+                    <i class="fas fa-crown"></i> प्रीमियम यूज़र
+                </div>
+                <div class="days-left">
+                    <i class="fas fa-clock"></i> <span id="days-left">30</span> दिन बाकी
+                </div>
+            </div>
         </div>
         
-        <div class="content">
-            <div class="payment-info">
-                <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
-                <div class="price-tag">₹49</div>
-                <div class="price-period">30 दिन की असीमित एक्सेस</div>
-                
-                <ul class="features">
-                    <li><i class="fas fa-check-circle"></i> सभी क्विज़ कैटेगरी तक पहुंच</li>
-                    <li><i class="fas fa-check-circle"></i> असीमित क्विज़ प्रयास</li>
-                    <li><i class="fas fa-check-circle"></i> विस्तृत प्रगति रिपोर्ट</li>
-                    <li><i class="fas fa-check-circle"></i> नए क्विज़ अपडेट</li>
-                </ul>
+        <div class="quiz-container">
+            <div class="question-section">
+                <div class="question-count">
+                    <span id="current-question">1</span> / <span id="total-questions">10</span>
+                </div>
+                <h2 id="question-text">कृपया एक कैटेगरी चुनें</h2>
             </div>
             
-            <form id="payment-form">
-                <div class="form-group">
-                    <label for="user_id">ईमेल या फोन नंबर</label>
-                    <input type="text" id="user_id" name="user_id" placeholder="अपना ईमेल या फोन नंबर दर्ज करें" required>
-                </div>
-                
-                <div class="qr-section">
-                    <h3>QR कोड स्कैन करें</h3>
-                    <div class="qr-code">
-                        <i class="fas fa-qrcode"></i>
-                    </div>
-                    <p>किसी भी UPI ऐप से स्कैन करें</p>
-                </div>
-                
-                <div class="payment-methods">
-                    <h3>पेमेंट विधि चुनें</h3>
-                    <div class="payment-options">
-                        <div class="payment-option" data-method="upi">
-                            <i class="fas fa-mobile-alt"></i>
-                            <span>UPI</span>
-                        </div>
-                        <div class="payment-option" data-method="card">
-                            <i class="fas fa-credit-card"></i>
-                            <span>कार्ड</span>
-                        </div>
-                        <div class="payment-option" data-method="wallet">
-                            <i class="fas fa-wallet"></i>
-                            <span>वॉलेट</span>
-                        </div>
-                        <div class="payment-option" data-method="netbanking">
-                            <i class="fas fa-university"></i>
-                            <span>नेट बैंकिंग</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="transaction_id">ट्रांजैक्शन ID</label>
-                    <input type="text" id="transaction_id" name="transaction_id" placeholder="अपना ट्रांजैक्शन ID दर्ज करें" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="amount">पेमेंट राशि</label>
-                    <input type="text" id="amount" name="amount" placeholder="पेमेंट की गई राशि दर्ज करें" required>
-                </div>
-                
-                <div class="file-upload">
-                    <label>पेमेंट स्क्रीनशॉट अपलोड करें</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="payment_proof" name="payment_proof" accept="image/*" onchange="previewImage(event)">
-                        <span>फाइल चुनें</span>
-                    </div>
-                    <div id="image-preview" class="image-preview"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="payment_note">अतिरिक्त जानकारी (वैकल्पिक)</label>
-                    <textarea id="payment_note" name="payment_note" rows="3" placeholder="कोई अतिरिक्त जानकारी दर्ज करें..."></textarea>
-                </div>
-                
-                <button type="button" class="submit-btn" onclick="submitPayment()">
-                    <i class="fas fa-paper-plane"></i> पेमेंट वेरिफिकेशन के लिए सबमिट करें
-                </button>
-            </form>
+            <div class="options-section" id="options-container">
+                <!-- ऑप्शन जावास्क्रिप्ट से जेनरेट होंगे -->
+            </div>
             
-            <div id="status-message" class="status-message"></div>
-            
-            <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक क्विज़ मास्टर प्रो तक पहुंच मिलेगी</p>
+            <div class="quiz-footer">
+                <div class="progress-bar">
+                    <div id="progress"></div>
+                </div>
+                <div class="score-display">
+                    स्कोर: <span id="score">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quiz-categories">
+            <h3>क्विज़ कैटेगरी</h3>
+            <div class="category-grid">
+                <div class="category-card active" data-category="सामान्य ज्ञान">
+                    <i class="fas fa-book"></i>
+                    <span>सामान्य ज्ञान</span>
+                </div>
+                <div class="category-card" data-category="विज्ञान">
+                    <i class="fas fa-flask"></i>
+                    <span>विज्ञान</span>
+                </div>
+                <div class="category-card" data-category="इतिहास">
+                    <i class="fas fa-landmark"></i>
+                    <span>इतिहास</span>
+                </div>
+                <div class="category-card" data-category="गणित">
+                    <i class="fas fa-calculator"></i>
+                    <span>गणित</span>
+                </div>
+                <div class="category-card" data-category="मनोरंजन">
+                    <i class="fas fa-film"></i>
+                    <span>मनोरंजन</span>
+                </div>
+                <div class="category-card" data-category="खेल">
+                    <i class="fas fa-football-ball"></i>
+                    <span>खेल</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('image-preview');
-                    preview.innerHTML = '<img src="' + e.target.result + '" alt="पेमेंट प्रूफ">';
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
+        document.addEventListener('DOMContentLoaded', function() {
+            // पेमेंट स्टेटस चेक करें
+            checkPaymentStatus();
+            
+            // वेरिएबल्स
+            const questionText = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const currentQuestionEl = document.getElementById('current-question');
+            const totalQuestionsEl = document.getElementById('total-questions');
+            const scoreEl = document.getElementById('score');
+            const progressBar = document.getElementById('progress');
+            const daysLeftEl = document.getElementById('days-left');
+            
+            let currentQuestion = 0;
+            let score = 0;
+            let questions = [];
+            let currentCategory = "सामान्य ज्ञान";
+            
+            // क्विज़ डेटा
+            const quizData = {
+                "सामान्य ज्ञान": [
+                    {
+                        question: "भारत की राजधानी क्या है?",
+                        options: ["मुंबई", "नई दिल्ली", "कोलकाता", "चेन्नई"],
+                        correctAnswer: "नई दिल्ली"
+                    },
+                    {
+                        question: "जल का रासायनिक सूत्र क्या है?",
+                        options: ["H2O", "CO2", "O2", "NaCl"],
+                        correctAnswer: "H2O"
+                    },
+                    {
+                        question: "निम्न में से कौन सा एक प्राकृतिक उपग्रह है?",
+                        options: ["चंद्रमा", "अपोलो", "सैटेलाइट", "रॉकेट"],
+                        correctAnswer: "चंद्रमा"
+                    }
+                ],
+                "विज्ञान": [
+                    {
+                        question: "प्रकाश की गति कितनी होती है?",
+                        options: ["3,00,000 किमी/सेकंड", "1,50,000 किमी/सेकंड", "4,50,000 किमी/सेकंड", "6,00,000 किमी/सेकंड"],
+                        correctAnswer: "3,00,000 किमी/सेकंड"
+                    },
+                    {
+                        question: "मनुष्य के शरीर में कितनी हड्डियां होती हैं?",
+                        options: ["206", "302", "156", "260"],
+                        correctAnswer: "206"
+                    },
+                    {
+                        question: "निम्न में से कौन सा सबसे छोटा तत्व है?",
+                        options: ["हाइड्रोजन", "हीलियम", "लिथियम", "बेरिलियम"],
+                        correctAnswer: "हाइड्रोजन"
+                    }
+                ],
+                "इतिहास": [
+                    {
+                        question: "भारत का संविधान कब लागू हुआ था?",
+                        options: ["26 जनवरी 1950", "15 अगस्त 1947", "26 नवंबर 1949", "2 अक्टूबर 1950"],
+                        correctAnswer: "26 जनवरी 1950"
+                    },
+                    {
+                        question: "महात्मा गांधी का जन्म कब हुआ था?",
+                        options: ["2 अक्टूबर 1869", "15 अगस्त 1872", "26 जनवरी 1875", "1 मई 1865"],
+                        correctAnswer: "2 अक्टूबर 1869"
+                    },
+                    {
+                        question: "1857 के विद्रोह को क्या भी कहा जाता है?",
+                        options: ["पहला स्वतंत्रता संग्राम", "दूसरा स्वतंत्रता संग्राम", "भारत छोड़ो आंदोलन", "असहयोग आंदोलन"],
+                        correctAnswer: "पहला स्वतंत्रता संग्राम"
+                    }
+                ],
+                "गणित": [
+                    {
+                        question: "π (पाई) का मान कितना होता है?",
+                        options: ["3.14159", "2.71828", "1.41421", "1.73205"],
+                        correctAnswer: "3.14159"
+                    },
+                    {
+                        question: "एक त्रिभुज के कोणों का योग कितना होता है?",
+                        options: ["180 डिग्री", "90 डिग्री", "270 डिग्री", "360 डिग्री"],
+                        correctAnswer: "180 डिग्री"
+                    },
+                    {
+                        question: "निम्न में से कौन सी एक सम संख्या है?",
+                        options: ["2", "3", "5", "7"],
+                        correctAnswer: "2"
+                    }
+                ],
+                "मनोरंजन": [
+                    {
+                        question: "शाहरुख खान को किस नाम से भी जाना जाता है?",
+                        options: ["किंग खान", "बॉलीवुड का बादशाह", "रोमियो", "ये सभी"],
+                        correctAnswer: "ये सभी"
+                    },
+                    {
+                        question: "'दिलवाले दुल्हनिया ले जाएंगे' फिल्म कब रिलीज़ हुई थी?",
+                        options: ["1995", "1990", "2000", "1985"],
+                        correctAnswer: "1995"
+                    },
+                    {
+                        question: "निम्न में से कौन सा एक टीवी शो नहीं है?",
+                        options: ["तारक मेहता का उल्टा चश्मा", "कपिल शर्मा शो", "बिग बॉस", "कौन बनेगा करोड़पति"],
+                        correctAnswer: "कौन बनेगा करोड़पति"
+                    }
+                ],
+                "खेल": [
+                    {
+                        question: "क्रिकेट में एक ओवर में कितनी गेंदें होती हैं?",
+                        options: ["6", "7", "8", "5"],
+                        correctAnswer: "6"
+                    },
+                    {
+                        question: "हॉकी को किस देश का राष्ट्रीय खेल माना जाता है?",
+                        options: ["भारत", "पाकिस्तान", "ऑस्ट्रेलिया", "इंग्लैंड"],
+                        correctAnswer: "भारत"
+                    },
+                    {
+                        question: "ओलंपिक खेल कितने साल में एक बार आयोजित किए जाते हैं?",
+                        options: ["4 साल", "2 साल", "5 साल", "3 साल"],
+                        correctAnswer: "4 साल"
+                    }
+                ]
+            };
+            
+            // पेमेंट स्टेटस चेक फंक्शन
+            function checkPaymentStatus() {
+                const paymentData = localStorage.getItem('paymentData');
+                
+                if (paymentData) {
+                    const payment = JSON.parse(paymentData);
+                    if (payment.status === 'approved') {
+                        // पेमेंट अप्रूव्ड है, क्विज़ लोड करें
+                        loadQuiz();
+                    } else {
+                        // पेमेंट पेंडिंग है, पेमेंट पेज पर रीडायरेक्ट करें
+                        window.location.href = 'payment.html';
+                    }
+                } else {
+                    // कोई पेमेंट डेटा नहीं है, पेमेंट पेज पर रीडायरेक्ट करें
+                    window.location.href = 'payment.html';
+                }
             }
-        }
-        
-        // पेमेंट विधि चयन
-        document.querySelectorAll('.payment-option').forEach(function(option) {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.payment-option').forEach(function(opt) {
-                    opt.classList.remove('selected');
+            
+            // क्विज़ लोड करने का फंक्शन
+            function loadQuiz() {
+                questions = quizData[currentCategory] || [];
+                totalQuestionsEl.textContent = questions.length;
+                
+                if (questions.length > 0) {
+                    showQuestion();
+                } else {
+                    questionText.textContent = `${currentCategory} कैटेगरी में कोई प्रश्न उपलब्ध नहीं है। कृपया दूसरी कैटेगरी चुनें।`;
+                    optionsContainer.innerHTML = '';
+                }
+            }
+            
+            // प्रश्न दिखाने का फंक्शन
+            function showQuestion() {
+                if (currentQuestion >= questions.length) {
+                    showResults();
+                    return;
+                }
+                
+                const question = questions[currentQuestion];
+                questionText.textContent = question.question;
+                currentQuestionEl.textContent = currentQuestion + 1;
+                
+                // प्रोग्रेस बार अपडेट करें
+                const progressPercent = ((currentQuestion + 1) / questions.length) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                
+                // ऑप्शन क्लियर करें
+                optionsContainer.innerHTML = '';
+                
+                // ऑप्शन बनाएं
+                question.options.forEach((option, index) => {
+                    const optionBtn = document.createElement('button');
+                    optionBtn.classList.add('option-btn');
+                    optionBtn.innerHTML = `<span>${option}</span>`;
+                    
+                    // ऑप्शन क्लिक इवेंट
+                    optionBtn.addEventListener('click', () => {
+                        // सभी ऑप्शन डिसेबल करें
+                        document.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.disabled = true;
+                        });
+                        
+                        // सही/गलत चेक करें
+                        if (option === question.correctAnswer) {
+                            optionBtn.classList.add('correct');
+                            score++;
+                            scoreEl.textContent = score;
+                        } else {
+                            optionBtn.classList.add('incorrect');
+                            
+                            // सही उत्तर हाइलाइट करें
+                            document.querySelectorAll('.option-btn').forEach(btn => {
+                                if (btn.textContent.trim() === question.correctAnswer) {
+                                    btn.classList.add('correct');
+                                }
+                            });
+                        }
+                        
+                        // 1 सेकंड बाद अगला प्रश्न
+                        setTimeout(() => {
+                            currentQuestion++;
+                            showQuestion();
+                        }, 1000);
+                    });
+                    
+                    optionsContainer.appendChild(optionBtn);
                 });
-                option.classList.add('selected');
+            }
+            
+            // रिजल्ट दिखाने का फंक्शन
+            function showResults() {
+                questionText.textContent = "क्विज़ पूरा हुआ!";
+                optionsContainer.innerHTML = `
+                    <div class="result-container">
+                        <div class="result-score">
+                            <h2>आपका स्कोर</h2>
+                            <div class="score-value">${score} / ${questions.length}</div>
+                        </div>
+                        <div class="result-message">
+                            ${score === questions.length ? 
+                                '<i class="fas fa-trophy"></i> बधाई हो! आपने पूर्ण अंक प्राप्त किए!' : 
+                                score >= questions.length / 2 ? 
+                                '<i class="fas fa-thumbs-up"></i> अच्छा प्रदर्शन! बेहतरीन कोशिश!' : 
+                                '<i class="fas fa-redo"></i> अभ्यास करने की जरूरत है! फिर से कोशिश करें!'}
+                        </div>
+                        <button id="restart-btn" class="restart-btn">क्विज़ फिर से शुरू करें</button>
+                        <button id="category-btn" class="category-btn">कैटेगरी बदलें</button>
+                    </div>
+                `;
+                
+                // रीस्टार्ट बटन इवेंट
+                document.getElementById('restart-btn').addEventListener('click', () => {
+                    currentQuestion = 0;
+                    score = 0;
+                    scoreEl.textContent = score;
+                    progressBar.style.width = '0%';
+                    showQuestion();
+                });
+                
+                // कैटेगरी बदलें बटन इवेंट
+                document.getElementById('category-btn').addEventListener('click', () => {
+                    currentQuestion = 0;
+                    score = 0;
+                    scoreEl.textContent = score;
+                    progressBar.style.width = '0%';
+                    questionText.textContent = "कृपया एक कैटेगरी चुनें";
+                    optionsContainer.innerHTML = '';
+                });
+            }
+            
+            // कैटेगरी कार्ड्स के लिए इवेंट लिसनर
+            const categoryCards = document.querySelectorAll('.category-card');
+            categoryCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    categoryCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    
+                    // कैटेगरी का नाम प्राप्त करें
+                    currentCategory = card.dataset.category;
+                    
+                    // क्विज़ रीसेट करें
+                    currentQuestion = 0;
+                    score = 0;
+                    scoreEl.textContent = score;
+                    progressBar.style.width = '0%';
+                    
+                    // नई कैटेगरी के लिए क्विज़ लोड करें
+                    loadQuiz();
+                });
             });
         });
-        
-        function submitPayment() {
-            const userId = document.getElementById('user_id').value;
-            const transactionId = document.getElementById('transaction_id').value;
-            const amount = document.getElementById('amount').value;
-            const statusElement = document.getElementById('status-message');
-            
-            if (!userId || !transactionId || !amount) {
-                statusElement.textContent = 'कृपया सभी आवश्यक फील्ड भरें!';
-                statusElement.className = 'status-message error';
-                return;
-            }
-            
-            // लोडिंग स्टेटस दिखाएं
-            statusElement.textContent = 'पेमेंट सबमिट हो रहा है...';
-            statusElement.className = 'status-message pending';
-            
-            // सिमुलेट पेमेंट सबमिशन
-            setTimeout(function() {
-                // पेमेंट डेटा सेव करें
-                const paymentData = {
-                    user_id: userId,
-                    transaction_id: transactionId,
-                    amount: amount,
-                    payment_note: document.getElementById('payment_note').value,
-                    submission_date: new Date().toISOString(),
-                    status: 'pending'
-                };
-                
-                // लोकल स्टोरेज में सेव करें
-                localStorage.setItem('paymentData', JSON.stringify(paymentData));
-                
-                // सफलता संदेश दिखाएं
-                statusElement.textContent = 'आपका पेमेंट सबमिट किया गया है! वेरिफिकेशन के बाद आपको ईमेल/SMS द्वारा सूचित किया जाएगा।';
-                statusElement.className = 'status-message success';
-                
-                // फॉर्म हाइड करें
-                document.getElementById('payment-form').style.display = 'none';
-                
-                // 5 सेकंड बाद रीडायरेक्ट करें
-                setTimeout(function() {
-                    // यहां आप यूजर को क्विज़ पेज पर रीडायरेक्ट कर सकते हैं
-                    alert('पेमेंट सफलतापूर्वक सबमिट किया गया! अब आप क्विज़ खेल सकते हैं।');
-                    window.location.href = 'quiz.html';
-                }, 5000);
-            }, 2000);
-        }
     </script>
 </body>
 </html>
