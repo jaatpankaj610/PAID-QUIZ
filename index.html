@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>प्रोफेशनल क्विज ऐप</title>
+    <title>क्विज़ मास्टर प्रो</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#764ba2">
 </head>
 <body>
     <div class="app-container">
         <div class="quiz-header">
-            <img src="qr-code.png" alt="QR Code" class="qr-code">
-            <h1>क्विज मास्टर प्रो</h1>
+            <img src="app-icon.png" alt="App Icon" class="app-icon">
+            <h1>क्विज़ मास्टर प्रो</h1>
+            <div class="user-info">
+                <div class="user-status">
+                    <i class="fas fa-crown"></i> प्रीमियम यूज़र
+                </div>
+                <div class="days-left">
+                    <i class="fas fa-clock"></i> <span id="days-left">30</span> दिन बाकी
+                </div>
+            </div>
         </div>
         
         <div class="quiz-container">
@@ -35,7 +45,63 @@
                 </div>
             </div>
         </div>
+        
+        <div class="quiz-categories">
+            <h3>क्विज़ कैटेगरी</h3>
+            <div class="category-grid">
+                <div class="category-card active">
+                    <i class="fas fa-book"></i>
+                    <span>सामान्य ज्ञान</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-flask"></i>
+                    <span>विज्ञान</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-landmark"></i>
+                    <span>इतिहास</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-calculator"></i>
+                    <span>गणित</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-film"></i>
+                    <span>मनोरंजन</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-football-ball"></i>
+                    <span>खेल</span>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    <div class="payment-overlay" id="payment-overlay">
+        <div class="payment-modal">
+            <div class="payment-modal-header">
+                <h2>प्रीमियम एक्सेस की आवश्यकता</h2>
+                <p>क्विज़ मास्टर प्रो का उपयोग करने के लिए पेमेंट करें</p>
+            </div>
+            
+            <div class="payment-modal-body">
+                <div class="plan-card">
+                    <h3><i class="fas fa-crown"></i> प्रीमियम प्लान</h3>
+                    <div class="plan-price">₹49 <span>30 दिनों के लिए</span></div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check-circle"></i> सभी क्विज़ कैटेगरी तक पहुंच</li>
+                        <li><i class="fas fa-check-circle"></i> असीमित क्विज़ प्रयास</li>
+                        <li><i class="fas fa-check-circle"></i> विस्तृत प्रगति रिपोर्ट</li>
+                    </ul>
+                </div>
+                
+                <button class="payment-btn" id="pay-now-btn">
+                    <i class="fas fa-lock"></i> अभी पेमेंट करें
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
