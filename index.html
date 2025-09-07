@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>क्विज़ मास्टर प्रो - पेमेंट</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -28,6 +28,12 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         body {
@@ -36,9 +42,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 0;
             overflow: hidden;
-            position: relative;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
         }
         
         /* बैकग्राउंड एनिमेशन - सभी डिवाइसों के लिए */
@@ -63,10 +73,10 @@
         .container {
             width: 100%;
             max-width: 600px;
-            height: 90vh;
-            max-height: 900px;
+            height: 100vh;
+            max-height: 100vh;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            border-radius: 0;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             backdrop-filter: blur(10px);
@@ -89,6 +99,7 @@
             /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
+            -webkit-overflow-scrolling: touch;
         }
         
         .scrollable-content::-webkit-scrollbar {
@@ -107,7 +118,7 @@
         
         .header {
             background: var(--gradient);
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: center;
             color: white;
             position: relative;
@@ -115,6 +126,7 @@
             /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
+            flex-shrink: 0;
         }
         
         .header::before {
@@ -137,11 +149,11 @@
         }
         
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: white;
             border-radius: 50%;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -175,16 +187,16 @@
         }
         
         .logo i {
-            font-size: 40px;
+            font-size: 35px;
             color: var(--primary);
             position: relative;
             z-index: 2;
         }
         
         .header h1 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 1;
@@ -243,7 +255,7 @@
             position: absolute;
             top: -15px;
             right: -15px;
-            font-size: 18px;
+            font-size: 16px;
             animation: sparkleRotate 3s linear infinite;
             /* मोबाइल में भी दिखने के लिए */
             transform: translateZ(0);
@@ -257,29 +269,30 @@
         }
         
         .header p {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.9;
             position: relative;
             z-index: 1;
         }
         
         .content {
-            padding: 30px;
+            padding: 20px;
+            padding-bottom: 30px;
         }
         
         .payment-info {
             background: rgba(255, 255, 255, 0.7);
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 20px;
+            margin-bottom: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .payment-info h2 {
             color: var(--primary);
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 22px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
         }
@@ -290,30 +303,30 @@
         }
         
         .price-tag {
-            font-size: 42px;
+            font-size: 36px;
             font-weight: 700;
             color: var(--secondary);
-            margin: 15px 0;
+            margin: 12px 0;
             text-align: center;
         }
         
         .price-period {
-            font-size: 18px;
+            font-size: 16px;
             color: #666;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .features {
             list-style: none;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .features li {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            font-size: 16px;
+            font-size: 15px;
             color: #333;
         }
         
@@ -323,22 +336,23 @@
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #333;
+            font-size: 15px;
         }
         
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.3s ease;
             background: white;
         }
@@ -357,18 +371,18 @@
             position: absolute;
             right: 15px;
             bottom: -20px;
-            font-size: 12px;
+            font-size: 11px;
             color: #888;
             background: rgba(255, 255, 255, 0.8);
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
         }
         
         .qr-section {
             background: white;
             border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
+            padding: 20px;
+            margin: 20px 0;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(0, 0, 0, 0.05);
@@ -376,16 +390,16 @@
         
         .qr-section h3 {
             color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
+            margin-bottom: 12px;
+            font-size: 16px;
         }
         
         .qr-code {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             background: #f5f5f5;
             border-radius: 10px;
-            margin: 0 auto 15px;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -403,15 +417,15 @@
         }
         
         .qr-code i {
-            font-size: 50px;
+            font-size: 45px;
             color: var(--primary);
         }
         
         .upi-id {
             background: rgba(74, 0, 224, 0.05);
             border-radius: 10px;
-            padding: 12px;
-            margin: 15px 0;
+            padding: 10px;
+            margin: 12px 0;
             font-weight: 600;
             color: var(--primary);
             display: flex;
@@ -419,21 +433,22 @@
             justify-content: center;
             gap: 8px;
             word-break: break-all;
+            font-size: 14px;
         }
         
         .payment-issue-alert {
             background: rgba(253, 203, 110, 0.1);
             border: 1px solid rgba(253, 203, 110, 0.2);
             border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
+            padding: 12px;
+            margin: 15px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         
         .payment-issue-alert i {
-            font-size: 24px;
+            font-size: 20px;
             color: var(--warning);
             flex-shrink: 0;
         }
@@ -445,12 +460,12 @@
         .payment-issue-alert-title {
             font-weight: 600;
             color: var(--warning);
-            margin-bottom: 5px;
-            font-size: 16px;
+            margin-bottom: 4px;
+            font-size: 15px;
         }
         
         .payment-issue-alert-text {
-            font-size: 14px;
+            font-size: 13px;
             color: #666;
             line-height: 1.4;
         }
@@ -461,8 +476,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             display: inline-block;
-            padding: 2px 5px;
+            padding: 2px 4px;
             border-radius: 4px;
+            font-size: 14px;
         }
         
         .payment-issue-alert-number:hover {
@@ -473,8 +489,8 @@
         .payment-steps {
             background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
             border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
+            padding: 20px;
+            margin: 20px 0;
             text-align: center;
             border: 1px solid rgba(74, 0, 224, 0.1);
             position: relative;
@@ -507,8 +523,8 @@
         
         .payment-steps h3 {
             color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 22px;
+            margin-bottom: 15px;
+            font-size: 18px;
             font-weight: 700;
             position: relative;
             z-index: 1;
@@ -517,7 +533,7 @@
         .steps-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
             z-index: 1;
         }
@@ -530,34 +546,35 @@
         }
         
         .step-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: var(--gradient);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: white;
-            font-size: 20px;
+            font-size: 18px;
         }
         
         .step-text {
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             color: #555;
             line-height: 1.4;
         }
         
         .file-upload {
-            margin: 25px 0;
+            margin: 20px 0;
         }
         
         .file-upload label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #333;
+            font-size: 15px;
         }
         
         .file-input-wrapper {
@@ -567,12 +584,13 @@
             cursor: pointer;
             background: var(--gradient-3);
             color: white;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s ease;
             width: 100%;
             text-align: center;
+            font-size: 14px;
         }
         
         .file-input-wrapper:hover {
@@ -591,14 +609,14 @@
         }
         
         .image-preview {
-            margin-top: 15px;
+            margin-top: 12px;
             text-align: center;
             display: none;
         }
         
         .image-preview img {
             max-width: 100%;
-            max-height: 200px;
+            max-height: 180px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
@@ -608,8 +626,8 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 18px 30px;
-            font-size: 18px;
+            padding: 15px 25px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
@@ -617,7 +635,7 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
-            margin-top: 10px;
+            margin-top: 8px;
             box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
             /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
@@ -673,8 +691,8 @@
         .contact-section {
             background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
             border-radius: 15px;
-            padding: 20px;
-            margin: 25px 0;
+            padding: 18px;
+            margin: 20px 0;
             text-align: center;
             border: 1px solid rgba(74, 0, 224, 0.1);
             position: relative;
@@ -707,9 +725,9 @@
         
         .contact-title {
             color: var(--primary);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             position: relative;
             z-index: 1;
             display: flex;
@@ -726,11 +744,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             background: white;
             border-radius: 10px;
-            padding: 12px 15px;
-            margin: 10px 0;
+            padding: 10px 12px;
+            margin: 8px 0;
             font-weight: 600;
             color: var(--primary);
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
@@ -738,6 +756,7 @@
             z-index: 1;
             transition: all 0.3s ease;
             cursor: pointer;
+            font-size: 15px;
         }
         
         .contact-number:hover {
@@ -746,7 +765,7 @@
         }
         
         .contact-number i {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--success);
         }
         
@@ -762,27 +781,28 @@
         }
         
         .contact-note {
-            font-size: 14px;
+            font-size: 13px;
             color: #666;
-            margin-top: 10px;
+            margin-top: 8px;
             position: relative;
             z-index: 1;
         }
         
         .note {
             text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
+            margin-top: 15px;
+            font-size: 13px;
             color: #666;
         }
         
         .status-message {
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
             text-align: center;
             font-weight: 600;
             display: none;
+            font-size: 14px;
         }
         
         .status-message.success {
@@ -821,23 +841,23 @@
             }
             
             .header h1 {
-                font-size: 28px;
+                font-size: 24px;
             }
             
             .price-tag {
-                font-size: 36px;
+                font-size: 32px;
             }
             
             .steps-container {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
             }
             
             .step {
                 width: 100%;
                 flex-direction: row;
                 text-align: left;
-                gap: 15px;
+                gap: 12px;
             }
             
             .step-icon {
@@ -853,11 +873,11 @@
         
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
             
             .header p {
-                font-size: 14px;
+                font-size: 13px;
             }
             
             .payment-info h2 {
@@ -865,16 +885,16 @@
             }
             
             .price-tag {
-                font-size: 32px;
+                font-size: 30px;
             }
             
             .form-group input, .form-group textarea {
-                padding: 12px;
+                padding: 10px;
                 font-size: 14px;
             }
             
             .payment-steps h3 {
-                font-size: 20px;
+                font-size: 17px;
             }
             
             /* छोटे फोन के लिए एनिमेशन अनुकूलन */
@@ -883,20 +903,20 @@
             }
             
             .sparkle::before {
-                font-size: 16px;
+                font-size: 14px;
             }
             
             .contact-title {
-                font-size: 16px;
+                font-size: 15px;
             }
             
             .contact-number {
                 font-size: 14px;
-                padding: 10px 12px;
+                padding: 8px 10px;
             }
             
             .contact-number i {
-                font-size: 18px;
+                font-size: 16px;
             }
             
             .payment-issue-alert {
@@ -906,7 +926,7 @@
             }
             
             .payment-issue-alert i {
-                font-size: 20px;
+                font-size: 18px;
             }
         }
     </style>
