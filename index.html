@@ -315,6 +315,11 @@
             min-height: fit-content;
             height: auto;
         }
+
+        /* Added margin-top to payment-steps for spacing */
+        .payment-steps {
+            margin-top: 20px; 
+        }
         
         .veklapic-message::before {
             content: '';
@@ -709,10 +714,6 @@
             100% { box-shadow: 0 0 0 0 rgba(67, 233, 123, 0); }
         }
         
-        .access-info i {
-            font-size: 18px;
-        }
-        
         /* एनिमेशन */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -776,15 +777,11 @@
             .payment-info {
                 flex-direction: column;
                 text-align: center;
-                padding: 15px;
-                margin-bottom: 15px;
+                padding: 18px 15px;
             }
             
             .payment-visual {
-                margin: 10px auto 0;
-                width: 70px;
-                height: 70px;
-                font-size: 22px;
+                margin: 15px auto 0;
             }
             
             .payment-details {
@@ -795,16 +792,10 @@
             .features {
                 justify-content: center;
             }
-            
-            /* पेमेंट स्टेप्स को सही जगह पर लाना */
+
+            /* Adjusted margin-top for mobile for payment-steps */
             .payment-steps {
-                margin-top: 10px;
-                margin-bottom: 15px;
-            }
-            
-            /* फॉर्म और QR सेक्शन को सही जगह पर लाना */
-            .form-and-qr {
-                margin-top: 0;
+                margin-top: 15px; 
             }
         }
         
@@ -912,150 +903,4 @@
                         <div class="file-upload">
                             <label>पेमेंट स्क्रीनशॉट अपलोड करें</label>
                             <div class="file-input-wrapper">
-                                <input type="file" id="payment_proof" name="payment_proof" accept="image/*" onchange="previewImage(event)">
-                                <span>फाइल चुनें</span>
-                            </div>
-                            <div id="image-preview" class="image-preview"></div>
-                        </div>
-                        
-                        <div class="form-group hint">
-                            <label for="payment_note">संदेश (वैकल्पिक)</label>
-                            <textarea id="payment_note" name="payment_note" rows="2" placeholder="कोई संदेश दर्ज करें..."></textarea>
-                            <span class="input-hint">वैकल्पिक</span>
-                        </div>
-                        
-                        <button type="button" class="submit-btn" onclick="submitPayment()">
-                            <i class="fas fa-paper-plane"></i> पेमेंट वेरिफिकेशन के लिए सबमिट करें
-                        </button>
-                    </form>
-                    
-                    <div id="status-message" class="status-message"></div>
-                </div>
-            </div>
-            
-            <div class="veklapic-message">
-                <h4><i class="fas fa-info-circle"></i> वेक्लपिक संदेश</h4>
-                <p>हमारी टीम आपके पेमेंट को जल्द से जल्द वेरिफाई करेगी। किसी भी समस्या की स्थिति में, आप हमारे वेक्लपिक मोबाइल नंबर पर संपर्क कर सकते हैं।</p>
-                <div class="veklapic-contact">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>वेक्लपिक सपोर्ट: +91 98765 43210</span>
-                </div>
-            </div>
-            
-            <div class="access-info">
-                <i class="fas fa-unlock-alt"></i>
-                <span>पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक क्विज़ मास्टर प्रो तक पहुंच मिलेगी</span>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        // UPI ID कॉपी करने का फंक्शन
-        document.querySelector('.upi-id').addEventListener('click', function() {
-            const upiId = document.getElementById('upi-id-text').textContent;
-            navigator.clipboard.writeText(upiId).then(function() {
-                const originalText = document.getElementById('upi-id-text').textContent;
-                document.getElementById('upi-id-text').textContent = 'कॉपी हो गया!';
-                setTimeout(function() {
-                    document.getElementById('upi-id-text').textContent = originalText;
-                }, 2000);
-            });
-        });
-        
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('image-preview');
-                    preview.innerHTML = '<img src="' + e.target.result + '" alt="पेमेंट प्रूफ">';
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        
-        function submitPayment() {
-            const userId = document.getElementById('user_id').value;
-            const transactionId = document.getElementById('transaction_id').value;
-            const amount = document.getElementById('amount').value;
-            const statusElement = document.getElementById('status-message');
-            
-            if (!userId || !transactionId || !amount) {
-                statusElement.textContent = 'कृपया सभी आवश्यक फील्ड भरें!';
-                statusElement.className = 'status-message error';
-                return;
-            }
-            
-            // लोडिंग स्टेटस दिखाएं
-            statusElement.textContent = 'पेमेंट सबमिट हो रहा है...';
-            statusElement.className = 'status-message pending';
-            
-            // सिमुलेट पेमेंट सबमिशन
-            setTimeout(function() {
-                // पेमेंट डेटा सेव करें
-                const paymentData = {
-                    id: Date.now(), // यूनीक ID
-                    user_id: userId,
-                    mobile_number: document.getElementById('mobile_number').value,
-                    transaction_id: transactionId,
-                    amount: amount,
-                    payment_note: document.getElementById('payment_note').value,
-                    submission_date: new Date().toISOString(),
-                    status: 'pending',
-                    payment_method: 'upi' // डिफ़ॉल्ट UPI क्योंकि यूजर ने QR स्कैन किया है
-                };
-                
-                // पेमेंट्स लिस्ट में जोड़ें
-                let payments = JSON.parse(localStorage.getItem('payments')) || [];
-                payments.push(paymentData);
-                localStorage.setItem('payments', JSON.stringify(payments));
-                
-                // एडमिन को SMS भेजें (सिमुलेशन)
-                sendAdminNotification();
-                
-                // सफलता संदेश दिखाएं
-                statusElement.textContent = 'आपका पेमेंट सबमिट किया गया है! वेरिफिकेशन के बाद आपको ईमेल/SMS द्वारा सूचित किया जाएगा।';
-                statusElement.className = 'status-message success';
-                
-                // फॉर्म हाइड करें
-                document.getElementById('payment-form').style.display = 'none';
-                
-                // यूजर को धन्यवाद SMS/ईमेल भेजें (सिमुलेशन)
-                sendUserThankYouMessage(userId);
-                
-                // 5 सेकंड बाद रीडायरेक्ट करें
-                setTimeout(function() {
-                    // यहां आप यूजर को क्विज़ पेज पर रीडायरेक्ट कर सकते हैं
-                    alert('पेमेंट सफलतापूर्वक सबमिट किया गया! अब आप क्विज़ खेल सकते हैं।');
-                    window.location.href = 'quiz.html';
-                }, 5000);
-            }, 2000);
-        }
-        
-        // एडमिन को नोटिफिकेशन भेजने का फंक्शन (सिमुलेशन)
-        function sendAdminNotification() {
-            // वास्तविक एप्लिकेशन में, यह एक SMS API कॉल होगा
-            console.log('एडमिन को SMS: नया पेमेंट रिक्वेस्ट आया है।');
-            
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS के बजाय
-            const notification = document.createElement('div');
-            notification.className = 'status-message pending';
-            notification.textContent = 'एडमिन को SMS भेजा गया: नया पेमेंट रिक्वेस्ट आया है।';
-            document.querySelector('.form-section').appendChild(notification);
-        }
-        
-        // यूजर को धन्यवाद संदेश भेजने का फंक्शन (सिमुलेशन)
-        function sendUserThankYouMessage(userId) {
-            // वास्तविक एप्लिकेशन में, यह SMS या ईमेल API कॉल होगा
-            console.log(`${userId} को धन्यवाद संदेश भेजा गया।`);
-            
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS/ईमेल के बजाय
-            const notification = document.createElement('div');
-            notification.className = 'status-message success';
-            notification.textContent = `${userId} को धन्यवाद संदेश भेजा गया।`;
-            document.querySelector('.form-section').appendChild(notification);
-        }
-    </script>
-</body>
-</html>
+                                <input type="file" id="payment_proof" name="payment_proof" accept="image/*" on
