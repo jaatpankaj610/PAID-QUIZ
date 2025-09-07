@@ -198,22 +198,6 @@
             box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
         }
         
-        .form-group.hint {
-            position: relative;
-        }
-        
-        .form-group.hint .input-hint {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            color: #888;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-        
         .qr-section {
             background: white;
             border-radius: 15px;
@@ -271,83 +255,54 @@
             word-break: break-all;
         }
         
-        .payment-steps {
-            background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
-            border-radius: 15px;
-            padding: 25px;
+        .payment-methods {
             margin: 25px 0;
-            text-align: center;
-            border: 1px solid rgba(74, 0, 224, 0.1);
-            position: relative;
-            overflow: hidden;
         }
         
-        .payment-steps::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 100px;
-            height: 100px;
+        .payment-methods h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .payment-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-option.selected {
+            border-color: var(--primary);
             background: rgba(74, 0, 224, 0.05);
-            border-radius: 50%;
-            z-index: 0;
         }
         
-        .payment-steps::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: -30px;
-            width: 120px;
-            height: 120px;
-            background: rgba(142, 45, 226, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-        
-        .payment-steps h3 {
+        .payment-option i {
+            font-size: 24px;
             color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 22px;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 8px;
+            display: block;
         }
         
-        .steps-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 30%;
-        }
-        
-        .step-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-            color: white;
-            font-size: 20px;
-        }
-        
-        .step-text {
-            text-align: center;
+        .payment-option span {
+            display: block;
             font-size: 14px;
             color: #555;
-            line-height: 1.4;
         }
         
         .file-upload {
@@ -501,20 +456,8 @@
                 font-size: 36px;
             }
             
-            .steps-container {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .step {
-                width: 100%;
-                flex-direction: row;
-                text-align: left;
-                gap: 15px;
-            }
-            
-            .step-icon {
-                margin-bottom: 0;
+            .payment-options {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -538,10 +481,6 @@
             .form-group input, .form-group textarea {
                 padding: 12px;
                 font-size: 14px;
-            }
-            
-            .payment-steps h3 {
-                font-size: 20px;
             }
         }
     </style>
@@ -570,40 +509,10 @@
                 </ul>
             </div>
             
-            <div class="payment-steps">
-                <h3>पेमेंट प्रक्रिया</h3>
-                <div class="steps-container">
-                    <div class="step">
-                        <div class="step-icon">
-                            <i class="fas fa-qrcode"></i>
-                        </div>
-                        <div class="step-text">QR कोड स्कैन करें</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-icon">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </div>
-                        <div class="step-text">₹49 का भुगतान करें</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-icon">
-                            <i class="fas fa-file-invoice"></i>
-                        </div>
-                        <div class="step-text">डिटेल्स भरें</div>
-                    </div>
-                </div>
-            </div>
-            
             <form id="payment-form">
                 <div class="form-group">
                     <label for="user_id">ईमेल या फोन नंबर</label>
                     <input type="text" id="user_id" name="user_id" placeholder="अपना ईमेल या फोन नंबर दर्ज करें" required>
-                </div>
-                
-                <div class="form-group hint">
-                    <label for="mobile_number">मोबाइल नंबर (वैकल्पिक)</label>
-                    <input type="text" id="mobile_number" name="mobile_number" placeholder="अपना मोबाइल नंबर दर्ज करें">
-                    <span class="input-hint">वैकल्पिक</span>
                 </div>
                 
                 <div class="qr-section">
@@ -617,6 +526,28 @@
                         <span id="upi-id-text">your-amazon-pay@upi</span>
                     </div>
                     <p>किसी भी UPI ऐप से स्कैन करें</p>
+                </div>
+                
+                <div class="payment-methods">
+                    <h3>पेमेंट विधि चुनें</h3>
+                    <div class="payment-options">
+                        <div class="payment-option selected" data-method="upi">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>UPI</span>
+                        </div>
+                        <div class="payment-option" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            <span>कार्ड</span>
+                        </div>
+                        <div class="payment-option" data-method="wallet">
+                            <i class="fas fa-wallet"></i>
+                            <span>वॉलेट</span>
+                        </div>
+                        <div class="payment-option" data-method="netbanking">
+                            <i class="fas fa-university"></i>
+                            <span>नेट बैंकिंग</span>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -638,10 +569,9 @@
                     <div id="image-preview" class="image-preview"></div>
                 </div>
                 
-                <div class="form-group hint">
-                    <label for="payment_note">संदेश (वैकल्पिक)</label>
-                    <textarea id="payment_note" name="payment_note" rows="3" placeholder="कोई संदेश दर्ज करें (वैकल्पिक)..."></textarea>
-                    <span class="input-hint">वैकल्पिक</span>
+                <div class="form-group">
+                    <label for="payment_note">अतिरिक्त जानकारी (वैकल्पिक)</label>
+                    <textarea id="payment_note" name="payment_note" rows="3" placeholder="कोई अतिरिक्त जानकारी दर्ज करें..."></textarea>
                 </div>
                 
                 <button type="button" class="submit-btn" onclick="submitPayment()">
@@ -681,6 +611,16 @@
             }
         }
         
+        // पेमेंट विधि चयन
+        document.querySelectorAll('.payment-option').forEach(function(option) {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option').forEach(function(opt) {
+                    opt.classList.remove('selected');
+                });
+                option.classList.add('selected');
+            });
+        });
+        
         function submitPayment() {
             const userId = document.getElementById('user_id').value;
             const transactionId = document.getElementById('transaction_id').value;
@@ -703,13 +643,12 @@
                 const paymentData = {
                     id: Date.now(), // यूनीक ID
                     user_id: userId,
-                    mobile_number: document.getElementById('mobile_number').value,
                     transaction_id: transactionId,
                     amount: amount,
                     payment_note: document.getElementById('payment_note').value,
                     submission_date: new Date().toISOString(),
                     status: 'pending',
-                    payment_method: 'upi' // डिफ़ॉल्ट UPI क्योंकि यूजर ने QR स्कैन किया है
+                    payment_method: document.querySelector('.payment-option.selected').dataset.method
                 };
                 
                 // पेमेंट्स लिस्ट में जोड़ें
