@@ -7,15 +7,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
         
         :root {
-            --primary: #6a11cb;
-            --secondary: #2575fc;
-            --success: #4caf50;
-            --danger: #f44336;
-            --warning: #ff9800;
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
             --light: #f8f9fa;
-            --dark: #343a40;
+            --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
             --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -27,7 +28,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Montserrat', 'Poppins', sans-serif;
         }
         
         body {
@@ -37,6 +38,10 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
         
         .app-container {
@@ -44,11 +49,11 @@
             max-width: 600px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.18);
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.8s ease;
         }
         
         .quiz-header {
@@ -57,6 +62,23 @@
             text-align: center;
             color: white;
             position: relative;
+            overflow: hidden;
+        }
+        
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 8s infinite linear;
+        }
+        
+        @keyframes pulse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .app-icon {
@@ -70,6 +92,8 @@
             justify-content: center;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
+            z-index: 1;
         }
         
         .app-icon i {
@@ -81,6 +105,10 @@
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
         }
         
         .user-info {
@@ -88,6 +116,8 @@
             justify-content: center;
             gap: 20px;
             margin-top: 10px;
+            position: relative;
+            z-index: 1;
         }
         
         .user-status, .days-left {
@@ -99,6 +129,31 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .home-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.1);
         }
         
         .quiz-container {
@@ -114,6 +169,7 @@
             color: var(--dark);
             margin-bottom: 10px;
             font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
         }
         
         #question-text {
@@ -121,6 +177,7 @@
             color: var(--dark);
             line-height: 1.4;
             font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .options-section {
@@ -142,6 +199,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .option-btn:before {
@@ -210,6 +268,7 @@
             text-align: right;
             font-weight: 600;
             color: var(--dark);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .quiz-categories {
@@ -221,6 +280,7 @@
             margin-bottom: 15px;
             font-size: 18px;
             font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .category-grid {
@@ -259,29 +319,7 @@
         .category-card span {
             font-size: 14px;
             font-weight: 500;
-        }
-        
-        .home-btn {
-            background: var(--gradient-2);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
-            margin: 0 25px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .home-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.5);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .result-container {
@@ -296,6 +334,7 @@
             color: var(--primary);
             margin-bottom: 15px;
             font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .score-value {
@@ -303,12 +342,14 @@
             font-weight: 700;
             color: var(--secondary);
             margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .result-message {
             font-size: 18px;
             margin-bottom: 25px;
             color: var(--dark);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .result-message i {
@@ -329,6 +370,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
             margin: 0 10px 10px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .restart-btn:hover, .category-btn:hover {
@@ -376,6 +418,9 @@
 <body>
     <div class="app-container">
         <div class="quiz-header">
+            <button class="home-btn" onclick="goHome()">
+                <i class="fas fa-home"></i>
+            </button>
             <div class="app-icon">
                 <i class="fas fa-brain"></i>
             </div>
@@ -441,12 +486,8 @@
                 </div>
             </div>
         </div>
-        
-        <button class="home-btn" onclick="goHome()">
-            <i class="fas fa-home"></i> होम पेज
-        </button>
     </div>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // पेमेंट स्टेटस चेक करें
@@ -572,23 +613,38 @@
                 ]
             };
             
+            // होम पेज पर जाने का फंक्शन
+            function goHome() {
+                if (confirm("क्या आप होम पेज पर जाना चाहते हैं?")) {
+                    window.location.href = 'payment.html';
+                }
+            }
+            
             // पेमेंट स्टेटस चेक फंक्शन
             function checkPaymentStatus() {
                 const paymentData = localStorage.getItem('paymentData');
                 
                 if (paymentData) {
                     const payment = JSON.parse(paymentData);
+                    
+                    // चेक करें कि पेमेंट अप्रूव्ड है या नहीं
                     if (payment.status === 'approved') {
-                        // पेमेंट अप्रूव्ड है, क्विज़ लोड करें
-                        loadQuiz();
+                        // चेक करें कि एक्सेस अवधि समाप्त हो गई है या नहीं
+                        const accessExpiry = new Date(payment.access_expiry_date);
+                        const currentDate = new Date();
                         
-                        // एक्सपायरी डेट सेट करें
-                        const expiryDate = new Date();
-                        expiryDate.setDate(expiryDate.getDate() + 30);
-                        localStorage.setItem('expiryDate', expiryDate.toISOString());
-                        
-                        // दिनों की संख्या अपडेट करें
-                        updateDaysLeft();
+                        if (currentDate > accessExpiry) {
+                            // एक्सेस अवधि समाप्त हो गई है, पेमेंट पेज पर रीडायरेक्ट करें
+                            alert('आपकी एक्सेस अवधि समाप्त हो गई है। कृपया फिर से पेमेंट करें।');
+                            window.location.href = 'payment.html';
+                        } else {
+                            // एक्सेस अवधि वैध है, क्विज़ लोड करें
+                            loadQuiz();
+                            
+                            // शेष दिनों की गणना करें
+                            const daysLeft = Math.ceil((accessExpiry - currentDate) / (1000 * 60 * 60 * 24));
+                            daysLeftEl.textContent = daysLeft;
+                        }
                     } else {
                         // पेमेंट पेंडिंग है, पेमेंट पेज पर रीडायरेक्ट करें
                         window.location.href = 'payment.html';
@@ -596,26 +652,6 @@
                 } else {
                     // कोई पेमेंट डेटा नहीं है, पेमेंट पेज पर रीडायरेक्ट करें
                     window.location.href = 'payment.html';
-                }
-            }
-            
-            // दिनों की संख्या अपडेट करने का फंक्शन
-            function updateDaysLeft() {
-                const expiryDate = localStorage.getItem('expiryDate');
-                if (expiryDate) {
-                    const expiry = new Date(expiryDate);
-                    const now = new Date();
-                    const diffTime = expiry - now;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    
-                    if (diffDays > 0) {
-                        daysLeftEl.textContent = diffDays;
-                    } else {
-                        // एक्सपायर्ड हो गया, पेमेंट पेज पर रीडायरेक्ट करें
-                        localStorage.removeItem('paymentData');
-                        localStorage.removeItem('expiryDate');
-                        window.location.href = 'payment.html';
-                    }
                 }
             }
             
@@ -751,15 +787,7 @@
                     loadQuiz();
                 });
             });
-            
-            // हर 30 सेकंड में दिनों की संख्या अपडेट करें
-            setInterval(updateDaysLeft, 30000);
         });
-        
-        // होम पेज पर जाने का फंक्शन
-        function goHome() {
-            window.location.href = 'payment.html';
-        }
     </script>
 </body>
 </html>
