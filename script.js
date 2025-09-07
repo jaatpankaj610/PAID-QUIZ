@@ -1,117 +1,114 @@
-let currentQuestion = 0;
-let score = 0;
-let timer;
-let quizData = [];
-
-const questionElement = document.getElementById('question');
-const optionsElement = document.getElementById('options');
-const resultElement = document.getElementById('result');
-const scoreElement = document.getElementById('score');
-const timerElement = document.getElementById('timer');
-const quizContainer = document.querySelector('.quiz-container');
-
-// सवालों को questions.json से लाएँ
-fetch('questions.json')
-    .then(response => response.json())
-    .then(data => {
-        quizData = data;
-        showQuestion();
-    })
-    .catch(error => console.error('सवाल लोड करने में त्रुटि:', error));
-
-// वर्तमान सवाल और विकल्प दिखाएँ
-function showQuestion() {
-    if (currentQuestion >= quizData.length) {
-        showResult();
-        return;
-    }
-
-    const question = quizData[currentQuestion];
-    questionElement.innerText = question.question;
-    optionsElement.innerHTML = '';
-
-    question.options.forEach(option => {
-        const button = document.createElement('div');
-        button.innerText = option;
-        button.classList.add('option');
-        button.addEventListener('click', () => selectAnswer(option));
-        optionsElement.appendChild(button);
-    });
-
-    // टाइमर शुरू करें
-    startTimer();
-}
-
-// टाइमर शुरू करें
-function startTimer() {
-    let timeLeft = 15;
-    timerElement.innerText = timeLeft;
-    timer = setInterval(() => {
-        timeLeft--;
-        timerElement.innerText = timeLeft;
-        if (timeLeft <= 0) {
-            clearInterval(timer);
-            selectAnswer(null); // समय खत्म होने पर सही जवाब दिखाएँ
+document.addEventListener('DOMContentLoaded', () => {
+    // वेरिएबल्स इनिशियलाइज़ करें
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const currentQuestionEl = document.getElementById('current-question');
+    const totalQuestionsEl = document.getElementById('total-questions');
+    const scoreEl = document.getElementById('score');
+    const progressBar = document.getElementById('progress');
+    
+    let currentQuestion = 0;
+    let score = 0;
+    let questions = [];
+    
+    // क्वेश्चन लोड करें
+    fetch('questions.json')
+        .then(response => response.json())
+        .then(data => {
+            questions = data;
+            totalQuestionsEl.textContent = questions.length;
+            showQuestion();
+        })
+        .catch(error => {
+            console.error('क्वेश्चन लोड करने में त्रुटि:', error);
+            questionText.textContent = "क्वेश्चन लोड करने में समस्या हुई। कृपया बाद में पुनः प्रयास करें।";
+        });
+    
+    // क्वेश्चन दिखाने का फंक्शन
+    function showQuestion() {
+        if (currentQuestion >= questions.length) {
+            showResults();
+            return;
         }
-    }, 1000);
-}
-
-// जवाब चुनने की प्रक्रिया
-function selectAnswer(selectedOption) {
-    clearInterval(timer);
-    const correctAnswer = quizData[currentQuestion].answer;
-    const buttons = optionsElement.querySelectorAll('.option');
-
-    buttons.forEach(button => {
-        if (button.innerText === correctAnswer) {
-            button.classList.add('correct');
-        } else if (button.innerText === selectedOption && selectedOption !== correctAnswer) {
-            button.classList.add('wrong');
-        }
-        button.style.pointerEvents = 'none'; // दोबारा क्लिक न हो
-    });
-
-    if (selectedOption === correctAnswer) {
-        score++;
+        
+        const question = questions[currentQuestion];
+        questionText.textContent = question.question;
+        currentQuestionEl.textContent = currentQuestion + 1;
+        
+        // प्रोग्रेस बार अपडेट करें
+        const progressPercent = ((currentQuestion + 1) / questions.length) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+        
+        // ऑप्शन क्लियर करें
+        optionsContainer.innerHTML = '';
+        
+        // ऑप्शन बनाएं
+        question.options.forEach((option, index) => {
+            const optionBtn = document.createElement('button');
+            optionBtn.classList.add('option-btn');
+            optionBtn.innerHTML = `<span>${option}</span>`;
+            
+            // ऑप्शन क्लिक इवेंट
+            optionBtn.addEventListener('click', () => {
+                // सभी ऑप्शन डिसेबल करें
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.disabled = true;
+                });
+                
+                // सही/गलत चेक करें
+                if (option === question.correctAnswer) {
+                    optionBtn.classList.add('correct');
+                    score++;
+                    scoreEl.textContent = score;
+                } else {
+                    optionBtn.classList.add('incorrect');
+                    
+                    // सही उत्तर हाइलाइट करें
+                    document.querySelectorAll('.option-btn').forEach(btn => {
+                        if (btn.textContent.trim() === question.correctAnswer) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                
+                // 1 सेकंड बाद अगला क्वेश्चन
+                setTimeout(() => {
+                    currentQuestion++;
+                    showQuestion();
+                }, 1000);
+            });
+            
+            optionsContainer.appendChild(optionBtn);
+        });
     }
-
-    // 1 सेकंड बाद अगला सवाल
-    setTimeout(() => {
-        currentQuestion++;
-        showQuestion();
-    }, 1000);
-}
-
-// अंतिम परिणाम दिखाएँ
-function showResult() {
-    quizContainer.innerHTML = 
-        <div class="result-container">
-            <h2>क्विज़ पूरा हुआ!</h2>
-            <p>आपका स्कोर: <span id="score">${score}</span>/${quizData.length}</p>
-            <button class="restart-btn">फिर से शुरू करें</button>
-        </div>
-    ;
-    document.querySelector('.restart-btn').addEventListener('click', () => {
-        currentQuestion = 0;
-        score = 0;
-        quizContainer.innerHTML = 
-            <header class="quiz-header">
-                <h2>क्विज़ ऐप</h2>
-                <div class="quiz-timer">
-                    <i class="fas fa-stopwatch"></i>
-                    <span id="timer">15</span> सेकंड
+    
+    // रिजल्ट दिखाने का फंक्शन
+    function showResults() {
+        questionText.textContent = "क्विज पूरा हुआ!";
+        optionsContainer.innerHTML = `
+            <div class="result-container">
+                <div class="result-score">
+                    <h2>आपका स्कोर</h2>
+                    <div class="score-value">${score} / ${questions.length}</div>
                 </div>
-            </header>
-            <div class="question-container">
-                <h3 id="question">यहाँ सवाल दिखेगा</h3>
+                <div class="result-message">
+                    ${score === questions.length ? 
+                        '<i class="fas fa-trophy"></i> बधाई हो! आपने पूर्ण अंक प्राप्त किए!' : 
+                        score >= questions.length / 2 ? 
+                        '<i class="fas fa-thumbs-up"></i> अच्छा प्रदर्शन! बेहतरीन कोशिश!' : 
+                        '<i class="fas fa-redo"></i> अभ्यास करने की जरूरत है! फिर से कोशिश करें!'}
+                </div>
+                <button id="restart-btn" class="restart-btn">क्विज फिर से शुरू करें</button>
             </div>
-            <div class="options-container" id="options"></div>
-            <div class="result-container" id="result" style="display: none;">
-                <h2>क्विज़ पूरा हुआ!</h2>
-                <p>आपका स्कोर: <span id="score">0</span></p>
-                <button class="restart-btn">फिर से शुरू करें</button>
-            </div>
-        ;
-        showQuestion();
-    });
-}
+        `;
+        
+        // रीस्टार्ट बटन इवेंट
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            currentQuestion = 0;
+            score = 0;
+            scoreEl.textContent = score;
+            progressBar.style.width = '0%';
+            showQuestion();
+        });
+    }
+});
