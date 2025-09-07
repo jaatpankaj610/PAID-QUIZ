@@ -1,0 +1,16 @@
+{
+    "name": "क्विज़ मास्टर प्रो",
+    "short_name": "क्विज़ मास्टर",
+    "description": "प्रोफेशनल हिंदी क्विज़ ऐप",
+    "start_url": ".",
+    "display": "fullscreen",
+    "background_color": "#764ba2",
+    "theme_color": "#764ba2",
+    "icons": [
+        {
+            "src": "app-icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
