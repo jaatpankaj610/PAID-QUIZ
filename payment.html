@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>क्विज़ मास्टर प्रो - पेमेंट</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* पेमेंट स्क्रीन के लिए विशेष स्टाइल */
+        .payment-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .payment-header h1 {
+            color: #764ba2;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .payment-header p {
+            color: #555;
+            font-size: 16px;
+        }
+        
+        .plan-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(245, 87, 108, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+        
+        .plan-card h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .plan-card h2 i {
+            margin-right: 10px;
+        }
+        
+        .plan-price {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .plan-period {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .plan-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .plan-features li i {
+            margin-right: 10px;
+            color: #fff;
+        }
+        
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+        
+        .payment-methods h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .payment-option {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option:hover {
+            border-color: #764ba2;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-option.selected {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.1);
+        }
+        
+        .payment-option i {
+            font-size: 24px;
+            color: #764ba2;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .payment-option span {
+            display: block;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .qr-section {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .qr-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .payment-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+        }
+        
+        .payment-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.5);
+        }
+        
+        .payment-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .payment-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .payment-footer a {
+            color: #764ba2;
+            text-decoration: none;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* एनिमेटेड बैकग्राउंड */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            animation: move 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+        
+        .bg-animation span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+            animation-duration: 20s;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .bg-animation span:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+        
+        .bg-animation span:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+            animation-duration: 12s;
+        }
+        
+        .bg-animation span:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .bg-animation span:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+            animation-duration: 10s;
+        }
+        
+        .bg-animation span:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+            animation-duration: 25s;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .bg-animation span:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+            animation-duration: 30s;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .bg-animation span:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+        
+        .bg-animation span:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+        
+        .bg-animation span:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 25s;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        @keyframes move {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="bg-animation">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="payment-card">
+            <div class="payment-header">
+                <h1>क्विज़ मास्टर प्रो</h1>
+                <p>असीमित क्विज़ पहुंच के लिए पेमेंट करें</p>
+            </div>
+            
+            <div class="plan-card">
+                <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
+                <div class="plan-price">₹49</div>
+                <div class="plan-period">30 दिनों के लिए</div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check-circle"></i> सभी क्विज़ कैटेगरी तक पहुंच</li>
+                    <li><i class="fas fa-check-circle"></i> असीमित क्विज़ प्रयास</li>
+                    <li><i class="fas fa-check-circle"></i> विस्तृत प्रगति रिपोर्ट</li>
+                    <li><i class="fas fa-check-circle"></i> नए क्विज़ अपडेट</li>
+                </ul>
+            </div>
+            
+            <div class="payment-methods">
+                <h3>पेमेंट विधि चुनें</h3>
+                <div class="payment-options">
+                    <div class="payment-option" data-method="upi">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>UPI</span>
+                    </div>
+                    <div class="payment-option" data-method="card">
+                        <i class="fas fa-credit-card"></i>
+                        <span>कार्ड</span>
+                    </div>
+                    <div class="payment-option" data-method="wallet">
+                        <i class="fas fa-wallet"></i>
+                        <span>वॉलेट</span>
+                    </div>
+                    <div class="payment-option" data-method="netbanking">
+                        <i class="fas fa-university"></i>
+                        <span>नेट बैंकिंग</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="qr-section">
+                <h3>QR कोड स्कैन करें</h3>
+                <img src="qr-code.png" alt="QR Code" class="qr-code">
+                <p>किसी भी UPI ऐप से स्कैन करें</p>
+            </div>
+            
+            <button class="payment-btn" id="confirm-payment">
+                <i class="fas fa-lock"></i> सुरक्षित पेमेंट करें
+            </button>
+            
+            <div class="payment-footer">
+                पेमेंट करके आप हमारी <a href="#">सेवा की शर्तें</a> से सहमत होते हैं
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // पेमेंट विधि चयन
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+            
+            // पेमेंट कन्फर्मेशन
+            const confirmBtn = document.getElementById('confirm-payment');
+            confirmBtn.addEventListener('click', () => {
+                // लोडिंग स्टेटस दिखाएं
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> प्रोसेसिंग...';
+                confirmBtn.disabled = true;
+                
+                // सिमुलेट पेमेंट प्रोसेसिंग
+                setTimeout(() => {
+                    // पेमेंट सफलता स्टोर करें
+                    const expiryDate = new Date();
+                    expiryDate.setDate(expiryDate.getDate() + 30); // 30 दिन बाद एक्सपायरी
+                    localStorage.setItem('paymentStatus', 'paid');
+                    localStorage.setItem('paymentExpiry', expiryDate.toISOString());
+                    
+                    // वेलकम पेज पर रीडायरेक्ट करें
+                    window.location.href = 'welcome.html';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
