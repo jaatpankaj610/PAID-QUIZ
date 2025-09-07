@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>पेशेवर क्विज़ ऐप</title>
+    <title>प्रोफेशनल क्विज ऐप</title>
     <link rel="stylesheet" href="style.css">
-    <!-- आकर्षक आइकन के लिए Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- आधुनिक टेक्स्ट के लिए Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="quiz-container">
-        <header class="quiz-header">
-            <h2>क्विज़ ऐप</h2>
-            <div class="quiz-timer">
-                <i class="fas fa-stopwatch"></i>
-                <span id="timer">15</span> सेकंड
-            </div>
-        </header>
-        <div class="question-container">
-            <h3 id="question">यहाँ सवाल दिखेगा</h3>
+    <div class="app-container">
+        <div class="quiz-header">
+            <img src="qr-code.png" alt="QR Code" class="qr-code">
+            <h1>क्विज मास्टर प्रो</h1>
         </div>
-        <div class="options-container" id="options"></div>
-        <div class="result-container" id="result" style="display: none;">
-            <h2>क्विज़ पूरा हुआ!</h2>
-            <p>आपका स्कोर: <span id="score">0</span></p>
-            <button class="restart-btn">फिर से शुरू करें</button>
+        
+        <div class="quiz-container">
+            <div class="question-section">
+                <div class="question-count">
+                    <span id="current-question">1</span> / <span id="total-questions">10</span>
+                </div>
+                <h2 id="question-text">यहाँ प्रश्न आएगा...</h2>
+            </div>
+            
+            <div class="options-section" id="options-container">
+                <!-- ऑप्शन जावास्क्रिप्ट से जेनरेट होंगे -->
+            </div>
+            
+            <div class="quiz-footer">
+                <div class="progress-bar">
+                    <div id="progress"></div>
+                </div>
+                <div class="score-display">
+                    स्कोर: <span id="score">0</span>
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
