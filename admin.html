@@ -30,16 +30,12 @@
             background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
             min-height: 100vh;
             padding: 20px;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            overflow-y: auto;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            height: calc(100vh - 40px);
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
@@ -55,11 +51,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .header h1 {
             font-size: 28px;
             font-weight: 700;
+            margin-right: 20px;
         }
         
         .header .user-info {
@@ -193,11 +191,13 @@
             padding: 15px;
             text-align: left;
             font-weight: 600;
+            white-space: nowrap;
         }
         
         .payments-table td {
             padding: 15px;
             border-bottom: 1px solid #eee;
+            word-break: break-word;
         }
         
         .payments-table tr:last-child td {
@@ -214,6 +214,7 @@
             font-size: 14px;
             font-weight: 600;
             display: inline-block;
+            white-space: nowrap;
         }
         
         .status-badge.pending {
@@ -240,6 +241,7 @@
             cursor: pointer;
             margin-right: 5px;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
         
         .action-btn.approve {
@@ -283,6 +285,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
         }
         
         .modal-content {
@@ -446,6 +449,11 @@
                 text-align: center;
             }
             
+            .header h1 {
+                margin-right: 0;
+                font-size: 24px;
+            }
+            
             .payments-table {
                 font-size: 14px;
             }
@@ -457,6 +465,42 @@
             .action-btn {
                 padding: 5px 10px;
                 font-size: 12px;
+            }
+            
+            .guide-step {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .payments-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .payments-table thead, .payments-table tbody, .payments-table th, .payments-table td, .payments-table tr {
+                display: block;
+            }
+            
+            .payments-table tr {
+                margin-bottom: 15px;
+            }
+            
+            .payments-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            
+            .payments-table td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                width: 45%;
+                padding-right: 10px;
+                text-align: left;
+                font-weight: 600;
             }
         }
     </style>
@@ -521,21 +565,23 @@
             
             <div class="payments-section">
                 <h2 class="section-title"><i class="fas fa-credit-card"></i> पेमेंट्स</h2>
-                <table class="payments-table">
-                    <thead>
-                        <tr>
-                            <th>यूजर ID</th>
-                            <th>ट्रांजैक्शन ID</th>
-                            <th>राशि</th>
-                            <th>तिथि</th>
-                            <th>स्टेटस</th>
-                            <th>क्रिया</th>
-                        </tr>
-                    </thead>
-                    <tbody id="payments-tbody">
-                        <!-- पेमेंट रो जावास्क्रिप्ट से जेनरेट होंगे -->
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="payments-table">
+                        <thead>
+                            <tr>
+                                <th>यूजर ID</th>
+                                <th>ट्रांजैक्शन ID</th>
+                                <th>राशि</th>
+                                <th>तिथि</th>
+                                <th>स्टेटस</th>
+                                <th>क्रिया</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-tbody">
+                            <!-- पेमेंट रो जावास्क्रिप्ट से जेनरेट होंगे -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -649,13 +695,14 @@
                 
                 actionsCell.appendChild(viewBtn);
                 
+                // data-label attributes for mobile view
                 row.innerHTML = `
-                    <td>${payment.user_id}</td>
-                    <td>${payment.transaction_id}</td>
-                    <td>₹${payment.amount}</td>
-                    <td>${new Date(payment.submission_date).toLocaleDateString()}</td>
-                    <td></td>
-                    <td></td>
+                    <td data-label="यूजर ID">${payment.user_id}</td>
+                    <td data-label="ट्रांजैक्शन ID">${payment.transaction_id}</td>
+                    <td data-label="राशि">₹${payment.amount}</td>
+                    <td data-label="तिथि">${new Date(payment.submission_date).toLocaleDateString()}</td>
+                    <td data-label="स्टेटस"></td>
+                    <td data-label="क्रिया"></td>
                 `;
                 
                 row.cells[4].appendChild(statusBadge);
