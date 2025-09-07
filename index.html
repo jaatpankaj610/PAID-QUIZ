@@ -1,81 +1,347 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>प्रोफेशनल क्विज़</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #89f7fe, #66a6ff);
-  display: flex;
- justify-content: center; align-items: center; min-height: 100vh; margin: 0;
-}
-.quiz-box {
-  background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  max-width: 700px; width: 100%;
-}
-h2 {
-  text-align: center; margin-bottom: 20px; color: #333;
-}
-button {
-  display: block; width: 100%; margin: 10px 0; padding: 15px; font-size: 1.2em; border: none; border-radius: 10px; cursor: pointer;
-  background: linear-gradient(135deg, #f7971e, #ffd200);
-  color: #fff; transition: 0.3s;
-}
-button:hover { transform: scale(1.05); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>पेड क्विज़</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            background: rgba(20, 30, 48, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            width: 90vw;
+            height: 85vh;
+            max-width: 500px;
+            max-height: 800px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+            animation: rotate 30s linear infinite;
+            z-index: 0;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 215, 0, 0.5) rgba(20, 30, 48, 0.2);
+        }
+        
+        .content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .content::-webkit-scrollbar-track {
+            background: rgba(20, 30, 48, 0.2);
+            border-radius: 3px;
+        }
+        
+        .content::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 215, 0, 0.5);
+            border-radius: 3px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, #f7971e, #ffd200);
+            border-radius: 2px;
+        }
+        
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #ffd200;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .option.selected {
+            background: rgba(67, 206, 162, 0.3);
+            border-color: rgba(67, 206, 162, 0.5);
+        }
+        
+        .quiz-button {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #333;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(247, 151, 30, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(247, 151, 30, 0.6);
+        }
+        
+        .quiz-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .result.success {
+            background: rgba(67, 206, 162, 0.3);
+            border-color: rgba(67, 206, 162, 0.5);
+            display: block;
+        }
+        
+        .result.error {
+            background: rgba(255, 65, 76, 0.3);
+            border-color: rgba(255, 65, 76, 0.5);
+            display: block;
+        }
+        
+        .expiry-info {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                height: 90vh;
+                width: 95vw;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<div class="quiz-box" id="quizBox">
-<h2 id="question">प्रश्न यहाँ आएगा</h2>
-<div id="options"></div>
-</div>
-
-<script>
-let questions = [];
-let currentQuestion = 0;
-let autoNextTimeout;
-
-fetch('questions.json')  // यहाँ questions.json फाइल का पथ दें
-.then(res => res.json())
-.then(data => {
-  questions = data;
-  showQuestion();
-});
-
-function showQuestion() {
-  clearTimeout(autoNextTimeout); // नई question से पहले पुराना timeout रद्द
-  if (currentQuestion >= questions.length) {
-    document.getElementById('question').innerText = "क्विज़ समाप्त! धन्यवाद।";
-    document.getElementById('options').innerHTML = "";
-    return;
-  }
-  
-  let q = questions[currentQuestion];
-  document.getElementById('question').innerText = q.question;
-  const optionsDiv = document.getElementById('options');
-  optionsDiv.innerHTML = '';
-  q.options.forEach((opt, idx) => {
-    const btn = document.createElement('button');
-    btn.innerText = opt;
-    btn.onclick = () => {
-      // यहाँ आप answer check कर सकते हैं
-      // फिलहाल, तुरंत ही अगली question पर जाएं
-      clearTimeout(autoNextTimeout);
-      autoNextTimeout = setTimeout(nextQuestion, 1000);
-    };
-    optionsDiv.appendChild(btn);
-  });
-  // 1 सेकंड बाद ऑटोमेटिक अगला question
-  autoNextTimeout = setTimeout(nextQuestion, 1000);
-}
-
-function nextQuestion() {
-  currentQuestion++;
-  showQuestion();
-}
-</script>
+    <div class="container">
+        <div class="content">
+            <h1>पेड क्विज़</h1>
+            <div class="expiry-info">
+                आपकी सदस्यता <span id="expiry-date">30 दिन</span> तक वैध है
+            </div>
+            <div class="quiz-container">
+                <div class="question" id="question">क्विज़ लोड हो रहा है...</div>
+                <div class="options" id="options">
+                    <!-- ऑप्शन यहाँ लोड होंगे -->
+                </div>
+            </div>
+            <button class="quiz-button" id="submit-btn" onclick="submitAnswer()">उत्तर सबमिट करें</button>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+    <script>
+        // क्विज़ डेटा लोड करें
+        let questions = [];
+        let currentQuestion = 0;
+        let score = 0;
+        
+        // यूजर ID से एक्सपायरी डेट प्राप्त करें (localStorage से सिमुलेटेड)
+        function getUserExpiryDate() {
+            const expiryDate = localStorage.getItem('expiryDate');
+            if (expiryDate) {
+                const expiry = new Date(expiryDate);
+                const now = new Date();
+                const daysLeft = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+                document.getElementById('expiry-date').textContent = daysLeft > 0 ? `${daysLeft} दिन` : 'एक्सपायर';
+                return expiryDate;
+            }
+            return null;
+        }
+        
+        // क्विज़ प्रश्न लोड करें
+        function loadQuestions() {
+            fetch('questions.json')
+                .then(response => response.json())
+                .then(data => {
+                    questions = data;
+                    if (questions.length > 0) {
+                        showQuestion();
+                    } else {
+                        document.getElementById('question').textContent = 'कोई प्रश्न उपलब्ध नहीं है';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('question').textContent = 'प्रश्न लोड करने में त्रुटि';
+                });
+        }
+        
+        // प्रश्न दिखाएं
+        function showQuestion() {
+            if (currentQuestion < questions.length) {
+                const q = questions[currentQuestion];
+                document.getElementById('question').textContent = q.question;
+                
+                const optionsContainer = document.getElementById('options');
+                optionsContainer.innerHTML = '';
+                
+                q.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => selectOption(index);
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                document.getElementById('submit-btn').disabled = true;
+            } else {
+                showResult();
+            }
+        }
+        
+        // ऑप्शन चुनें
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[index].classList.add('selected');
+            document.getElementById('submit-btn').disabled = false;
+        }
+        
+        // उत्तर सबमिट करें
+        function submitAnswer() {
+            const selectedOption = document.querySelector('.option.selected');
+            if (!selectedOption) return;
+            
+            const selectedIndex = Array.from(document.querySelectorAll('.option')).indexOf(selectedOption);
+            const correctIndex = questions[currentQuestion].answer;
+            
+            if (selectedIndex === correctIndex) {
+                score++;
+            }
+            
+            currentQuestion++;
+            showQuestion();
+        }
+        
+        // परिणाम दिखाएं
+        function showResult() {
+            const resultElement = document.getElementById('result');
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            resultElement.className = 'result success';
+            resultElement.innerHTML = `
+                <h3>क्विज़ पूर्ण!</h3>
+                <p>आपका स्कोर: ${score}/${questions.length} (${percentage}%)</p>
+                <button class="quiz-button" onclick="location.reload()">फिर से कोशिश करें</button>
+            `;
+            
+            document.getElementById('submit-btn').style.display = 'none';
+        }
+        
+        // पेज लोड होने पर क्विज़ लोड करें
+        window.onload = function() {
+            getUserExpiryDate();
+            loadQuestions();
+        };
+    </script>
 </body>
 </html>
