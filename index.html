@@ -7,16 +7,600 @@
     
     <!-- CSS फाइलें -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     
-    <!-- PWA मेनिफेस्ट -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#764ba2">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .quiz-header {
+            background: var(--gradient);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .app-icon i {
+            font-size: 30px;
+            color: var(--primary);
+        }
+        
+        .quiz-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .user-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .user-status, .days-left {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .quiz-container {
+            padding: 25px;
+        }
+        
+        .question-section {
+            margin-bottom: 25px;
+        }
+        
+        .question-count {
+            font-size: 14px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        #question-text {
+            font-size: 22px;
+            color: var(--dark);
+            line-height: 1.4;
+            font-weight: 600;
+        }
+        
+        .options-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+            z-index: 0;
+        }
+        
+        .option-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-btn:hover:before {
+            width: 100%;
+        }
+        
+        .option-btn span {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+        
+        .option-btn:hover span {
+            color: white;
+        }
+        
+        .option-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .option-btn.incorrect {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+        
+        .quiz-footer {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        #progress {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .score-display {
+            text-align: right;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .quiz-categories {
+            padding: 0 25px 25px;
+        }
+        
+        .quiz-categories h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .category-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-card.active {
+            background: var(--gradient);
+            border-color: transparent;
+            color: white;
+        }
+        
+        .category-card i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .category-card span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* पेमेंट सेक्शन */
+        .payment-section {
+            padding: 0 25px 25px;
+            text-align: center;
+        }
+        
+        .payment-btn {
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .payment-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.5);
+        }
+        
+        .payment-note {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* पेमेंट मोडल */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: slideIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .payment-header h2 {
+            color: var(--primary);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .payment-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .plan-details {
+            background: var(--gradient-2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            color: white;
+            text-align: center;
+        }
+        
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .price span {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        
+        .plan-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .plan-features li i {
+            margin-right: 10px;
+            color: #fff;
+        }
+        
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+        
+        .payment-methods h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .payment-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: rgba(118, 75, 162, 0.1);
+        }
+        
+        .payment-option i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .payment-option span {
+            display: block;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .qr-section {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .qr-section h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .confirm-payment-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .confirm-payment-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.5);
+        }
+        
+        /* रिजल्ट कंटेनर के लिए स्टाइल */
+        .result-container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-score h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        .result-message {
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: var(--dark);
+        }
+        
+        .result-message i {
+            font-size: 24px;
+            margin-right: 8px;
+            color: var(--warning);
+        }
+        
+        .restart-btn, .category-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+            margin: 0 10px 10px;
+        }
+        
+        .restart-btn:hover, .category-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.5);
+        }
+        
+        /* एनिमेशन */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* रेस्पॉन्सिव डिज़ाइन */
+        @media (max-width: 500px) {
+            .app-container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            .quiz-header h1 {
+                font-size: 22px;
+            }
+            
+            #question-text {
+                font-size: 18px;
+            }
+            
+            .option-btn {
+                padding: 12px 15px;
+                font-size: 15px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .payment-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
         <div class="quiz-header">
-            <img src="app-icon.png" alt="App Icon" class="app-icon">
+            <div class="app-icon">
+                <i class="fas fa-brain"></i>
+            </div>
             <h1>क्विज़ मास्टर प्रो</h1>
             <div class="user-info">
                 <div class="user-status">
@@ -132,7 +716,12 @@
             
             <div class="qr-section">
                 <h3>QR कोड स्कैन करें</h3>
-                <img src="qr-code.png" alt="QR Code" class="qr-code">
+                <div class="qr-code">
+                    <!-- यहां QR कोड की जगह एक डमी डिव है -->
+                    <div style="width: 100%; height: 100%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
+                        QR कोड
+                    </div>
+                </div>
                 <p>किसी भी UPI ऐप से स्कैन करें</p>
             </div>
             
@@ -141,8 +730,380 @@
             </button>
         </div>
     </div>
-    
-    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // पेमेंट स्टेटस चेक करें
+            checkPaymentStatus();
+            
+            // वेरिएबल्स इनिशियलाइज़ करें
+            const questionText = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const currentQuestionEl = document.getElementById('current-question');
+            const totalQuestionsEl = document.getElementById('total-questions');
+            const scoreEl = document.getElementById('score');
+            const progressBar = document.getElementById('progress');
+            const daysLeftEl = document.getElementById('days-left');
+            const paymentBtn = document.getElementById('payment-btn');
+            const paymentModal = document.getElementById('payment-modal');
+            const closeModal = document.querySelector('.close-modal');
+            const confirmPaymentBtn = document.getElementById('confirm-payment');
+            
+            let currentQuestion = 0;
+            let score = 0;
+            let questions = [];
+            let currentCategory = "सामान्य ज्ञान"; // डिफॉल्ट कैटेगरी
+            
+            // क्विज़ डेटा (इनलाइन)
+            const quizData = {
+                "सामान्य ज्ञान": [
+                    {
+                        "question": "भारत की राजधानी क्या है?",
+                        "options": ["मुंबई", "नई दिल्ली", "कोलकाता", "चेन्नई"],
+                        "correctAnswer": "नई दिल्ली"
+                    },
+                    {
+                        "question": "निम्न में से कौन सा एक प्राकृतिक उपग्रह है?",
+                        "options": ["चंद्रमा", "अपोलो", "सैटेलाइट", "रॉकेट"],
+                        "correctAnswer": "चंद्रमा"
+                    },
+                    {
+                        "question": "जल का रासायनिक सूत्र क्या है?",
+                        "options": ["H2O", "CO2", "O2", "NaCl"],
+                        "correctAnswer": "H2O"
+                    }
+                ],
+                "विज्ञान": [
+                    {
+                        "question": "प्रकाश की गति कितनी होती है?",
+                        "options": ["3,00,000 किमी/सेकंड", "1,50,000 किमी/सेकंड", "4,50,000 किमी/सेकंड", "6,00,000 किमी/सेकंड"],
+                        "correctAnswer": "3,00,000 किमी/सेकंड"
+                    },
+                    {
+                        "question": "मनुष्य के शरीर में कितनी हड्डियां होती हैं?",
+                        "options": ["206", "302", "156", "260"],
+                        "correctAnswer": "206"
+                    },
+                    {
+                        "question": "निम्न में से कौन सा सबसे छोटा तत्व है?",
+                        "options": ["हाइड्रोजन", "हीलियम", "लिथियम", "बेरिलियम"],
+                        "correctAnswer": "हाइड्रोजन"
+                    }
+                ],
+                "इतिहास": [
+                    {
+                        "question": "भारत का संविधान कब लागू हुआ था?",
+                        "options": ["26 जनवरी 1950", "15 अगस्त 1947", "26 नवंबर 1949", "2 अक्टूबर 1950"],
+                        "correctAnswer": "26 जनवरी 1950"
+                    },
+                    {
+                        "question": "महात्मा गांधी का जन्म कब हुआ था?",
+                        "options": ["2 अक्टूबर 1869", "15 अगस्त 1872", "26 जनवरी 1875", "1 मई 1865"],
+                        "correctAnswer": "2 अक्टूबर 1869"
+                    },
+                    {
+                        "question": "1857 के विद्रोह को क्या भी कहा जाता है?",
+                        "options": ["पहला स्वतंत्रता संग्राम", "दूसरा स्वतंत्रता संग्राम", "भारत छोड़ो आंदोलन", "असहयोग आंदोलन"],
+                        "correctAnswer": "पहला स्वतंत्रता संग्राम"
+                    }
+                ],
+                "गणित": [
+                    {
+                        "question": "π (पाई) का मान कितना होता है?",
+                        "options": ["3.14159", "2.71828", "1.41421", "1.73205"],
+                        "correctAnswer": "3.14159"
+                    },
+                    {
+                        "question": "एक त्रिभुज के कोणों का योग कितना होता है?",
+                        "options": ["180 डिग्री", "90 डिग्री", "270 डिग्री", "360 डिग्री"],
+                        "correctAnswer": "180 डिग्री"
+                    },
+                    {
+                        "question": "निम्न में से कौन सी एक सम संख्या है?",
+                        "options": ["2", "3", "5", "7"],
+                        "correctAnswer": "2"
+                    }
+                ],
+                "मनोरंजन": [
+                    {
+                        "question": "शाहरुख खान को किस नाम से भी जाना जाता है?",
+                        "options": ["किंग खान", "बॉलीवुड का बादशाह", "रोमियो", "ये सभी"],
+                        "correctAnswer": "ये सभी"
+                    },
+                    {
+                        "question": "'दिलवाले दुल्हनिया ले जाएंगे' फिल्म कब रिलीज़ हुई थी?",
+                        "options": ["1995", "1990", "2000", "1985"],
+                        "correctAnswer": "1995"
+                    },
+                    {
+                        "question": "निम्न में से कौन सा एक टीवी शो नहीं है?",
+                        "options": ["तारक मेहता का उल्टा चश्मा", "कपिल शर्मा शो", "बिग बॉस", "कौन बनेगा करोड़पति"],
+                        "correctAnswer": "कौन बनेगा करोड़पति"
+                    }
+                ],
+                "खेल": [
+                    {
+                        "question": "क्रिकेट में एक ओवर में कितनी गेंदें होती हैं?",
+                        "options": ["6", "7", "8", "5"],
+                        "correctAnswer": "6"
+                    },
+                    {
+                        "question": "हॉकी को किस देश का राष्ट्रीय खेल माना जाता है?",
+                        "options": ["भारत", "पाकिस्तान", "ऑस्ट्रेलिया", "इंग्लैंड"],
+                        "correctAnswer": "भारत"
+                    },
+                    {
+                        "question": "ओलंपिक खेल कितने साल में एक बार आयोजित किए जाते हैं?",
+                        "options": ["4 साल", "2 साल", "5 साल", "3 साल"],
+                        "correctAnswer": "4 साल"
+                    }
+                ]
+            };
+            
+            // पेमेंट स्टेटस चेक फंक्शन
+            function checkPaymentStatus() {
+                const paymentStatus = localStorage.getItem('paymentStatus');
+                const paymentExpiry = localStorage.getItem('paymentExpiry');
+                
+                if (paymentStatus === 'paid' && paymentExpiry) {
+                    const expiryDate = new Date(paymentExpiry);
+                    const currentDate = new Date();
+                    
+                    if (currentDate <= expiryDate) {
+                        // पेमेंट वैलिड है
+                        const daysLeft = Math.ceil((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
+                        daysLeftEl.textContent = daysLeft;
+                        
+                        // क्विज़ लोड करें
+                        loadQuiz();
+                    } else {
+                        // पेमेंट एक्सपायर्ड हो गया
+                        localStorage.removeItem('paymentStatus');
+                        localStorage.removeItem('paymentExpiry');
+                        showPaymentSection();
+                    }
+                } else {
+                    // पेमेंट नहीं किया गया
+                    showPaymentSection();
+                }
+            }
+            
+            // पेमेंट सेक्शन दिखाने का फंक्शन
+            function showPaymentSection() {
+                paymentBtn.style.display = 'flex';
+                document.querySelector('.payment-note').style.display = 'block';
+                questionText.textContent = "प्रीमियम क्विज़ एक्सेस के लिए पेमेंट करें";
+                optionsContainer.innerHTML = '';
+            }
+            
+            // पेमेंट बटन क्लिक इवेंट
+            paymentBtn.addEventListener('click', () => {
+                paymentModal.style.display = 'block';
+            });
+            
+            // मोडल बंद करने का इवेंट
+            closeModal.addEventListener('click', () => {
+                paymentModal.style.display = 'none';
+            });
+            
+            // मोडल के बाहर क्लिक करने पर बंद करें
+            window.addEventListener('click', (event) => {
+                if (event.target === paymentModal) {
+                    paymentModal.style.display = 'none';
+                }
+            });
+            
+            // पेमेंट विधि चयन
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+            
+            // कन्फर्म पेमेंट बटन
+            confirmPaymentBtn.addEventListener('click', () => {
+                // लोडिंग स्टेटस दिखाएं
+                confirmPaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> प्रोसेसिंग...';
+                confirmPaymentBtn.disabled = true;
+                
+                // सिमुलेट पेमेंट प्रोसेसिंग
+                setTimeout(() => {
+                    // पेमेंट सफलता स्टोर करें
+                    const expiryDate = new Date();
+                    expiryDate.setDate(expiryDate.getDate() + 30); // 30 दिन बाद एक्सपायरी
+                    localStorage.setItem('paymentStatus', 'paid');
+                    localStorage.setItem('paymentExpiry', expiryDate.toISOString());
+                    
+                    // पेमेंट मोडल बंद करें
+                    paymentModal.style.display = 'none';
+                    
+                    // सफलता संदेश दिखाएं
+                    questionText.textContent = "पेमेंट सफल! अब आप क्विज़ खेल सकते हैं। कृपया एक कैटेगरी चुनें।";
+                    optionsContainer.innerHTML = `
+                        <div class="result-container">
+                            <div class="result-message">
+                                <i class="fas fa-check-circle"></i> आपका पेमेंट सफलतापूर्वक हो गया है!
+                            </div>
+                            <button class="restart-btn" id="start-quiz-btn">क्विज़ शुरू करें</button>
+                        </div>
+                    `;
+                    
+                    // स्टार्ट बटन इवेंट
+                    document.getElementById('start-quiz-btn').addEventListener('click', () => {
+                        loadQuiz();
+                    });
+                    
+                    // पेमेंट बटन छुपाएं
+                    paymentBtn.style.display = 'none';
+                    document.querySelector('.payment-note').style.display = 'none';
+                    
+                    // दिनों की संख्या अपडेट करें
+                    daysLeftEl.textContent = '30';
+                }, 2000);
+            });
+            
+            // क्विज़ लोड करने का फंक्शन
+            function loadQuiz() {
+                // क्वेश्चन लोड करें
+                questions = quizData[currentCategory] || [];
+                totalQuestionsEl.textContent = questions.length;
+                
+                if (questions.length > 0) {
+                    showQuestion();
+                } else {
+                    questionText.textContent = `${currentCategory} कैटेगरी में कोई प्रश्न उपलब्ध नहीं है। कृपया दूसरी कैटेगरी चुनें।`;
+                    optionsContainer.innerHTML = '';
+                }
+            }
+            
+            // क्वेश्चन दिखाने का फंक्शन
+            function showQuestion() {
+                if (currentQuestion >= questions.length) {
+                    showResults();
+                    return;
+                }
+                
+                const question = questions[currentQuestion];
+                questionText.textContent = question.question;
+                currentQuestionEl.textContent = currentQuestion + 1;
+                
+                // प्रोग्रेस बार अपडेट करें
+                const progressPercent = ((currentQuestion + 1) / questions.length) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                
+                // ऑप्शन क्लियर करें
+                optionsContainer.innerHTML = '';
+                
+                // ऑप्शन बनाएं
+                question.options.forEach((option, index) => {
+                    const optionBtn = document.createElement('button');
+                    optionBtn.classList.add('option-btn');
+                    optionBtn.innerHTML = `<span>${option}</span>`;
+                    
+                    // ऑप्शन क्लिक इवेंट
+                    optionBtn.addEventListener('click', () => {
+                        // सभी ऑप्शन डिसेबल करें
+                        document.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.disabled = true;
+                        });
+                        
+                        // सही/गलत चेक करें
+                        if (option === question.correctAnswer) {
+                            optionBtn.classList.add('correct');
+                            score++;
+                            scoreEl.textContent = score;
+                        } else {
+                            optionBtn.classList.add('incorrect');
+                            
+                            // सही उत्तर हाइलाइट करें
+                            document.querySelectorAll('.option-btn').forEach(btn => {
+                                if (btn.textContent.trim() === question.correctAnswer) {
+                                    btn.classList.add('correct');
+                                }
+                            });
+                        }
+                        
+                        // 1 सेकंड बाद अगला क्वेश्चन
+                        setTimeout(() => {
+                            currentQuestion++;
+                            showQuestion();
+                        }, 1000);
+                    });
+                    
+                    optionsContainer.appendChild(optionBtn);
+                });
+            }
+            
+            // रिजल्ट दिखाने का फंक्शन
+            function showResults() {
+                questionText.textContent = "क्विज़ पूरा हुआ!";
+                optionsContainer.innerHTML = `
+                    <div class="result-container">
+                        <div class="result-score">
+                            <h2>आपका स्कोर</h2>
+                            <div class="score-value">${score} / ${questions.length}</div>
+                        </div>
+                        <div class="result-message">
+                            ${score === questions.length ? 
+                                '<i class="fas fa-trophy"></i> बधाई हो! आपने पूर्ण अंक प्राप्त किए!' : 
+                                score >= questions.length / 2 ? 
+                                '<i class="fas fa-thumbs-up"></i> अच्छा प्रदर्शन! बेहतरीन कोशिश!' : 
+                                '<i class="fas fa-redo"></i> अभ्यास करने की जरूरत है! फिर से कोशिश करें!'}
+                        </div>
+                        <button id="restart-btn" class="restart-btn">क्विज़ फिर से शुरू करें</button>
+                        <button id="category-btn" class="category-btn">कैटेगरी बदलें</button>
+                    </div>
+                `;
+                
+                // रीस्टार्ट बटन इवेंट
+                document.getElementById('restart-btn').addEventListener('click', () => {
+                    currentQuestion = 0;
+                    score = 0;
+                    scoreEl.textContent = score;
+                    progressBar.style.width = '0%';
+                    showQuestion();
+                });
+                
+                // कैटेगरी बदलें बटन इवेंट
+                document.getElementById('category-btn').addEventListener('click', () => {
+                    currentQuestion = 0;
+                    score = 0;
+                    scoreEl.textContent = score;
+                    progressBar.style.width = '0%';
+                    questionText.textContent = "कृपया एक कैटेगरी चुनें";
+                    optionsContainer.innerHTML = '';
+                });
+            }
+            
+            // कैटेगरी कार्ड्स के लिए इवेंट लिसनर
+            const categoryCards = document.querySelectorAll('.category-card');
+            categoryCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // अगर पेमेंट नहीं किया गया है, तो पेमेंट मोडल दिखाएं
+                    if (localStorage.getItem('paymentStatus') !== 'paid') {
+                        paymentModal.style.display = 'block';
+                        return;
+                    }
+                    
+                    categoryCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    
+                    // कैटेगरी का नाम प्राप्त करें
+                    currentCategory = card.dataset.category;
+                    
+                    // क्विज़ रीसेट करें
+                    currentQuestion = 0;
+                    score = 0;
+                    scoreEl.textContent = score;
+                    progressBar.style.width = '0%';
+                    
+                    // नई कैटेगरी के लिए क्विज़ लोड करें
+                    loadQuiz();
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-
