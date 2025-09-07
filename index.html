@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>क्विज़ मास्टर प्रो - पेमेंट</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css  ">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
@@ -185,7 +186,6 @@
             padding: 15px;
             overflow-y: auto;
             flex-grow: 1;
-            min-height: 0;
             scrollbar-width: thin;
             scrollbar-color: var(--primary) #f1f1f1;
             display: flex;
@@ -210,14 +210,12 @@
         .payment-info {
             background: rgba(255, 255, 255, 0.7);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(0, 0, 0, 0.05);
             display: flex;
             gap: 15px;
             align-items: center;
-            min-height: 150px;
-            overflow: visible;
         }
         
         .payment-details {
@@ -303,15 +301,13 @@
             100% { transform: rotate(360deg); }
         }
         
-        .veklapic-message,
-        .payment-steps {
+        .veklapic-message {
             background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
             border-radius: 15px;
             padding: 15px;
             border: 1px solid rgba(74, 0, 224, 0.1);
             position: relative;
-            overflow: visible;
-            min-height: fit-content;
+            overflow: hidden;
             height: auto;
         }
         
@@ -347,7 +343,7 @@
         .veklapic-message p {
             color: #555;
             font-size: 11px;
-            line-height: 1.3;
+            line-height: 1.4;
             position: relative;
             z-index: 1;
             margin-bottom: 6px;
@@ -374,6 +370,17 @@
         .veklapic-contact span {
             font-weight: 600;
             color: var(--primary);
+        }
+        
+        .payment-steps {
+            background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(74, 0, 224, 0.1);
+            position: relative;
+            overflow: hidden;
+            height: auto;
         }
         
         .payment-steps::before {
@@ -440,7 +447,7 @@
             text-align: center;
             font-size: 11px;
             color: #555;
-            line-height: 1.2;
+            line-height: 1.4;
         }
         
         .form-and-qr {
@@ -835,7 +842,7 @@
                     <h3>QR कोड स्कैन करें</h3>
                     <div class="qr-code">
                         <!-- यहां अपना अमेज़न पे QR कोड डालें -->
-                        <img src="https://i.imgur.com/example.jpg" alt="Amazon Pay QR Code">
+                        <img src="  https://i.imgur.com/example.jpg  " alt="Amazon Pay QR Code">
                     </div>
                     <div class="upi-id">
                         <i class="fas fa-copy"></i>
@@ -1017,3 +1024,4 @@
     </script>
 </body>
 </html>
+```
