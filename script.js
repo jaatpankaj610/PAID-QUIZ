@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // पेमेंट स्टेटस चेक करें
+    checkPaymentStatus();
+    
     // वेरिएबल्स इनिशियलाइज़ करें
     const questionText = document.getElementById('question-text');
     const optionsContainer = document.getElementById('options-container');
@@ -6,23 +9,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalQuestionsEl = document.getElementById('total-questions');
     const scoreEl = document.getElementById('score');
     const progressBar = document.getElementById('progress');
+    const daysLeftEl = document.getElementById('days-left');
+    const paymentOverlay = document.getElementById('payment-overlay');
+    const payNowBtn = document.getElementById('pay-now-btn');
     
     let currentQuestion = 0;
     let score = 0;
     let questions = [];
     
-    // क्वेश्चन लोड करें
-    fetch('questions.json')
-        .then(response => response.json())
-        .then(data => {
-            questions = data;
-            totalQuestionsEl.textContent = questions.length;
-            showQuestion();
-        })
-        .catch(error => {
-            console.error('क्वेश्चन लोड करने में त्रुटि:', error);
-            questionText.textContent = "क्वेश्चन लोड करने में समस्या हुई। कृपया बाद में पुनः प्रयास करें।";
+    // पेमेंट स्टेटस चेक फंक्शन
+    function checkPaymentStatus() {
+        const paymentStatus = localStorage.getItem('paymentStatus');
+        const paymentExpiry = localStorage.getItem('paymentExpiry');
+        
+        if (paymentStatus === 'paid' && paymentExpiry) {
+            const expiryDate = new Date(paymentExpiry);
+            const currentDate = new Date();
+            
+            if (currentDate <= expiryDate) {
+                // पेमेंट वैलिड है
+                const daysLeft = Math.ceil((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
+                daysLeftEl.textContent = daysLeft;
+                
+                // क्विज़ लोड करें
+                loadQuiz();
+            } else {
+                // पेमेंट एक्सपायर्ड हो गया
+                localStorage.removeItem('paymentStatus');
+                localStorage.removeItem('paymentExpiry');
+                showPaymentOverlay();
+            }
+        } else {
+            // पेमेंट नहीं किया गया
+            showPaymentOverlay();
+        }
+    }
+    
+    // पेमेंट ओवरले दिखाने का फंक्शन
+    function showPaymentOverlay() {
+        paymentOverlay.classList.add('active');
+        
+        // पेमेंट बटन क्लिक इवेंट
+        payNowBtn.addEventListener('click', () => {
+            window.location.href = 'payment.html';
         });
+    }
+    
+    // क्विज़ लोड करने का फंक्शन
+    function loadQuiz() {
+        // क्वेश्चन लोड करें
+        fetch('questions.json')
+            .then(response => response.json())
+            .then(data => {
+                questions = data;
+                totalQuestionsEl.textContent = questions.length;
+                showQuestion();
+            })
+            .catch(error => {
+                console.error('क्वेश्चन लोड करने में त्रुटि:', error);
+                questionText.textContent = "क्वेश्चन लोड करने में समस्या हुई। कृपया बाद में पुनः प्रयास करें।";
+            });
+    }
     
     // क्वेश्चन दिखाने का फंक्शन
     function showQuestion() {
@@ -84,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // रिजल्ट दिखाने का फंक्शन
     function showResults() {
-        questionText.textContent = "क्विज पूरा हुआ!";
+        questionText.textContent = "क्विज़ पूरा हुआ!";
         optionsContainer.innerHTML = `
             <div class="result-container">
                 <div class="result-score">
@@ -98,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         '<i class="fas fa-thumbs-up"></i> अच्छा प्रदर्शन! बेहतरीन कोशिश!' : 
                         '<i class="fas fa-redo"></i> अभ्यास करने की जरूरत है! फिर से कोशिश करें!'}
                 </div>
-                <button id="restart-btn" class="restart-btn">क्विज फिर से शुरू करें</button>
+                <button id="restart-btn" class="restart-btn">क्विज़ फिर से शुरू करें</button>
             </div>
         `;
         
@@ -111,4 +158,21 @@ document.addEventListener('DOMContentLoaded', () => {
             showQuestion();
         });
     }
+    
+    // कैटेगरी कार्ड्स के लिए इवेंट लिसनर
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach(card => {
+        card.addEventListener('click', () => {
+            categoryCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            
+            // यहां आप कैटेगरी के आधार पर क्वेश्चन लोड कर सकते हैं
+            // अभी के लिए सिर्फ UI प्रतिक्रिया दिखा रहे हैं
+            currentQuestion = 0;
+            score = 0;
+            scoreEl.textContent = score;
+            progressBar.style.width = '0%';
+            showQuestion();
+        });
+    });
 });
