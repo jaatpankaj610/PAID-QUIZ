@@ -421,6 +421,55 @@
             word-break: break-all;
         }
         
+        .payment-issue-alert {
+            background: rgba(253, 203, 110, 0.1);
+            border: 1px solid rgba(253, 203, 110, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .payment-issue-alert i {
+            font-size: 24px;
+            color: var(--warning);
+            flex-shrink: 0;
+        }
+        
+        .payment-issue-alert-content {
+            flex: 1;
+        }
+        
+        .payment-issue-alert-title {
+            font-weight: 600;
+            color: var(--warning);
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .payment-issue-alert-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .payment-issue-alert-number {
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        
+        .payment-issue-alert-number:hover {
+            background: rgba(74, 0, 224, 0.1);
+            transform: translateY(-2px);
+        }
+        
         .payment-steps {
             background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
             border-radius: 15px;
@@ -621,6 +670,105 @@
             opacity: 1;
         }
         
+        .contact-section {
+            background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            border: 1px solid rgba(74, 0, 224, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(74, 0, 224, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .contact-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(142, 45, 226, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .contact-title {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .contact-title i {
+            color: var(--warning);
+        }
+        
+        .contact-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: white;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin: 10px 0;
+            font-weight: 600;
+            color: var(--primary);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .contact-number:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.2);
+        }
+        
+        .contact-number i {
+            font-size: 20px;
+            color: var(--success);
+        }
+        
+        .contact-emoji {
+            display: inline-block;
+            animation: contactEmojiBounce 2s infinite;
+            margin-left: 5px;
+        }
+        
+        @keyframes contactEmojiBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .contact-note {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
         .note {
             text-align: center;
             margin-top: 20px;
@@ -737,6 +885,29 @@
             .sparkle::before {
                 font-size: 16px;
             }
+            
+            .contact-title {
+                font-size: 16px;
+            }
+            
+            .contact-number {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            
+            .contact-number i {
+                font-size: 18px;
+            }
+            
+            .payment-issue-alert {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .payment-issue-alert i {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -788,6 +959,20 @@
                                 <i class="fas fa-file-invoice"></i>
                             </div>
                             <div class="step-text">डिटेल्स भरें</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- पेमेंट इश्यू अलर्ट -->
+                <div class="payment-issue-alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="payment-issue-alert-content">
+                        <div class="payment-issue-alert-title">पेमेंट में समस्या?</div>
+                        <div class="payment-issue-alert-text">
+                            अगर आपको पेमेंट करने में कोई परेशानी हो रही है, तो तुरंत वेक्टरपिक एडमिट टीम से संपर्क करें:
+                            <div class="payment-issue-alert-number" onclick="copyContactNumber()">
+                                <i class="fas fa-phone-alt"></i> 7665274721
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -849,6 +1034,20 @@
                 
                 <div id="status-message" class="status-message"></div>
                 
+                <!-- वेक्टरपिक एडमिट टीम का संपर्क विवरण -->
+                <div class="contact-section">
+                    <div class="contact-title">
+                        <i class="fas fa-headset"></i>
+                        वेक्टरपिक एडमिट टीम से संपर्क करें
+                    </div>
+                    <div class="contact-number" onclick="copyContactNumber()">
+                        <i class="fas fa-phone-alt"></i>
+                        <span id="contact-number-text">7665274721</span>
+                        <span class="contact-emoji">📞</span>
+                    </div>
+                    <p class="contact-note">किसी भी पेमेंट समस्या के लिए सीधे संपर्क करें</p>
+                </div>
+                
                 <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक क्विज़ मास्टर प्रो तक पहुंच मिलेगी</p>
             </div>
         </div>
@@ -866,6 +1065,18 @@
                 }, 2000);
             });
         });
+        
+        // संपर्क नंबर कॉपी करने का फंक्शन
+        function copyContactNumber() {
+            const contactNumber = document.getElementById('contact-number-text').textContent;
+            navigator.clipboard.writeText(contactNumber).then(function() {
+                const originalText = document.getElementById('contact-number-text').textContent;
+                document.getElementById('contact-number-text').textContent = 'कॉपी हो गया!';
+                setTimeout(function() {
+                    document.getElementById('contact-number-text').textContent = originalText;
+                }, 2000);
+            });
+        }
         
         function previewImage(event) {
             const file = event.target.files[0];
