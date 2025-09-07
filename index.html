@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>क्विज़ मास्टर प्रो - पेमेंट</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -32,33 +32,41 @@
         
         body {
             background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            min-height: 100vh;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            overflow-y: auto;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
         
-        .container {
+        .app-container {
             width: 100%;
-            max-width: 600px;
+            height: 100%;
+            max-width: 1200px;
+            max-height: 900px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            flex-direction: column;
             animation: fadeIn 0.8s ease;
         }
         
         .header {
             background: var(--gradient);
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: center;
             color: white;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
         
         .header::before {
@@ -78,11 +86,11 @@
         }
         
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: white;
             border-radius: 50%;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -92,43 +100,61 @@
         }
         
         .logo i {
-            font-size: 40px;
+            font-size: 35px;
             color: var(--primary);
         }
         
         .header h1 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 1;
         }
         
         .header p {
-            font-size: 16px;
+            font-size: 15px;
             opacity: 0.9;
             position: relative;
             z-index: 1;
         }
         
         .content {
-            padding: 30px;
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) #f1f1f1;
+        }
+        
+        .content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
         }
         
         .payment-info {
             background: rgba(255, 255, 255, 0.7);
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 20px;
+            margin-bottom: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .payment-info h2 {
             color: var(--primary);
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 22px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
         }
@@ -139,30 +165,30 @@
         }
         
         .price-tag {
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 700;
             color: var(--secondary);
-            margin: 15px 0;
+            margin: 12px 0;
             text-align: center;
         }
         
         .price-period {
-            font-size: 18px;
+            font-size: 16px;
             color: #666;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .features {
             list-style: none;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .features li {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            font-size: 16px;
+            font-size: 15px;
             color: #333;
         }
         
@@ -172,22 +198,23 @@
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #333;
+            font-size: 14px;
         }
         
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.3s ease;
             background: white;
         }
@@ -207,7 +234,7 @@
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 14px;
+            font-size: 12px;
             color: #888;
             background: rgba(255, 255, 255, 0.8);
             padding: 2px 8px;
@@ -217,8 +244,8 @@
         .qr-section {
             background: white;
             border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
+            padding: 20px;
+            margin: 20px 0;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(0, 0, 0, 0.05);
@@ -226,16 +253,16 @@
         
         .qr-section h3 {
             color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
+            margin-bottom: 12px;
+            font-size: 17px;
         }
         
         .qr-code {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             background: #f5f5f5;
             border-radius: 10px;
-            margin: 0 auto 15px;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -253,15 +280,15 @@
         }
         
         .qr-code i {
-            font-size: 50px;
+            font-size: 45px;
             color: var(--primary);
         }
         
         .upi-id {
             background: rgba(74, 0, 224, 0.05);
             border-radius: 10px;
-            padding: 12px;
-            margin: 15px 0;
+            padding: 10px;
+            margin: 12px 0;
             font-weight: 600;
             color: var(--primary);
             display: flex;
@@ -269,13 +296,14 @@
             justify-content: center;
             gap: 8px;
             word-break: break-all;
+            font-size: 14px;
         }
         
         .payment-steps {
             background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
             border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
+            padding: 20px;
+            margin: 20px 0;
             text-align: center;
             border: 1px solid rgba(74, 0, 224, 0.1);
             position: relative;
@@ -308,8 +336,8 @@
         
         .payment-steps h3 {
             color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 22px;
+            margin-bottom: 15px;
+            font-size: 20px;
             font-weight: 700;
             position: relative;
             z-index: 1;
@@ -318,7 +346,7 @@
         .steps-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
             z-index: 1;
         }
@@ -331,34 +359,35 @@
         }
         
         .step-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: var(--gradient);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: white;
-            font-size: 20px;
+            font-size: 18px;
         }
         
         .step-text {
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             color: #555;
             line-height: 1.4;
         }
         
         .file-upload {
-            margin: 25px 0;
+            margin: 20px 0;
         }
         
         .file-upload label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #333;
+            font-size: 14px;
         }
         
         .file-input-wrapper {
@@ -368,12 +397,13 @@
             cursor: pointer;
             background: var(--gradient-3);
             color: white;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s ease;
             width: 100%;
             text-align: center;
+            font-size: 14px;
         }
         
         .file-input-wrapper:hover {
@@ -392,14 +422,14 @@
         }
         
         .image-preview {
-            margin-top: 15px;
+            margin-top: 12px;
             text-align: center;
             display: none;
         }
         
         .image-preview img {
             max-width: 100%;
-            max-height: 200px;
+            max-height: 180px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
@@ -409,8 +439,8 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 18px 30px;
-            font-size: 18px;
+            padding: 15px 25px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
@@ -418,7 +448,7 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         
         .submit-btn:before {
@@ -445,18 +475,19 @@
         
         .note {
             text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
+            margin-top: 15px;
+            font-size: 13px;
             color: #666;
         }
         
         .status-message {
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
             text-align: center;
             font-weight: 600;
             display: none;
+            font-size: 14px;
         }
         
         .status-message.success {
@@ -487,30 +518,42 @@
         }
         
         /* रेस्पॉन्सिव डिज़ाइन */
-        @media (max-width: 600px) {
-            .container {
+        @media (max-width: 768px) {
+            .app-container {
                 border-radius: 0;
-                min-height: 100vh;
+                max-height: 100vh;
             }
             
             .header h1 {
-                font-size: 28px;
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 13px;
             }
             
             .price-tag {
-                font-size: 36px;
+                font-size: 32px;
+            }
+            
+            .payment-info h2 {
+                font-size: 18px;
+            }
+            
+            .features li {
+                font-size: 13px;
             }
             
             .steps-container {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
             }
             
             .step {
                 width: 100%;
                 flex-direction: row;
                 text-align: left;
-                gap: 15px;
+                gap: 12px;
             }
             
             .step-icon {
@@ -518,30 +561,10 @@
             }
         }
         
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 24px;
-            }
-            
-            .header p {
-                font-size: 14px;
-            }
-            
-            .payment-info h2 {
-                font-size: 20px;
-            }
-            
-            .price-tag {
-                font-size: 32px;
-            }
-            
-            .form-group input, .form-group textarea {
-                padding: 12px;
-                font-size: 14px;
-            }
-            
-            .payment-steps h3 {
-                font-size: 20px;
+        @media (min-width: 769px) {
+            .app-container {
+                margin: 20px;
+                height: calc(100vh - 40px);
             }
         }
         
@@ -549,8 +572,8 @@
         .veklapic-message {
             background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
             border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 15px 0;
             border: 1px solid rgba(74, 0, 224, 0.1);
             position: relative;
             overflow: hidden;
@@ -570,8 +593,8 @@
         
         .veklapic-message h4 {
             color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 18px;
+            margin-bottom: 8px;
+            font-size: 16px;
             font-weight: 600;
             position: relative;
             z-index: 1;
@@ -580,14 +603,14 @@
         }
         
         .veklapic-message h4 i {
-            margin-right: 10px;
+            margin-right: 8px;
             color: var(--warning);
         }
         
         .veklapic-message p {
             color: #555;
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.5;
             position: relative;
             z-index: 1;
         }
@@ -596,16 +619,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 15px;
+            margin-top: 12px;
             background: rgba(255, 255, 255, 0.7);
-            padding: 10px;
+            padding: 8px;
             border-radius: 8px;
             position: relative;
             z-index: 1;
+            font-size: 13px;
         }
         
         .veklapic-contact i {
-            margin-right: 10px;
+            margin-right: 8px;
             color: var(--primary);
         }
         
@@ -616,7 +640,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="app-container">
         <div class="header">
             <div class="logo">
                 <i class="fas fa-brain"></i>
