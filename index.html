@@ -433,6 +433,7 @@
             const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
 
             if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
+                console.log('Redirecting to quiz.html: Valid approved payment');
                 window.location.href = 'quiz.html';
                 return;
             } else if (expiryDate && now > expiryDate) {
@@ -443,7 +444,7 @@
                 return;
             }
 
-            // quiz.html चेक करें, लेकिन सख्ती से नहीं
+            // quiz.html चेक करें
             try {
                 const response = await fetch('quiz.html', { method: 'HEAD', cache: 'no-store' });
                 if (response.status === 404 || response.status === 503) {
@@ -518,13 +519,22 @@
             };
 
             try {
-                // localStorage में डेटा स्टोर करें
+                // मौजूदा पेमेंट्स लोड करें और डुप्लिकेशन चेक करें
                 let payments = JSON.parse(localStorage.getItem('payments') || '[]');
+                const existingPayment = payments.find(p => p.user_id === userId && p.status === 'approved');
+                if (existingPayment && new Date(existingPayment.access_expiry_date) > new Date()) {
+                    statusElement.textContent = 'आपके पास पहले से एक सक्रिय प्रीमियम एक्सेस है।';
+                    statusElement.className = 'status-message error';
+                    statusElement.style.display = 'block';
+                    document.getElementById('payment-form').style.display = 'none';
+                    return;
+                }
+
                 payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
                 localStorage.setItem('paymentData', JSON.stringify(paymentData));
                 console.log('Payment stored in localStorage:', paymentData);
-                console.log('Current payments in localStorage:', JSON.parse(localStorage.getItem('payments')));
+                console.log('All payments in localStorage:', payments);
 
                 const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}।`;
                 sendSMS('7665274721', adminMessage);
@@ -557,7 +567,6 @@
                 console.log('localStorage cleared');
             } catch (error) {
                 console.error('Error clearing localStorage:', error);
-                const statusElement = document.getElementById('status-message');
                 statusElement.textContent = 'डेटा रीसेट करने में त्रुटि। कृपया ब्राउज़र सेटिंग्स चेक करें और पुनः प्रयास करें।';
                 statusElement.className = 'status-message error';
                 statusElement.style.display = 'block';
