@@ -438,38 +438,51 @@
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
 
-            // पहले localStorage चेक करें
-            const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
-            const now = new Date();
-            const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
-
-            if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
-                console.log('Redirecting to quiz.html: Valid approved payment');
-                window.location.href = 'quiz.html';
-                return;
-            } else if (expiryDate && now > expiryDate) {
-                statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-                document.getElementById('payment-form').style.display = 'block';
-                return;
-            }
-
-            // quiz.html चेक करें
             try {
-                const response = await fetch('quiz.html', { method: 'HEAD', cache: 'no-store' });
-                if (response.status === 404 || response.status === 503) {
+                // सभी पेमेंट्स लोड करें
+                const payments = JSON.parse(localStorage.getItem('payments') || '[]');
+                const userId = document.getElementById('user_id').value.trim() || 'unknown';
+                const userPayments = payments.filter(p => p.user_id === userId && p.status === 'approved');
+                const latestApproved = userPayments.reduce((latest, payment) => {
+                    return !latest || new Date(payment.submission_date) > new Date(latest.submission_date) ? payment : latest;
+                }, null);
+
+                const now = new Date();
+                const expiryDate = latestApproved?.access_expiry_date ? new Date(latestApproved.access_expiry_date) : null;
+
+                if (latestApproved && expiryDate && now <= expiryDate) {
+                    console.log('Redirecting to quiz.html: Valid approved payment for user', userId);
+                    window.location.href = 'quiz.html';
+                    return;
+                } else if (latestApproved && expiryDate && now > expiryDate) {
+                    statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
+                    statusElement.className = 'status-message error';
+                    statusElement.style.display = 'block';
+                    document.getElementById('payment-form').style.display = 'block';
+                    return;
+                }
+
+                // quiz.html चेक करें
+                try {
+                    const response = await fetch('quiz.html', { method: 'HEAD', cache: 'no-store' });
+                    if (response.status === 404 || response.status === 503) {
+                        errorSection.style.display = 'block';
+                        onlineContent.style.display = 'none';
+                        console.error('quiz.html unavailable:', response.status);
+                    } else {
+                        errorSection.style.display = 'none';
+                        onlineContent.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error checking quiz.html:', error);
                     errorSection.style.display = 'block';
                     onlineContent.style.display = 'none';
-                    console.error('quiz.html unavailable:', response.status);
-                } else {
-                    errorSection.style.display = 'none';
-                    onlineContent.style.display = 'block';
                 }
             } catch (error) {
-                console.error('Error checking quiz.html:', error);
-                errorSection.style.display = 'none';
-                onlineContent.style.display = 'block';
+                console.error('Error checking payment status:', error);
+                statusElement.textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि। कृपया पुनः प्रयास करें।';
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
             }
         }
 
@@ -579,10 +592,11 @@
             };
 
             try {
-                // मौजूदा पेमेंट्स लोड करें और डुप्लिकेशन चेक करें
+                // मौजूदा पेमेंट्स लोड करें
                 let payments = JSON.parse(localStorage.getItem('payments') || '[]');
-                const existingPayment = payments.find(p => p.user_id === userId && p.status === 'approved');
-                if (existingPayment && new Date(existingPayment.access_expiry_date) > new Date()) {
+                const existingPayment = payments.find(p => p.user_id === userId && p.status === 'approved' && new Date(p.access_expiry_date) > new Date());
+
+                if (existingPayment) {
                     statusElement.textContent = 'आपके पास पहले से एक सक्रिय प्रीमियम एक्सेस है।';
                     statusElement.className = 'status-message error';
                     statusElement.style.display = 'block';
@@ -590,9 +604,9 @@
                     return;
                 }
 
+                // नई रिक्वेस्ट को payments array में जोड़ें
                 payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
-                localStorage.setItem('paymentData', JSON.stringify(paymentData));
                 console.log('Payment stored in localStorage:', paymentData);
                 console.log('All payments in localStorage:', payments);
 
@@ -617,7 +631,6 @@
         function clearStorage() {
             try {
                 localStorage.removeItem('payments');
-                localStorage.removeItem('paymentData');
                 const statusElement = document.getElementById('status-message');
                 statusElement.textContent = 'आपका डेटा सफलतापूर्वक रीसेट हो गया है। कृपया पेमेंट जानकारी दोबारा दर्ज करें।';
                 statusElement.className = 'status-message success';
