@@ -326,7 +326,7 @@
                 
                 <div id="status-message" class="status-message"></div>
                 
-                <button class="clear-btn" onclick="clearStorage()">डेटा रीसेट करें (टेस्ट के लिए)</button>
+                <button class="clear-btn" onclick="clearStorage()">पेमेंट डेटा रीसेट करें</button>
             </div>
         </div>
     </div>
@@ -341,18 +341,21 @@
             if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
                 window.location.href = 'quiz.html';
             } else if (expiryDate && now > expiryDate) {
-                // वैलिडिटी खत्म होने पर अलर्ट
                 const statusElement = document.getElementById('status-message');
                 statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
                 statusElement.className = 'status-message error';
                 statusElement.style.display = 'block';
+                document.getElementById('payment-form').style.display = 'block';
             }
         }
 
         // सिमुलेटेड SMS (अलर्ट के रूप में)
         function sendSMS(toPhone, message) {
             console.log(`SMS भेजा गया ${toPhone} को: ${message}`);
-            alert(`SMS भेजा गया ${toPhone} को: ${message}`);
+            const statusElement = document.getElementById('status-message');
+            statusElement.textContent = message;
+            statusElement.className = 'status-message success';
+            statusElement.style.display = 'block';
         }
 
         // पेमेंट सबमिट
@@ -403,14 +406,14 @@
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
 
             // एडमिन को सिमुलेटेड SMS
-            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}. कृपया admin.html पर जांच करें!`;
+            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}. कृपया अप्रूव करें।`;
             sendSMS('7665274721', adminMessage);
 
             // यूजर को धन्यवाद
             const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको 30 दिन की प्रीमियम एक्सेस मिलेगी।`;
             sendSMS(mobileNumber, userMessage);
 
-            statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद SMS भेजा गया है।`;
+            statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद नोटिफिकेशन भेजा गया है।`;
             statusElement.className = 'status-message success';
             document.getElementById('payment-form').style.display = 'none';
         }
@@ -419,8 +422,12 @@
         function clearStorage() {
             localStorage.removeItem('payments');
             localStorage.removeItem('paymentData');
-            alert('डेटा रीसेट हो गया!');
-            location.reload();
+            const statusElement = document.getElementById('status-message');
+            statusElement.textContent = 'आपका डेटा सफलतापूर्वक रीसेट हो गया है। कृपया पेमेंट जानकारी दोबारा दर्ज करें।';
+            statusElement.className = 'status-message success';
+            statusElement.style.display = 'block';
+            document.getElementById('payment-form').style.display = 'block';
+            document.getElementById('payment-form').reset();
         }
 
         // पेज लोड पर चेक
