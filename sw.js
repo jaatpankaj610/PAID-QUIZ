@@ -1,12 +1,11 @@
 self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open('rajasthan-gk-quiz-cache').then(cache => {
+        caches.open('rajasthan-gk-quiz-cache-v2').then(cache => {
             return cache.addAll([
                 '/rajasthan-gk-quiz/index.html',
                 '/rajasthan-gk-quiz/',
-                'https://via.placeholder.com/200x200?text=Offline',
-                'https://via.placeholder.com/200x200?text=Error',
-                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+                'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap'
             ]);
         })
     );
