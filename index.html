@@ -166,6 +166,13 @@
             box-shadow: 0 0 0 4px rgba(74, 0, 224, 0.15);
         }
         
+        .form-group .error-text {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
         .qr-section {
             background: white;
             border-radius: 15px;
@@ -360,21 +367,25 @@
                         <div class="form-group">
                             <label for="user_id">अपना ईमेल ID दर्ज करें</label>
                             <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.com" required>
+                            <div id="user_id_error" class="error-text"></div>
                         </div>
                         
                         <div class="form-group">
                             <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
                             <input type="text" id="mobile_number" name="mobile_number" placeholder="7665274721" required>
+                            <div id="mobile_number_error" class="error-text"></div>
                         </div>
                         
                         <div class="form-group">
                             <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
                             <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
+                            <div id="transaction_id_error" class="error-text"></div>
                         </div>
                         
                         <div class="form-group">
                             <label for="amount">पेमेंट राशि</label>
                             <input type="text" id="amount" name="amount" placeholder="49" required>
+                            <div id="amount_error" class="error-text"></div>
                         </div>
                         
                         <div class="form-group">
@@ -471,6 +482,65 @@
             statusElement.style.display = 'block';
         }
 
+        // फॉर्म वैलिडेशन
+        function validateForm() {
+            let isValid = true;
+            const userId = document.getElementById('user_id').value.trim();
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+
+            // रीसेट एरर मैसेज
+            document.getElementById('user_id_error').style.display = 'none';
+            document.getElementById('mobile_number_error').style.display = 'none';
+            document.getElementById('transaction_id_error').style.display = 'none';
+            document.getElementById('amount_error').style.display = 'none';
+
+            // ईमेल वैलिडेशन
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!userId) {
+                document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
+                document.getElementById('user_id_error').style.display = 'block';
+                isValid = false;
+            } else if (!emailRegex.test(userId)) {
+                document.getElementById('user_id_error').textContent = 'कृपया सही ईमेल फॉर्मेट दर्ज करें (उदाहरण: example@domain.com)!';
+                document.getElementById('user_id_error').style.display = 'block';
+                isValid = false;
+            }
+
+            // मोबाइल नंबर वैलिडेशन
+            const mobileRegex = /^\d{10}$/;
+            if (!mobileNumber) {
+                document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
+                document.getElementById('mobile_number_error').style.display = 'block';
+                isValid = false;
+            } else if (!mobileRegex.test(mobileNumber)) {
+                document.getElementById('mobile_number_error').textContent = 'कृपया ठीक 10 अंकों का मोबाइल नंबर दर्ज करें!';
+                document.getElementById('mobile_number_error').style.display = 'block';
+                isValid = false;
+            }
+
+            // ट्रांजैक्शन ID वैलिडेशन
+            if (!transactionId) {
+                document.getElementById('transaction_id_error').textContent = 'कृपया UPI ट्रांजैक्शन ID दर्ज करें!';
+                document.getElementById('transaction_id_error').style.display = 'block';
+                isValid = false;
+            }
+
+            // राशि वैलिडेशन
+            if (!amount) {
+                document.getElementById('amount_error').textContent = 'कृपया पेमेंट राशि दर्ज करें!';
+                document.getElementById('amount_error').style.display = 'block';
+                isValid = false;
+            } else if (amount !== '49') {
+                document.getElementById('amount_error').textContent = 'कृपया सही राशि (₹49) दर्ज करें!';
+                document.getElementById('amount_error').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
         // पेमेंट सबमिट
         function submitPayment() {
             if (!navigator.onLine) {
@@ -481,26 +551,16 @@
                 return;
             }
 
-            const userId = document.getElementById('user_id').value;
-            const mobileNumber = document.getElementById('mobile_number').value;
-            const transactionId = document.getElementById('transaction_id').value;
-            const amount = document.getElementById('amount').value;
-            const paymentNote = document.getElementById('payment_note').value;
+            if (!validateForm()) {
+                return;
+            }
+
+            const userId = document.getElementById('user_id').value.trim();
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const paymentNote = document.getElementById('payment_note').value.trim();
             const statusElement = document.getElementById('status-message');
-
-            if (!userId || !mobileNumber || !transactionId || !amount) {
-                statusElement.textContent = 'कृपया सभी आवश्यक जानकारी भरें!';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-                return;
-            }
-
-            if (amount !== '49') {
-                statusElement.textContent = 'कृपया सही राशि (₹49) दर्ज करें!';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-                return;
-            }
 
             statusElement.textContent = 'आपकी रिक्वेस्ट प्रोसेस हो रही है...';
             statusElement.className = 'status-message pending';
@@ -564,9 +624,15 @@
                 statusElement.style.display = 'block';
                 document.getElementById('payment-form').style.display = 'block';
                 document.getElementById('payment-form').reset();
+                // रीसेट एरर मैसेज
+                document.getElementById('user_id_error').style.display = 'none';
+                document.getElementById('mobile_number_error').style.display = 'none';
+                document.getElementById('transaction_id_error').style.display = 'none';
+                document.getElementById('amount_error').style.display = 'none';
                 console.log('localStorage cleared');
             } catch (error) {
                 console.error('Error clearing localStorage:', error);
+                const statusElement = document.getElementById('status-message');
                 statusElement.textContent = 'डेटा रीसेट करने में त्रुटि। कृपया ब्राउज़र सेटिंग्स चेक करें और पुनः प्रयास करें।';
                 statusElement.className = 'status-message error';
                 statusElement.style.display = 'block';
