@@ -2,8 +2,8 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>एडमिन पैनल - राजस्थान GK क्विज़</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>राजस्थान GK क्विज़ - पेमेंट</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -17,6 +17,10 @@
             --light: #f8f9fa;
             --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
         
         * {
@@ -24,529 +28,905 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         body {
             background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
             min-height: 100vh;
-            padding: 20px;
-            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        /* बैकग्राउंड एनिमेशन - सभी डिवाइसों के लिए */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: backgroundPulse 8s infinite linear;
+            z-index: -1;
+        }
+        
+        @keyframes backgroundPulse {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 0.5; }
+            100% { transform: scale(1) rotate(360deg); opacity: 0.3; }
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            max-height: 100vh;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            border-radius: 0;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: fadeIn 0.8s ease;
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 1;
+            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) #f1f1f1;
+            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
+            transform: translateZ(0);
+            will-change: transform;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .scrollable-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .scrollable-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
         }
         
         .header {
             background: var(--gradient);
-            padding: 20px 30px;
+            padding: 25px 20px;
+            text-align: center;
             color: white;
+            position: relative;
+            overflow: hidden;
+            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
+            transform: translateZ(0);
+            will-change: transform;
+            flex-shrink: 0;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 8s infinite linear;
+            /* मोबाइल में भी दिखने के लिए */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        @keyframes pulse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.8), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+            /* मोबाइल में भी दिखने के लिए */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .logo i {
+            font-size: 35px;
+            color: var(--primary);
+            position: relative;
+            z-index: 2;
         }
         
         .header h1 {
             font-size: 28px;
             font-weight: 700;
-            margin-right: 20px;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            overflow: hidden;
+            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
+            transform: translateZ(0);
+            will-change: transform;
         }
         
-        .header .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .header h1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+            animation: textShine 3s infinite;
+            /* मोबाइल में भी दिखने के लिए */
+            transform: translateZ(0);
+            will-change: transform;
         }
         
-        .header .user-info i {
-            font-size: 24px;
+        @keyframes textShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .animated-emoji {
+            display: inline-block;
+            margin-right: 8px;
+            animation: emojiFloat 2s ease-in-out infinite;
+            /* मोबाइल में भी दिखने के लिए */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        @keyframes emojiFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-5px) rotate(-5deg); }
+        }
+        
+        .sparkle {
+            position: relative;
+            display: inline-block;
+            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        .sparkle::before {
+            content: '✨';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 16px;
+            animation: sparkleRotate 3s linear infinite;
+            /* मोबाइल में भी दिखने के लिए */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        @keyframes sparkleRotate {
+            0% { transform: rotate(0deg) scale(1); opacity: 1; }
+            50% { transform: rotate(180deg) scale(1.2); opacity: 0.8; }
+            100% { transform: rotate(360deg) scale(1); opacity: 1; }
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
         
         .content {
-            padding: 30px;
-            flex: 1;
-            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 30px;
         }
         
-        .guide-section {
-            background: rgba(74, 0, 224, 0.05);
+        .payment-info {
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 15px;
             padding: 20px;
-            margin-bottom: 30px;
-            border: 1px dashed var(--primary);
-        }
-        
-        .guide-title {
-            font-size: 20px;
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .guide-steps {
-            counter-reset: step-counter;
-        }
-        
-        .guide-step {
-            margin-bottom: 15px;
-            padding-left: 40px;
-            position: relative;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        
-        .guide-step:before {
-            counter-increment: step-counter;
-            content: counter(step-counter);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 30px;
-            height: 30px;
-            background: var(--gradient);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-        
-        .guide-step strong {
-            color: var(--primary);
-        }
-        
-        .stats-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-card i {
-            font-size: 30px;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .stat-card h3 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-        
-        .stat-card p {
-            color: #666;
-        }
-        
-        .payments-section {
-            margin-bottom: 30px;
-        }
-        
-        .section-title {
-            font-size: 24px;
-            color: var(--primary);
             margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .payment-info h2 {
+            color: var(--primary);
+            font-size: 22px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
         
-        .payments-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .payments-table th {
-            background: var(--gradient);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .payments-table td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            word-break: break-word;
-        }
-        
-        .payments-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .payments-table tr:hover {
-            background: rgba(74, 0, 224, 0.05);
-        }
-        
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-            white-space: nowrap;
-        }
-        
-        .status-badge.pending {
-            background: rgba(253, 203, 110, 0.2);
+        .payment-info h2 i {
+            margin-right: 10px;
             color: var(--warning);
         }
         
-        .status-badge.approved {
-            background: rgba(0, 184, 148, 0.2);
-            color: var(--success);
+        .price-tag {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 12px 0;
+            text-align: center;
         }
         
-        .status-badge.rejected {
-            background: rgba(214, 48, 49, 0.2);
-            color: var(--danger);
-        }
-        
-        .action-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 5px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        
-        .action-btn.approve {
-            background: var(--success);
-            color: white;
-        }
-        
-        .action-btn.approve:hover {
-            background: #00a085;
-            transform: translateY(-2px);
-        }
-        
-        .action-btn.reject {
-            background: var(--danger);
-            color: white;
-        }
-        
-        .action-btn.reject:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .action-btn.view {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .action-btn.view:hover {
-            background: #3a00b8;
-            transform: translateY(-2px);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
+        .price-period {
+            font-size: 16px;
             color: #666;
+            text-align: center;
+            margin-bottom: 15px;
         }
         
-        .modal-close:hover {
-            color: var(--danger);
-        }
-        
-        .modal h2 {
-            color: var(--primary);
+        .features {
+            list-style: none;
             margin-bottom: 20px;
         }
         
-        .modal .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .modal .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
+        .features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
             color: #333;
         }
         
-        .modal .form-group input, .modal .form-group textarea, .modal .form-group select {
+        .features li i {
+            margin-right: 10px;
+            color: var(--success);
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 15px;
             transition: all 0.3s ease;
+            background: white;
         }
         
-        .modal .form-group input:focus, .modal .form-group textarea:focus, .modal .form-group select:focus {
+        .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
         }
         
-        .modal .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 10px;
+        .form-group.hint {
+            position: relative;
         }
         
-        .modal .btn-primary {
-            background: var(--gradient);
-            color: white;
+        .form-group.hint .input-hint {
+            position: absolute;
+            right: 15px;
+            bottom: -20px;
+            font-size: 11px;
+            color: #888;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
         }
         
-        .modal .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.3);
-        }
-        
-        .modal .btn-secondary {
-            background: #e0e0e0;
-            color: #333;
-        }
-        
-        .modal .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-        
-        .payment-proof {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        .qr-section {
             background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .qr-section h3 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            background: #f5f5f5;
             border-radius: 10px;
-            padding: 15px 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 2000;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            max-width: 350px;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
+            justify-content: center;
+            font-weight: 600;
+            color: #666;
+            border: 2px dashed #ddd;
+            position: relative;
+            overflow: hidden;
         }
         
-        .notification.show {
-            transform: translateX(0);
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         
-        .notification i {
-            font-size: 24px;
-        }
-        
-        .notification.success i {
-            color: var(--success);
-        }
-        
-        .notification.error i {
-            color: var(--danger);
-        }
-        
-        .notification.info i {
+        .qr-code i {
+            font-size: 45px;
             color: var(--primary);
         }
         
-        .notification-content {
-            flex: 1;
-        }
-        
-        .notification-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .notification-message {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .notification-close {
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: #999;
-            cursor: pointer;
-        }
-        
-        .new-payment-alert {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: var(--warning);
-            color: white;
+        .upi-id {
+            background: rgba(74, 0, 224, 0.05);
             border-radius: 10px;
-            padding: 15px 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 2000;
-            display: none;
-            animation: pulse 2s infinite;
+            padding: 10px;
+            margin: 12px 0;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            word-break: break-all;
+            font-size: 14px;
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .new-payment-alert.show {
-            display: block;
-        }
-        
-        .new-payment-alert h3 {
-            margin-bottom: 10px;
+        .payment-issue-alert {
+            background: rgba(253, 203, 110, 0.1);
+            border: 1px solid rgba(253, 203, 110, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 15px 0;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
-        .new-payment-alert button {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
+        .payment-issue-alert i {
+            font-size: 20px;
+            color: var(--warning);
+            flex-shrink: 0;
         }
         
-        .new-payment-alert button:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .payment-issue-alert-content {
+            flex: 1;
+        }
+        
+        .payment-issue-alert-title {
+            font-weight: 600;
+            color: var(--warning);
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+        
+        .payment-issue-alert-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .payment-issue-alert-number {
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .payment-issue-alert-number:hover {
+            background: rgba(74, 0, 224, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .payment-steps {
+            background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid rgba(74, 0, 224, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-steps::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(74, 0, 224, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .payment-steps::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(142, 45, 226, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .payment-steps h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30%;
+        }
+        
+        .step-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .step-text {
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.4;
+        }
+        
+        .file-upload {
+            margin: 20px 0;
+        }
+        
+        .file-upload label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+            background: var(--gradient-3);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .file-input-wrapper:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .image-preview {
+            margin-top: 12px;
+            text-align: center;
+            display: none;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .submit-btn {
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin-top: 8px;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.2));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            z-index: -1;
+            /* मोबाइल में भी दिखने के लिए */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.5);
+        }
+        
+        .submit-btn:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        
+        .submit-btn:active::after {
+            opacity: 1;
+        }
+        
+        .contact-section {
+            background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
+            border-radius: 15px;
+            padding: 18px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid rgba(74, 0, 224, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(74, 0, 224, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .contact-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(142, 45, 226, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .contact-title {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .contact-title i {
+            color: var(--warning);
+        }
+        
+        .contact-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: white;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        
+        .contact-number:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.2);
+        }
+        
+        .contact-number i {
+            font-size: 18px;
+            color: var(--success);
+        }
+        
+        .contact-emoji {
+            display: inline-block;
+            animation: contactEmojiBounce 2s infinite;
+            margin-left: 5px;
+        }
+        
+        @keyframes contactEmojiBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .contact-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .note {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .status-message {
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .status-message.success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(0, 184, 148, 0.2);
+            display: block;
+        }
+        
+        .status-message.error {
+            background: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(214, 48, 49, 0.2);
+            display: block;
+        }
+        
+        .status-message.pending {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(253, 203, 110, 0.2);
+            display: block;
+        }
+        
+        /* एनिमेशन */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         /* रेस्पॉन्सिव डिज़ाइन */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+                height: 100vh;
+                max-height: 100vh;
             }
             
             .header h1 {
-                margin-right: 0;
                 font-size: 24px;
             }
             
-            .payments-table {
-                font-size: 14px;
+            .price-tag {
+                font-size: 32px;
             }
             
-            .payments-table th, .payments-table td {
-                padding: 10px;
+            .steps-container {
+                flex-direction: column;
+                gap: 15px;
             }
             
-            .action-btn {
-                padding: 5px 10px;
-                font-size: 12px;
+            .step {
+                width: 100%;
+                flex-direction: row;
+                text-align: left;
+                gap: 12px;
             }
             
-            .guide-step {
-                font-size: 14px;
+            .step-icon {
+                margin-bottom: 0;
+            }
+            
+            /* मोबाइल में बैकग्राउंड एनिमेशन को बेहतर बनाने के लिए */
+            body::before {
+                animation-duration: 6s;
+                opacity: 0.4;
             }
         }
         
         @media (max-width: 480px) {
-            .payments-table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
+            .header h1 {
+                font-size: 22px;
             }
             
-            .payments-table thead, .payments-table tbody, .payments-table th, .payments-table td, .payments-table tr {
-                display: block;
+            .header p {
+                font-size: 13px;
             }
             
-            .payments-table tr {
-                margin-bottom: 15px;
+            .payment-info h2 {
+                font-size: 20px;
             }
             
-            .payments-table td {
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
+            .price-tag {
+                font-size: 30px;
             }
             
-            .payments-table td:before {
-                content: attr(data-label);
-                position: absolute;
-                left: 15px;
-                width: 45%;
-                padding-right: 10px;
-                text-align: left;
-                font-weight: 600;
+            .form-group input, .form-group textarea {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .payment-steps h3 {
+                font-size: 17px;
+            }
+            
+            /* छोटे फोन के लिए एनिमेशन अनुकूलन */
+            .animated-emoji {
+                animation-duration: 1.5s;
+            }
+            
+            .sparkle::before {
+                font-size: 14px;
+            }
+            
+            .contact-title {
+                font-size: 15px;
+            }
+            
+            .contact-number {
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+            
+            .contact-number i {
+                font-size: 16px;
+            }
+            
+            .payment-issue-alert {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .payment-issue-alert i {
+                font-size: 18px;
             }
         }
     </style>
@@ -554,473 +934,291 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-cogs"></i> एडमिन पैनल - राजस्थान GK क्विज़</h1>
-            <div class="user-info">
-                <i class="fas fa-user-circle"></i>
-                <span>एडमिन</span>
+            <div class="logo">
+                <i class="fas fa-landmark"></i>
             </div>
+            <h1>
+                <span class="animated-emoji">🏰</span>
+                <span class="sparkle">राजस्थान GK क्विज़</span>
+            </h1>
+            <p>राजस्थान की समृद्ध संस्कृति और इतिहास की जानकारी</p>
         </div>
         
-        <div class="content">
-            <div class="guide-section">
-                <h2 class="guide-title"><i class="fas fa-question-circle"></i> पेमेंट वेरिफिकेशन गाइड</h2>
-                <div class="guide-steps">
-                    <div class="guide-step">
-                        <strong>स्टेप 1:</strong> नीचे दी गई टेबल में नए पेमेंट रिक्वेस्ट देखें। ये आपके अमेज़न पे अकाउंट में आए पेमेंट हैं।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 2:</strong> अपना अमेज़न पे ऐप खोलें और "ट्रांजैक्शन हिस्ट्री" चेक करें। यूजर द्वारा दिए गए ट्रांजैक्शन ID से मैच करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 3:</strong> यूजर द्वारा अपलोड किया गया स्क्रीनशॉट चेक करने के लिए "व्यू" बटन पर क्लिक करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 4:</strong> अगर पेमेंट सही है (₹49 का हो और ट्रांजैक्शन ID मैच करे), तो "अप्रूव" बटन पर क्लिक करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 5:</strong> अप्रूव करते समय नोट में लिखें: "पेमेंट सत्यापित हो गया है। धन्यवाद!" और एक्सेस दिन (डिफ़ॉल्ट 30 दिन) सेट करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 6:</strong> "कन्फर्म" बटन पर क्लिक करें। यूजर को SMS/ईमेल द्वारा नोटिफिकेशन जाएगा।
+        <div class="scrollable-content">
+            <div class="content">
+                <div class="payment-info">
+                    <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
+                    <div class="price-tag">₹49</div>
+                    <div class="price-period">30 दिन की असीमित एक्सेस</div>
+                    
+                    <ul class="features">
+                        <li><i class="fas fa-check-circle"></i> राजस्थान GK के सभी टॉपिक्स तक पहुंच</li>
+                        <li><i class="fas fa-check-circle"></i> दैनिक नए क्विज़ प्रश्न</li>
+                        <li><i class="fas fa-check-circle"></i> विस्तृत प्रगति रिपोर्ट</li>
+                        <li><i class="fas fa-check-circle"></i> नए क्विज़ अपडेट</li>
+                    </ul>
+                </div>
+                
+                <div class="payment-steps">
+                    <h3>पेमेंट प्रक्रिया</h3>
+                    <div class="steps-container">
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <div class="step-text">QR कोड स्कैन करें</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="step-text">₹49 का भुगतान करें</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <div class="step-text">डिटेल्स भरें</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="stats-section">
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <h3 id="total-users">0</h3>
-                    <p>कुल यूजर्स</p>
+                
+                <!-- पेमेंट इश्यू अलर्ट -->
+                <div class="payment-issue-alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="payment-issue-alert-content">
+                        <div class="payment-issue-alert-title">पेमेंट में समस्या?</div>
+                        <div class="payment-issue-alert-text">
+                            अगर आपको पेमेंट करने में कोई परेशानी हो रही है, तो तुरंत राजस्थान GK क्विज़ टीम से संपर्क करें:
+                            <div class="payment-issue-alert-number" onclick="copyContactNumber()">
+                                <i class="fas fa-phone-alt"></i> 7665274721
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-clock"></i>
-                    <h3 id="pending-payments">0</h3>
-                    <p>पेंडिंग पेमेंट्स</p>
+                
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label for="user_id">ईमेल या फोन नंबर</label>
+                        <input type="text" id="user_id" name="user_id" placeholder="अपना ईमेल या फोन नंबर दर्ज करें" required>
+                    </div>
+                    
+                    <div class="form-group hint">
+                        <label for="mobile_number">मोबाइल नंबर (वैकल्पिक)</label>
+                        <input type="text" id="mobile_number" name="mobile_number" placeholder="अपना मोबाइल नंबर दर्ज करें">
+                        <span class="input-hint">पेमेंट समस्या होने पर संपर्क के लिए</span>
+                    </div>
+                    
+                    <div class="qr-section">
+                        <h3>QR कोड स्कैन करें</h3>
+                        <div class="qr-code">
+                            <!-- यहां अपना अमेज़न पे QR कोड डालें -->
+                            <img src="https://i.imgur.com/example.jpg" alt="Amazon Pay QR Code">
+                        </div>
+                        <div class="upi-id">
+                            <i class="fas fa-copy"></i>
+                            <span id="upi-id-text">your-amazon-pay@upi</span>
+                        </div>
+                        <p>किसी भी UPI ऐप से स्कैन करें</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transaction_id">ट्रांजैक्शन ID</label>
+                        <input type="text" id="transaction_id" name="transaction_id" placeholder="अपना ट्रांजैक्शन ID दर्ज करें" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="amount">पेमेंट राशि</label>
+                        <input type="text" id="amount" name="amount" placeholder="पेमेंट की गई राशि दर्ज करें" required>
+                    </div>
+                    
+                    <div class="file-upload">
+                        <label>पेमेंट स्क्रीनशॉट अपलोड करें</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="payment_proof" name="payment_proof" accept="image/*" onchange="previewImage(event)">
+                            <span>फाइल चुनें</span>
+                        </div>
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+                    
+                    <div class="form-group hint">
+                        <label for="payment_note">मोबाइल नंबर (वैकल्पिक)</label>
+                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="कृपया अपना मोबाइल नंबर दर्ज करें ताकि पेमेंट समस्या होने पर हम आपसे संपर्क कर सकें"></textarea>
+                        <span class="input-hint">संपर्क के लिए</span>
+                    </div>
+                    
+                    <button type="button" class="submit-btn" onclick="submitPayment()">
+                        <i class="fas fa-paper-plane"></i> पेमेंट वेरिफिकेशन के लिए सबमिट करें
+                    </button>
+                </form>
+                
+                <div id="status-message" class="status-message"></div>
+                
+                <!-- राजस्थान GK क्विज़ टीम का संपर्क विवरण -->
+                <div class="contact-section">
+                    <div class="contact-title">
+                        <i class="fas fa-headset"></i>
+                        राजस्थान GK क्विज़ टीम से संपर्क करें
+                    </div>
+                    <div class="contact-number" onclick="copyContactNumber()">
+                        <i class="fas fa-phone-alt"></i>
+                        <span id="contact-number-text">7665274721</span>
+                        <span class="contact-emoji">📞</span>
+                    </div>
+                    <p class="contact-note">किसी भी पेमेंट समस्या के लिए सीधे संपर्क करें</p>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-check-circle"></i>
-                    <h3 id="approved-payments">0</h3>
-                    <p>अप्रूव्ड पेमेंट्स</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <h3 id="total-revenue">₹0</h3>
-                    <p>कुल राजस्व</p>
-                </div>
-            </div>
-            
-            <div class="payments-section">
-                <h2 class="section-title"><i class="fas fa-credit-card"></i> पेमेंट्स</h2>
-                <div style="overflow-x: auto;">
-                    <table class="payments-table">
-                        <thead>
-                            <tr>
-                                <th>यूजर ID</th>
-                                <th>ट्रांजैक्शन ID</th>
-                                <th>राशि</th>
-                                <th>तिथि</th>
-                                <th>स्टेटस</th>
-                                <th>क्रिया</th>
-                            </tr>
-                        </thead>
-                        <tbody id="payments-tbody">
-                            <!-- पेमेंट रो जावास्क्रिप्ट से जेनरेट होंगे -->
-                        </tbody>
-                    </table>
-                </div>
+                
+                <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक राजस्थान GK क्विज़ तक पहुंच मिलेगी। अप्रूव होने पर डायरेक्ट क्विज़ में वेलकम मैसेज के साथ एक्सेस होगी।</p>
             </div>
         </div>
-    </div>
-    
-    <!-- नए पेमेंट अलर्ट -->
-    <div id="new-payment-alert" class="new-payment-alert">
-        <h3><i class="fas fa-bell"></i> नया पेमेंट अनुरोध!</h3>
-        <p>एक नया पेमेंट अनुरोध आया है। कृपया जांचें।</p>
-        <button onclick="closeNewPaymentAlert()">ठीक है</button>
-    </div>
-    
-    <!-- पेमेंट डिटेल मोडल -->
-    <div id="payment-detail-modal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('payment-detail-modal')">&times;</button>
-            <h2>पेमेंट डिटेल</h2>
-            <div id="payment-detail-content">
-                <!-- पेमेंट डिटेल जावास्क्रिप्ट से जेनरेट होगा -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- पेमेंट एक्शन मोडल -->
-    <div id="payment-action-modal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('payment-action-modal')">&times;</button>
-            <h2 id="action-modal-title">पेमेंट एक्शन</h2>
-            <div class="form-group">
-                <label for="action-note">नोट</label>
-                <textarea id="action-note" rows="3" placeholder="एक्शन के लिए नोट दर्ज करें...">पेमेंट सत्यापित हो गया है। धन्यवाद!</textarea>
-            </div>
-            <div class="form-group">
-                <label for="access-days">एक्सेस दिन (केवल अप्रूव करने पर)</label>
-                <input type="number" id="access-days" value="30" min="1" max="365">
-            </div>
-            <button class="btn btn-primary" id="confirm-action-btn">कन्फर्म</button>
-            <button class="btn btn-secondary" onclick="closeModal('payment-action-modal')">कैंसल</button>
-        </div>
-    </div>
-    
-    <!-- नोटिफिकेशन -->
-    <div id="notification" class="notification">
-        <i class="fas fa-info-circle"></i>
-        <div class="notification-content">
-            <div class="notification-title">नोटिफिकेशन</div>
-            <div class="notification-message">यह एक नोटिफिकेशन है</div>
-        </div>
-        <button class="notification-close" onclick="closeNotification()">&times;</button>
     </div>
     
     <script>
+        // पेमेंट स्थिति जांचें
         document.addEventListener('DOMContentLoaded', function() {
-            loadPayments();
-            updateStats();
-            
-            // नए पेमेंट के लिए चेक करें और नोटिफिकेशन दिखाएं
-            checkNewPayments();
-            
-            // हर 30 सेकंड में नए पेमेंट चेक करें
-            setInterval(checkNewPayments, 30000);
+            checkPaymentStatus();
         });
         
-        // पेमेंट्स लोड करने का फंक्शन
-        function loadPayments() {
-            const paymentsTbody = document.getElementById('payments-tbody');
-            paymentsTbody.innerHTML = '';
+        // पेमेंट स्थिति जांचने का फंक्शन
+        function checkPaymentStatus() {
+            const paymentData = localStorage.getItem('paymentData');
             
-            // लोकल स्टोरेज से पेमेंट्स प्राप्त करें
-            let payments = JSON.parse(localStorage.getItem('payments')) || [];
-            
-            // अगर कोई पेमेंट नहीं है, तो डमी पेमेंट डेटा जोड़ें
-            if (payments.length === 0) {
-                payments = [
-                    {
-                        id: 1,
-                        user_id: 'user@example.com',
-                        transaction_id: 'TXN123456',
-                        amount: '49',
-                        submission_date: new Date().toISOString(),
-                        status: 'pending',
-                        payment_method: 'upi',
-                        payment_note: 'यह एक टेस्ट पेमेंट है'
+            if (paymentData) {
+                const payment = JSON.parse(paymentData);
+                
+                // चेक करें कि पेमेंट अप्रूव्ड है या नहीं
+                if (payment.status === 'approved') {
+                    // चेक करें कि एक्सेस अवधि समाप्त हो गई है या नहीं
+                    const accessExpiry = new Date(payment.access_expiry_date);
+                    const currentDate = new Date();
+                    
+                    if (currentDate <= accessExpiry) {
+                        // वैध एक्सेस, डायरेक्ट क्विज़ पेज पर रीडायरेक्ट (बिना पेमेंट स्क्रीन के)
+                        alert('आपकी एक्सेस वैध है। डायरेक्ट क्विज़ में जा रहे हैं!');
+                        window.location.href = 'quiz.html';
+                        return;
+                    } else {
+                        // एक्सेस समाप्त, paymentData क्लियर करें
+                        localStorage.removeItem('paymentData');
+                        const statusElement = document.getElementById('status-message');
+                        statusElement.textContent = 'आपकी 30 दिन की एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।';
+                        statusElement.className = 'status-message error';
+                        statusElement.style.display = 'block';
                     }
-                ];
-                localStorage.setItem('payments', JSON.stringify(payments));
-            }
-            
-            // पेमेंट्स टेबल में जोड़ें
-            payments.forEach(payment => {
-                const row = document.createElement('tr');
-                
-                const statusBadge = document.createElement('span');
-                statusBadge.className = `status-badge ${payment.status}`;
-                statusBadge.textContent = payment.status === 'pending' ? 'पेंडिंग' : 
-                                          payment.status === 'approved' ? 'अप्रूव्ड' : 'रिजेक्टेड';
-                
-                const actionsCell = document.createElement('td');
-                
-                if (payment.status === 'pending') {
-                    const approveBtn = document.createElement('button');
-                    approveBtn.className = 'action-btn approve';
-                    approveBtn.textContent = 'अप्रूव';
-                    approveBtn.onclick = () => openActionModal(payment, 'approve');
-                    
-                    const rejectBtn = document.createElement('button');
-                    rejectBtn.className = 'action-btn reject';
-                    rejectBtn.textContent = 'रिजेक्ट';
-                    rejectBtn.onclick = () => openActionModal(payment, 'reject');
-                    
-                    actionsCell.appendChild(approveBtn);
-                    actionsCell.appendChild(rejectBtn);
                 }
-                
-                const viewBtn = document.createElement('button');
-                viewBtn.className = 'action-btn view';
-                viewBtn.textContent = 'व्यू';
-                viewBtn.onclick = () => viewPaymentDetail(payment);
-                
-                actionsCell.appendChild(viewBtn);
-                
-                // data-label attributes for mobile view
-                row.innerHTML = `
-                    <td data-label="यूजर ID">${payment.user_id}</td>
-                    <td data-label="ट्रांजैक्शन ID">${payment.transaction_id}</td>
-                    <td data-label="राशि">₹${payment.amount}</td>
-                    <td data-label="तिथि">${new Date(payment.submission_date).toLocaleDateString()}</td>
-                    <td data-label="स्टेटस"></td>
-                    <td data-label="क्रिया"></td>
-                `;
-                
-                row.cells[4].appendChild(statusBadge);
-                row.cells[5].appendChild(actionsCell);
-                
-                paymentsTbody.appendChild(row);
+                // अगर पेंडिंग, तो पेमेंट फॉर्म दिखाएं (बिना अप्रूव के क्विज़ न खेल सके)
+            }
+            // कोई डेटा न हो तो पेमेंट फॉर्म दिखाएं
+        }
+        
+        // UPI ID कॉपी करने का फंक्शन
+        document.querySelector('.upi-id').addEventListener('click', function() {
+            const upiId = document.getElementById('upi-id-text').textContent;
+            navigator.clipboard.writeText(upiId).then(function() {
+                const originalText = document.getElementById('upi-id-text').textContent;
+                document.getElementById('upi-id-text').textContent = 'कॉपी हो गया!';
+                setTimeout(function() {
+                    document.getElementById('upi-id-text').textContent = originalText;
+                }, 2000);
+            });
+        });
+        
+        // संपर्क नंबर कॉपी करने का फंक्शन
+        function copyContactNumber() {
+            const contactNumber = document.getElementById('contact-number-text').textContent;
+            navigator.clipboard.writeText(contactNumber).then(function() {
+                const originalText = document.getElementById('contact-number-text').textContent;
+                document.getElementById('contact-number-text').textContent = 'कॉपी हो गया!';
+                setTimeout(function() {
+                    document.getElementById('contact-number-text').textContent = originalText;
+                }, 2000);
             });
         }
         
-        // स्टैट्स अपडेट करने का फंक्शन
-        function updateStats() {
-            const payments = JSON.parse(localStorage.getItem('payments')) || [];
-            
-            const totalUsers = payments.length;
-            const pendingPayments = payments.filter(p => p.status === 'pending').length;
-            const approvedPayments = payments.filter(p => p.status === 'approved').length;
-            const totalRevenue = payments
-                .filter(p => p.status === 'approved')
-                .reduce((sum, p) => sum + parseInt(p.amount), 0);
-            
-            document.getElementById('total-users').textContent = totalUsers;
-            document.getElementById('pending-payments').textContent = pendingPayments;
-            document.getElementById('approved-payments').textContent = approvedPayments;
-            document.getElementById('total-revenue').textContent = `₹${totalRevenue}`;
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('image-preview');
+                    preview.innerHTML = '<img src="' + e.target.result + '" alt="पेमेंट प्रूफ">';
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
         }
         
-        // नए पेमेंट चेक करने का फंक्शन
-        function checkNewPayments() {
-            const payments = JSON.parse(localStorage.getItem('payments')) || [];
-            const lastChecked = localStorage.getItem('lastPaymentCheck') || new Date(0).toISOString();
-            const lastCheckedDate = new Date(lastChecked);
+        function submitPayment() {
+            const userId = document.getElementById('user_id').value;
+            const transactionId = document.getElementById('transaction_id').value;
+            const amount = document.getElementById('amount').value;
+            const statusElement = document.getElementById('status-message');
             
-            const newPayments = payments.filter(p => 
-                p.status === 'pending' && new Date(p.submission_date) > lastCheckedDate
-            );
-            
-            if (newPayments.length > 0) {
-                // नए पेमेंट अलर्ट दिखाएं
-                showNewPaymentAlert();
-                
-                // एडमिन को SMS भेजें (गारंटीड नोटिफिकेशन - सिमुलेटेड)
-                sendAdminSMS(newPayments.length);
+            if (!userId || !transactionId || !amount) {
+                statusElement.textContent = 'कृपया सभी आवश्यक फील्ड भरें!';
+                statusElement.className = 'status-message error';
+                return;
             }
             
-            // आखिरी चेक टाइम अपडेट करें
-            localStorage.setItem('lastPaymentCheck', new Date().toISOString());
-        }
-        
-        // नए पेमेंट अलर्ट दिखाने का फंक्शन
-        function showNewPaymentAlert() {
-            const alert = document.getElementById('new-payment-alert');
-            alert.classList.add('show');
+            // लोडिंग स्टेटस दिखाएं
+            statusElement.textContent = 'पेमेंट सबमिट हो रहा है...';
+            statusElement.className = 'status-message pending';
             
-            // 10 सेकंड बाद अलर्ट छुपाएं
-            setTimeout(() => {
-                alert.classList.remove('show');
-            }, 10000);
-        }
-        
-        // नए पेमेंट अलर्ट बंद करने का फंक्शन
-        function closeNewPaymentAlert() {
-            document.getElementById('new-payment-alert').classList.remove('show');
-        }
-        
-        // एडमिन को SMS भेजने का फंक्शन (सिमुलेशन - गारंटीड मैसेज)
-        function sendAdminSMS(count) {
-            // वास्तविक में SMS API, यहां console और नोटिफिकेशन
-            console.log(`गारंटीड SMS एडमिन को: ${count} नए पेमेंट रिक्वेस्ट आए हैं। तुरंत admin.html चेक करें!`);
-            
-            showNotification(
-                'info',
-                'SMS अलर्ट (गारंटीड)',
-                `आपके फोन पर SMS गया: ${count} नए पेमेंट रिक्वेस्ट आए हैं। तुरंत admin.html में जाकर अप्रूव करें।`
-            );
-            
-            // अलर्ट भी दिखाएं ताकि गारंटीड लगे
-            alert(`नया पेमेंट रिक्वेस्ट! ${count} अनुरोध आए हैं। admin.html में जाकर अप्रूव करें।`);
-        }
-        
-        // यूजर को SMS/ईमेल भेजने का फंक्शन (सिमुलेशन)
-        function sendUserNotification(userId, status, message) {
-            // वास्तविक में SMS/ईमेल API, यहां सिमुलेट
-            console.log(`${userId} को ${status} के लिए SMS/ईमेल: ${message}`);
-            
-            showNotification(
-                'success',
-                'यूजर को SMS भेजा गया',
-                `${userId} को फोन पर मैसेज भेजा गया: ${message}`
-            );
-        }
-        
-        // नोटिफिकेशन दिखाने का फंक्शन
-        function showNotification(type, title, message) {
-            const notification = document.getElementById('notification');
-            const icon = notification.querySelector('i');
-            const titleEl = notification.querySelector('.notification-title');
-            const messageEl = notification.querySelector('.notification-message');
-            
-            // नोटिफिकेशन क्लास सेट करें
-            notification.className = `notification ${type} show`;
-            
-            // आइकन सेट करें
-            if (type === 'success') {
-                icon.className = 'fas fa-check-circle';
-            } else if (type === 'error') {
-                icon.className = 'fas fa-exclamation-circle';
-            } else {
-                icon.className = 'fas fa-info-circle';
-            }
-            
-            // टाइटल और मैसेज सेट करें
-            titleEl.textContent = title;
-            messageEl.textContent = message;
-            
-            // 5 सेकंड बाद नोटिफिकेशन छुपाएं
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        }
-        
-        // नोटिफिकेशन बंद करने का फंक्शन
-        function closeNotification() {
-            document.getElementById('notification').classList.remove('show');
-        }
-        
-        // पेमेंट डिटेल देखने का फंक्शन
-        function viewPaymentDetail(payment) {
-            const modal = document.getElementById('payment-detail-modal');
-            const content = document.getElementById('payment-detail-content');
-            
-            content.innerHTML = `
-                <div class="form-group">
-                    <label>यूजर ID</label>
-                    <input type="text" value="${payment.user_id}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>ट्रांजैक्शन ID</label>
-                    <input type="text" value="${payment.transaction_id}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>राशि</label>
-                    <input type="text" value="₹${payment.amount}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>पेमेंट विधि</label>
-                    <input type="text" value="${payment.payment_method}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>सबमिशन तिथि</label>
-                    <input type="text" value="${new Date(payment.submission_date).toLocaleString()}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>स्टेटस</label>
-                    <input type="text" value="${payment.status}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>नोट</label>
-                    <textarea readonly>${payment.payment_note || 'कोई नोट नहीं'}</textarea>
-                </div>
-                <div class="form-group">
-                    <label>पेमेंट प्रूफ</label>
-                    <img src="https://via.placeholder.com/400x200?text=Payment+Proof" alt="पेमेंट प्रूफ" class="payment-proof">
-                </div>
-            `;
-            
-            modal.style.display = 'flex';
-        }
-        
-        // एक्शन मोडल खोलने का फंक्शन
-        function openActionModal(payment, action) {
-            const modal = document.getElementById('payment-action-modal');
-            const title = document.getElementById('action-modal-title');
-            const confirmBtn = document.getElementById('confirm-action-btn');
-            
-            title.textContent = action === 'approve' ? 'पेमेंट अप्रूव करें' : 'पेमेंट रिजेक्ट करें';
-            
-            confirmBtn.textContent = action === 'approve' ? 'अप्रूव' : 'रिजेक्ट';
-            confirmBtn.className = `btn ${action === 'approve' ? 'btn-primary' : 'btn-danger'}`;
-            confirmBtn.onclick = () => processPaymentAction(payment, action);
-            
-            modal.style.display = 'flex';
-        }
-        
-        // पेमेंट एक्शन प्रोसेस करने का फंक्शन
-        function processPaymentAction(payment, action) {
-            const note = document.getElementById('action-note').value;
-            const accessDays = parseInt(document.getElementById('access-days').value);
-            
-            // पेमेंट्स प्राप्त करें
-            let payments = JSON.parse(localStorage.getItem('payments')) || [];
-            
-            // पेमेंट अपडेट करें
-            const paymentIndex = payments.findIndex(p => p.id === payment.id);
-            if (paymentIndex !== -1) {
-                payments[paymentIndex].status = action;
-                payments[paymentIndex].admin_note = note;
+            // सिमुलेट पेमेंट सबमिशन
+            setTimeout(function() {
+                // पेमेंट डेटा सेव करें (status pending रखें, अप्रूव होने तक quiz.html पर न जाए)
+                const paymentData = {
+                    id: Date.now(), // यूनीक ID
+                    user_id: userId,
+                    mobile_number: document.getElementById('mobile_number').value,
+                    transaction_id: transactionId,
+                    amount: amount,
+                    payment_note: document.getElementById('payment_note').value,
+                    submission_date: new Date().toISOString(),
+                    status: 'pending',
+                    payment_method: 'upi' // डिफ़ॉल्ट UPI क्योंकि यूजर ने QR स्कैन किया है
+                };
                 
-                if (action === 'approve') {
-                    // एक्सेस एक्सपायरी डेट सेट करें
-                    const expiryDate = new Date();
-                    expiryDate.setDate(expiryDate.getDate() + accessDays);
-                    payments[paymentIndex].access_expiry_date = expiryDate.toISOString();
-                    
-                    // यूजर के लिए पेमेंट डेटा सेव करें (localStorage में, जो APK में persist करेगा)
-                    const userPaymentData = {
-                        user_id: payments[paymentIndex].user_id,
-                        transaction_id: payments[paymentIndex].transaction_id,
-                        amount: payments[paymentIndex].amount,
-                        payment_note: payments[paymentIndex].payment_note,
-                        submission_date: payments[paymentIndex].submission_date,
-                        status: 'approved',
-                        access_expiry_date: payments[paymentIndex].access_expiry_date
-                    };
-                    localStorage.setItem('paymentData', JSON.stringify(userPaymentData));
-                    
-                    // यूजर को अप्रूवल के लिए SMS भेजें (सिमुलेटेड)
-                    sendUserNotification(
-                        payments[paymentIndex].user_id,
-                        'पेमेंट अप्रूव्ड',
-                        'आपका पेमेंट अप्रूव हो गया है। अब आप 30 दिनों तक राजस्थान GK क्विज़ खेल सकते हैं। वेलकम मैसेज के साथ डायरेक्ट क्विज़ में एक्सेस!'
-                    );
-                } else {
-                    // यूजर को रिजेक्शन के लिए SMS भेजें (सिमुलेटेड)
-                    sendUserNotification(
-                        payments[paymentIndex].user_id,
-                        'पेमेंट रिजेक्टेड',
-                        'आपका पेमेंट रिजेक्ट कर दिया गया है। कृपया फिर से कोशिश करें।'
-                    );
-                    
-                    // रिजेक्ट पर paymentData क्लियर करें अगर हो
-                    localStorage.removeItem('paymentData');
-                }
-                
-                // पेमेंट्स सेव करें
+                // पेमेंट्स लिस्ट में जोड़ें (admin.html के लिए)
+                let payments = JSON.parse(localStorage.getItem('payments')) || [];
+                payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
                 
-                // मोडल बंद करें
-                closeModal('payment-action-modal');
+                // यूजर के लिए paymentData सेव करें लेकिन status pending रखें
+                localStorage.setItem('paymentData', JSON.stringify({
+                    ...paymentData,
+                    status: 'pending' // अप्रूव होने तक pending
+                }));
                 
-                // पेमेंट्स और स्टैट्स रीलोड करें
-                loadPayments();
-                updateStats();
+                // एडमिन को नोटिफिकेशन भेजें (गारंटीड)
+                sendAdminNotification();
                 
-                // सफलता संदेश दिखाएं
-                showNotification(
-                    'success',
-                    'पेमेंट अपडेटेड',
-                    `पेमेंट सफलतापूर्वक ${action === 'approve' ? 'अप्रूव' : 'रिजेक्ट'} किया गया! यूजर को SMS भेजा गया।`
-                );
-            }
+                // सफलता संदेश दिखाएं (रीडायरेक्ट न करें, वेट अप्रूवल के लिए)
+                statusElement.textContent = 'आपका पेमेंट रिक्वेस्ट सबमिट हो गया है! एडमिन द्वारा वेरिफिकेशन के बाद (जल्द ही SMS आएगा) आपको डायरेक्ट क्विज़ एक्सेस मिलेगा। कृपया इंतजार करें।';
+                statusElement.className = 'status-message success';
+                
+                // फॉर्म हाइड करें
+                document.getElementById('payment-form').style.display = 'none';
+                
+                // यूजर को थैंक यू मैसेज (सिमुलेटेड SMS)
+                sendUserThankYouMessage(userId);
+                
+            }, 2000);
         }
         
-        // मोडल बंद करने का फंक्शन
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+        // एडमिन को नोटिफिकेशन भेजने का फंक्शन (गारंटीड - सिमुलेशन)
+        function sendAdminNotification() {
+            // वास्तविक में SMS API, यहां console और अलर्ट
+            console.log('गारंटीड SMS एडमिन को: नया पेमेंट रिक्वेस्ट आया है। तुरंत admin.html चेक करें!');
+            
+            // अलर्ट दिखाएं ताकि एडमिन को पता चले (सिमुलेट)
+            alert('एडमिन को गारंटीड मैसेज भेजा गया: नया पेमेंट रिक्वेस्ट! admin.html में जाकर अप्रूव करें।');
         }
         
-        // मोडल के बाहर क्लिक करने पर मोडल बंद करें
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
+        // यूजर को धन्यवाद संदेश भेजने का फंक्शन (सिमुलेशन)
+        function sendUserThankYouMessage(userId) {
+            // वास्तविक में SMS API
+            console.log(`${userId} को SMS: आपका रिक्वेस्ट सबमिट हो गया। अप्रूव होने पर नोटिफिकेशन आएगा।`);
         }
     </script>
 </body>
