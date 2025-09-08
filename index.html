@@ -21,7 +21,7 @@
             --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
             --offline-gradient: linear-gradient(135deg, #636e72, #b2bec3);
-            --error-gradient: linear-gradient(135deg, #e17055, #d63031);
+            --error-gradient: linear-gradient(135deg, #ff7675, #d63031);
         }
         
         * {
@@ -279,10 +279,10 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 22px;
+            font-weight: 800;
             text-align: center;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
         }
         
         .offline-section .custom-design {
@@ -325,7 +325,7 @@
                 
                 <div id="error-section" class="error-section" style="display: none;">
                     <div class="custom-design">
-                        ⚠️ Rajasthan GK Quiz 😔<br>Error
+                        ⚠️ Rajasthan GK Quiz 🌟<br>Error
                     </div>
                     <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
                 </div>
@@ -347,7 +347,6 @@
                     <div class="qr-section">
                         <h3>आसान UPI पेमेंट</h3>
                         <div class="qr-code">
-                            <!-- अपना अमेज़न पे QR इमेज URL डालें -->
                             <img src="https://via.placeholder.com/200x200?text=Amazon+Pay+QR" alt="QR Code">
                         </div>
                         <div class="upi-id">
@@ -428,26 +427,39 @@
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
 
+            // पहले localStorage चेक करें
+            const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
+            const now = new Date();
+            const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
+
+            if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
+                window.location.href = 'quiz.html';
+                return;
+            } else if (expiryDate && now > expiryDate) {
+                statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
+                document.getElementById('payment-form').style.display = 'block';
+                return;
+            }
+
+            // quiz.html चेक करें, लेकिन सख्ती से नहीं
             try {
-                const response = await fetch('quiz.html', { method: 'HEAD' });
-                if (!response.ok) throw new Error('quiz.html अनुपलब्ध');
-
-                const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
-                const now = new Date();
-                const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
-
-                if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
-                    window.location.href = 'quiz.html';
-                } else if (expiryDate && now > expiryDate) {
-                    statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
-                    statusElement.className = 'status-message error';
-                    statusElement.style.display = 'block';
-                    document.getElementById('payment-form').style.display = 'block';
+                const response = await fetch('quiz.html', { method: 'HEAD', cache: 'no-store' });
+                if (response.status === 404 || response.status === 503) {
+                    errorSection.style.display = 'block';
+                    onlineContent.style.display = 'none';
+                    console.error('quiz.html unavailable:', response.status);
+                } else {
+                    // कोई रियल एरर नहीं, पेमेंट स्क्रीन दिखाएँ
+                    errorSection.style.display = 'none';
+                    onlineContent.style.display = 'block';
                 }
             } catch (error) {
-                errorSection.style.display = 'block';
-                onlineContent.style.display = 'none';
-                console.error('Error checking payment status:', error);
+                // नेटवर्क या अन्य एरर, लेकिन डिफॉल्ट पेमेंट स्क्रीन दिखाएँ
+                console.error('Error checking quiz.html:', error);
+                errorSection.style.display = 'none';
+                onlineContent.style.display = 'block';
             }
         }
 
