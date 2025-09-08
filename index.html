@@ -349,9 +349,9 @@
             }
         }
 
-        // सिमुलेटेड SMS (अलर्ट के रूप में)
+        // सिमुलेटेड SMS (स्टेटस मैसेज)
         function sendSMS(toPhone, message) {
-            console.log(`SMS भेजा गया ${toPhone} को: ${message}`);
+            console.log(`नोटिफिकेशन ${toPhone} को: ${message}`);
             const statusElement = document.getElementById('status-message');
             statusElement.textContent = message;
             statusElement.className = 'status-message success';
@@ -405,8 +405,8 @@
             // यूजर paymentData (pending)
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
 
-            // एडमिन को सिमुलेटेड SMS
-            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}. कृपया अप्रूव करें।`;
+            // एडमिन को नोटिफिकेशन
+            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}।`;
             sendSMS('7665274721', adminMessage);
 
             // यूजर को धन्यवाद
