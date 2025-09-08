@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>क्विज़ मास्टर प्रो</title>
+    <title>राजस्थान GK क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -269,57 +269,6 @@
             font-family: 'Montserrat', sans-serif;
         }
         
-        .quiz-categories {
-            padding: 0 25px 25px;
-        }
-        
-        .quiz-categories h3 {
-            color: var(--dark);
-            margin-bottom: 15px;
-            font-size: 18px;
-            font-weight: 600;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-        
-        .category-card {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .category-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .category-card.active {
-            background: var(--gradient);
-            border-color: transparent;
-            color: white;
-        }
-        
-        .category-card i {
-            font-size: 24px;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .category-card span {
-            font-size: 14px;
-            font-weight: 500;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
         .result-container {
             text-align: center;
             padding: 20px;
@@ -356,7 +305,7 @@
             color: var(--warning);
         }
         
-        .restart-btn, .category-btn {
+        .restart-btn {
             background: var(--gradient);
             color: white;
             border: none;
@@ -371,9 +320,95 @@
             font-family: 'Montserrat', sans-serif;
         }
         
-        .restart-btn:hover, .category-btn:hover {
+        .restart-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(118, 75, 162, 0.5);
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .welcome-message h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .welcome-message p {
+            font-size: 16px;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .welcome-message i {
+            font-size: 40px;
+            color: var(--warning);
+            margin-bottom: 15px;
+        }
+        
+        .topic-info {
+            background: rgba(74, 0, 224, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(74, 0, 224, 0.1);
+        }
+        
+        .topic-info h3 {
+            color: var(--primary);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .topic-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .start-quiz-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .start-quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.5);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: var(--primary);
+        }
+        
+        .loading i {
+            font-size: 30px;
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         /* एनिमेशन */
@@ -406,10 +441,6 @@
                 flex-direction: column;
                 gap: 10px;
             }
-            
-            .category-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
         
         @media (max-width: 480px) {
@@ -435,18 +466,6 @@
                 font-size: 14px;
             }
             
-            .category-card {
-                padding: 10px;
-            }
-            
-            .category-card i {
-                font-size: 20px;
-            }
-            
-            .category-card span {
-                font-size: 12px;
-            }
-            
             .result-score h2 {
                 font-size: 20px;
             }
@@ -459,10 +478,27 @@
                 font-size: 16px;
             }
             
-            .restart-btn, .category-btn {
+            .restart-btn {
                 padding: 10px 20px;
                 font-size: 14px;
                 margin: 0 5px 5px;
+            }
+            
+            .welcome-message h2 {
+                font-size: 20px;
+            }
+            
+            .welcome-message p {
+                font-size: 14px;
+            }
+            
+            .welcome-message i {
+                font-size: 30px;
+            }
+            
+            .start-quiz-btn {
+                padding: 12px 25px;
+                font-size: 16px;
             }
         }
     </style>
@@ -474,9 +510,9 @@
                 <i class="fas fa-home"></i>
             </button>
             <div class="app-icon">
-                <i class="fas fa-brain"></i>
+                <i class="fas fa-landmark"></i>
             </div>
-            <h1>क्विज़ मास्टर प्रो</h1>
+            <h1>राजस्थान GK क्विज़</h1>
             <div class="user-info">
                 <div class="user-status">
                     <i class="fas fa-crown"></i> प्रीमियम यूज़र
@@ -488,53 +524,35 @@
         </div>
         
         <div class="quiz-container">
-            <div class="question-section">
+            <div class="welcome-message" id="welcome-message">
+                <i class="fas fa-smile"></i>
+                <h2 id="welcome-title">स्वागत है!</h2>
+                <p id="welcome-text">क्विज़ शुरू करने के लिए बटन दबाएं।</p>
+                <button class="start-quiz-btn" onclick="startQuiz()">क्विज़ शुरू करें</button>
+            </div>
+            
+            <div class="topic-info" id="topic-info" style="display: none;">
+                <h3 id="topic-name"></h3>
+                <p id="topic-date"></p>
+            </div>
+            
+            <div class="question-section" id="question-section" style="display: none;">
                 <div class="question-count">
                     <span id="current-question">1</span> / <span id="total-questions">10</span>
                 </div>
-                <h2 id="question-text">कृपया एक कैटेगरी चुनें</h2>
+                <h2 id="question-text">प्रश्न लोड हो रहा है...</h2>
             </div>
             
             <div class="options-section" id="options-container">
                 <!-- ऑप्शन जावास्क्रिप्ट से जेनरेट होंगे -->
             </div>
             
-            <div class="quiz-footer">
+            <div class="quiz-footer" id="quiz-footer" style="display: none;">
                 <div class="progress-bar">
                     <div id="progress"></div>
                 </div>
                 <div class="score-display">
                     स्कोर: <span id="score">0</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="quiz-categories">
-            <h3>क्विज़ कैटेगरी</h3>
-            <div class="category-grid">
-                <div class="category-card active" data-category="सामान्य ज्ञान">
-                    <i class="fas fa-book"></i>
-                    <span>सामान्य ज्ञान</span>
-                </div>
-                <div class="category-card" data-category="विज्ञान">
-                    <i class="fas fa-flask"></i>
-                    <span>विज्ञान</span>
-                </div>
-                <div class="category-card" data-category="इतिहास">
-                    <i class="fas fa-landmark"></i>
-                    <span>इतिहास</span>
-                </div>
-                <div class="category-card" data-category="गणित">
-                    <i class="fas fa-calculator"></i>
-                    <span>गणित</span>
-                </div>
-                <div class="category-card" data-category="मनोरंजन">
-                    <i class="fas fa-film"></i>
-                    <span>मनोरंजन</span>
-                </div>
-                <div class="category-card" data-category="खेल">
-                    <i class="fas fa-football-ball"></i>
-                    <span>खेल</span>
                 </div>
             </div>
         </div>
@@ -553,122 +571,24 @@
             const scoreEl = document.getElementById('score');
             const progressBar = document.getElementById('progress');
             const daysLeftEl = document.getElementById('days-left');
+            const welcomeMessage = document.getElementById('welcome-message');
+            const welcomeTitle = document.getElementById('welcome-title');
+            const welcomeText = document.getElementById('welcome-text');
+            const topicInfo = document.getElementById('topic-info');
+            const topicName = document.getElementById('topic-name');
+            const topicDate = document.getElementById('topic-date');
+            const questionSection = document.getElementById('question-section');
+            const quizFooter = document.getElementById('quiz-footer');
             
             let currentQuestion = 0;
             let score = 0;
             let questions = [];
-            let currentCategory = "सामान्य ज्ञान";
+            let currentTopic = null;
             
-            // क्विज़ डेटा
-            const quizData = {
-                "सामान्य ज्ञान": [
-                    {
-                        question: "भारत की राजधानी क्या है?",
-                        options: ["मुंबई", "नई दिल्ली", "कोलकाता", "चेन्नई"],
-                        correctAnswer: "नई दिल्ली"
-                    },
-                    {
-                        question: "जल का रासायनिक सूत्र क्या है?",
-                        options: ["H2O", "CO2", "O2", "NaCl"],
-                        correctAnswer: "H2O"
-                    },
-                    {
-                        question: "निम्न में से कौन सा एक प्राकृतिक उपग्रह है?",
-                        options: ["चंद्रमा", "अपोलो", "सैटेलाइट", "रॉकेट"],
-                        correctAnswer: "चंद्रमा"
-                    }
-                ],
-                "विज्ञान": [
-                    {
-                        question: "प्रकाश की गति कितनी होती है?",
-                        options: ["3,00,000 किमी/सेकंड", "1,50,000 किमी/सेकंड", "4,50,000 किमी/सेकंड", "6,00,000 किमी/सेकंड"],
-                        correctAnswer: "3,00,000 किमी/सेकंड"
-                    },
-                    {
-                        question: "मनुष्य के शरीर में कितनी हड्डियां होती हैं?",
-                        options: ["206", "302", "156", "260"],
-                        correctAnswer: "206"
-                    },
-                    {
-                        question: "निम्न में से कौन सा सबसे छोटा तत्व है?",
-                        options: ["हाइड्रोजन", "हीलियम", "लिथियम", "बेरिलियम"],
-                        correctAnswer: "हाइड्रोजन"
-                    }
-                ],
-                "इतिहास": [
-                    {
-                        question: "भारत का संविधान कब लागू हुआ था?",
-                        options: ["26 जनवरी 1950", "15 अगस्त 1947", "26 नवंबर 1949", "2 अक्टूबर 1950"],
-                        correctAnswer: "26 जनवरी 1950"
-                    },
-                    {
-                        question: "महात्मा गांधी का जन्म कब हुआ था?",
-                        options: ["2 अक्टूबर 1869", "15 अगस्त 1872", "26 जनवरी 1875", "1 मई 1865"],
-                        correctAnswer: "2 अक्टूबर 1869"
-                    },
-                    {
-                        question: "1857 के विद्रोह को क्या भी कहा जाता है?",
-                        options: ["पहला स्वतंत्रता संग्राम", "दूसरा स्वतंत्रता संग्राम", "भारत छोड़ो आंदोलन", "असहयोग आंदोलन"],
-                        correctAnswer: "पहला स्वतंत्रता संग्राम"
-                    }
-                ],
-                "गणित": [
-                    {
-                        question: "π (पाई) का मान कितना होता है?",
-                        options: ["3.14159", "2.71828", "1.41421", "1.73205"],
-                        correctAnswer: "3.14159"
-                    },
-                    {
-                        question: "एक त्रिभुज के कोणों का योग कितना होता है?",
-                        options: ["180 डिग्री", "90 डिग्री", "270 डिग्री", "360 डिग्री"],
-                        correctAnswer: "180 डिग्री"
-                    },
-                    {
-                        question: "निम्न में से कौन सी एक सम संख्या है?",
-                        options: ["2", "3", "5", "7"],
-                        correctAnswer: "2"
-                    }
-                ],
-                "मनोरंजन": [
-                    {
-                        question: "शाहरुख खान को किस नाम से भी जाना जाता है?",
-                        options: ["किंग खान", "बॉलीवुड का बादशाह", "रोमियो", "ये सभी"],
-                        correctAnswer: "ये सभी"
-                    },
-                    {
-                        question: "'दिलवाले दुल्हनिया ले जाएंगे' फिल्म कब रिलीज़ हुई थी?",
-                        options: ["1995", "1990", "2000", "1985"],
-                        correctAnswer: "1995"
-                    },
-                    {
-                        question: "निम्न में से कौन सा एक टीवी शो नहीं है?",
-                        options: ["तारक मेहता का उल्टा चश्मा", "कपिल शर्मा शो", "बिग बॉस", "कौन बनेगा करोड़पति"],
-                        correctAnswer: "कौन बनेगा करोड़पति"
-                    }
-                ],
-                "खेल": [
-                    {
-                        question: "क्रिकेट में एक ओवर में कितनी गेंदें होती हैं?",
-                        options: ["6", "7", "8", "5"],
-                        correctAnswer: "6"
-                    },
-                    {
-                        question: "हॉकी को किस देश का राष्ट्रीय खेल माना जाता है?",
-                        options: ["भारत", "पाकिस्तान", "ऑस्ट्रेलिया", "इंग्लैंड"],
-                        correctAnswer: "भारत"
-                    },
-                    {
-                        question: "ओलंपिक खेल कितने साल में एक बार आयोजित किए जाते हैं?",
-                        options: ["4 साल", "2 साल", "5 साल", "3 साल"],
-                        correctAnswer: "4 साल"
-                    }
-                ]
-            };
-            
-            // होम पेज पर जाने का फंक्शन
+            // होम पेज पर जाने का फंक्शन (पेमेंट पेज)
             function goHome() {
-                if (confirm("क्या आप होम पेज पर जाना चाहते हैं?")) {
-                    window.location.href = 'payment.html';
+                if (confirm("क्या आप होम पेज (पेमेंट) पर जाना चाहते हैं?")) {
+                    window.location.href = 'index.html';
                 }
             }
             
@@ -686,38 +606,85 @@
                         const currentDate = new Date();
                         
                         if (currentDate > accessExpiry) {
-                            // एक्सेस अवधि समाप्त हो गई है, पेमेंट पेज पर रीडायरेक्ट करें
-                            alert('आपकी एक्सेस अवधि समाप्त हो गई है। कृपया फिर से पेमेंट करें।');
-                            window.location.href = 'payment.html';
+                            // एक्सेस समाप्त, paymentData क्लियर करें और पेमेंट पेज पर रीडायरेक्ट
+                            localStorage.removeItem('paymentData');
+                            alert('आपकी 30 दिन की एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।');
+                            window.location.href = 'index.html';
                         } else {
-                            // एक्सेस अवधि वैध है, क्विज़ लोड करें
-                            loadQuiz();
+                            // वैध एक्सेस, वेलकम मैसेज दिखाएं
                             
                             // शेष दिनों की गणना करें
                             const daysLeft = Math.ceil((accessExpiry - currentDate) / (1000 * 60 * 60 * 24));
                             daysLeftEl.textContent = daysLeft;
+                            
+                            // वेलकम मैसेज सेट करें
+                            const userName = payment.user_id.split('@')[0] || 'यूजर'; // सिंपल नाम एक्सट्रैक्ट
+                            welcomeTitle.textContent = `${userName}, राजस्थान GK क्विज़ में आपका स्वागत है!`;
+                            welcomeText.textContent = 'आज का डेली टॉपिक लोड हो रहा है। क्विज़ शुरू करें और राजस्थान GK सीखें।';
+                            
+                            welcomeMessage.style.display = 'block';
+                            topicInfo.style.display = 'none'; // शुरू में छुपाएं
                         }
                     } else {
-                        // पेमेंट पेंडिंग है, पेमेंट पेज पर रीडायरेक्ट करें
-                        window.location.href = 'payment.html';
+                        // पेंडिंग या अन्य, पेमेंट पेज पर रीडायरेक्ट
+                        window.location.href = 'index.html';
                     }
                 } else {
-                    // कोई पेमेंट डेटा नहीं है, पेमेंट पेज पर रीडायरेक्ट करें
-                    window.location.href = 'payment.html';
+                    // कोई पेमेंट डेटा नहीं, पेमेंट पेज पर रीडायरेक्ट
+                    window.location.href = 'index.html';
                 }
             }
             
-            // क्विज़ लोड करने का फंक्शन
-            function loadQuiz() {
-                questions = quizData[currentCategory] || [];
-                totalQuestionsEl.textContent = questions.length;
+            // क्विज़ शुरू करने का फंक्शन
+            function startQuiz() {
+                // वेलकम मैसेज छुपाएं
+                welcomeMessage.style.display = 'none';
                 
-                if (questions.length > 0) {
-                    showQuestion();
-                } else {
-                    questionText.textContent = `${currentCategory} कैटेगरी में कोई प्रश्न उपलब्ध नहीं है। कृपया दूसरी कैटेगरी चुनें।`;
-                    optionsContainer.innerHTML = '';
-                }
+                // लोडिंग मैसेज दिखाएं
+                questionText.textContent = "आज का टॉपिक लोड हो रहा है...";
+                optionsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> डेली क्विज़ लोड हो रही है...</div>';
+                
+                // क्विज़ सेक्शन दिखाएं
+                questionSection.style.display = 'block';
+                quizFooter.style.display = 'block';
+                
+                // डेली टॉपिक और प्रश्न लोड करें
+                loadDailyTopicAndQuestions();
+            }
+            
+            // डेली टॉपिक और प्रश्न लोड करने का फंक्शन
+            function loadDailyTopicAndQuestions() {
+                fetch('questions.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('JSON लोड करने में त्रुटि');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+                        currentTopic = data.topics.find(topic => topic.date === today) || data.topics[0]; // आज का टॉपिक, या डिफॉल्ट
+                        
+                        if (currentTopic && currentTopic.questions.length > 0) {
+                            questions = currentTopic.questions;
+                            totalQuestionsEl.textContent = questions.length;
+                            
+                            // टॉपिक इंफो दिखाएं
+                            topicName.textContent = currentTopic.topic;
+                            topicDate.textContent = `तिथि: ${currentTopic.date}`;
+                            topicInfo.style.display = 'block';
+                            
+                            showQuestion();
+                        } else {
+                            questionText.textContent = "आज का टॉपिक उपलब्ध नहीं है। कृपया कल पुनः प्रयास करें।";
+                            optionsContainer.innerHTML = '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        questionText.textContent = "डेली क्विज़ लोड करने में त्रुटि। कृपया बाद में पुन: प्रयास करें।";
+                        optionsContainer.innerHTML = '';
+                    });
             }
             
             // प्रश्न दिखाने का फंक्शन
@@ -780,11 +747,11 @@
             
             // रिजल्ट दिखाने का फंक्शन
             function showResults() {
-                questionText.textContent = "क्विज़ पूरा हुआ!";
+                questionText.textContent = "डेली क्विज़ पूरा हुआ!";
                 optionsContainer.innerHTML = `
                     <div class="result-container">
                         <div class="result-score">
-                            <h2>आपका स्कोर</h2>
+                            <h2>आपका स्कोर (${currentTopic.topic})</h2>
                             <div class="score-value">${score} / ${questions.length}</div>
                         </div>
                         <div class="result-message">
@@ -795,7 +762,6 @@
                                 '<i class="fas fa-redo"></i> अभ्यास करने की जरूरत है! फिर से कोशिश करें!'}
                         </div>
                         <button id="restart-btn" class="restart-btn">क्विज़ फिर से शुरू करें</button>
-                        <button id="category-btn" class="category-btn">कैटेगरी बदलें</button>
                     </div>
                 `;
                 
@@ -807,38 +773,7 @@
                     progressBar.style.width = '0%';
                     showQuestion();
                 });
-                
-                // कैटेगरी बदलें बटन इवेंट
-                document.getElementById('category-btn').addEventListener('click', () => {
-                    currentQuestion = 0;
-                    score = 0;
-                    scoreEl.textContent = score;
-                    progressBar.style.width = '0%';
-                    questionText.textContent = "कृपया एक कैटेगरी चुनें";
-                    optionsContainer.innerHTML = '';
-                });
             }
-            
-            // कैटेगरी कार्ड्स के लिए इवेंट लिसनर
-            const categoryCards = document.querySelectorAll('.category-card');
-            categoryCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    categoryCards.forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                    
-                    // कैटेगरी का नाम प्राप्त करें
-                    currentCategory = card.dataset.category;
-                    
-                    // क्विज़ रीसेट करें
-                    currentQuestion = 0;
-                    score = 0;
-                    scoreEl.textContent = score;
-                    progressBar.style.width = '0%';
-                    
-                    // नई कैटेगरी के लिए क्विज़ लोड करें
-                    loadQuiz();
-                });
-            });
         });
     </script>
 </body>
