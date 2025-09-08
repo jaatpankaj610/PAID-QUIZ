@@ -222,18 +222,19 @@
 
                 payments.forEach(payment => {
                     const row = document.createElement('tr');
+                    const status = payment.status || 'pending';
                     row.innerHTML = `
                         <td>${payment.user_id || 'N/A'}</td>
                         <td>${payment.mobile_number || 'N/A'}</td>
                         <td>${payment.transaction_id || 'N/A'}</td>
                         <td>₹${payment.amount || 'N/A'}</td>
                         <td>${payment.submission_date ? new Date(payment.submission_date).toLocaleString('hi-IN') : 'N/A'}</td>
-                        <td>${payment.status === 'approved' ? 'अप्रूव्ड' : 'पेंडिंग'}</td>
+                        <td>${status === 'approved' ? 'अप्रूव्ड' : 'पेंडिंग'}</td>
                         <td>
-                            ${payment.status !== 'approved' ? `
+                            ${status === 'pending' ? `
                                 <button class="action-btn" onclick="approvePayment(${payment.id}, '${payment.user_id || ''}', '${payment.mobile_number || ''}')">अप्रूव</button>
                                 <button class="action-btn reject" onclick="rejectPayment(${payment.id})">रिजेक्ट</button>
-                            ` : 'कोई एक्शन नहीं'}
+                            ` : 'अप्रूव्ड - कोई एक्शन नहीं'}
                         </td>
                     `;
                     tbody.appendChild(row);
@@ -250,7 +251,7 @@
             try {
                 let payments = JSON.parse(localStorage.getItem('payments') || '[]');
                 const payment = payments.find(p => p.id === paymentId);
-                if (payment) {
+                if (payment && payment.status !== 'approved') {
                     payment.status = 'approved';
                     payment.access_expiry_date = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
                     localStorage.setItem('payments', JSON.stringify(payments));
@@ -259,6 +260,8 @@
                     sendSMS(mobileNumber, `धन्यवाद ${userId}! आपका पेमेंट अप्रूव हो गया है। 30 दिन की प्रीमियम एक्सेस अनलॉक हो गई है।`);
                     sendSMS('7665274721', `पेमेंट अप्रूव: यूजर ${userId}, ट्रांजैक्शन ID ${payment.transaction_id}`);
                     loadPaymentRequests();
+                } else {
+                    console.log('Payment already approved or not found:', paymentId);
                 }
             } catch (error) {
                 console.error('Error approving payment:', error);
@@ -273,15 +276,20 @@
         function rejectPayment(paymentId) {
             try {
                 let payments = JSON.parse(localStorage.getItem('payments') || '[]');
-                payments = payments.filter(p => p.id !== paymentId);
-                localStorage.setItem('payments', JSON.stringify(payments));
-                localStorage.removeItem('paymentData');
-                console.log('Payment rejected, ID:', paymentId);
-                const statusElement = document.getElementById('status-message');
-                statusElement.textContent = 'पेमेंट रिक्वेस्ट रिजेक्ट कर दी गई।';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-                loadPaymentRequests();
+                const payment = payments.find(p => p.id === paymentId);
+                if (payment && payment.status === 'pending') {
+                    payments = payments.filter(p => p.id !== paymentId);
+                    localStorage.setItem('payments', JSON.stringify(payments));
+                    if (payment.user_id === JSON.parse(localStorage.getItem('paymentData') || '{}').user_id) {
+                        localStorage.removeItem('paymentData');
+                    }
+                    console.log('Payment rejected, ID:', paymentId);
+                    const statusElement = document.getElementById('status-message');
+                    statusElement.textContent = 'पेमेंट रिक्वेस्ट रिजेक्ट कर दी गई।';
+                    statusElement.className = 'status-message error';
+                    statusElement.style.display = 'block';
+                    loadPaymentRequests();
+                }
             } catch (error) {
                 console.error('Error rejecting payment:', error);
                 const statusElement = document.getElementById('status-message');
