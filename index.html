@@ -51,25 +51,6 @@
             left: 0;
         }
         
-        /* बैकग्राउंड एनिमेशन - सभी डिवाइसों के लिए */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-            animation: backgroundPulse 8s infinite linear;
-            z-index: -1;
-        }
-        
-        @keyframes backgroundPulse {
-            0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
-            50% { transform: scale(1.1) rotate(180deg); opacity: 0.5; }
-            100% { transform: scale(1) rotate(360deg); opacity: 0.3; }
-        }
-        
         .container {
             width: 100%;
             max-width: 600px;
@@ -86,7 +67,6 @@
             flex-direction: column;
             position: relative;
             z-index: 1;
-            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -96,7 +76,6 @@
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: var(--primary) #f1f1f1;
-            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
             -webkit-overflow-scrolling: touch;
@@ -123,7 +102,6 @@
             color: white;
             position: relative;
             overflow: hidden;
-            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
             flex-shrink: 0;
@@ -138,7 +116,6 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
             animation: pulse 8s infinite linear;
-            /* मोबाइल में भी दिखने के लिए */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -161,7 +138,6 @@
             position: relative;
             z-index: 1;
             overflow: hidden;
-            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -176,7 +152,6 @@
             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.8), transparent);
             transform: rotate(45deg);
             animation: shine 3s infinite;
-            /* मोबाइल में भी दिखने के लिए */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -202,7 +177,6 @@
             z-index: 1;
             display: inline-block;
             overflow: hidden;
-            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -216,7 +190,6 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
             animation: textShine 3s infinite;
-            /* मोबाइल में भी दिखने के लिए */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -230,7 +203,6 @@
             display: inline-block;
             margin-right: 8px;
             animation: emojiFloat 2s ease-in-out infinite;
-            /* मोबाइल में भी दिखने के लिए */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -245,7 +217,6 @@
         .sparkle {
             position: relative;
             display: inline-block;
-            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -257,7 +228,6 @@
             right: -15px;
             font-size: 16px;
             animation: sparkleRotate 3s linear infinite;
-            /* मोबाइल में भी दिखने के लिए */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -637,7 +607,6 @@
             z-index: 1;
             margin-top: 8px;
             box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
-            /* हार्डवेयर एक्सेलेरेशन एनेबल करें */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -653,7 +622,6 @@
             transform: translateX(-100%);
             transition: transform 0.6s ease;
             z-index: -1;
-            /* मोबाइल में भी दिखने के लिए */
             transform: translateZ(0);
             will-change: transform;
         }
@@ -864,7 +832,6 @@
                 margin-bottom: 0;
             }
             
-            /* मोबाइल में बैकग्राउंड एनिमेशन को बेहतर बनाने के लिए */
             body::before {
                 animation-duration: 6s;
                 opacity: 0.4;
@@ -897,7 +864,6 @@
                 font-size: 17px;
             }
             
-            /* छोटे फोन के लिए एनिमेशन अनुकूलन */
             .animated-emoji {
                 animation-duration: 1.5s;
             }
@@ -1068,7 +1034,7 @@
                     <p class="contact-note">किसी भी पेमेंट समस्या के लिए सीधे संपर्क करें</p>
                 </div>
                 
-                <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक राजस्थान GK क्विज़ तक पहुंच मिलेगी। अप्रूव होने पर डायरेक्ट क्विज़ में वेलकम मैसेज के साथ एक्सेस होगी।</p>
+                <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक राजस्थान GK क्विज़ तक पहुंच मिलेगी</p>
             </div>
         </div>
     </div>
@@ -1092,23 +1058,18 @@
                     const accessExpiry = new Date(payment.access_expiry_date);
                     const currentDate = new Date();
                     
-                    if (currentDate <= accessExpiry) {
-                        // वैध एक्सेस, डायरेक्ट क्विज़ पेज पर रीडायरेक्ट (बिना पेमेंट स्क्रीन के)
-                        alert('आपकी एक्सेस वैध है। डायरेक्ट क्विज़ में जा रहे हैं!');
-                        window.location.href = 'quiz.html';
-                        return;
-                    } else {
-                        // एक्सेस समाप्त, paymentData क्लियर करें
-                        localStorage.removeItem('paymentData');
+                    if (currentDate > accessExpiry) {
+                        // एक्सेस अवधि समाप्त हो गई है, पेमेंट पेज पर रहें
                         const statusElement = document.getElementById('status-message');
-                        statusElement.textContent = 'आपकी 30 दिन की एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।';
+                        statusElement.textContent = 'आपकी एक्सेस अवधि समाप्त हो गई है। कृपया फिर से पेमेंट करें।';
                         statusElement.className = 'status-message error';
                         statusElement.style.display = 'block';
+                    } else {
+                        // एक्सेस अवधि वैध है, क्विज़ पेज पर रीडायरेक्ट करें
+                        window.location.href = 'quiz.html';
                     }
                 }
-                // अगर पेंडिंग, तो पेमेंट फॉर्म दिखाएं (बिना अप्रूव के क्विज़ न खेल सके)
             }
-            // कोई डेटा न हो तो पेमेंट फॉर्म दिखाएं
         }
         
         // UPI ID कॉपी करने का फंक्शन
@@ -1166,7 +1127,7 @@
             
             // सिमुलेट पेमेंट सबमिशन
             setTimeout(function() {
-                // पेमेंट डेटा सेव करें (status pending रखें, अप्रूव होने तक quiz.html पर न जाए)
+                // पेमेंट डेटा सेव करें
                 const paymentData = {
                     id: Date.now(), // यूनीक ID
                     user_id: userId,
@@ -1179,46 +1140,53 @@
                     payment_method: 'upi' // डिफ़ॉल्ट UPI क्योंकि यूजर ने QR स्कैन किया है
                 };
                 
-                // पेमेंट्स लिस्ट में जोड़ें (admin.html के लिए)
+                // पेमेंट्स लिस्ट में जोड़ें
                 let payments = JSON.parse(localStorage.getItem('payments')) || [];
                 payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
                 
-                // यूजर के लिए paymentData सेव करें लेकिन status pending रखें
-                localStorage.setItem('paymentData', JSON.stringify({
-                    ...paymentData,
-                    status: 'pending' // अप्रूव होने तक pending
-                }));
-                
-                // एडमिन को नोटिफिकेशन भेजें (गारंटीड)
+                // एडमिन को SMS भेजें (सिमुलेशन)
                 sendAdminNotification();
                 
-                // सफलता संदेश दिखाएं (रीडायरेक्ट न करें, वेट अप्रूवल के लिए)
-                statusElement.textContent = 'आपका पेमेंट रिक्वेस्ट सबमिट हो गया है! एडमिन द्वारा वेरिफिकेशन के बाद (जल्द ही SMS आएगा) आपको डायरेक्ट क्विज़ एक्सेस मिलेगा। कृपया इंतजार करें।';
+                // सफलता संदेश दिखाएं
+                statusElement.textContent = 'आपका पेमेंट सबमिट किया गया है! वेरिफिकेशन के बाद आपको ईमेल/SMS द्वारा सूचित किया जाएगा।';
                 statusElement.className = 'status-message success';
                 
                 // फॉर्म हाइड करें
                 document.getElementById('payment-form').style.display = 'none';
                 
-                // यूजर को थैंक यू मैसेज (सिमुलेटेड SMS)
+                // यूजर को धन्यवाद SMS/ईमेल भेजें (सिमुलेशन)
                 sendUserThankYouMessage(userId);
                 
+                // 5 सेकंड बाद रीडायरेक्ट करें
+                setTimeout(function() {
+                    alert('पेमेंट सफलतापूर्वक सबमिट किया गया! एडमिन द्वारा वेरिफिकेशन के बाद आपको सूचित किया जाएगा।');
+                }, 5000);
             }, 2000);
         }
         
-        // एडमिन को नोटिफिकेशन भेजने का फंक्शन (गारंटीड - सिमुलेशन)
+        // एडमिन को नोटिफिकेशन भेजने का फंक्शन (सिमुलेशन)
         function sendAdminNotification() {
-            // वास्तविक में SMS API, यहां console और अलर्ट
-            console.log('गारंटीड SMS एडमिन को: नया पेमेंट रिक्वेस्ट आया है। तुरंत admin.html चेक करें!');
+            // वास्तविक एप्लिकेशन में, यह एक SMS API कॉल होगा
+            console.log('एडमिन को SMS: नया पेमेंट रिक्वेस्ट आया है।');
             
-            // अलर्ट दिखाएं ताकि एडमिन को पता चले (सिमुलेट)
-            alert('एडमिन को गारंटीड मैसेज भेजा गया: नया पेमेंट रिक्वेस्ट! admin.html में जाकर अप्रूव करें।');
+            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS के बजाय
+            const notification = document.createElement('div');
+            notification.className = 'status-message pending';
+            notification.textContent = 'एडमिन को SMS भेजा गया: नया पेमेंट रिक्वेस्ट आया है।';
+            document.querySelector('.content').appendChild(notification);
         }
         
         // यूजर को धन्यवाद संदेश भेजने का फंक्शन (सिमुलेशन)
         function sendUserThankYouMessage(userId) {
-            // वास्तविक में SMS API
-            console.log(`${userId} को SMS: आपका रिक्वेस्ट सबमिट हो गया। अप्रूव होने पर नोटिफिकेशन आएगा।`);
+            // वास्तविक एप्लिकेशन में, यह SMS या ईमेल API कॉल होगा
+            console.log(`${userId} को धन्यवाद संदेश भेजा गया।`);
+            
+            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS/ईमेल के बजाय
+            const notification = document.createElement('div');
+            notification.className = 'status-message success';
+            notification.textContent = `${userId} को धन्यवाद संदेश भेजा गया।`;
+            document.querySelector('.content').appendChild(notification);
         }
     </script>
 </body>
