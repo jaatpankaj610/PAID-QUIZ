@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -20,6 +20,8 @@
             --light: #f8f9fa;
             --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --offline-gradient: linear-gradient(135deg, #636e72, #b2bec3);
+            --error-gradient: linear-gradient(135deg, #e17055, #d63031);
         }
         
         * {
@@ -36,12 +38,13 @@
             justify-content: center;
             align-items: center;
             padding: 0;
-            overflow: hidden;
+            overflow-x: hidden;
             position: fixed;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             top: 0;
             left: 0;
+            touch-action: pan-y;
         }
         
         .container {
@@ -60,6 +63,7 @@
         .scrollable-content {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
         
@@ -265,11 +269,28 @@
             margin: 25px 0;
         }
         
-        .offline-image, .error-image {
+        .custom-design {
             width: 200px;
             height: 200px;
             margin: 0 auto 15px;
             border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .offline-section .custom-design {
+            background: var(--offline-gradient);
+        }
+        
+        .error-section .custom-design {
+            background: var(--error-gradient);
         }
         
         .offline-message, .error-message {
@@ -282,6 +303,7 @@
             .header h1 { font-size: 28px; }
             .price-tag { font-size: 36px; }
             .submit-btn { font-size: 16px; padding: 15px 25px; }
+            .custom-design { font-size: 20px; }
         }
     </style>
 </head>
@@ -295,12 +317,16 @@
         <div class="scrollable-content">
             <div class="content">
                 <div id="offline-section" class="offline-section" style="display: none;">
-                    <img src="https://via.placeholder.com/200x200?text=Offline" alt="Offline" class="offline-image">
+                    <div class="custom-design">
+                        📴 Rajasthan GK Quiz 🌟<br>Offline
+                    </div>
                     <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
                 </div>
                 
                 <div id="error-section" class="error-section" style="display: none;">
-                    <img src="https://via.placeholder.com/200x200?text=Error" alt="Error" class="error-image">
+                    <div class="custom-design">
+                        ⚠️ Rajasthan GK Quiz 😔<br>Error
+                    </div>
                     <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
                 </div>
                 
@@ -403,7 +429,6 @@
             const onlineContent = document.getElementById('online-content');
 
             try {
-                // quiz.html की उपलब्धता चेक करें
                 const response = await fetch('quiz.html', { method: 'HEAD' });
                 if (!response.ok) throw new Error('quiz.html अनुपलब्ध');
 
@@ -426,7 +451,7 @@
             }
         }
 
-        // सिमुलेटेड SMS (स्टेटस मैसेज)
+        // सिमुलेटेड SMS
         function sendSMS(toPhone, message) {
             console.log(`नोटिफिकेशन ${toPhone} को: ${message}`);
             const statusElement = document.getElementById('status-message');
@@ -482,19 +507,15 @@
                 payment_method: 'upi'
             };
 
-            // payments में जोड़ें
             let payments = JSON.parse(localStorage.getItem('payments') || '[]');
             payments.push(paymentData);
             localStorage.setItem('payments', JSON.stringify(payments));
 
-            // यूजर paymentData (pending)
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
 
-            // एडमिन को नोटिफिकेशन
             const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}।`;
             sendSMS('7665274721', adminMessage);
 
-            // यूजर को धन्यवाद
             const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको 30 दिन की प्रीमियम एक्सेस मिलेगी।`;
             sendSMS(mobileNumber, userMessage);
 
@@ -522,7 +543,7 @@
             errorSection.style.display = 'block';
             onlineContent.style.display = 'none';
             console.error('Global error:', message, error);
-            return true; // डिफॉल्ट एरर हैंडलिंग रोकें
+            return true;
         };
 
         // पेज लोड और नेटवर्क स्टेटस चेक
