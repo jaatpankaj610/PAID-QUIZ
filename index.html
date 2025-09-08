@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>राजस्थान GK क्विज़ - पेमेंट</title>
+    <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -62,7 +62,7 @@
         
         .header {
             background: var(--gradient);
-            padding: 25px 20px;
+            padding: 30px 20px;
             text-align: center;
             color: white;
             position: relative;
@@ -70,104 +70,110 @@
         }
         
         .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         .header p {
-            font-size: 14px;
+            font-size: 16px;
             opacity: 0.9;
+            font-weight: 400;
         }
         
         .content {
-            padding: 20px;
+            padding: 25px;
             padding-bottom: 30px;
         }
         
         .payment-info {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
         
         .price-tag {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 40px;
+            font-weight: 800;
             color: var(--secondary);
-            margin: 12px 0;
+            margin: 15px 0;
             text-align: center;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
         .price-period {
-            font-size: 16px;
-            color: #666;
+            font-size: 18px;
+            color: #555;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: 500;
         }
         
         .features {
             list-style: none;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .features li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            font-size: 15px;
+            font-size: 16px;
             color: #333;
+            font-weight: 500;
         }
         
         .features li i {
-            margin-right: 10px;
+            margin-right: 12px;
             color: var(--success);
+            font-size: 20px;
         }
         
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #333;
-            font-size: 15px;
+            font-size: 16px;
         }
         
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 12px;
+            font-size: 16px;
             transition: all 0.3s ease;
         }
         
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+            box-shadow: 0 0 0 4px rgba(74, 0, 224, 0.15);
         }
         
         .qr-section {
             background: white;
             border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 25px;
+            margin: 25px 0;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
         
         .qr-code {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             background: #f5f5f5;
-            border-radius: 10px;
-            margin: 0 auto 12px;
+            border-radius: 12px;
+            margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -175,13 +181,14 @@
         }
         
         .upi-id {
-            background: rgba(74, 0, 224, 0.05);
-            border-radius: 10px;
-            padding: 10px;
-            margin: 12px 0;
+            background: rgba(74, 0, 224, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 15px 0;
             font-weight: 600;
             color: var(--primary);
             word-break: break-all;
+            font-size: 16px;
         }
         
         .submit-btn {
@@ -189,9 +196,9 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 15px 25px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 18px 30px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s ease;
@@ -199,34 +206,35 @@
         
         .submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(74, 0, 224, 0.3);
+            box-shadow: 0 12px 30px rgba(74, 0, 224, 0.3);
         }
         
         .status-message {
-            padding: 12px;
-            border-radius: 10px;
-            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
             text-align: center;
             font-weight: 600;
+            font-size: 16px;
             display: none;
         }
         
         .status-message.success {
-            background: rgba(0, 184, 148, 0.1);
+            background: rgba(0, 184, 148, 0.15);
             color: var(--success);
             border: 1px solid var(--success);
             display: block;
         }
         
         .status-message.pending {
-            background: rgba(253, 203, 110, 0.1);
+            background: rgba(253, 203, 110, 0.15);
             color: var(--warning);
             border: 1px solid var(--warning);
             display: block;
         }
         
         .status-message.error {
-            background: rgba(214, 48, 49, 0.1);
+            background: rgba(214, 48, 49, 0.15);
             color: var(--danger);
             border: 1px solid var(--danger);
             display: block;
@@ -236,16 +244,19 @@
             background: var(--danger);
             color: white;
             border: none;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 10px;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
             cursor: pointer;
             width: 100%;
+            font-weight: 600;
+            font-size: 16px;
         }
         
         @media (max-width: 600px) {
-            .header h1 { font-size: 24px; }
-            .price-tag { font-size: 32px; }
+            .header h1 { font-size: 28px; }
+            .price-tag { font-size: 36px; }
+            .submit-btn { font-size: 16px; padding: 15px 25px; }
         }
     </style>
 </head>
@@ -253,7 +264,7 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
-            <p>₹49 में 30 दिन की प्रीमियम एक्सेस</p>
+            <p>मात्र ₹49 में 30 दिन की प्रीमियम एक्सेस अनलॉक करें!</p>
         </div>
         
         <div class="scrollable-content">
@@ -264,39 +275,39 @@
                     <div class="price-period">30 दिन की असीमित एक्सेस</div>
                     
                     <ul class="features">
-                        <li><i class="fas fa-check-circle"></i> सभी GK सवालों तक पहुंच</li>
-                        <li><i class="fas fa-check-circle"></i> दैनिक क्विज़</li>
-                        <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग</li>
-                        <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
+                        <li><i class="fas fa-check-circle"></i> 100+ विशेषज्ञ द्वारा तैयार GK सवाल</li>
+                        <li><i class="fas fa-check-circle"></i> दैनिक क्विज़ और प्रैक्टिस टेस्ट</li>
+                        <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग और प्रोग्रेस रिपोर्ट</li>
+                        <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड कंटेंट</li>
                     </ul>
                 </div>
                 
                 <div class="qr-section">
-                    <h3>QR कोड स्कैन करें</h3>
+                    <h3>आसान UPI पेमेंट</h3>
                     <div class="qr-code">
                         <!-- अपना अमेज़न पे QR इमेज URL डालें -->
-                        <img src="https://via.placeholder.com/180x180?text=Amazon+Pay+QR" alt="QR Code">
+                        <img src="https://via.placeholder.com/200x200?text=Amazon+Pay+QR" alt="QR Code">
                     </div>
                     <div class="upi-id">
                         <i class="fas fa-copy"></i>
                         your-amazon-pay@upi
                     </div>
-                    <p>किसी भी UPI ऐप से स्कैन करें</p>
+                    <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
                 </div>
                 
                 <form id="payment-form">
                     <div class="form-group">
-                        <label for="user_id">ईमेल</label>
+                        <label for="user_id">अपना ईमेल ID दर्ज करें</label>
                         <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.com" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="mobile_number">मोबाइल नंबर</label>
+                        <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
                         <input type="text" id="mobile_number" name="mobile_number" placeholder="7665274721" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="transaction_id">ट्रांजैक्शन ID</label>
+                        <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
                         <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
                     </div>
                     
@@ -306,16 +317,16 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="payment_note">नोट (वैकल्पिक)</label>
-                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई जानकारी"></textarea>
+                        <label for="payment_note">कोई अतिरिक्त जानकारी (वैकल्पिक)</label>
+                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
                     </div>
                     
-                    <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट सबमिट करें</button>
+                    <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
                 </form>
                 
                 <div id="status-message" class="status-message"></div>
                 
-                <button class="clear-btn" onclick="clearStorage()">LocalStorage क्लियर करें (टेस्ट के लिए)</button>
+                <button class="clear-btn" onclick="clearStorage()">डेटा रीसेट करें (टेस्ट के लिए)</button>
             </div>
         </div>
     </div>
@@ -335,7 +346,7 @@
         // सिमुलेटेड SMS (अलर्ट के रूप में)
         function sendSMS(toPhone, message) {
             console.log(`SMS भेजा गया ${toPhone} को: ${message}`);
-            alert(`SMS भेजा गया ${toPhone} को: ${message}`); // सिमुलेटेड
+            alert(`SMS भेजा गया ${toPhone} को: ${message}`);
         }
 
         // पेमेंट सबमिट
@@ -348,13 +359,13 @@
             const statusElement = document.getElementById('status-message');
 
             if (!userId || !mobileNumber || !transactionId || !amount) {
-                statusElement.textContent = 'सभी आवश्यक फील्ड भरें!';
+                statusElement.textContent = 'कृपया सभी आवश्यक जानकारी भरें!';
                 statusElement.className = 'status-message error';
                 statusElement.style.display = 'block';
                 return;
             }
 
-            statusElement.textContent = 'रिक्वेस्ट सबमिट हो रही है...';
+            statusElement.textContent = 'आपकी रिक्वेस्ट प्रोसेस हो रही है...';
             statusElement.className = 'status-message pending';
             statusElement.style.display = 'block';
 
@@ -379,14 +390,14 @@
             localStorage.setItem('paymentData', JSON.stringify(paymentData));
 
             // एडमिन को सिमुलेटेड SMS
-            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}. admin.html में अप्रूव करें!`;
+            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}. कृपया admin.html पर जांच करें!`;
             sendSMS('7665274721', adminMessage);
 
             // यूजर को धन्यवाद
-            const userMessage = `धन्यवाद ${userId}! आपकी रिक्वेस्ट सबमिट हो गई। वेरिफिकेशन के बाद SMS आएगा।`;
+            const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको SMS मिलेगा।`;
             sendSMS(mobileNumber, userMessage);
 
-            statusElement.textContent = `रिक्वेस्ट सबमिट हो गई! ${userId} को धन्यवाद SMS भेजा गया। एडमिन को रिक्वेस्ट मैसेज भेजा गया।`;
+            statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद SMS भेजा गया है।`;
             statusElement.className = 'status-message success';
             document.getElementById('payment-form').style.display = 'none';
         }
@@ -395,7 +406,7 @@
         function clearStorage() {
             localStorage.removeItem('payments');
             localStorage.removeItem('paymentData');
-            alert('LocalStorage क्लियर हो गया!');
+            alert('डेटा रीसेट हो गया!');
             location.reload();
         }
 
