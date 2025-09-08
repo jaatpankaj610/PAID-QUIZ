@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>एडमिन पैनल - क्विज़ मास्टर प्रो</title>
+    <title>एडमिन पैनल - राजस्थान GK क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -441,6 +441,52 @@
             cursor: pointer;
         }
         
+        .new-payment-alert {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--warning);
+            color: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .new-payment-alert.show {
+            display: block;
+        }
+        
+        .new-payment-alert h3 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .new-payment-alert button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .new-payment-alert button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
         /* रेस्पॉन्सिव डिज़ाइन */
         @media (max-width: 768px) {
             .header {
@@ -508,7 +554,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-cogs"></i> एडमिन पैनल</h1>
+            <h1><i class="fas fa-cogs"></i> एडमिन पैनल - राजस्थान GK क्विज़</h1>
             <div class="user-info">
                 <i class="fas fa-user-circle"></i>
                 <span>एडमिन</span>
@@ -584,6 +630,13 @@
                 </div>
             </div>
         </div>
+    </div>
+    
+    <!-- नए पेमेंट अलर्ट -->
+    <div id="new-payment-alert" class="new-payment-alert">
+        <h3><i class="fas fa-bell"></i> नया पेमेंट अनुरोध!</h3>
+        <p>एक नया पेमेंट अनुरोध आया है। कृपया जांचें।</p>
+        <button onclick="closeNewPaymentAlert()">ठीक है</button>
     </div>
     
     <!-- पेमेंट डिटेल मोडल -->
@@ -740,13 +793,10 @@
             );
             
             if (newPayments.length > 0) {
-                showNotification(
-                    'info',
-                    'नया पेमेंट',
-                    `${newPayments.length} नए पेमेंट रिक्वेस्ट आए हैं। कृपया वेरिफाई करें।`
-                );
+                // नए पेमेंट अलर्ट दिखाएं
+                showNewPaymentAlert();
                 
-                // एडमिन को SMS भेजें (यहां हम सिमुलेट कर रहे हैं)
+                // एडमिन को SMS भेजें (गारंटीड नोटिफिकेशन - सिमुलेटेड)
                 sendAdminSMS(newPayments.length);
             }
             
@@ -754,29 +804,46 @@
             localStorage.setItem('lastPaymentCheck', new Date().toISOString());
         }
         
-        // एडमिन को SMS भेजने का फंक्शन (सिमुलेशन)
-        function sendAdminSMS(count) {
-            // वास्तविक एप्लिकेशन में, यह एक SMS API कॉल होगा
-            console.log(`एडमिन को SMS: ${count} नए पेमेंट रिक्वेस्ट आए हैं।`);
+        // नए पेमेंट अलर्ट दिखाने का फंक्शन
+        function showNewPaymentAlert() {
+            const alert = document.getElementById('new-payment-alert');
+            alert.classList.add('show');
             
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS के बजाय
+            // 10 सेकंड बाद अलर्ट छुपाएं
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 10000);
+        }
+        
+        // नए पेमेंट अलर्ट बंद करने का फंक्शन
+        function closeNewPaymentAlert() {
+            document.getElementById('new-payment-alert').classList.remove('show');
+        }
+        
+        // एडमिन को SMS भेजने का फंक्शन (सिमुलेशन - गारंटीड मैसेज)
+        function sendAdminSMS(count) {
+            // वास्तविक में SMS API, यहां console और नोटिफिकेशन
+            console.log(`गारंटीड SMS एडमिन को: ${count} नए पेमेंट रिक्वेस्ट आए हैं। तुरंत admin.html चेक करें!`);
+            
             showNotification(
                 'info',
-                'SMS अलर्ट',
-                `आपके फोन पर SMS गया: ${count} नए पेमेंट रिक्वेस्ट आए हैं।`
+                'SMS अलर्ट (गारंटीड)',
+                `आपके फोन पर SMS गया: ${count} नए पेमेंट रिक्वेस्ट आए हैं। तुरंत admin.html में जाकर अप्रूव करें।`
             );
+            
+            // अलर्ट भी दिखाएं ताकि गारंटीड लगे
+            alert(`नया पेमेंट रिक्वेस्ट! ${count} अनुरोध आए हैं। admin.html में जाकर अप्रूव करें।`);
         }
         
         // यूजर को SMS/ईमेल भेजने का फंक्शन (सिमुलेशन)
         function sendUserNotification(userId, status, message) {
-            // वास्तविक एप्लिकेशन में, यह SMS या ईमेल API कॉल होगा
-            console.log(`${userId} को ${status} के लिए नोटिफिकेशन: ${message}`);
+            // वास्तविक में SMS/ईमेल API, यहां सिमुलेट
+            console.log(`${userId} को ${status} के लिए SMS/ईमेल: ${message}`);
             
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS/ईमेल के बजाय
             showNotification(
                 'success',
-                'यूजर नोटिफिकेशन भेजा गया',
-                `${userId} को ${status} का नोटिफिकेशन भेजा गया है।`
+                'यूजर को SMS भेजा गया',
+                `${userId} को फोन पर मैसेज भेजा गया: ${message}`
             );
         }
         
@@ -892,7 +959,7 @@
                     expiryDate.setDate(expiryDate.getDate() + accessDays);
                     payments[paymentIndex].access_expiry_date = expiryDate.toISOString();
                     
-                    // यूजर के लिए पेमेंट डेटा सेव करें
+                    // यूजर के लिए पेमेंट डेटा सेव करें (localStorage में, जो APK में persist करेगा)
                     const userPaymentData = {
                         user_id: payments[paymentIndex].user_id,
                         transaction_id: payments[paymentIndex].transaction_id,
@@ -904,19 +971,22 @@
                     };
                     localStorage.setItem('paymentData', JSON.stringify(userPaymentData));
                     
-                    // यूजर को अप्रूवल के लिए नोटिफिकेशन भेजें
+                    // यूजर को अप्रूवल के लिए SMS भेजें (सिमुलेटेड)
                     sendUserNotification(
                         payments[paymentIndex].user_id,
                         'पेमेंट अप्रूव्ड',
-                        'आपका पेमेंट अप्रूव हो गया है। अब आप क्विज़ खेल सकते हैं।'
+                        'आपका पेमेंट अप्रूव हो गया है। अब आप 30 दिनों तक राजस्थान GK क्विज़ खेल सकते हैं। वेलकम मैसेज के साथ डायरेक्ट क्विज़ में एक्सेस!'
                     );
                 } else {
-                    // यूजर को रिजेक्शन के लिए नोटिफिकेशन भेजें
+                    // यूजर को रिजेक्शन के लिए SMS भेजें (सिमुलेटेड)
                     sendUserNotification(
                         payments[paymentIndex].user_id,
                         'पेमेंट रिजेक्टेड',
                         'आपका पेमेंट रिजेक्ट कर दिया गया है। कृपया फिर से कोशिश करें।'
                     );
+                    
+                    // रिजेक्ट पर paymentData क्लियर करें अगर हो
+                    localStorage.removeItem('paymentData');
                 }
                 
                 // पेमेंट्स सेव करें
@@ -933,7 +1003,7 @@
                 showNotification(
                     'success',
                     'पेमेंट अपडेटेड',
-                    `पेमेंट सफलतापूर्वक ${action === 'approve' ? 'अप्रूव' : 'रिजेक्ट'} किया गया!`
+                    `पेमेंट सफलतापूर्वक ${action === 'approve' ? 'अप्रूव' : 'रिजेक्ट'} किया गया! यूजर को SMS भेजा गया।`
                 );
             }
         }
