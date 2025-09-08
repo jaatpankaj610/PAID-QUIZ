@@ -256,7 +256,7 @@
             font-size: 16px;
         }
         
-        .offline-section {
+        .offline-section, .error-section {
             text-align: center;
             padding: 25px;
             background: rgba(255, 255, 255, 0.9);
@@ -265,14 +265,14 @@
             margin: 25px 0;
         }
         
-        .offline-image {
+        .offline-image, .error-image {
             width: 200px;
             height: 200px;
             margin: 0 auto 15px;
             border-radius: 12px;
         }
         
-        .offline-message {
+        .offline-message, .error-message {
             font-size: 18px;
             color: #333;
             font-weight: 500;
@@ -297,6 +297,11 @@
                 <div id="offline-section" class="offline-section" style="display: none;">
                     <img src="https://via.placeholder.com/200x200?text=Offline" alt="Offline" class="offline-image">
                     <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
+                </div>
+                
+                <div id="error-section" class="error-section" style="display: none;">
+                    <img src="https://via.placeholder.com/200x200?text=Error" alt="Error" class="error-image">
+                    <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
                 </div>
                 
                 <div id="online-content">
@@ -364,34 +369,60 @@
     </div>
     
     <script>
-        // नेटवर्क स्टेटस चेक
+        // Service Worker रजिस्टर
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/rajasthan-gk-quiz/sw.js').then(() => {
+                console.log('Service Worker Registered');
+            }).catch(error => {
+                console.error('Service Worker Error:', error);
+            });
+        }
+
+        // नेटवर्क और एरर स्टेटस चेक
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
+            const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
+
             if (!navigator.onLine) {
                 offlineSection.style.display = 'block';
+                errorSection.style.display = 'none';
                 onlineContent.style.display = 'none';
             } else {
                 offlineSection.style.display = 'none';
+                errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
                 checkPaymentStatus();
             }
         }
 
         // पेमेंट स्टेटस चेक
-        function checkPaymentStatus() {
-            const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
-            const now = new Date();
-            const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
+        async function checkPaymentStatus() {
+            const statusElement = document.getElementById('status-message');
+            const errorSection = document.getElementById('error-section');
+            const onlineContent = document.getElementById('online-content');
 
-            if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
-                window.location.href = 'quiz.html';
-            } else if (expiryDate && now > expiryDate) {
-                const statusElement = document.getElementById('status-message');
-                statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-                document.getElementById('payment-form').style.display = 'block';
+            try {
+                // quiz.html की उपलब्धता चेक करें
+                const response = await fetch('quiz.html', { method: 'HEAD' });
+                if (!response.ok) throw new Error('quiz.html अनुपलब्ध');
+
+                const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
+                const now = new Date();
+                const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
+
+                if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
+                    window.location.href = 'quiz.html';
+                } else if (expiryDate && now > expiryDate) {
+                    statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
+                    statusElement.className = 'status-message error';
+                    statusElement.style.display = 'block';
+                    document.getElementById('payment-form').style.display = 'block';
+                }
+            } catch (error) {
+                errorSection.style.display = 'block';
+                onlineContent.style.display = 'none';
+                console.error('Error checking payment status:', error);
             }
         }
 
@@ -483,6 +514,16 @@
             document.getElementById('payment-form').style.display = 'block';
             document.getElementById('payment-form').reset();
         }
+
+        // ग्लोबल एरर हैंडलिंग
+        window.onerror = function(message, source, lineno, colno, error) {
+            const errorSection = document.getElementById('error-section');
+            const onlineContent = document.getElementById('online-content');
+            errorSection.style.display = 'block';
+            onlineContent.style.display = 'none';
+            console.error('Global error:', message, error);
+            return true; // डिफॉल्ट एरर हैंडलिंग रोकें
+        };
 
         // पेज लोड और नेटवर्क स्टेटस चेक
         window.addEventListener('load', checkNetworkStatus);
