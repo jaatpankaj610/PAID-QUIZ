@@ -51,79 +51,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
         
         .header h1 {
             font-size: 28px;
             font-weight: 700;
-            margin-right: 20px;
-        }
-        
-        .header .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .header .user-info i {
-            font-size: 24px;
         }
         
         .content {
             padding: 30px;
             flex: 1;
             overflow-y: auto;
-        }
-        
-        .guide-section {
-            background: rgba(74, 0, 224, 0.05);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border: 1px dashed var(--primary);
-        }
-        
-        .guide-title {
-            font-size: 20px;
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .guide-steps {
-            counter-reset: step-counter;
-        }
-        
-        .guide-step {
-            margin-bottom: 15px;
-            padding-left: 40px;
-            position: relative;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        
-        .guide-step:before {
-            counter-increment: step-counter;
-            content: counter(step-counter);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 30px;
-            height: 30px;
-            background: var(--gradient);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-        
-        .guide-step strong {
-            color: var(--primary);
         }
         
         .stats-section {
@@ -139,12 +77,6 @@
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
         .stat-card i {
@@ -155,12 +87,7 @@
         
         .stat-card h3 {
             font-size: 24px;
-            margin-bottom: 5px;
             color: var(--dark);
-        }
-        
-        .stat-card p {
-            color: #666;
         }
         
         .payments-section {
@@ -171,9 +98,6 @@
             font-size: 24px;
             color: var(--primary);
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         
         .payments-table {
@@ -191,30 +115,17 @@
             padding: 15px;
             text-align: left;
             font-weight: 600;
-            white-space: nowrap;
         }
         
         .payments-table td {
             padding: 15px;
             border-bottom: 1px solid #eee;
-            word-break: break-word;
-        }
-        
-        .payments-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .payments-table tr:hover {
-            background: rgba(74, 0, 224, 0.05);
         }
         
         .status-badge {
             padding: 5px 10px;
             border-radius: 20px;
-            font-size: 14px;
             font-weight: 600;
-            display: inline-block;
-            white-space: nowrap;
         }
         
         .status-badge.pending {
@@ -227,11 +138,6 @@
             color: var(--success);
         }
         
-        .status-badge.rejected {
-            background: rgba(214, 48, 49, 0.2);
-            color: var(--danger);
-        }
-        
         .action-btn {
             padding: 8px 15px;
             border: none;
@@ -240,8 +146,6 @@
             font-weight: 600;
             cursor: pointer;
             margin-right: 5px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
         }
         
         .action-btn.approve {
@@ -249,29 +153,14 @@
             color: white;
         }
         
-        .action-btn.approve:hover {
-            background: #00a085;
-            transform: translateY(-2px);
-        }
-        
         .action-btn.reject {
             background: var(--danger);
             color: white;
         }
         
-        .action-btn.reject:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-        
         .action-btn.view {
             background: var(--primary);
             color: white;
-        }
-        
-        .action-btn.view:hover {
-            background: #3a00b8;
-            transform: translateY(-2px);
         }
         
         .modal {
@@ -285,7 +174,6 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            overflow-y: auto;
         }
         
         .modal-content {
@@ -294,151 +182,43 @@
             padding: 30px;
             max-width: 500px;
             width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
         }
         
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .modal-close:hover {
-            color: var(--danger);
-        }
-        
-        .modal h2 {
-            color: var(--primary);
+        .form-group {
             margin-bottom: 20px;
         }
         
-        .modal .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .modal .form-group label {
+        .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #333;
         }
         
-        .modal .form-group input, .modal .form-group textarea, .modal .form-group select {
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
         }
         
-        .modal .form-group input:focus, .modal .form-group textarea:focus, .modal .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
-        }
-        
-        .modal .btn {
+        .btn {
             padding: 12px 25px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
             margin-right: 10px;
         }
         
-        .modal .btn-primary {
+        .btn-primary {
             background: var(--gradient);
             color: white;
         }
         
-        .modal .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.3);
-        }
-        
-        .modal .btn-secondary {
+        .btn-secondary {
             background: #e0e0e0;
             color: #333;
-        }
-        
-        .modal .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-        
-        .payment-proof {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            border-radius: 10px;
-            padding: 15px 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            max-width: 350px;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification i {
-            font-size: 24px;
-        }
-        
-        .notification.success i {
-            color: var(--success);
-        }
-        
-        .notification.error i {
-            color: var(--danger);
-        }
-        
-        .notification.info i {
-            color: var(--primary);
-        }
-        
-        .notification-content {
-            flex: 1;
-        }
-        
-        .notification-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .notification-message {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .notification-close {
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: #999;
-            cursor: pointer;
         }
         
         .new-payment-alert {
@@ -452,101 +232,22 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             z-index: 2000;
             display: none;
-            animation: pulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .new-payment-alert.show {
-            display: block;
-        }
-        
-        .new-payment-alert h3 {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .new-payment-alert button {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .new-payment-alert button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        /* रेस्पॉन्सिव डिज़ाइन */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
                 gap: 15px;
-                text-align: center;
-            }
-            
-            .header h1 {
-                margin-right: 0;
-                font-size: 24px;
-            }
-            
-            .payments-table {
-                font-size: 14px;
             }
             
             .payments-table th, .payments-table td {
                 padding: 10px;
+                font-size: 14px;
             }
             
             .action-btn {
                 padding: 5px 10px;
                 font-size: 12px;
-            }
-            
-            .guide-step {
-                font-size: 14px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .payments-table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-            
-            .payments-table thead, .payments-table tbody, .payments-table th, .payments-table td, .payments-table tr {
-                display: block;
-            }
-            
-            .payments-table tr {
-                margin-bottom: 15px;
-            }
-            
-            .payments-table td {
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-            }
-            
-            .payments-table td:before {
-                content: attr(data-label);
-                position: absolute;
-                left: 15px;
-                width: 45%;
-                padding-right: 10px;
-                text-align: left;
-                font-weight: 600;
             }
         }
     </style>
@@ -554,7 +255,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-cogs"></i> एडमिन पैनल - राजस्थान GK क्विज़</h1>
+            <h1><i class="fas fa-cogs"></i> एडमिन पैनल</h1>
             <div class="user-info">
                 <i class="fas fa-user-circle"></i>
                 <span>एडमिन</span>
@@ -562,45 +263,21 @@
         </div>
         
         <div class="content">
-            <div class="guide-section">
-                <h2 class="guide-title"><i class="fas fa-question-circle"></i> पेमेंट वेरिफिकेशन गाइड</h2>
-                <div class="guide-steps">
-                    <div class="guide-step">
-                        <strong>स्टेप 1:</strong> नीचे दी गई टेबल में नए पेमेंट रिक्वेस्ट देखें। ये आपके अमेज़न पे अकाउंट में आए पेमेंट हैं।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 2:</strong> अपना अमेज़न पे ऐप खोलें और "ट्रांजैक्शन हिस्ट्री" चेक करें। यूजर द्वारा दिए गए ट्रांजैक्शन ID से मैच करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 3:</strong> यूजर द्वारा अपलोड किया गया स्क्रीनशॉट चेक करने के लिए "व्यू" बटन पर क्लिक करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 4:</strong> अगर पेमेंट सही है (₹49 का हो और ट्रांजैक्शन ID मैच करे), तो "अप्रूव" बटन पर क्लिक करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 5:</strong> अप्रूव करते समय नोट में लिखें: "पेमेंट सत्यापित हो गया है। धन्यवाद!" और एक्सेस दिन (डिफ़ॉल्ट 30 दिन) सेट करें।
-                    </div>
-                    <div class="guide-step">
-                        <strong>स्टेप 6:</strong> "कन्फर्म" बटन पर क्लिक करें। यूजर को SMS/ईमेल द्वारा नोटिफिकेशन जाएगा।
-                    </div>
-                </div>
-            </div>
-            
             <div class="stats-section">
                 <div class="stat-card">
                     <i class="fas fa-users"></i>
                     <h3 id="total-users">0</h3>
-                    <p>कुल यूजर्स</p>
+                    <p>कुल रिक्वेस्ट्स</p>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-clock"></i>
                     <h3 id="pending-payments">0</h3>
-                    <p>पेंडिंग पेमेंट्स</p>
+                    <p>पेंडिंग</p>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-check-circle"></i>
                     <h3 id="approved-payments">0</h3>
-                    <p>अप्रूव्ड पेमेंट्स</p>
+                    <p>अप्रूव्ड</p>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-money-bill-wave"></i>
@@ -610,414 +287,166 @@
             </div>
             
             <div class="payments-section">
-                <h2 class="section-title"><i class="fas fa-credit-card"></i> पेमेंट्स</h2>
-                <div style="overflow-x: auto;">
-                    <table class="payments-table">
-                        <thead>
-                            <tr>
-                                <th>यूजर ID</th>
-                                <th>ट्रांजैक्शन ID</th>
-                                <th>राशि</th>
-                                <th>तिथि</th>
-                                <th>स्टेटस</th>
-                                <th>क्रिया</th>
-                            </tr>
-                        </thead>
-                        <tbody id="payments-tbody">
-                            <!-- पेमेंट रो जावास्क्रिप्ट से जेनरेट होंगे -->
-                        </tbody>
-                    </table>
-                </div>
+                <h2 class="section-title"><i class="fas fa-credit-card"></i> पेमेंट रिक्वेस्ट्स</h2>
+                <table class="payments-table">
+                    <thead>
+                        <tr>
+                            <th>यूजर ID</th>
+                            <th>मोबाइल</th>
+                            <th>ट्रांजैक्शन ID</th>
+                            <th>राशि</th>
+                            <th>तिथि</th>
+                            <th>स्टेटस</th>
+                            <th>क्रिया</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payments-tbody">
+                        <!-- रिक्वेस्ट्स यहां लोड होंगी -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     
-    <!-- नए पेमेंट अलर्ट -->
     <div id="new-payment-alert" class="new-payment-alert">
-        <h3><i class="fas fa-bell"></i> नया पेमेंट अनुरोध!</h3>
-        <p>एक नया पेमेंट अनुरोध आया है। कृपया जांचें।</p>
+        <h3><i class="fas fa-bell"></i> नया पेमेंट रिक्वेस्ट!</h3>
+        <p>एक नया रिक्वेस्ट आया है। जांचें!</p>
         <button onclick="closeNewPaymentAlert()">ठीक है</button>
     </div>
     
-    <!-- पेमेंट डिटेल मोडल -->
-    <div id="payment-detail-modal" class="modal">
+    <div id="action-modal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('payment-detail-modal')">&times;</button>
-            <h2>पेमेंट डिटेल</h2>
-            <div id="payment-detail-content">
-                <!-- पेमेंट डिटेल जावास्क्रिप्ट से जेनरेट होगा -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- पेमेंट एक्शन मोडल -->
-    <div id="payment-action-modal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('payment-action-modal')">&times;</button>
+            <button class="modal-close" onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
             <h2 id="action-modal-title">पेमेंट एक्शन</h2>
             <div class="form-group">
-                <label for="action-note">नोट</label>
-                <textarea id="action-note" rows="3" placeholder="एक्शन के लिए नोट दर्ज करें...">पेमेंट सत्यापित हो गया है। धन्यवाद!</textarea>
-            </div>
-            <div class="form-group">
-                <label for="access-days">एक्सेस दिन (केवल अप्रूव करने पर)</label>
+                <label for="access-days">एक्सेस दिन (अप्रूव के लिए)</label>
                 <input type="number" id="access-days" value="30" min="1" max="365">
             </div>
             <button class="btn btn-primary" id="confirm-action-btn">कन्फर्म</button>
-            <button class="btn btn-secondary" onclick="closeModal('payment-action-modal')">कैंसल</button>
+            <button class="btn btn-secondary" onclick="closeModal()">कैंसल</button>
         </div>
-    </div>
-    
-    <!-- नोटिफिकेशन -->
-    <div id="notification" class="notification">
-        <i class="fas fa-info-circle"></i>
-        <div class="notification-content">
-            <div class="notification-title">नोटिफिकेशन</div>
-            <div class="notification-message">यह एक नोटिफिकेशन है</div>
-        </div>
-        <button class="notification-close" onclick="closeNotification()">&times;</button>
     </div>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPayments();
-            updateStats();
-            
-            // नए पेमेंट के लिए चेक करें और नोटिफिकेशन दिखाएं
-            checkNewPayments();
-            
-            // हर 30 सेकंड में नए पेमेंट चेक करें
-            setInterval(checkNewPayments, 30000);
-        });
-        
-        // पेमेंट्स लोड करने का फंक्शन
+        let currentPayment = null;
+        let currentAction = null;
+
+        // सिमुलेटेड SMS
+        function sendSMS(toPhone, message) {
+            console.log(`SMS भेजा गया ${toPhone} को: ${message}`);
+            alert(`SMS भेजा गया ${toPhone} को: ${message}`);
+        }
+
+        // पेमेंट्स लोड करें
         function loadPayments() {
-            const paymentsTbody = document.getElementById('payments-tbody');
-            paymentsTbody.innerHTML = '';
-            
-            // लोकल स्टोरेज से पेमेंट्स प्राप्त करें
-            let payments = JSON.parse(localStorage.getItem('payments')) || [];
-            
-            // अगर कोई पेमेंट नहीं है, तो डमी पेमेंट डेटा जोड़ें
-            if (payments.length === 0) {
-                payments = [
-                    {
-                        id: 1,
-                        user_id: 'user@example.com',
-                        transaction_id: 'TXN123456',
-                        amount: '49',
-                        submission_date: new Date().toISOString(),
-                        status: 'pending',
-                        payment_method: 'upi',
-                        payment_note: 'यह एक टेस्ट पेमेंट है'
-                    }
-                ];
-                localStorage.setItem('payments', JSON.stringify(payments));
-            }
-            
-            // पेमेंट्स टेबल में जोड़ें
+            const tbody = document.getElementById('payments-tbody');
+            tbody.innerHTML = '';
+            let payments = JSON.parse(localStorage.getItem('payments') || '[]');
+
+            const totalUsers = payments.length;
+            const pending = payments.filter(p => p.status === 'pending').length;
+            const approved = payments.filter(p => p.status === 'approved').length;
+            const revenue = payments.filter(p => p.status === 'approved').reduce((sum, p) => sum + parseInt(p.amount), 0);
+
+            document.getElementById('total-users').textContent = totalUsers;
+            document.getElementById('pending-payments').textContent = pending;
+            document.getElementById('approved-payments').textContent = approved;
+            document.getElementById('total-revenue').textContent = '₹' + revenue;
+
             payments.forEach(payment => {
                 const row = document.createElement('tr');
+                const statusBadge = `<span class="status-badge ${payment.status}">${payment.status === 'pending' ? 'पेंडिंग' : 'अप्रूव्ड'}</span>`;
                 
-                const statusBadge = document.createElement('span');
-                statusBadge.className = `status-badge ${payment.status}`;
-                statusBadge.textContent = payment.status === 'pending' ? 'पेंडिंग' : 
-                                          payment.status === 'approved' ? 'अप्रूव्ड' : 'रिजेक्टेड';
-                
-                const actionsCell = document.createElement('td');
-                
+                let actions = `<button class="action-btn view" onclick="viewPayment('${JSON.stringify(payment)}')">व्यू</button>`;
                 if (payment.status === 'pending') {
-                    const approveBtn = document.createElement('button');
-                    approveBtn.className = 'action-btn approve';
-                    approveBtn.textContent = 'अप्रूव';
-                    approveBtn.onclick = () => openActionModal(payment, 'approve');
-                    
-                    const rejectBtn = document.createElement('button');
-                    rejectBtn.className = 'action-btn reject';
-                    rejectBtn.textContent = 'रिजेक्ट';
-                    rejectBtn.onclick = () => openActionModal(payment, 'reject');
-                    
-                    actionsCell.appendChild(approveBtn);
-                    actionsCell.appendChild(rejectBtn);
+                    actions += `<button class="action-btn approve" onclick="openActionModal(${payment.id}, 'approve')">अप्रूव</button>
+                                <button class="action-btn reject" onclick="openActionModal(${payment.id}, 'reject')">रिजेक्ट</button>`;
                 }
                 
-                const viewBtn = document.createElement('button');
-                viewBtn.className = 'action-btn view';
-                viewBtn.textContent = 'व्यू';
-                viewBtn.onclick = () => viewPaymentDetail(payment);
-                
-                actionsCell.appendChild(viewBtn);
-                
-                // data-label attributes for mobile view
                 row.innerHTML = `
-                    <td data-label="यूजर ID">${payment.user_id}</td>
-                    <td data-label="ट्रांजैक्शन ID">${payment.transaction_id}</td>
-                    <td data-label="राशि">₹${payment.amount}</td>
-                    <td data-label="तिथि">${new Date(payment.submission_date).toLocaleDateString()}</td>
-                    <td data-label="स्टेटस"></td>
-                    <td data-label="क्रिया"></td>
+                    <td>${payment.user_id}</td>
+                    <td>${payment.mobile_number}</td>
+                    <td>${payment.transaction_id}</td>
+                    <td>₹${payment.amount}</td>
+                    <td>${new Date(payment.submission_date).toLocaleDateString()}</td>
+                    <td>${statusBadge}</td>
+                    <td>${actions}</td>
                 `;
-                
-                row.cells[4].appendChild(statusBadge);
-                row.cells[5].appendChild(actionsCell);
-                
-                paymentsTbody.appendChild(row);
+                tbody.appendChild(row);
             });
         }
-        
-        // स्टैट्स अपडेट करने का फंक्शन
-        function updateStats() {
-            const payments = JSON.parse(localStorage.getItem('payments')) || [];
-            
-            const totalUsers = payments.length;
-            const pendingPayments = payments.filter(p => p.status === 'pending').length;
-            const approvedPayments = payments.filter(p => p.status === 'approved').length;
-            const totalRevenue = payments
-                .filter(p => p.status === 'approved')
-                .reduce((sum, p) => sum + parseInt(p.amount), 0);
-            
-            document.getElementById('total-users').textContent = totalUsers;
-            document.getElementById('pending-payments').textContent = pendingPayments;
-            document.getElementById('approved-payments').textContent = approvedPayments;
-            document.getElementById('total-revenue').textContent = `₹${totalRevenue}`;
+
+        // एक्शन मॉडल
+        function openActionModal(id, action) {
+            currentPayment = JSON.parse(localStorage.getItem('payments') || '[]').find(p => p.id === id);
+            currentAction = action;
+            document.getElementById('action-modal-title').textContent = action === 'approve' ? 'पेमेंट अप्रूव करें' : 'पेमेंट रिजेक्ट करें';
+            document.getElementById('confirm-action-btn').textContent = action === 'approve' ? 'अप्रूव' : 'रिजेक्ट';
+            document.getElementById('confirm-action-btn').onclick = () => processAction(id, action);
+            document.getElementById('action-modal').style.display = 'flex';
         }
-        
-        // नए पेमेंट चेक करने का फंक्शन
-        function checkNewPayments() {
-            const payments = JSON.parse(localStorage.getItem('payments')) || [];
-            const lastChecked = localStorage.getItem('lastPaymentCheck') || new Date(0).toISOString();
-            const lastCheckedDate = new Date(lastChecked);
-            
-            const newPayments = payments.filter(p => 
-                p.status === 'pending' && new Date(p.submission_date) > lastCheckedDate
-            );
-            
-            if (newPayments.length > 0) {
-                // नए पेमेंट अलर्ट दिखाएं
-                showNewPaymentAlert();
-                
-                // एडमिन को SMS भेजें (यहां हम सिमुलेट कर रहे हैं)
-                sendAdminSMS(newPayments.length);
-            }
-            
-            // आखिरी चेक टाइम अपडेट करें
-            localStorage.setItem('lastPaymentCheck', new Date().toISOString());
-        }
-        
-        // नए पेमेंट अलर्ट दिखाने का फंक्शन
-        function showNewPaymentAlert() {
-            const alert = document.getElementById('new-payment-alert');
-            alert.classList.add('show');
-            
-            // 10 सेकंड बाद अलर्ट छुपाएं
-            setTimeout(() => {
-                alert.classList.remove('show');
-            }, 10000);
-        }
-        
-        // नए पेमेंट अलर्ट बंद करने का फंक्शन
-        function closeNewPaymentAlert() {
-            document.getElementById('new-payment-alert').classList.remove('show');
-        }
-        
-        // एडमिन को SMS भेजने का फंक्शन (सिमुलेशन)
-        function sendAdminSMS(count) {
-            // वास्तविक एप्लिकेशन में, यह एक SMS API कॉल होगा
-            console.log(`एडमिन को SMS: ${count} नए पेमेंट रिक्वेस्ट आए हैं।`);
-            
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS के बजाय
-            showNotification(
-                'info',
-                'SMS अलर्ट',
-                `आपके फोन पर SMS गया: ${count} नए पेमेंट रिक्वेस्ट आए हैं।`
-            );
-        }
-        
-        // यूजर को SMS/ईमेल भेजने का फंक्शन (सिमुलेशन)
-        function sendUserNotification(userId, status, message) {
-            // वास्तविक एप्लिकेशन में, यह SMS या ईमेल API कॉल होगा
-            console.log(`${userId} को ${status} के लिए नोटिफिकेशन: ${message}`);
-            
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS/ईमेल के बजाय
-            showNotification(
-                'success',
-                'यूजर नोटिफिकेशन भेजा गया',
-                `${userId} को ${status} का नोटिफिकेशन भेजा गया है।`
-            );
-        }
-        
-        // नोटिफिकेशन दिखाने का फंक्शन
-        function showNotification(type, title, message) {
-            const notification = document.getElementById('notification');
-            const icon = notification.querySelector('i');
-            const titleEl = notification.querySelector('.notification-title');
-            const messageEl = notification.querySelector('.notification-message');
-            
-            // नोटिफिकेशन क्लास सेट करें
-            notification.className = `notification ${type} show`;
-            
-            // आइकन सेट करें
-            if (type === 'success') {
-                icon.className = 'fas fa-check-circle';
-            } else if (type === 'error') {
-                icon.className = 'fas fa-exclamation-circle';
-            } else {
-                icon.className = 'fas fa-info-circle';
-            }
-            
-            // टाइटल और मैसेज सेट करें
-            titleEl.textContent = title;
-            messageEl.textContent = message;
-            
-            // 5 सेकंड बाद नोटिफिकेशन छुपाएं
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        }
-        
-        // नोटिफिकेशन बंद करने का फंक्शन
-        function closeNotification() {
-            document.getElementById('notification').classList.remove('show');
-        }
-        
-        // पेमेंट डिटेल देखने का फंक्शन
-        function viewPaymentDetail(payment) {
-            const modal = document.getElementById('payment-detail-modal');
-            const content = document.getElementById('payment-detail-content');
-            
-            content.innerHTML = `
-                <div class="form-group">
-                    <label>यूजर ID</label>
-                    <input type="text" value="${payment.user_id}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>ट्रांजैक्शन ID</label>
-                    <input type="text" value="${payment.transaction_id}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>राशि</label>
-                    <input type="text" value="₹${payment.amount}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>पेमेंट विधि</label>
-                    <input type="text" value="${payment.payment_method}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>सबमिशन तिथि</label>
-                    <input type="text" value="${new Date(payment.submission_date).toLocaleString()}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>स्टेटस</label>
-                    <input type="text" value="${payment.status}" readonly>
-                </div>
-                <div class="form-group">
-                    <label>नोट</label>
-                    <textarea readonly>${payment.payment_note || 'कोई नोट नहीं'}</textarea>
-                </div>
-                <div class="form-group">
-                    <label>पेमेंट प्रूफ</label>
-                    <img src="https://via.placeholder.com/400x200?text=Payment+Proof" alt="पेमेंट प्रूफ" class="payment-proof">
-                </div>
-            `;
-            
-            modal.style.display = 'flex';
-        }
-        
-        // एक्शन मोडल खोलने का फंक्शन
-        function openActionModal(payment, action) {
-            const modal = document.getElementById('payment-action-modal');
-            const title = document.getElementById('action-modal-title');
-            const confirmBtn = document.getElementById('confirm-action-btn');
-            
-            title.textContent = action === 'approve' ? 'पेमेंट अप्रूव करें' : 'पेमेंट रिजेक्ट करें';
-            
-            confirmBtn.textContent = action === 'approve' ? 'अप्रूव' : 'रिजेक्ट';
-            confirmBtn.className = `btn ${action === 'approve' ? 'btn-primary' : 'btn-danger'}`;
-            confirmBtn.onclick = () => processPaymentAction(payment, action);
-            
-            modal.style.display = 'flex';
-        }
-        
-        // पेमेंट एक्शन प्रोसेस करने का फंक्शन
-        function processPaymentAction(payment, action) {
-            const note = document.getElementById('action-note').value;
-            const accessDays = parseInt(document.getElementById('access-days').value);
-            
-            // पेमेंट्स प्राप्त करें
-            let payments = JSON.parse(localStorage.getItem('payments')) || [];
-            
-            // पेमेंट अपडेट करें
-            const paymentIndex = payments.findIndex(p => p.id === payment.id);
+
+        function processAction(id, action) {
+            let payments = JSON.parse(localStorage.getItem('payments') || '[]');
+            const paymentIndex = payments.findIndex(p => p.id === id);
             if (paymentIndex !== -1) {
                 payments[paymentIndex].status = action;
-                payments[paymentIndex].admin_note = note;
                 
                 if (action === 'approve') {
-                    // एक्सेस एक्सपायरी डेट सेट करें
                     const expiryDate = new Date();
-                    expiryDate.setDate(expiryDate.getDate() + accessDays);
+                    expiryDate.setDate(expiryDate.getDate() + 30);
                     payments[paymentIndex].access_expiry_date = expiryDate.toISOString();
-                    
-                    // यूजर के लिए पेमेंट डेटा सेव करें
-                    const userPaymentData = {
-                        user_id: payments[paymentIndex].user_id,
-                        transaction_id: payments[paymentIndex].transaction_id,
-                        amount: payments[paymentIndex].amount,
-                        payment_note: payments[paymentIndex].payment_note,
-                        submission_date: payments[paymentIndex].submission_date,
-                        status: 'approved',
-                        access_expiry_date: payments[paymentIndex].access_expiry_date
-                    };
+
+                    // यूजर paymentData अपडेट
+                    const userPaymentData = { ...payments[paymentIndex], status: 'approved' };
                     localStorage.setItem('paymentData', JSON.stringify(userPaymentData));
-                    
-                    // यूजर को अप्रूवल के लिए नोटिफिकेशन भेजें
-                    sendUserNotification(
-                        payments[paymentIndex].user_id,
-                        'पेमेंट अप्रूव्ड',
-                        'आपका पेमेंट अप्रूव हो गया है। अब आप 30 दिनों तक राजस्थान GK क्विज़ खेल सकते हैं।'
-                    );
+
+                    // यूजर को SMS
+                    const userMessage = `आपका पेमेंट अप्रूव हो गया, ${payments[paymentIndex].user_id}! अब क्विज़ खेलें।`;
+                    sendSMS(payments[paymentIndex].mobile_number, userMessage);
                 } else {
-                    // यूजर को रिजेक्शन के लिए नोटिफिकेशन भेजें
-                    sendUserNotification(
-                        payments[paymentIndex].user_id,
-                        'पेमेंट रिजेक्टेड',
-                        'आपका पेमेंट रिजेक्ट कर दिया गया है। कृपया फिर से कोशिश करें।'
-                    );
+                    localStorage.removeItem('paymentData');
                 }
                 
-                // पेमेंट्स सेव करें
                 localStorage.setItem('payments', JSON.stringify(payments));
-                
-                // मोडल बंद करें
-                closeModal('payment-action-modal');
-                
-                // पेमेंट्स और स्टैट्स रीलोड करें
                 loadPayments();
-                updateStats();
-                
-                // सफलता संदेश दिखाएं
-                showNotification(
-                    'success',
-                    'पेमेंट अपडेटेड',
-                    `पेमेंट सफलतापूर्वक ${action === 'approve' ? 'अप्रूव' : 'रिजेक्ट'} किया गया!`
-                );
+                closeModal();
+                alert('एक्शन सफल!');
             }
         }
-        
-        // मोडल बंद करने का फंक्शन
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+
+        function viewPayment(paymentStr) {
+            const payment = JSON.parse(paymentStr);
+            alert(`यूजर ID: ${payment.user_id}\nमोबाइल: ${payment.mobile_number}\nट्रांजैक्शन ID: ${payment.transaction_id}\nराशि: ₹${payment.amount}\nनोट: ${payment.payment_note || 'कोई नहीं'}\nतिथि: ${new Date(payment.submission_date).toLocaleString()}`);
         }
-        
-        // मोडल के बाहर क्लिक करने पर मोडल बंद करें
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
+
+        function closeModal() {
+            document.getElementById('action-modal').style.display = 'none';
         }
+
+        function closeNewPaymentAlert() {
+            document.getElementById('new-payment-alert').style.display = 'none';
+        }
+
+        // नए रिक्वेस्ट चेक (हर 30 सेकंड)
+        function checkNewPayments() {
+            const payments = JSON.parse(localStorage.getItem('payments') || '[]');
+            const lastChecked = localStorage.getItem('lastPaymentCheck') || 0;
+            const newPayments = payments.filter(p => p.status === 'pending' && p.id > lastChecked);
+
+            if (newPayments.length > 0) {
+                document.getElementById('new-payment-alert').style.display = 'block';
+                localStorage.setItem('lastPaymentCheck', Date.now());
+                const message = `${newPayments.length} नई रिक्वेस्ट: ${newPayments[0].user_id}`;
+                sendSMS('9057650616', message);
+            }
+        }
+
+        setInterval(checkNewPayments, 30000);
+        checkNewPayments();
+
+        // पेज लोड पर
+        loadPayments();
     </script>
 </body>
 </html>
