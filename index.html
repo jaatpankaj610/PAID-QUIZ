@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -253,6 +256,28 @@
             font-size: 16px;
         }
         
+        .offline-section {
+            text-align: center;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin: 25px 0;
+        }
+        
+        .offline-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 15px;
+            border-radius: 12px;
+        }
+        
+        .offline-message {
+            font-size: 18px;
+            color: #333;
+            font-weight: 500;
+        }
+        
         @media (max-width: 600px) {
             .header h1 { font-size: 28px; }
             .price-tag { font-size: 36px; }
@@ -269,69 +294,90 @@
         
         <div class="scrollable-content">
             <div class="content">
-                <div class="payment-info">
-                    <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
-                    <div class="price-tag">₹49</div>
-                    <div class="price-period">30 दिन की असीमित क्विज़ एक्सेस</div>
-                    
-                    <ul class="features">
-                        <li><i class="fas fa-check-circle"></i> 100+ विशेषज्ञ द्वारा तैयार GK सवाल</li>
-                        <li><i class="fas fa-check-circle"></i> दैनिक क्विज़ और प्रैक्टिस टेस्ट</li>
-                        <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग और प्रोग्रेस रिपोर्ट</li>
-                        <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड कंटेंट</li>
-                    </ul>
+                <div id="offline-section" class="offline-section" style="display: none;">
+                    <img src="https://via.placeholder.com/200x200?text=Offline" alt="Offline" class="offline-image">
+                    <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
                 </div>
                 
-                <div class="qr-section">
-                    <h3>आसान UPI पेमेंट</h3>
-                    <div class="qr-code">
-                        <!-- अपना अमेज़न पे QR इमेज URL डालें -->
-                        <img src="https://via.placeholder.com/200x200?text=Amazon+Pay+QR" alt="QR Code">
+                <div id="online-content">
+                    <div class="payment-info">
+                        <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
+                        <div class="price-tag">₹49</div>
+                        <div class="price-period">30 दिन की असीमित क्विज़ एक्सेस</div>
+                        
+                        <ul class="features">
+                            <li><i class="fas fa-check-circle"></i> 100+ विशेषज्ञ द्वारा तैयार GK सवाल</li>
+                            <li><i class="fas fa-check-circle"></i> दैनिक क्विज़ और प्रैक्टिस टेस्ट</li>
+                            <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग और प्रोग्रेस रिपोर्ट</li>
+                            <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड कंटेंट</li>
+                        </ul>
                     </div>
-                    <div class="upi-id">
-                        <i class="fas fa-copy"></i>
-                        your-amazon-pay@upi
+                    
+                    <div class="qr-section">
+                        <h3>आसान UPI पेमेंट</h3>
+                        <div class="qr-code">
+                            <!-- अपना अमेज़न पे QR इमेज URL डालें -->
+                            <img src="https://via.placeholder.com/200x200?text=Amazon+Pay+QR" alt="QR Code">
+                        </div>
+                        <div class="upi-id">
+                            <i class="fas fa-copy"></i>
+                            your-amazon-pay@upi
+                        </div>
+                        <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
                     </div>
-                    <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
+                    
+                    <form id="payment-form">
+                        <div class="form-group">
+                            <label for="user_id">अपना ईमेल ID दर्ज करें</label>
+                            <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
+                            <input type="text" id="mobile_number" name="mobile_number" placeholder="7665274721" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
+                            <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="amount">पेमेंट राशि</label>
+                            <input type="text" id="amount" name="amount" placeholder="49" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="payment_note">कोई अतिरिक्त जानकारी (वैकल्पिक)</label>
+                            <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
+                        </div>
+                        
+                        <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
+                    </form>
+                    
+                    <div id="status-message" class="status-message"></div>
+                    
+                    <button class="clear-btn" onclick="clearStorage()">पेमेंट डेटा रीसेट करें</button>
                 </div>
-                
-                <form id="payment-form">
-                    <div class="form-group">
-                        <label for="user_id">अपना ईमेल ID दर्ज करें</label>
-                        <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
-                        <input type="text" id="mobile_number" name="mobile_number" placeholder="7665274721" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
-                        <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="amount">पेमेंट राशि</label>
-                        <input type="text" id="amount" name="amount" placeholder="49" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="payment_note">कोई अतिरिक्त जानकारी (वैकल्पिक)</label>
-                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
-                    </div>
-                    
-                    <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
-                </form>
-                
-                <div id="status-message" class="status-message"></div>
-                
-                <button class="clear-btn" onclick="clearStorage()">पेमेंट डेटा रीसेट करें</button>
             </div>
         </div>
     </div>
     
     <script>
+        // नेटवर्क स्टेटस चेक
+        function checkNetworkStatus() {
+            const offlineSection = document.getElementById('offline-section');
+            const onlineContent = document.getElementById('online-content');
+            if (!navigator.onLine) {
+                offlineSection.style.display = 'block';
+                onlineContent.style.display = 'none';
+            } else {
+                offlineSection.style.display = 'none';
+                onlineContent.style.display = 'block';
+                checkPaymentStatus();
+            }
+        }
+
         // पेमेंट स्टेटस चेक
         function checkPaymentStatus() {
             const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
@@ -360,6 +406,14 @@
 
         // पेमेंट सबमिट
         function submitPayment() {
+            if (!navigator.onLine) {
+                const statusElement = document.getElementById('status-message');
+                statusElement.textContent = 'कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।';
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
+                return;
+            }
+
             const userId = document.getElementById('user_id').value;
             const mobileNumber = document.getElementById('mobile_number').value;
             const transactionId = document.getElementById('transaction_id').value;
@@ -430,8 +484,10 @@
             document.getElementById('payment-form').reset();
         }
 
-        // पेज लोड पर चेक
-        checkPaymentStatus();
+        // पेज लोड और नेटवर्क स्टेटस चेक
+        window.addEventListener('load', checkNetworkStatus);
+        window.addEventListener('online', checkNetworkStatus);
+        window.addEventListener('offline', checkNetworkStatus);
     </script>
 </body>
 </html>
