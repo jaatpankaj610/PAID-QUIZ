@@ -417,6 +417,12 @@
             });
         }
 
+        // यूनिक ID जनरेटर
+        function generateUniqueId() {
+            return window.crypto && crypto.randomUUID ? crypto.randomUUID() : 
+                   Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+        }
+
         // नेटवर्क और एरर स्टेटस चेक
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
@@ -445,6 +451,7 @@
             try {
                 // सभी पेमेंट्स लोड करें
                 const payments = JSON.parse(localStorage.getItem('payments') || '[]');
+                console.log('Payments loaded in checkPaymentStatus:', payments);
                 const userId = document.getElementById('user_id').value.trim() || 'unknown';
                 const userPayments = payments.filter(p => p.user_id === userId && p.status === 'approved');
                 const latestApproved = userPayments.reduce((latest, payment) => {
@@ -455,7 +462,7 @@
                 const expiryDate = latestApproved?.access_expiry_date ? new Date(latestApproved.access_expiry_date) : null;
 
                 if (latestApproved && expiryDate && now <= expiryDate) {
-                    console.log('Redirecting to quiz.html: Valid approved payment for user', userId);
+                    console.log('Redirecting to quiz.html: Valid approved payment for user', userId, latestApproved);
                     window.location.href = 'quiz.html';
                     return;
                 } else if (latestApproved && expiryDate && now > expiryDate) {
@@ -614,7 +621,7 @@
             statusElement.style.display = 'block';
 
             const paymentData = {
-                id: Date.now() + Math.random().toString(36).substr(2, 9), // यूनिक ID
+                id: generateUniqueId(),
                 user_id: userId,
                 mobile_number: mobileNumber,
                 transaction_id: transactionId,
@@ -628,12 +635,13 @@
             try {
                 // मौजूदा पेमेंट्स लोड करें
                 let payments = JSON.parse(localStorage.getItem('payments') || '[]');
+                console.log('Current payments before adding:', payments);
 
-                // नई रिक्वेस्ट को payments array में जोड़ें (डुप्लिकेशन चेक हटाया)
+                // नई रिक्वेस्ट जोड़ें
                 payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
                 console.log('Payment stored in localStorage:', paymentData);
-                console.log('All payments in localStorage:', payments);
+                console.log('All payments in localStorage after adding:', payments);
 
                 const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}।`;
                 sendSMS('7665274721', adminMessage);
