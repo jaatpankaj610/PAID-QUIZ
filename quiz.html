@@ -390,6 +390,21 @@
             100% { transform: rotate(360deg); }
         }
         
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(214, 48, 49, 0.1);
+            border-radius: 15px;
+            margin: 20px 0;
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        .error-message i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
         /* एनिमेशन */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -658,8 +673,15 @@
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        questionText.textContent = "प्रश्न लोड करने में त्रुटि। कृपया बाद में पुन: प्रयास करें।";
-                        optionsContainer.innerHTML = '';
+                        // एरर मैसेज दिखाएं
+                        questionText.textContent = "प्रश्न लोड करने में त्रुटि।";
+                        optionsContainer.innerHTML = `
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                प्रश्न लोड नहीं हो पा रहे हैं। कृपया इंटरनेट कनेक्शन चेक करें या बाद में पुन: प्रयास करें।
+                            </div>
+                            <button class="start-quiz-btn" onclick="loadQuestions()">पुन: प्रयास करें</button>
+                        `;
                     });
             }
             
