@@ -440,6 +440,7 @@
             const statusElement = document.getElementById('status-message');
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
+            const formError = document.getElementById('form-error');
 
             try {
                 // सभी पेमेंट्स लोड करें
@@ -480,10 +481,12 @@
                     console.error('Error checking quiz.html:', error);
                     errorSection.style.display = 'block';
                     onlineContent.style.display = 'none';
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(200);
+                    }
                 }
             } catch (error) {
                 console.error('Error checking payment status:', error);
-                const formError = document.getElementById('form-error');
                 formError.textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि। कृपया अपनी डिवाइस सेटिंग्स चेक करें और पुनः प्रयास करें।';
                 formError.style.display = 'block';
                 if ('vibrate' in navigator) {
@@ -611,7 +614,7 @@
             statusElement.style.display = 'block';
 
             const paymentData = {
-                id: Date.now(),
+                id: Date.now() + Math.random().toString(36).substr(2, 9), // यूनिक ID
                 user_id: userId,
                 mobile_number: mobileNumber,
                 transaction_id: transactionId,
@@ -625,20 +628,8 @@
             try {
                 // मौजूदा पेमेंट्स लोड करें
                 let payments = JSON.parse(localStorage.getItem('payments') || '[]');
-                const existingPayment = payments.find(p => p.user_id === userId && p.status === 'approved' && new Date(p.access_expiry_date) > new Date());
 
-                if (existingPayment) {
-                    formError.textContent = 'आपके पास पहले से एक सक्रिय प्रीमियम एक्सेस है।';
-                    formError.style.display = 'block';
-                    statusElement.style.display = 'none';
-                    document.getElementById('payment-form').style.display = 'none';
-                    if ('vibrate' in navigator) {
-                        navigator.vibrate(200);
-                    }
-                    return;
-                }
-
-                // नई रिक्वेस्ट को payments array में जोड़ें
+                // नई रिक्वेस्ट को payments array में जोड़ें (डुप्लिकेशन चेक हटाया)
                 payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
                 console.log('Payment stored in localStorage:', paymentData);
