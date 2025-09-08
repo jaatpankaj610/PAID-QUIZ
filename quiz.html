@@ -6,7 +6,6 @@
     <title>राजस्थान GK क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
         
         :root {
@@ -28,7 +27,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', 'Poppins', sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
         
         body {
@@ -354,26 +353,6 @@
             margin-bottom: 15px;
         }
         
-        .topic-info {
-            background: rgba(74, 0, 224, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px solid rgba(74, 0, 224, 0.1);
-        }
-        
-        .topic-info h3 {
-            color: var(--primary);
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .topic-info p {
-            color: #666;
-            font-size: 14px;
-        }
-        
         .start-quiz-btn {
             background: var(--gradient);
             color: white;
@@ -409,6 +388,49 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        .topic-selector {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .topic-selector h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .topic-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .topic-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .topic-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .topic-btn.active {
+            background: var(--primary);
+            color: white;
         }
         
         /* एनिमेशन */
@@ -500,6 +522,15 @@
                 padding: 12px 25px;
                 font-size: 16px;
             }
+            
+            .topic-buttons {
+                gap: 8px;
+            }
+            
+            .topic-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -526,14 +557,21 @@
         <div class="quiz-container">
             <div class="welcome-message" id="welcome-message">
                 <i class="fas fa-smile"></i>
-                <h2 id="welcome-title">स्वागत है!</h2>
-                <p id="welcome-text">क्विज़ शुरू करने के लिए बटन दबाएं।</p>
+                <h2>राजस्थान GK क्विज़ में आपका स्वागत है!</h2>
+                <p>राजस्थान की समृद्ध संस्कृति, इतिहास और भूगोल के बारे में जानें। नीचे दिए गए बटन पर क्लिक करें और क्विज़ शुरू करें।</p>
+                
+                <div class="topic-selector">
+                    <h3>क्विज़ टॉपिक चुनें</h3>
+                    <div class="topic-buttons">
+                        <button class="topic-btn active" data-topic="history">इतिहास</button>
+                        <button class="topic-btn" data-topic="geography">भूगोल</button>
+                        <button class="topic-btn" data-topic="culture">संस्कृति</button>
+                        <button class="topic-btn" data-topic="politics">राजनीति</button>
+                        <button class="topic-btn" data-topic="tourism">पर्यटन</button>
+                    </div>
+                </div>
+                
                 <button class="start-quiz-btn" onclick="startQuiz()">क्विज़ शुरू करें</button>
-            </div>
-            
-            <div class="topic-info" id="topic-info" style="display: none;">
-                <h3 id="topic-name"></h3>
-                <p id="topic-date"></p>
             </div>
             
             <div class="question-section" id="question-section" style="display: none;">
@@ -572,22 +610,29 @@
             const progressBar = document.getElementById('progress');
             const daysLeftEl = document.getElementById('days-left');
             const welcomeMessage = document.getElementById('welcome-message');
-            const welcomeTitle = document.getElementById('welcome-title');
-            const welcomeText = document.getElementById('welcome-text');
-            const topicInfo = document.getElementById('topic-info');
-            const topicName = document.getElementById('topic-name');
-            const topicDate = document.getElementById('topic-date');
             const questionSection = document.getElementById('question-section');
             const quizFooter = document.getElementById('quiz-footer');
             
             let currentQuestion = 0;
             let score = 0;
             let questions = [];
-            let currentTopic = null;
+            let selectedTopic = 'history'; // डिफ़ॉल्ट टॉपिक
             
-            // होम पेज पर जाने का फंक्शन (पेमेंट पेज)
+            // टॉपिक बटन इवेंट लिसनर
+            document.querySelectorAll('.topic-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // सभी बटन से active क्लास हटाएं
+                    document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+                    // वर्तमान बटन पर active क्लास जोड़ें
+                    this.classList.add('active');
+                    // चयनित टॉपिक सेट करें
+                    selectedTopic = this.getAttribute('data-topic');
+                });
+            });
+            
+            // होम पेज पर जाने का फंक्शन
             function goHome() {
-                if (confirm("क्या आप होम पेज (पेमेंट) पर जाना चाहते हैं?")) {
+                if (confirm("क्या आप होम पेज पर जाना चाहते हैं?")) {
                     window.location.href = 'index.html';
                 }
             }
@@ -606,33 +651,66 @@
                         const currentDate = new Date();
                         
                         if (currentDate > accessExpiry) {
-                            // एक्सेस समाप्त, paymentData क्लियर करें और पेमेंट पेज पर रीडायरेक्ट
-                            localStorage.removeItem('paymentData');
-                            alert('आपकी 30 दिन की एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।');
+                            // एक्सेस अवधि समाप्त हो गई है, पेमेंट पेज पर रीडायरेक्ट करें
+                            alert('आपकी एक्सेस अवधि समाप्त हो गई है। कृपया फिर से पेमेंट करें।');
                             window.location.href = 'index.html';
                         } else {
-                            // वैध एक्सेस, वेलकम मैसेज दिखाएं
+                            // एक्सेस अवधि वैध है, वेलकम मैसेज दिखाएं
                             
                             // शेष दिनों की गणना करें
                             const daysLeft = Math.ceil((accessExpiry - currentDate) / (1000 * 60 * 60 * 24));
                             daysLeftEl.textContent = daysLeft;
                             
-                            // वेलकम मैसेज सेट करें
-                            const userName = payment.user_id.split('@')[0] || 'यूजर'; // सिंपल नाम एक्सट्रैक्ट
-                            welcomeTitle.textContent = `${userName}, राजस्थान GK क्विज़ में आपका स्वागत है!`;
-                            welcomeText.textContent = 'आज का डेली टॉपिक लोड हो रहा है। क्विज़ शुरू करें और राजस्थान GK सीखें।';
-                            
-                            welcomeMessage.style.display = 'block';
-                            topicInfo.style.display = 'none'; // शुरू में छुपाएं
+                            // वेलकम मैसेज दिखाएं
+                            showWelcomeMessage();
                         }
                     } else {
-                        // पेंडिंग या अन्य, पेमेंट पेज पर रीडायरेक्ट
+                        // पेमेंट पेंडिंग है, पेमेंट पेज पर रीडायरेक्ट करें
                         window.location.href = 'index.html';
                     }
                 } else {
-                    // कोई पेमेंट डेटा नहीं, पेमेंट पेज पर रीडायरेक्ट
+                    // कोई पेमेंट डेटा नहीं है, पेमेंट पेज पर रीडायरेक्ट करें
                     window.location.href = 'index.html';
                 }
+            }
+            
+            // वेलकम मैसेज दिखाने का फंक्शन
+            function showWelcomeMessage() {
+                const paymentData = JSON.parse(localStorage.getItem('paymentData'));
+                const userName = paymentData.user_id;
+                
+                welcomeMessage.innerHTML = `
+                    <i class="fas fa-smile"></i>
+                    <h2>${userName}, राजस्थान GK क्विज़ में आपका स्वागत है!</h2>
+                    <p>राजस्थान की समृद्ध संस्कृति, इतिहास और भूगोल के बारे में जानें। नीचे दिए गए बटन पर क्लिक करें और क्विज़ शुरू करें।</p>
+                    
+                    <div class="topic-selector">
+                        <h3>क्विज़ टॉपिक चुनें</h3>
+                        <div class="topic-buttons">
+                            <button class="topic-btn ${selectedTopic === 'history' ? 'active' : ''}" data-topic="history">इतिहास</button>
+                            <button class="topic-btn ${selectedTopic === 'geography' ? 'active' : ''}" data-topic="geography">भूगोल</button>
+                            <button class="topic-btn ${selectedTopic === 'culture' ? 'active' : ''}" data-topic="culture">संस्कृति</button>
+                            <button class="topic-btn ${selectedTopic === 'politics' ? 'active' : ''}" data-topic="politics">राजनीति</button>
+                            <button class="topic-btn ${selectedTopic === 'tourism' ? 'active' : ''}" data-topic="tourism">पर्यटन</button>
+                        </div>
+                    </div>
+                    
+                    <button class="start-quiz-btn" onclick="startQuiz()">क्विज़ शुरू करें</button>
+                `;
+                
+                welcomeMessage.style.display = 'block';
+                
+                // टॉपिक बटन इवेंट लिसनर फिर से जोड़ें
+                document.querySelectorAll('.topic-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // सभी बटन से active क्लास हटाएं
+                        document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+                        // वर्तमान बटन पर active क्लास जोड़ें
+                        this.classList.add('active');
+                        // चयनित टॉपिक सेट करें
+                        selectedTopic = this.getAttribute('data-topic');
+                    });
+                });
             }
             
             // क्विज़ शुरू करने का फंक्शन
@@ -640,49 +718,50 @@
                 // वेलकम मैसेज छुपाएं
                 welcomeMessage.style.display = 'none';
                 
-                // लोडिंग मैसेज दिखाएं
-                questionText.textContent = "आज का टॉपिक लोड हो रहा है...";
-                optionsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> डेली क्विज़ लोड हो रही है...</div>';
-                
                 // क्विज़ सेक्शन दिखाएं
                 questionSection.style.display = 'block';
                 quizFooter.style.display = 'block';
                 
-                // डेली टॉपिक और प्रश्न लोड करें
-                loadDailyTopicAndQuestions();
+                // लोडिंग मैसेज दिखाएं
+                questionText.textContent = "प्रश्न लोड हो रहे हैं...";
+                optionsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> प्रश्न लोड हो रहे हैं...</div>';
+                
+                // प्रश्न लोड करें
+                loadQuestions();
             }
             
-            // डेली टॉपिक और प्रश्न लोड करने का फंक्शन
-            function loadDailyTopicAndQuestions() {
+            // प्रश्न लोड करने का फंक्शन
+            function loadQuestions() {
+                // वास्तविक एप्लिकेशन में, यह एक API कॉल होगा
+                // यहां हम questions.json फाइल से प्रश्न लोड कर रहे हैं
                 fetch('questions.json')
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('JSON लोड करने में त्रुटि');
+                            throw new Error('प्रश्न लोड करने में त्रुटि');
                         }
                         return response.json();
                     })
                     .then(data => {
-                        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-                        currentTopic = data.topics.find(topic => topic.date === today) || data.topics[0]; // आज का टॉपिक, या डिफॉल्ट
+                        // चयनित टॉपिक के अनुसार प्रश्न फ़िल्टर करें
+                        questions = data.questions.filter(q => q.topic === selectedTopic);
                         
-                        if (currentTopic && currentTopic.questions.length > 0) {
-                            questions = currentTopic.questions;
-                            totalQuestionsEl.textContent = questions.length;
-                            
-                            // टॉपिक इंफो दिखाएं
-                            topicName.textContent = currentTopic.topic;
-                            topicDate.textContent = `तिथि: ${currentTopic.date}`;
-                            topicInfo.style.display = 'block';
-                            
+                        // यदि चयनित टॉपिक में प्रश्न नहीं हैं, तो सभी प्रश्न लें
+                        if (questions.length === 0) {
+                            questions = data.questions;
+                        }
+                        
+                        totalQuestionsEl.textContent = questions.length;
+                        
+                        if (questions.length > 0) {
                             showQuestion();
                         } else {
-                            questionText.textContent = "आज का टॉपिक उपलब्ध नहीं है। कृपया कल पुनः प्रयास करें।";
+                            questionText.textContent = "कोई प्रश्न उपलब्ध नहीं है।";
                             optionsContainer.innerHTML = '';
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        questionText.textContent = "डेली क्विज़ लोड करने में त्रुटि। कृपया बाद में पुन: प्रयास करें।";
+                        questionText.textContent = "प्रश्न लोड करने में त्रुटि। कृपया बाद में पुन: प्रयास करें।";
                         optionsContainer.innerHTML = '';
                     });
             }
@@ -747,11 +826,11 @@
             
             // रिजल्ट दिखाने का फंक्शन
             function showResults() {
-                questionText.textContent = "डेली क्विज़ पूरा हुआ!";
+                questionText.textContent = "क्विज़ पूरा हुआ!";
                 optionsContainer.innerHTML = `
                     <div class="result-container">
                         <div class="result-score">
-                            <h2>आपका स्कोर (${currentTopic.topic})</h2>
+                            <h2>आपका स्कोर</h2>
                             <div class="score-value">${score} / ${questions.length}</div>
                         </div>
                         <div class="result-message">
@@ -762,6 +841,7 @@
                                 '<i class="fas fa-redo"></i> अभ्यास करने की जरूरत है! फिर से कोशिश करें!'}
                         </div>
                         <button id="restart-btn" class="restart-btn">क्विज़ फिर से शुरू करें</button>
+                        <button id="home-btn" class="restart-btn">होम पेज पर जाएं</button>
                     </div>
                 `;
                 
@@ -771,7 +851,14 @@
                     score = 0;
                     scoreEl.textContent = score;
                     progressBar.style.width = '0%';
-                    showQuestion();
+                    showWelcomeMessage();
+                    questionSection.style.display = 'none';
+                    quizFooter.style.display = 'none';
+                });
+                
+                // होम बटन इवेंट
+                document.getElementById('home-btn').addEventListener('click', () => {
+                    window.location.href = 'index.html';
                 });
             }
         });
