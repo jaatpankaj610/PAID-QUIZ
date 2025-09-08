@@ -347,7 +347,7 @@
                     <div class="qr-section">
                         <h3>आसान UPI पेमेंट</h3>
                         <div class="qr-code">
-                            <img src="images/qrcode.png" alt="QR Code" style="max-width:100%; max-height:100%; width:auto; height:auto; display:block;">
+                            <img src="https://via.placeholder.com/200x200?text=Amazon+Pay+QR" alt="QR Code">
                         </div>
                         <div class="upi-id">
                             <i class="fas fa-copy"></i>
@@ -396,7 +396,7 @@
     <script>
         // Service Worker रजिस्टर
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/rajasthan-gk-quiz/sw.js').then(() => {
+            navigator.serviceWorker.register('/PAID-QUIZ/sw.js').then(() => {
                 console.log('Service Worker Registered');
             }).catch(error => {
                 console.error('Service Worker Error:', error);
@@ -451,12 +451,10 @@
                     onlineContent.style.display = 'none';
                     console.error('quiz.html unavailable:', response.status);
                 } else {
-                    // कोई रियल एरर नहीं, पेमेंट स्क्रीन दिखाएँ
                     errorSection.style.display = 'none';
                     onlineContent.style.display = 'block';
                 }
             } catch (error) {
-                // नेटवर्क या अन्य एरर, लेकिन डिफॉल्ट पेमेंट स्क्रीन दिखाएँ
                 console.error('Error checking quiz.html:', error);
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
@@ -519,33 +517,51 @@
                 payment_method: 'upi'
             };
 
-            let payments = JSON.parse(localStorage.getItem('payments') || '[]');
-            payments.push(paymentData);
-            localStorage.setItem('payments', JSON.stringify(payments));
+            try {
+                // localStorage में डेटा स्टोर करें
+                let payments = JSON.parse(localStorage.getItem('payments') || '[]');
+                payments.push(paymentData);
+                localStorage.setItem('payments', JSON.stringify(payments));
+                localStorage.setItem('paymentData', JSON.stringify(paymentData));
+                console.log('Payment stored in localStorage:', paymentData);
+                console.log('Current payments in localStorage:', JSON.parse(localStorage.getItem('payments')));
 
-            localStorage.setItem('paymentData', JSON.stringify(paymentData));
+                const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}।`;
+                sendSMS('7665274721', adminMessage);
 
-            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}।`;
-            sendSMS('7665274721', adminMessage);
+                const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको 30 दिन की प्रीमियम एक्सेस मिलेगी।`;
+                sendSMS(mobileNumber, userMessage);
 
-            const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको 30 दिन की प्रीमियम एक्सेस मिलेगी।`;
-            sendSMS(mobileNumber, userMessage);
-
-            statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद नोटिफिकेशन भेजा गया है।`;
-            statusElement.className = 'status-message success';
-            document.getElementById('payment-form').style.display = 'none';
+                statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद नोटिफिकेशन भेजा गया है।`;
+                statusElement.className = 'status-message success';
+                document.getElementById('payment-form').style.display = 'none';
+            } catch (error) {
+                console.error('Error storing payment in localStorage:', error);
+                statusElement.textContent = 'पेमेंट रिक्वेस्ट स्टोर करने में त्रुटि। कृपया ब्राउज़र सेटिंग्स चेक करें और पुनः प्रयास करें।';
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
+            }
         }
 
         // LocalStorage क्लियर
         function clearStorage() {
-            localStorage.removeItem('payments');
-            localStorage.removeItem('paymentData');
-            const statusElement = document.getElementById('status-message');
-            statusElement.textContent = 'आपका डेटा सफलतापूर्वक रीसेट हो गया है। कृपया पेमेंट जानकारी दोबारा दर्ज करें।';
-            statusElement.className = 'status-message success';
-            statusElement.style.display = 'block';
-            document.getElementById('payment-form').style.display = 'block';
-            document.getElementById('payment-form').reset();
+            try {
+                localStorage.removeItem('payments');
+                localStorage.removeItem('paymentData');
+                const statusElement = document.getElementById('status-message');
+                statusElement.textContent = 'आपका डेटा सफलतापूर्वक रीसेट हो गया है। कृपया पेमेंट जानकारी दोबारा दर्ज करें।';
+                statusElement.className = 'status-message success';
+                statusElement.style.display = 'block';
+                document.getElementById('payment-form').style.display = 'block';
+                document.getElementById('payment-form').reset();
+                console.log('localStorage cleared');
+            } catch (error) {
+                console.error('Error clearing localStorage:', error);
+                const statusElement = document.getElementById('status-message');
+                statusElement.textContent = 'डेटा रीसेट करने में त्रुटि। कृपया ब्राउज़र सेटिंग्स चेक करें और पुनः प्रयास करें।';
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
+            }
         }
 
         // ग्लोबल एरर हैंडलिंग
@@ -565,4 +581,3 @@
     </script>
 </body>
 </html>
-
