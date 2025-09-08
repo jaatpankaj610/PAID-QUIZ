@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>राजस्थान GK क्विज़ - पेमेंट</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,10 +17,6 @@
             --light: #f8f9fa;
             --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
         
         * {
@@ -28,12 +24,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
         
         body {
@@ -55,44 +45,19 @@
             width: 100%;
             max-width: 600px;
             height: 100vh;
-            max-height: 100vh;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 0;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            animation: fadeIn 0.8s ease;
             display: flex;
             flex-direction: column;
             position: relative;
-            z-index: 1;
-            transform: translateZ(0);
-            will-change: transform;
         }
         
         .scrollable-content {
             flex: 1;
             overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) #f1f1f1;
-            transform: translateZ(0);
-            will-change: transform;
             -webkit-overflow-scrolling: touch;
-        }
-        
-        .scrollable-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .scrollable-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        
-        .scrollable-content::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
         }
         
         .header {
@@ -102,147 +67,17 @@
             color: white;
             position: relative;
             overflow: hidden;
-            transform: translateZ(0);
-            will-change: transform;
-            flex-shrink: 0;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
-            animation: pulse 8s infinite linear;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        @keyframes pulse {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .logo {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.8), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-        
-        .logo i {
-            font-size: 35px;
-            color: var(--primary);
-            position: relative;
-            z-index: 2;
         }
         
         .header h1 {
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            position: relative;
-            z-index: 1;
-            display: inline-block;
-            overflow: hidden;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        .header h1::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-            animation: textShine 3s infinite;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        @keyframes textShine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .animated-emoji {
-            display: inline-block;
-            margin-right: 8px;
-            animation: emojiFloat 2s ease-in-out infinite;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        @keyframes emojiFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-5px) rotate(5deg); }
-            50% { transform: translateY(0) rotate(0deg); }
-            75% { transform: translateY(-5px) rotate(-5deg); }
-        }
-        
-        .sparkle {
-            position: relative;
-            display: inline-block;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        .sparkle::before {
-            content: '✨';
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            font-size: 16px;
-            animation: sparkleRotate 3s linear infinite;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        @keyframes sparkleRotate {
-            0% { transform: rotate(0deg) scale(1); opacity: 1; }
-            50% { transform: rotate(180deg) scale(1.2); opacity: 0.8; }
-            100% { transform: rotate(360deg) scale(1); opacity: 1; }
         }
         
         .header p {
             font-size: 14px;
             opacity: 0.9;
-            position: relative;
-            z-index: 1;
         }
         
         .content {
@@ -256,20 +91,6 @@
             padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .payment-info h2 {
-            color: var(--primary);
-            font-size: 22px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .payment-info h2 i {
-            margin-right: 10px;
-            color: var(--warning);
         }
         
         .price-tag {
@@ -324,28 +145,12 @@
             border-radius: 10px;
             font-size: 15px;
             transition: all 0.3s ease;
-            background: white;
         }
         
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
-        }
-        
-        .form-group.hint {
-            position: relative;
-        }
-        
-        .form-group.hint .input-hint {
-            position: absolute;
-            right: 15px;
-            bottom: -20px;
-            font-size: 11px;
-            color: #888;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 2px 6px;
-            border-radius: 4px;
         }
         
         .qr-section {
@@ -355,13 +160,6 @@
             margin: 20px 0;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .qr-section h3 {
-            color: #333;
-            margin-bottom: 12px;
-            font-size: 16px;
         }
         
         .qr-code {
@@ -373,22 +171,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            color: #666;
             border: 2px dashed #ddd;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .qr-code img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        
-        .qr-code i {
-            font-size: 45px;
-            color: var(--primary);
         }
         
         .upi-id {
@@ -398,201 +181,11 @@
             margin: 12px 0;
             font-weight: 600;
             color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
             word-break: break-all;
-            font-size: 14px;
-        }
-        
-        .payment-issue-alert {
-            background: rgba(253, 203, 110, 0.1);
-            border: 1px solid rgba(253, 203, 110, 0.2);
-            border-radius: 10px;
-            padding: 12px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .payment-issue-alert i {
-            font-size: 20px;
-            color: var(--warning);
-            flex-shrink: 0;
-        }
-        
-        .payment-issue-alert-content {
-            flex: 1;
-        }
-        
-        .payment-issue-alert-title {
-            font-weight: 600;
-            color: var(--warning);
-            margin-bottom: 4px;
-            font-size: 15px;
-        }
-        
-        .payment-issue-alert-text {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.4;
-        }
-        
-        .payment-issue-alert-number {
-            font-weight: 700;
-            color: var(--primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .payment-issue-alert-number:hover {
-            background: rgba(74, 0, 224, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .payment-steps {
-            background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            border: 1px solid rgba(74, 0, 224, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .payment-steps::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 100px;
-            height: 100px;
-            background: rgba(74, 0, 224, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-        
-        .payment-steps::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: -30px;
-            width: 120px;
-            height: 120px;
-            background: rgba(142, 45, 226, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-        
-        .payment-steps h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 18px;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .steps-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 30%;
-        }
-        
-        .step-icon {
-            width: 45px;
-            height: 45px;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 8px;
-            color: white;
-            font-size: 18px;
-        }
-        
-        .step-text {
-            text-align: center;
-            font-size: 13px;
-            color: #555;
-            line-height: 1.4;
-        }
-        
-        .file-upload {
-            margin: 20px 0;
-        }
-        
-        .file-upload label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 15px;
-        }
-        
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            cursor: pointer;
-            background: var(--gradient-3);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-align: center;
-            font-size: 14px;
-        }
-        
-        .file-input-wrapper:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
-        }
-        
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .image-preview {
-            margin-top: 12px;
-            text-align: center;
-            display: none;
-        }
-        
-        .image-preview img {
-            max-width: 100%;
-            max-height: 180px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         .submit-btn {
-            background: var(--gradient-2);
+            background: var(--gradient);
             color: white;
             border: none;
             border-radius: 50px;
@@ -602,165 +195,11 @@
             cursor: pointer;
             width: 100%;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            margin-top: 8px;
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.2));
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-            z-index: -1;
-            transform: translateZ(0);
-            will-change: transform;
         }
         
         .submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.5);
-        }
-        
-        .submit-btn:hover::before {
-            transform: translateX(100%);
-        }
-        
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-        
-        .submit-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-        
-        .submit-btn:active::after {
-            opacity: 1;
-        }
-        
-        .contact-section {
-            background: linear-gradient(135deg, rgba(74, 0, 224, 0.05), rgba(142, 45, 226, 0.1));
-            border-radius: 15px;
-            padding: 18px;
-            margin: 20px 0;
-            text-align: center;
-            border: 1px solid rgba(74, 0, 224, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .contact-section::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 100px;
-            height: 100px;
-            background: rgba(74, 0, 224, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-        
-        .contact-section::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: -30px;
-            width: 120px;
-            height: 120px;
-            background: rgba(142, 45, 226, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-        
-        .contact-title {
-            color: var(--primary);
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .contact-title i {
-            color: var(--warning);
-        }
-        
-        .contact-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: white;
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin: 8px 0;
-            font-weight: 600;
-            color: var(--primary);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            position: relative;
-            z-index: 1;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-size: 15px;
-        }
-        
-        .contact-number:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.2);
-        }
-        
-        .contact-number i {
-            font-size: 18px;
-            color: var(--success);
-        }
-        
-        .contact-emoji {
-            display: inline-block;
-            animation: contactEmojiBounce 2s infinite;
-            margin-left: 5px;
-        }
-        
-        @keyframes contactEmojiBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .contact-note {
-            font-size: 13px;
-            color: #666;
-            margin-top: 8px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .note {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #666;
+            box-shadow: 0 10px 25px rgba(74, 0, 224, 0.3);
         }
         
         .status-message {
@@ -770,144 +209,51 @@
             text-align: center;
             font-weight: 600;
             display: none;
-            font-size: 14px;
         }
         
         .status-message.success {
             background: rgba(0, 184, 148, 0.1);
             color: var(--success);
-            border: 1px solid rgba(0, 184, 148, 0.2);
-            display: block;
-        }
-        
-        .status-message.error {
-            background: rgba(214, 48, 49, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(214, 48, 49, 0.2);
+            border: 1px solid var(--success);
             display: block;
         }
         
         .status-message.pending {
             background: rgba(253, 203, 110, 0.1);
             color: var(--warning);
-            border: 1px solid rgba(253, 203, 110, 0.2);
+            border: 1px solid var(--warning);
             display: block;
         }
         
-        /* एनिमेशन */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .status-message.error {
+            background: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            display: block;
         }
         
-        /* रेस्पॉन्सिव डिज़ाइन */
+        .clear-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
         @media (max-width: 600px) {
-            .container {
-                border-radius: 0;
-                height: 100vh;
-                max-height: 100vh;
-            }
-            
-            .header h1 {
-                font-size: 24px;
-            }
-            
-            .price-tag {
-                font-size: 32px;
-            }
-            
-            .steps-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .step {
-                width: 100%;
-                flex-direction: row;
-                text-align: left;
-                gap: 12px;
-            }
-            
-            .step-icon {
-                margin-bottom: 0;
-            }
-            
-            body::before {
-                animation-duration: 6s;
-                opacity: 0.4;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 22px;
-            }
-            
-            .header p {
-                font-size: 13px;
-            }
-            
-            .payment-info h2 {
-                font-size: 20px;
-            }
-            
-            .price-tag {
-                font-size: 30px;
-            }
-            
-            .form-group input, .form-group textarea {
-                padding: 10px;
-                font-size: 14px;
-            }
-            
-            .payment-steps h3 {
-                font-size: 17px;
-            }
-            
-            .animated-emoji {
-                animation-duration: 1.5s;
-            }
-            
-            .sparkle::before {
-                font-size: 14px;
-            }
-            
-            .contact-title {
-                font-size: 15px;
-            }
-            
-            .contact-number {
-                font-size: 14px;
-                padding: 8px 10px;
-            }
-            
-            .contact-number i {
-                font-size: 16px;
-            }
-            
-            .payment-issue-alert {
-                flex-direction: column;
-                text-align: center;
-                gap: 8px;
-            }
-            
-            .payment-issue-alert i {
-                font-size: 18px;
-            }
+            .header h1 { font-size: 24px; }
+            .price-tag { font-size: 32px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">
-                <i class="fas fa-landmark"></i>
-            </div>
-            <h1>
-                <span class="animated-emoji">🏰</span>
-                <span class="sparkle">राजस्थान GK क्विज़</span>
-            </h1>
-            <p>राजस्थान की समृद्ध संस्कृति और इतिहास की जानकारी</p>
+            <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
+            <p>₹49 में 30 दिन की प्रीमियम एक्सेस</p>
         </div>
         
         <div class="scrollable-content">
@@ -918,276 +264,143 @@
                     <div class="price-period">30 दिन की असीमित एक्सेस</div>
                     
                     <ul class="features">
-                        <li><i class="fas fa-check-circle"></i> राजस्थान GK के सभी टॉपिक्स तक पहुंच</li>
-                        <li><i class="fas fa-check-circle"></i> दैनिक नए क्विज़ प्रश्न</li>
-                        <li><i class="fas fa-check-circle"></i> विस्तृत प्रगति रिपोर्ट</li>
-                        <li><i class="fas fa-check-circle"></i> नए क्विज़ अपडेट</li>
+                        <li><i class="fas fa-check-circle"></i> सभी GK सवालों तक पहुंच</li>
+                        <li><i class="fas fa-check-circle"></i> दैनिक क्विज़</li>
+                        <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग</li>
+                        <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
                     </ul>
                 </div>
                 
-                <div class="payment-steps">
-                    <h3>पेमेंट प्रक्रिया</h3>
-                    <div class="steps-container">
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-qrcode"></i>
-                            </div>
-                            <div class="step-text">QR कोड स्कैन करें</div>
-                        </div>
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="step-text">₹49 का भुगतान करें</div>
-                        </div>
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-file-invoice"></i>
-                            </div>
-                            <div class="step-text">डिटेल्स भरें</div>
-                        </div>
+                <div class="qr-section">
+                    <h3>QR कोड स्कैन करें</h3>
+                    <div class="qr-code">
+                        <!-- अपना अमेज़न पे QR इमेज URL डालें -->
+                        <img src="https://via.placeholder.com/180x180?text=Amazon+Pay+QR" alt="QR Code">
                     </div>
-                </div>
-                
-                <!-- पेमेंट इश्यू अलर्ट -->
-                <div class="payment-issue-alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div class="payment-issue-alert-content">
-                        <div class="payment-issue-alert-title">पेमेंट में समस्या?</div>
-                        <div class="payment-issue-alert-text">
-                            अगर आपको पेमेंट करने में कोई परेशानी हो रही है, तो तुरंत राजस्थान GK क्विज़ टीम से संपर्क करें:
-                            <div class="payment-issue-alert-number" onclick="copyContactNumber()">
-                                <i class="fas fa-phone-alt"></i> 7665274721
-                            </div>
-                        </div>
+                    <div class="upi-id">
+                        <i class="fas fa-copy"></i>
+                        your-amazon-pay@upi
                     </div>
+                    <p>किसी भी UPI ऐप से स्कैन करें</p>
                 </div>
                 
                 <form id="payment-form">
                     <div class="form-group">
                         <label for="user_id">ईमेल या फोन नंबर</label>
-                        <input type="text" id="user_id" name="user_id" placeholder="अपना ईमेल या फोन नंबर दर्ज करें" required>
+                        <input type="text" id="user_id" name="user_id" placeholder="pankajbeniwal2004@gmail.com" required>
                     </div>
                     
-                    <div class="form-group hint">
-                        <label for="mobile_number">मोबाइल नंबर (वैकल्पिक)</label>
-                        <input type="text" id="mobile_number" name="mobile_number" placeholder="अपना मोबाइल नंबर दर्ज करें">
-                        <span class="input-hint">पेमेंट समस्या होने पर संपर्क के लिए</span>
-                    </div>
-                    
-                    <div class="qr-section">
-                        <h3>QR कोड स्कैन करें</h3>
-                        <div class="qr-code">
-                            <!-- यहां अपना अमेज़न पे QR कोड डालें -->
-                            <img src="https://i.imgur.com/example.jpg" alt="Amazon Pay QR Code">
-                        </div>
-                        <div class="upi-id">
-                            <i class="fas fa-copy"></i>
-                            <span id="upi-id-text">your-amazon-pay@upi</span>
-                        </div>
-                        <p>किसी भी UPI ऐप से स्कैन करें</p>
+                    <div class="form-group">
+                        <label for="mobile_number">मोबाइल नंबर (SMS के लिए)</label>
+                        <input type="text" id="mobile_number" name="mobile_number" placeholder="9057650616" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="transaction_id">ट्रांजैक्शन ID</label>
-                        <input type="text" id="transaction_id" name="transaction_id" placeholder="अपना ट्रांजैक्शन ID दर्ज करें" required>
+                        <input type="text" id="transaction_id" name="transaction_id" placeholder="TXN123456" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="amount">पेमेंट राशि</label>
-                        <input type="text" id="amount" name="amount" placeholder="पेमेंट की गई राशि दर्ज करें" required>
+                        <input type="text" id="amount" name="amount" placeholder="49" required>
                     </div>
                     
-                    <div class="file-upload">
-                        <label>पेमेंट स्क्रीनशॉट अपलोड करें</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="payment_proof" name="payment_proof" accept="image/*" onchange="previewImage(event)">
-                            <span>फाइल चुनें</span>
-                        </div>
-                        <div id="image-preview" class="image-preview"></div>
+                    <div class="form-group">
+                        <label for="payment_note">नोट (वैकल्पिक)</label>
+                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट डिटेल्स"></textarea>
                     </div>
                     
-                    <div class="form-group hint">
-                        <label for="payment_note">मोबाइल नंबर (वैकल्पिक)</label>
-                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="कृपया अपना मोबाइल नंबर दर्ज करें ताकि पेमेंट समस्या होने पर हम आपसे संपर्क कर सकें"></textarea>
-                        <span class="input-hint">संपर्क के लिए</span>
-                    </div>
-                    
-                    <button type="button" class="submit-btn" onclick="submitPayment()">
-                        <i class="fas fa-paper-plane"></i> पेमेंट वेरिफिकेशन के लिए सबमिट करें
-                    </button>
+                    <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट सबमिट करें</button>
                 </form>
                 
                 <div id="status-message" class="status-message"></div>
                 
-                <!-- राजस्थान GK क्विज़ टीम का संपर्क विवरण -->
-                <div class="contact-section">
-                    <div class="contact-title">
-                        <i class="fas fa-headset"></i>
-                        राजस्थान GK क्विज़ टीम से संपर्क करें
-                    </div>
-                    <div class="contact-number" onclick="copyContactNumber()">
-                        <i class="fas fa-phone-alt"></i>
-                        <span id="contact-number-text">7665274721</span>
-                        <span class="contact-emoji">📞</span>
-                    </div>
-                    <p class="contact-note">किसी भी पेमेंट समस्या के लिए सीधे संपर्क करें</p>
-                </div>
-                
-                <p class="note">पेमेंट वेरिफिकेशन के बाद आपको 30 दिनों तक राजस्थान GK क्विज़ तक पहुंच मिलेगी</p>
+                <button class="clear-btn" onclick="clearStorage()">LocalStorage क्लियर करें (टेस्ट के लिए)</button>
             </div>
         </div>
     </div>
     
     <script>
-        // पेमेंट स्थिति जांचें
-        document.addEventListener('DOMContentLoaded', function() {
-            checkPaymentStatus();
-        });
-        
-        // पेमेंट स्थिति जांचने का फंक्शन
+        // पेमेंट स्टेटस चेक
         function checkPaymentStatus() {
-            const paymentData = localStorage.getItem('paymentData');
-            
-            if (paymentData) {
-                const payment = JSON.parse(paymentData);
-                
-                // चेक करें कि पेमेंट अप्रूव्ड है या नहीं
-                if (payment.status === 'approved') {
-                    // चेक करें कि एक्सेस अवधि समाप्त हो गई है या नहीं
-                    const accessExpiry = new Date(payment.access_expiry_date);
-                    const currentDate = new Date();
-                    
-                    if (currentDate > accessExpiry) {
-                        // एक्सेस अवधि समाप्त हो गई है, पेमेंट पेज पर रहें
-                        const statusElement = document.getElementById('status-message');
-                        statusElement.textContent = 'आपकी एक्सेस अवधि समाप्त हो गई है। कृपया फिर से पेमेंट करें।';
-                        statusElement.className = 'status-message error';
-                        statusElement.style.display = 'block';
-                    } else {
-                        // एक्सेस अवधि वैध है, क्विज़ पेज पर रीडायरेक्ट करें
-                        window.location.href = 'quiz.html';
-                    }
-                }
+            const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
+            const now = new Date();
+            const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
+
+            if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
+                window.location.href = 'quiz.html';
             }
         }
-        
-        // UPI ID कॉपी करने का फंक्शन
-        document.querySelector('.upi-id').addEventListener('click', function() {
-            const upiId = document.getElementById('upi-id-text').textContent;
-            navigator.clipboard.writeText(upiId).then(function() {
-                const originalText = document.getElementById('upi-id-text').textContent;
-                document.getElementById('upi-id-text').textContent = 'कॉपी हो गया!';
-                setTimeout(function() {
-                    document.getElementById('upi-id-text').textContent = originalText;
-                }, 2000);
-            });
-        });
-        
-        // संपर्क नंबर कॉपी करने का फंक्शन
-        function copyContactNumber() {
-            const contactNumber = document.getElementById('contact-number-text').textContent;
-            navigator.clipboard.writeText(contactNumber).then(function() {
-                const originalText = document.getElementById('contact-number-text').textContent;
-                document.getElementById('contact-number-text').textContent = 'कॉपी हो गया!';
-                setTimeout(function() {
-                    document.getElementById('contact-number-text').textContent = originalText;
-                }, 2000);
-            });
+
+        // सिमुलेटेड SMS (अलर्ट के रूप में)
+        function sendSMS(toPhone, message) {
+            console.log(`SMS भेजा गया ${toPhone} को: ${message}`);
+            alert(`SMS भेजा गया ${toPhone} को: ${message}`); // सिमुलेटेड
         }
-        
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('image-preview');
-                    preview.innerHTML = '<img src="' + e.target.result + '" alt="पेमेंट प्रूफ">';
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        
+
+        // पेमेंट सबमिट
         function submitPayment() {
             const userId = document.getElementById('user_id').value;
+            const mobileNumber = document.getElementById('mobile_number').value;
             const transactionId = document.getElementById('transaction_id').value;
             const amount = document.getElementById('amount').value;
+            const paymentNote = document.getElementById('payment_note').value;
             const statusElement = document.getElementById('status-message');
-            
-            if (!userId || !transactionId || !amount) {
-                statusElement.textContent = 'कृपया सभी आवश्यक फील्ड भरें!';
+
+            if (!userId || !mobileNumber || !transactionId || !amount) {
+                statusElement.textContent = 'सभी आवश्यक फील्ड भरें!';
                 statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
                 return;
             }
-            
-            // लोडिंग स्टेटस दिखाएं
-            statusElement.textContent = 'पेमेंट सबमिट हो रहा है...';
+
+            statusElement.textContent = 'रिक्वेस्ट सबमिट हो रही है...';
             statusElement.className = 'status-message pending';
-            
-            // सिमुलेट पेमेंट सबमिशन
-            setTimeout(function() {
-                // पेमेंट डेटा सेव करें
-                const paymentData = {
-                    id: Date.now(), // यूनीक ID
-                    user_id: userId,
-                    mobile_number: document.getElementById('mobile_number').value,
-                    transaction_id: transactionId,
-                    amount: amount,
-                    payment_note: document.getElementById('payment_note').value,
-                    submission_date: new Date().toISOString(),
-                    status: 'pending',
-                    payment_method: 'upi' // डिफ़ॉल्ट UPI क्योंकि यूजर ने QR स्कैन किया है
-                };
-                
-                // पेमेंट्स लिस्ट में जोड़ें
-                let payments = JSON.parse(localStorage.getItem('payments')) || [];
-                payments.push(paymentData);
-                localStorage.setItem('payments', JSON.stringify(payments));
-                
-                // एडमिन को SMS भेजें (सिमुलेशन)
-                sendAdminNotification();
-                
-                // सफलता संदेश दिखाएं
-                statusElement.textContent = 'आपका पेमेंट सबमिट किया गया है! वेरिफिकेशन के बाद आपको ईमेल/SMS द्वारा सूचित किया जाएगा।';
-                statusElement.className = 'status-message success';
-                
-                // फॉर्म हाइड करें
-                document.getElementById('payment-form').style.display = 'none';
-                
-                // यूजर को धन्यवाद SMS/ईमेल भेजें (सिमुलेशन)
-                sendUserThankYouMessage(userId);
-                
-                // 5 सेकंड बाद रीडायरेक्ट करें
-                setTimeout(function() {
-                    alert('पेमेंट सफलतापूर्वक सबमिट किया गया! एडमिन द्वारा वेरिफिकेशन के बाद आपको सूचित किया जाएगा।');
-                }, 5000);
-            }, 2000);
+            statusElement.style.display = 'block';
+
+            const paymentData = {
+                id: Date.now(),
+                user_id: userId,
+                mobile_number: mobileNumber,
+                transaction_id: transactionId,
+                amount: amount,
+                payment_note: paymentNote,
+                submission_date: new Date().toISOString(),
+                status: 'pending',
+                payment_method: 'upi'
+            };
+
+            // payments में जोड़ें
+            let payments = JSON.parse(localStorage.getItem('payments') || '[]');
+            payments.push(paymentData);
+            localStorage.setItem('payments', JSON.stringify(payments));
+
+            // यूजर paymentData (pending)
+            localStorage.setItem('paymentData', JSON.stringify(paymentData));
+
+            // एडमिन को सिमुलेटेड SMS
+            const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}. admin.html में अप्रूव करें!`;
+            sendSMS('9057650616', adminMessage);
+
+            // यूजर को धन्यवाद
+            const userMessage = `धन्यवाद ${userId}! आपकी रिक्वेस्ट सबमिट हो गई। वेरिफिकेशन के बाद SMS आएगा।`;
+            sendSMS(mobileNumber, userMessage);
+
+            statusElement.textContent = `रिक्वेस्ट सबमिट हो गई! ${userId} को धन्यवाद SMS भेजा गया। एडमिन को रिक्वेस्ट मैसेज भेजा गया।`;
+            statusElement.className = 'status-message success';
+            document.getElementById('payment-form').style.display = 'none';
         }
-        
-        // एडमिन को नोटिफिकेशन भेजने का फंक्शन (सिमुलेशन)
-        function sendAdminNotification() {
-            // वास्तविक एप्लिकेशन में, यह एक SMS API कॉल होगा
-            console.log('एडमिन को SMS: नया पेमेंट रिक्वेस्ट आया है।');
-            
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS के बजाय
-            const notification = document.createElement('div');
-            notification.className = 'status-message pending';
-            notification.textContent = 'एडमिन को SMS भेजा गया: नया पेमेंट रिक्वेस्ट आया है।';
-            document.querySelector('.content').appendChild(notification);
+
+        // LocalStorage क्लियर
+        function clearStorage() {
+            localStorage.removeItem('payments');
+            localStorage.removeItem('paymentData');
+            alert('LocalStorage क्लियर हो गया!');
+            location.reload();
         }
-        
-        // यूजर को धन्यवाद संदेश भेजने का फंक्शन (सिमुलेशन)
-        function sendUserThankYouMessage(userId) {
-            // वास्तविक एप्लिकेशन में, यह SMS या ईमेल API कॉल होगा
-            console.log(`${userId} को धन्यवाद संदेश भेजा गया।`);
-            
-            // यहां हम एक नोटिफिकेशन दिखा रहे हैं SMS/ईमेल के बजाय
-            const notification = document.createElement('div');
-            notification.className = 'status-message success';
-            notification.textContent = `${userId} को धन्यवाद संदेश भेजा गया।`;
-            document.querySelector('.content').appendChild(notification);
-        }
+
+        // पेज लोड पर चेक
+        checkPaymentStatus();
     </script>
 </body>
 </html>
