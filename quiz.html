@@ -390,49 +390,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        .topic-selector {
-            margin-bottom: 25px;
-            text-align: center;
-        }
-        
-        .topic-selector h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 20px;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .topic-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .topic-btn {
-            background: white;
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .topic-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        .topic-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-        
         /* एनिमेशन */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -522,15 +479,6 @@
                 padding: 12px 25px;
                 font-size: 16px;
             }
-            
-            .topic-buttons {
-                gap: 8px;
-            }
-            
-            .topic-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
         }
     </style>
 </head>
@@ -558,19 +506,7 @@
             <div class="welcome-message" id="welcome-message">
                 <i class="fas fa-smile"></i>
                 <h2>राजस्थान GK क्विज़ में आपका स्वागत है!</h2>
-                <p>राजस्थान की समृद्ध संस्कृति, इतिहास और भूगोल के बारे में जानें। नीचे दिए गए बटन पर क्लिक करें और क्विज़ शुरू करें।</p>
-                
-                <div class="topic-selector">
-                    <h3>क्विज़ टॉपिक चुनें</h3>
-                    <div class="topic-buttons">
-                        <button class="topic-btn active" data-topic="history">इतिहास</button>
-                        <button class="topic-btn" data-topic="geography">भूगोल</button>
-                        <button class="topic-btn" data-topic="culture">संस्कृति</button>
-                        <button class="topic-btn" data-topic="politics">राजनीति</button>
-                        <button class="topic-btn" data-topic="tourism">पर्यटन</button>
-                    </div>
-                </div>
-                
+                <p>राजस्थान के प्रसिद्ध किलों के बारे में जानें और अपनी ज्ञान का परीक्षण करें। नीचे दिए गए बटन पर क्लिक करें और क्विज़ शुरू करें।</p>
                 <button class="start-quiz-btn" onclick="startQuiz()">क्विज़ शुरू करें</button>
             </div>
             
@@ -616,19 +552,6 @@
             let currentQuestion = 0;
             let score = 0;
             let questions = [];
-            let selectedTopic = 'history'; // डिफ़ॉल्ट टॉपिक
-            
-            // टॉपिक बटन इवेंट लिसनर
-            document.querySelectorAll('.topic-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // सभी बटन से active क्लास हटाएं
-                    document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
-                    // वर्तमान बटन पर active क्लास जोड़ें
-                    this.classList.add('active');
-                    // चयनित टॉपिक सेट करें
-                    selectedTopic = this.getAttribute('data-topic');
-                });
-            });
             
             // होम पेज पर जाने का फंक्शन
             function goHome() {
@@ -682,35 +605,11 @@
                 welcomeMessage.innerHTML = `
                     <i class="fas fa-smile"></i>
                     <h2>${userName}, राजस्थान GK क्विज़ में आपका स्वागत है!</h2>
-                    <p>राजस्थान की समृद्ध संस्कृति, इतिहास और भूगोल के बारे में जानें। नीचे दिए गए बटन पर क्लिक करें और क्विज़ शुरू करें।</p>
-                    
-                    <div class="topic-selector">
-                        <h3>क्विज़ टॉपिक चुनें</h3>
-                        <div class="topic-buttons">
-                            <button class="topic-btn ${selectedTopic === 'history' ? 'active' : ''}" data-topic="history">इतिहास</button>
-                            <button class="topic-btn ${selectedTopic === 'geography' ? 'active' : ''}" data-topic="geography">भूगोल</button>
-                            <button class="topic-btn ${selectedTopic === 'culture' ? 'active' : ''}" data-topic="culture">संस्कृति</button>
-                            <button class="topic-btn ${selectedTopic === 'politics' ? 'active' : ''}" data-topic="politics">राजनीति</button>
-                            <button class="topic-btn ${selectedTopic === 'tourism' ? 'active' : ''}" data-topic="tourism">पर्यटन</button>
-                        </div>
-                    </div>
-                    
+                    <p>राजस्थान के प्रसिद्ध किलों के बारे में जानें और अपनी ज्ञान का परीक्षण करें। नीचे दिए गए बटन पर क्लिक करें और क्विज़ शुरू करें।</p>
                     <button class="start-quiz-btn" onclick="startQuiz()">क्विज़ शुरू करें</button>
                 `;
                 
                 welcomeMessage.style.display = 'block';
-                
-                // टॉपिक बटन इवेंट लिसनर फिर से जोड़ें
-                document.querySelectorAll('.topic-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        // सभी बटन से active क्लास हटाएं
-                        document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
-                        // वर्तमान बटन पर active क्लास जोड़ें
-                        this.classList.add('active');
-                        // चयनित टॉपिक सेट करें
-                        selectedTopic = this.getAttribute('data-topic');
-                    });
-                });
             }
             
             // क्विज़ शुरू करने का फंक्शन
@@ -742,13 +641,11 @@
                         return response.json();
                     })
                     .then(data => {
-                        // चयनित टॉपिक के अनुसार प्रश्न फ़िल्टर करें
-                        questions = data.questions.filter(q => q.topic === selectedTopic);
+                        // सभी प्रश्न लोड करें
+                        questions = data.questions;
                         
-                        // यदि चयनित टॉपिक में प्रश्न नहीं हैं, तो सभी प्रश्न लें
-                        if (questions.length === 0) {
-                            questions = data.questions;
-                        }
+                        // रैंडम तरीके से 10 प्रश्न चुनें
+                        questions = getRandomQuestions(questions, 10);
                         
                         totalQuestionsEl.textContent = questions.length;
                         
@@ -764,6 +661,12 @@
                         questionText.textContent = "प्रश्न लोड करने में त्रुटि। कृपया बाद में पुन: प्रयास करें।";
                         optionsContainer.innerHTML = '';
                     });
+            }
+            
+            // रैंडम प्रश्न चुनने का फंक्शन
+            function getRandomQuestions(allQuestions, count) {
+                const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
             }
             
             // प्रश्न दिखाने का फंक्शन
