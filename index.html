@@ -272,7 +272,7 @@
                 <div class="payment-info">
                     <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
                     <div class="price-tag">₹49</div>
-                    <div class="price-period">30 दिन की असीमित एक्सेस</div>
+                    <div class="price-period">30 दिन की असीमित क्विज़ एक्सेस</div>
                     
                     <ul class="features">
                         <li><i class="fas fa-check-circle"></i> 100+ विशेषज्ञ द्वारा तैयार GK सवाल</li>
@@ -340,6 +340,12 @@
 
             if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
                 window.location.href = 'quiz.html';
+            } else if (expiryDate && now > expiryDate) {
+                // वैलिडिटी खत्म होने पर अलर्ट
+                const statusElement = document.getElementById('status-message');
+                statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
             }
         }
 
@@ -360,6 +366,13 @@
 
             if (!userId || !mobileNumber || !transactionId || !amount) {
                 statusElement.textContent = 'कृपया सभी आवश्यक जानकारी भरें!';
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
+                return;
+            }
+
+            if (amount !== '49') {
+                statusElement.textContent = 'कृपया सही राशि (₹49) दर्ज करें!';
                 statusElement.className = 'status-message error';
                 statusElement.style.display = 'block';
                 return;
@@ -394,7 +407,7 @@
             sendSMS('7665274721', adminMessage);
 
             // यूजर को धन्यवाद
-            const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको SMS मिलेगा।`;
+            const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको 30 दिन की प्रीमियम एक्सेस मिलेगी।`;
             sendSMS(mobileNumber, userMessage);
 
             statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद SMS भेजा गया है।`;
