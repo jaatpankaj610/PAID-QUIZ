@@ -286,18 +286,18 @@
                 
                 <form id="payment-form">
                     <div class="form-group">
-                        <label for="user_id">ईमेल या फोन नंबर</label>
-                        <input type="text" id="user_id" name="user_id" placeholder="pankajbeniwal2004@gmail.com" required>
+                        <label for="user_id">ईमेल</label>
+                        <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.com" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="mobile_number">मोबाइल नंबर (SMS के लिए)</label>
-                        <input type="text" id="mobile_number" name="mobile_number" placeholder="9057650616" required>
+                        <label for="mobile_number">मोबाइल नंबर</label>
+                        <input type="text" id="mobile_number" name="mobile_number" placeholder="7665274721" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="transaction_id">ट्रांजैक्शन ID</label>
-                        <input type="text" id="transaction_id" name="transaction_id" placeholder="TXN123456" required>
+                        <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
                     </div>
                     
                     <div class="form-group">
@@ -307,7 +307,7 @@
                     
                     <div class="form-group">
                         <label for="payment_note">नोट (वैकल्पिक)</label>
-                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट डिटेल्स"></textarea>
+                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई जानकारी"></textarea>
                     </div>
                     
                     <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट सबमिट करें</button>
@@ -380,7 +380,7 @@
 
             // एडमिन को सिमुलेटेड SMS
             const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}. admin.html में अप्रूव करें!`;
-            sendSMS('9057650616', adminMessage);
+            sendSMS('7665274721', adminMessage);
 
             // यूजर को धन्यवाद
             const userMessage = `धन्यवाद ${userId}! आपकी रिक्वेस्ट सबमिट हो गई। वेरिफिकेशन के बाद SMS आएगा।`;
