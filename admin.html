@@ -233,7 +233,7 @@
                         <td>
                             ${status === 'pending' ? `
                                 <button class="action-btn" onclick="approvePayment(${payment.id}, '${payment.user_id || ''}', '${payment.mobile_number || ''}')">अप्रूव</button>
-                                <button class="action-btn reject" onclick="rejectPayment(${payment.id})">रिजेक्ट</button>
+                                <button class="action-btn reject" onclick="rejectPayment(${payment.id}, '${payment.user_id || ''}')">रिजेक्ट</button>
                             ` : 'अप्रूव्ड - कोई एक्शन नहीं'}
                         </td>
                     `;
@@ -255,7 +255,6 @@
                     payment.status = 'approved';
                     payment.access_expiry_date = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
                     localStorage.setItem('payments', JSON.stringify(payments));
-                    localStorage.setItem('paymentData', JSON.stringify(payment));
                     console.log('Payment approved:', payment);
                     sendSMS(mobileNumber, `धन्यवाद ${userId}! आपका पेमेंट अप्रूव हो गया है। 30 दिन की प्रीमियम एक्सेस अनलॉक हो गई है।`);
                     sendSMS('7665274721', `पेमेंट अप्रूव: यूजर ${userId}, ट्रांजैक्शन ID ${payment.transaction_id}`);
@@ -273,21 +272,15 @@
         }
 
         // पेमेंट रिजेक्ट करें
-        function rejectPayment(paymentId) {
+        function rejectPayment(paymentId, userId) {
             try {
                 let payments = JSON.parse(localStorage.getItem('payments') || '[]');
                 const payment = payments.find(p => p.id === paymentId);
                 if (payment && payment.status === 'pending') {
                     payments = payments.filter(p => p.id !== paymentId);
                     localStorage.setItem('payments', JSON.stringify(payments));
-                    if (payment.user_id === JSON.parse(localStorage.getItem('paymentData') || '{}').user_id) {
-                        localStorage.removeItem('paymentData');
-                    }
                     console.log('Payment rejected, ID:', paymentId);
-                    const statusElement = document.getElementById('status-message');
-                    statusElement.textContent = 'पेमेंट रिक्वेस्ट रिजेक्ट कर दी गई।';
-                    statusElement.className = 'status-message error';
-                    statusElement.style.display = 'block';
+                    sendSMS('7665274721', `पेमेंट रिजेक्ट: यूजर ${userId}, ट्रांजैक्शन ID ${payment.transaction_id}`);
                     loadPaymentRequests();
                 }
             } catch (error) {
