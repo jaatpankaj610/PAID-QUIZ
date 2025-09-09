@@ -2,159 +2,92 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>राजस्थान GK क्विज़</title>
+  <title>My App</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: #f0f2f5;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .header {
-      background: linear-gradient(90deg, #007bff, #0056b3); /* Glide जैसा ग्रेडिएंट */
-      color: #fff;
-      padding: 10px;
-      font-size: 22px;
-      font-weight: bold;
       text-align: center;
-      width: 100%;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1000;
+      background: #f9f9f9;
+      font-family: Arial, sans-serif;
     }
 
     .container {
-      width: 100%;
-      max-width: 400px;
-      background: #fff;
+      border: 5px solid #000; /* बाहर की काली पट्टी */
+      padding: 15px;
       border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-top: 60px; /* हेडर के लिए जगह */
+      background: #fff;
+      max-width: 380px;
+      margin: 20px auto;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
     }
 
     .card {
-      padding: 15px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .image-box {
-      margin: 10px 0;
-    }
-
-    .image-box img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
+      border: 2px solid #007bff; /* हर card के चारों ओर अलग पट्टी */
       border-radius: 8px;
-      display: block;
+      padding: 10px;
+      margin: 15px 0;
+      background: #fdfdfd;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      width: 100%;   /* image पूरी चौड़ाई में */
+      height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid #000;
     }
 
     .btn {
       display: block;
       width: 100%;
-      padding: 12px;
+      margin-top: 10px;
+      padding: 12px 0;
       font-size: 18px;
       font-weight: bold;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       color: #fff;
       text-decoration: none;
-      margin: 10px 0;
-      transition: background 0.3s ease, transform 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
 
     .btn.free {
-      background: #28a745; /* ग्रीन */
+      background: #28a745;
     }
-
     .btn.free:hover {
       background: #218838;
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     .btn.paid {
-      background: #007bff; /* ब्लू */
+      background: #007bff;
     }
-
     .btn.paid:hover {
       background: #0056b3;
-      transform: scale(1.05);
-    }
-
-    .offline-message {
-      display: none;
-      color: #dc3545;
-      font-weight: bold;
-      margin-top: 10px;
-      font-size: 14px;
+      transform: scale(1.03);
     }
   </style>
 </head>
 <body>
 
-  <div class="header">📚 राजस्थान GK क्विज़</div>
-
   <div class="container">
+
+    <!-- पहला कार्ड -->
     <div class="card">
-      <div class="image-box">
-        <img src="image1.png" alt="Free Quiz" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x180?text=Free+Quiz+Image'; this.style.display='block'">
-      </div>
-      <a href="free-quiz.html" class="btn free" onclick="handleClick(this.href, event)">Free Quiz</a>
+      <img src="image1.png" alt="Image 1">
+      <a href="free-quiz.html" class="btn free">Free Quiz</a>
     </div>
 
+    <!-- दूसरा कार्ड -->
     <div class="card">
-      <div class="image-box">
-        <img src="image2.png" alt="Paid Quiz" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x180?text=Paid+Quiz+Image'; this.style.display='block'">
-      </div>
-      <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
+      <img src="image2.png" alt="Image 2">
+      <a href="index.html" class="btn paid">Paid Quiz</a>
     </div>
 
-    <div id="offline-message" class="offline-message">ऑफलाइन मोड: लिंक काम नहीं करेंगे!</div>
   </div>
 
-  <script>
-    // ऑफलाइन चेक और हैंडलिंग
-    function checkOnlineStatus() {
-      if (!navigator.onLine) {
-        document.getElementById('offline-message').style.display = 'block';
-      } else {
-        document.getElementById('offline-message').style.display = 'none';
-      }
-    }
-
-    // बटन क्लिक हैंडलर
-    function handleClick(url, event) {
-      if (!navigator.onLine) {
-        event.preventDefault();
-        alert('ऑफलाइन हैं! इंटरनेट कनेक्शन चेक करें।');
-      } else {
-        window.location.href = url;
-      }
-    }
-
-    // पेज लोड और नेटवर्क स्टेटस चेक
-    window.addEventListener('load', checkOnlineStatus);
-    window.addEventListener('online', checkOnlineStatus);
-    window.addEventListener('offline', checkOnlineStatus);
-
-    // इमेज लोडिंग के लिए फॉल्बैक
-    document.querySelectorAll('img').forEach(img => {
-      if (!img.complete) {
-        img.onerror = () => {
-          img.src = `https://via.placeholder.com/400x180?text=${encodeURIComponent(img.alt)}`;
-        };
-      }
-    });
-  </script>
 </body>
 </html>
