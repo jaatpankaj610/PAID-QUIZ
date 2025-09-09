@@ -7,19 +7,9 @@
     body {
       margin: 0;
       padding: 0;
+      text-align: center;
       background: #f0f2f5;
       font-family: Arial, sans-serif;
-    }
-
-    /* ======= Status Bar ======= */
-    .status-bar {
-      background: linear-gradient(90deg, #0056b3, #007bff);
-      color: white;
-      padding: 12px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
     .container {
@@ -28,14 +18,13 @@
       padding: 10px;
     }
 
-    /* ======= Full Card (डब्बा) ======= */
     .card {
-      border: 2px solid #000;   /* Black Border */
+      border: 2px solid #333;   /* साफ़ border */
       border-radius: 12px;
       background: #fff;
       margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);  /* shadow for depth */
       overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
     .card img {
@@ -43,15 +32,18 @@
       height: 200px;
       object-fit: cover;
       display: block;
+      border-bottom: 1px solid #ddd;  /* image और button के बीच separator line */
     }
 
     .btn {
       display: block;
-      width: 100%;
-      padding: 14px 0;
+      width: 90%;   /* button sides में gap देगा */
+      margin: 15px auto;
+      padding: 12px 0;
       font-size: 18px;
       font-weight: bold;
       border: none;
+      border-radius: 6px;
       cursor: pointer;
       color: #fff;
       text-decoration: none;
@@ -77,20 +69,15 @@
 </head>
 <body>
 
-  <!-- Status Bar -->
-  <div class="status-bar">
-    📘 राजस्थान GK क्विज़
-  </div>
-
   <div class="container">
 
-    <!-- Free Quiz Block -->
+    <!-- Free Quiz Card -->
     <div class="card">
       <img src="image1.png" alt="Image 1">
       <a href="free-quiz.html" class="btn free">Free Quiz</a>
     </div>
 
-    <!-- Paid Quiz Block -->
+    <!-- Paid Quiz Card -->
     <div class="card">
       <img src="image2.png" alt="Image 2">
       <a href="index.html" class="btn paid">Paid Quiz</a>
