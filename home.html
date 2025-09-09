@@ -23,20 +23,22 @@
     }
 
     .image-box {
-      margin: 20px auto;
+      margin: 10px auto; /* पहले 20px था अब 10px किया */
     }
 
     .image-box img {
-      width: 300px;   /* image का size fix */
+      width: 300px;
       height: 200px;
       object-fit: cover;
       border: 2px solid #000;
+      display: block;
+      margin: 0 auto;
     }
 
     .btn {
       display: inline-block;
-      margin: 20px;
-      padding: 15px 40px;
+      margin: 8px 0;  /* पहले 20px था अब सिर्फ ऊपर-नीचे 8px */
+      padding: 12px 35px;
       font-size: 18px;
       font-weight: bold;
       border: none;
@@ -52,7 +54,7 @@
     }
 
     .btn.free:hover {
-      background: #218838; /* डार्कर ग्रीन */
+      background: #218838;
       transform: scale(1.05);
     }
 
@@ -61,7 +63,7 @@
     }
 
     .btn.paid:hover {
-      background: #0056b3; /* डार्कर ब्लू */
+      background: #0056b3;
       transform: scale(1.05);
     }
   </style>
