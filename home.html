@@ -2,43 +2,66 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <title>My App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>राजस्थान GK क्विज़</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      text-align: center;
-      background: #f9f9f9;
+      background: #f0f2f5;
       font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #007bff, #0056b3); /* Glide जैसा ग्रेडिएंट */
+      color: #fff;
+      padding: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
     }
 
     .container {
-      border: 5px solid #000; /* काली पट्टी चारों तरफ */
-      padding: 20px;
-      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
       background: #fff;
-      max-width: 350px;
-      margin: 20px auto;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 60px; /* हेडर के लिए जगह */
+    }
+
+    .card {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
     }
 
     .image-box {
-      margin: 10px auto; /* पहले 20px था अब 10px किया */
+      margin: 10px 0;
     }
 
     .image-box img {
-      width: 300px;
-      height: 200px;
+      width: 100%;
+      height: 180px;
       object-fit: cover;
-      border: 2px solid #000;
+      border-radius: 8px;
       display: block;
-      margin: 0 auto;
     }
 
     .btn {
-      display: inline-block;
-      margin: 8px 0;  /* पहले 20px था अब सिर्फ ऊपर-नीचे 8px */
-      padding: 12px 35px;
+      display: block;
+      width: 100%;
+      padding: 12px;
       font-size: 18px;
       font-weight: bold;
       border: none;
@@ -46,6 +69,7 @@
       cursor: pointer;
       color: #fff;
       text-decoration: none;
+      margin: 10px 0;
       transition: background 0.3s ease, transform 0.3s ease;
     }
 
@@ -72,27 +96,28 @@
       color: #dc3545;
       font-weight: bold;
       margin-top: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
 
+  <div class="header">📚 राजस्थान GK क्विज़</div>
+
   <div class="container">
-    <!-- पहली Image -->
-    <div class="image-box">
-      <img src="image1.png" alt="Image 1" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/300x200?text=Image+Not+Loaded'; this.style.display='block'">
+    <div class="card">
+      <div class="image-box">
+        <img src="image1.png" alt="Free Quiz" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x180?text=Free+Quiz+Image'; this.style.display='block'">
+      </div>
+      <a href="free-quiz.html" class="btn free" onclick="handleClick(this.href, event)">Free Quiz</a>
     </div>
 
-    <!-- पहला Button -->
-    <a href="free-quiz.html" class="btn free" onclick="handleClick(this.href, event)">Free Quiz</a>
-
-    <!-- दूसरी Image -->
-    <div class="image-box">
-      <img src="image2.png" alt="Image 2" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/300x200?text=Image+Not+Loaded'; this.style.display='block'">
+    <div class="card">
+      <div class="image-box">
+        <img src="image2.png" alt="Paid Quiz" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x180?text=Paid+Quiz+Image'; this.style.display='block'">
+      </div>
+      <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
     </div>
-
-    <!-- दूसरा Button -->
-    <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
 
     <div id="offline-message" class="offline-message">ऑफलाइन मोड: लिंक काम नहीं करेंगे!</div>
   </div>
@@ -126,7 +151,7 @@
     document.querySelectorAll('img').forEach(img => {
       if (!img.complete) {
         img.onerror = () => {
-          img.src = 'https://via.placeholder.com/300x200?text=Image+Not+Loaded';
+          img.src = `https://via.placeholder.com/400x180?text=${encodeURIComponent(img.alt)}`;
         };
       }
     });
