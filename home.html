@@ -66,6 +66,13 @@
       background: #0056b3;
       transform: scale(1.05);
     }
+
+    .offline-message {
+      display: none;
+      color: #dc3545;
+      font-weight: bold;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -73,20 +80,56 @@
   <div class="container">
     <!-- पहली Image -->
     <div class="image-box">
-      <img src="image1.png" alt="Image 1">
+      <img src="image1.png" alt="Image 1" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/300x200?text=Image+Not+Loaded'; this.style.display='block'">
     </div>
 
     <!-- पहला Button -->
-    <a href="free-quiz.html" class="btn free">Free Quiz</a>
+    <a href="free-quiz.html" class="btn free" onclick="handleClick(this.href, event)">Free Quiz</a>
 
     <!-- दूसरी Image -->
     <div class="image-box">
-      <img src="image2.png" alt="Image 2">
+      <img src="image2.png" alt="Image 2" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/300x200?text=Image+Not+Loaded'; this.style.display='block'">
     </div>
 
     <!-- दूसरा Button -->
-    <a href="index.html" class="btn paid">Paid Quiz</a>
+    <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
+
+    <div id="offline-message" class="offline-message">ऑफलाइन मोड: लिंक काम नहीं करेंगे!</div>
   </div>
 
+  <script>
+    // ऑफलाइन चेक और हैंडलिंग
+    function checkOnlineStatus() {
+      if (!navigator.onLine) {
+        document.getElementById('offline-message').style.display = 'block';
+      } else {
+        document.getElementById('offline-message').style.display = 'none';
+      }
+    }
+
+    // बटन क्लिक हैंडलर
+    function handleClick(url, event) {
+      if (!navigator.onLine) {
+        event.preventDefault();
+        alert('ऑफलाइन हैं! इंटरनेट कनेक्शन चेक करें।');
+      } else {
+        window.location.href = url;
+      }
+    }
+
+    // पेज लोड और नेटवर्क स्टेटस चेक
+    window.addEventListener('load', checkOnlineStatus);
+    window.addEventListener('online', checkOnlineStatus);
+    window.addEventListener('offline', checkOnlineStatus);
+
+    // इमेज लोडिंग के लिए फॉल्बैक
+    document.querySelectorAll('img').forEach(img => {
+      if (!img.complete) {
+        img.onerror = () => {
+          img.src = 'https://via.placeholder.com/300x200?text=Image+Not+Loaded';
+        };
+      }
+    });
+  </script>
 </body>
 </html>
