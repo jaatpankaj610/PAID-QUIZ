@@ -79,7 +79,7 @@
             <div class="content">
                 <div id="offline-section" class="offline-section" style="display: none;">
                     <div class="custom-design">📴 Rajasthan GK Quiz 🌟<br>Offline</div>
-                    <p class="offline-message">कृपया इंटरनेट चेक करें और पुनः प्रयास करें।</p>
+                    <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें।</p>
                 </div>
                 <div id="error-section" class="error-section" style="display: none;">
                     <div class="custom-design">⚠️ Rajasthan GK Quiz 🌟<br>Error</div>
@@ -114,10 +114,21 @@
         let currentQuestionIndex = 0;
         let score = 0;
 
+        document.addEventListener('DOMContentLoaded', () => {
+            checkNetworkStatus();
+            if (navigator.onLine) {
+                loadQuestions();
+            }
+        });
+
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
+            if (!offlineSection || !errorSection || !onlineContent) {
+                console.error('DOM elements not found');
+                return;
+            }
             if (!navigator.onLine) {
                 offlineSection.style.display = 'block';
                 errorSection.style.display = 'none';
@@ -132,6 +143,10 @@
         async function loadQuestions() {
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
+            if (!errorSection || !onlineContent) {
+                console.error('Error/Online sections not found');
+                return;
+            }
             try {
                 const response = await fetch('https://jaatpankaj610.github.io/PAID-QUIZ/freequestions.json', {
                     method: 'GET',
@@ -180,6 +195,10 @@
             const optionsList = document.getElementById('options-list');
             const result = document.getElementById('result');
             const nextBtn = document.getElementById('next-btn');
+            if (!questionText || !optionsList || !result || !nextBtn) {
+                console.error('Quiz elements not found');
+                return;
+            }
 
             if (currentQuestionIndex >= questions.length) {
                 questionText.textContent = 'क्विज़ समाप्त!';
@@ -192,7 +211,14 @@
             }
 
             const question = questions[currentQuestionIndex];
-            questionText.textContent = question.question || 'सवाल नहीं मिला';
+            if (!question || !question.question) {
+                questionText.textContent = 'सवाल लोड नहीं हुआ!';
+                optionsList.innerHTML = '';
+                console.error('Invalid question:', question);
+                return;
+            }
+
+            questionText.textContent = question.question;
             optionsList.innerHTML = '';
             result.style.display = 'none';
             nextBtn.style.display = 'none';
@@ -200,7 +226,7 @@
             if (question.options && Array.isArray(question.options) && question.options.length >= 4) {
                 question.options.forEach((option, index) => {
                     const li = document.createElement('li');
-                    li.textContent = option || 'विकल्प नहीं मिला';
+                    li.textContent = option || 'विकल्प गायब';
                     li.onclick = () => checkAnswer(index);
                     optionsList.appendChild(li);
                 });
@@ -217,11 +243,8 @@
             const options = document.querySelectorAll('.options li');
             const result = document.getElementById('result');
             const nextBtn = document.getElementById('next-btn');
-
-            if (!question || !question.options || selectedIndex >= question.options.length) {
-                result.textContent = 'जवाब चेक में त्रुटि!';
-                result.className = 'result error';
-                result.style.display = 'block';
+            if (!result || !nextBtn || !options.length) {
+                console.error('Result or options not found');
                 return;
             }
 
@@ -253,13 +276,14 @@
             console.error('Global error:', message);
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
-            errorSection.style.display = 'block';
-            onlineContent.style.display = 'none';
-            if ('vibrate' in navigator) navigator.vibrate(200);
+            if (errorSection && onlineContent) {
+                errorSection.style.display = 'block';
+                onlineContent.style.display = 'none';
+                if ('vibrate' in navigator) navigator.vibrate(200);
+            }
             return true;
         };
 
-        window.addEventListener('load', checkNetworkStatus);
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
 
