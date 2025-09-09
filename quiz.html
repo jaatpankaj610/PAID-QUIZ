@@ -680,6 +680,7 @@
             
             .welcome-message {
                 padding: 25px;
+                max-width: 500px;
             }
             
             .welcome-message i {
@@ -701,72 +702,7 @@
                 padding: 15px 30px;
                 font-size: 18px;
                 width: 100%;
-            }
-            
-            .loading {
-                font-size: 18px;
-                padding: 25px;
-            }
-            
-            .loading i {
-                font-size: 30px;
-            }
-            
-            .question-section {
-                margin-bottom: 25px;
-                padding: 20px;
-            }
-            
-            .question-count {
-                margin-bottom: 10px;
-            }
-            
-            #question-text {
-                font-size: 22px;
-            }
-            
-            .options-section {
-                gap: 15px;
-                margin-bottom: 25px;
-            }
-            
-            .option-btn {
-                padding: 15px 20px;
-                font-size: 16px;
-            }
-            
-            .quiz-footer {
-                margin-top: 20px;
-                padding: 20px;
-            }
-            
-            .progress-bar {
-                margin-bottom: 15px;
-            }
-            
-            .score-display {
-                font-size: 18px;
-            }
-            
-            .result-container {
-                padding: 25px;
-            }
-            
-            .score-value {
-                font-size: 36px;
-                margin-bottom: 20px;
-            }
-            
-            .restart-btn {
-                padding: 12px 25px;
-                width: 100%;
-            }
-            
-            .auto-next-timer {
-                bottom: 20px;
-                right: 20px;
-                font-size: 16px;
-                padding: 8px 12px;
+                max-width: 350px;
             }
             
             .error-container {
@@ -789,257 +725,61 @@
 <body>
     <div class="app-container">
         <div class="quiz-header">
-            <h1>राजस्थान GK क्विज़</h1>
-            <div class="user-info">
-                <i class="fas fa-clock"></i> <span id="days-left">30</span> दिन बाकी
-            </div>
+            <h1>राजस्थान GK क्विज़ - पेमेंट</h1>
         </div>
         
         <div class="quiz-container">
             <div class="welcome-message" id="welcome-message">
-                <i class="fas fa-smile"></i>
-                <h2>स्वागत है!</h2>
-                <p>अपने राजस्थान GK का टेस्ट लें और मजा लें। क्विज़ शुरू करने के लिए बटन दबाएं।</p>
+                <i class="fas fa-money-bill-wave"></i>
+                <h2>पेमेंट आवश्यक है!</h2>
+                <p>क्विज़ का आनंद लेने के लिए कृपया पेमेंट करें। भुगतान करने के बाद क्विज़ शुरू करें।</p>
                 <button class="start-quiz-btn" onclick="startQuiz()">क्विज़ शुरू करें</button>
                 <button class="home-btn" onclick="goToHome()">होम</button>
             </div>
             
-            <div class="loading" id="loading" style="display: none;">
-                <i class="fas fa-spinner"></i> सवाल लोड हो रहे हैं...
-            </div>
-            
-            <div class="question-section" id="question-section" style="display: none;">
-                <div class="question-count">
-                    <span id="current-question">1</span> / <span id="total-questions">10</span>
-                </div>
-                <h2 id="question-text">प्रश्न लोड हो रहा है...</h2>
-            </div>
-            
-            <div class="options-section" id="options-container">
-                <!-- ऑप्शन यहां जेनरेट होंगे -->
-            </div>
-            
-            <div class="quiz-footer" id="quiz-footer" style="display: none;">
-                <div class="progress-bar">
-                    <div id="progress"></div>
-                </div>
-                <div class="score-display">
-                    <i class="fas fa-star"></i> स्कोर: <span id="score">0</span>
+            <div id="error-overlay" class="error-overlay">
+                <div class="error-container">
+                    <div class="error-image">❌</div>
+                    <p class="error-message" id="error-message">पेमेंट स्टेटस चेक करने में त्रुटि, कृपया अपनी डिवाइस चेक करें और पुनः प्रयास करें!</p>
+                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
+                    <button class="home-btn" onclick="goToHome()">होम</button>
                 </div>
             </div>
-            
-            <div class="result-container" id="result-container" style="display: none;">
-                <div class="score-value" id="result-score"></div>
-                <p id="result-message"></p>
-                <button class="restart-btn" onclick="restartQuiz()">फिर से शुरू करें</button>
-                <button class="home-btn" onclick="goToHome()">होम</button>
-            </div>
-            
-            <!-- ऑटो नेक्स्ट टाइमर -->
-            <div class="auto-next-timer" id="auto-next-timer">
-                अगला सवाल <span id="timer-count">3</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Error Overlay -->
-    <div id="error-overlay" class="error-overlay">
-        <div class="error-container">
-            <div class="error-image">❌</div>
-            <p class="error-message" id="error-message">कनेक्शन खो गया, कृपया पुनः प्रयास करें!</p>
-            <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
-            <button class="home-btn" onclick="goToHome()">होम</button>
         </div>
     </div>
     
     <script>
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let autoNextTimer;
-        let timerCount = 3;
-        
-        // ऑफलाइन बैकअप डेटा (यदि नेटवर्क फेल हो)
-        const offlineQuestions = [
-            {
-                question: "राजस्थान की राजधानी क्या है?",
-                options: ["जयपुर", "जोधपुर", "उदयपुर", "कोटा"],
-                correctAnswer: "जयपुर"
-            },
-            {
-                question: "राजस्थान का सबसे बड़ा रेगिस्तान कौन सा है?",
-                options: ["थार", "ग्रेट इंडियन", "छोटा रेगिस्तान", "सोहागपुर"],
-                correctAnswer: "थार"
-            }
-            // और प्रश्न जोड़ सकते हो
-        ];
-        
-        // नेटवर्क चेक
-        function checkNetworkStatus() {
-            return navigator.onLine;
-        }
-        
-        // पेमेंट चेक (कस्टम ओवरले के साथ)
+        // पेमेंट स्टेटस चेक (डिले के साथ)
         function checkPaymentStatus() {
-            const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
-            const now = new Date();
-            const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
-            if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
-                const daysLeft = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
-                document.getElementById('days-left').textContent = daysLeft;
-                document.getElementById('welcome-message').style.display = 'block';
-            } else {
-                showPaymentError();
+            try {
+                const paymentData = localStorage.getItem('paymentData');
+                if (!paymentData) {
+                    return false;
+                }
+                const parsedData = JSON.parse(paymentData);
+                const now = new Date();
+                const expiryDate = parsedData.access_expiry_date ? new Date(parsedData.access_expiry_date) : null;
+                return parsedData.status === 'approved' && expiryDate && now <= expiryDate;
+            } catch (e) {
+                console.error('Payment data parsing error:', e);
+                return false;
             }
         }
-        
-        // पेमेंट एरर ओवरले
-        function showPaymentError() {
-            const errorOverlay = document.getElementById('error-overlay');
-            const errorMessage = document.getElementById('error-message');
-            if (errorOverlay && errorMessage) {
-                errorMessage.textContent = 'पेमेंट वैलिड नहीं है, कृपया संपर्क करें!';
-                errorOverlay.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-        
+
         // क्विज़ शुरू
         function startQuiz() {
-            if (!checkNetworkStatus()) {
-                questions = offlineQuestions; // ऑफलाइन बैकअप
-                loadQuiz();
-                return;
+            if (checkPaymentStatus()) {
+                window.location.href = 'quiz.html';
+            } else {
+                showErrorOverlay('पेमेंट वैलिड नहीं है, कृपया पेमेंट स्क्रीन पर जाएं!');
+                setTimeout(() => {
+                    window.location.href = 'payment.html';
+                }, 2000); // 2 सेकंड डिले के बाद पेमेंट पेज पर रीडायरेक्ट
             }
-            document.getElementById('welcome-message').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-            fetch('https://jaatpankaj610.github.io/PAID-QUIZ/questions.json', {
-                method: 'GET',
-                mode: 'cors',
-                cache: 'no-store',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('त्रुटि');
-                return response.json();
-            })
-            .then(data => {
-                questions = data.questions || offlineQuestions; // ऑनलाइन डेटा या ऑफलाइन बैकअप
-                loadQuiz();
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-                questions = offlineQuestions; // ऑफलाइन बैकअप
-                loadQuiz();
-            });
         }
-        
-        // क्विज़ लोड
-        function loadQuiz() {
-            document.getElementById('loading').style.display = 'none';
-            if (questions.length === 0) {
-                showErrorOverlay('सवाल उपलब्ध नहीं हैं, कृपया पुनः प्रयास करें!');
-                return;
-            }
-            document.getElementById('question-section').style.display = 'block';
-            document.getElementById('quiz-footer').style.display = 'block';
-            currentQuestionIndex = 0;
-            score = 0;
-            document.getElementById('score').textContent = score;
-            showQuestion();
-        }
-        
-        function showQuestion() {
-            if (autoNextTimer) clearInterval(autoNextTimer);
-            document.getElementById('auto-next-timer').style.display = 'none';
-            
-            if (currentQuestionIndex >= questions.length) {
-                showResults();
-                return;
-            }
-            
-            const question = questions[currentQuestionIndex];
-            document.getElementById('question-text').textContent = question.question;
-            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
-            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-            document.getElementById('progress').style.width = progress + '%';
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach(option => {
-                const btn = document.createElement('button');
-                btn.classList.add('option-btn');
-                btn.textContent = option;
-                btn.onclick = () => selectOption(option);
-                optionsContainer.appendChild(btn);
-            });
-        }
-        
-        function selectOption(selected) {
-            const question = questions[currentQuestionIndex];
-            const isCorrect = selected === question.correctAnswer;
-            
-            if (isCorrect) {
-                score++;
-                document.getElementById('score').textContent = score;
-            }
-            
-            const buttons = document.querySelectorAll('.option-btn');
-            buttons.forEach(btn => {
-                btn.disabled = true;
-                if (btn.textContent === question.correctAnswer) btn.classList.add('correct');
-                else if (btn.textContent === selected && !isCorrect) btn.classList.add('incorrect');
-            });
-            
-            if ('vibrate' in navigator) navigator.vibrate(200);
-            
-            const autoNextTimerElement = document.getElementById('auto-next-timer');
-            const timerCountElement = document.getElementById('timer-count');
-            autoNextTimerElement.style.display = 'block';
-            timerCount = 3;
-            timerCountElement.textContent = timerCount;
-            
-            autoNextTimer = setInterval(() => {
-                timerCount--;
-                timerCountElement.textContent = timerCount;
-                if (timerCount <= 0) {
-                    clearInterval(autoNextTimer);
-                    currentQuestionIndex++;
-                    showQuestion();
-                }
-            }, 1000);
-        }
-        
-        function showResults() {
-            if (autoNextTimer) clearInterval(autoNextTimer);
-            document.getElementById('question-section').style.display = 'none';
-            document.getElementById('options-container').innerHTML = '';
-            document.getElementById('quiz-footer').style.display = 'none';
-            document.getElementById('auto-next-timer').style.display = 'none';
-            
-            const resultContainer = document.getElementById('result-container');
-            resultContainer.style.display = 'block';
-            document.getElementById('result-score').textContent = score + ' / ' + questions.length;
-            
-            let message = '';
-            if (score === questions.length) message = 'बधाई हो! पूर्ण अंक!';
-            else if (score >= questions.length / 2) message = 'अच्छा प्रदर्शन!';
-            else message = 'अभ्यास करें!';
-            document.getElementById('result-message').textContent = message;
-        }
-        
-        function restartQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            document.getElementById('result-container').style.display = 'none';
-            document.getElementById('question-section').style.display = 'block';
-            document.getElementById('quiz-footer').style.display = 'block';
-            showQuestion();
-        }
-        
-        function showErrorOverlay(message = 'कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें!') {
+
+        // एरर ओवरले दिखाएं
+        function showErrorOverlay(message) {
             const errorOverlay = document.getElementById('error-overlay');
             const errorMessage = document.getElementById('error-message');
             if (errorOverlay && errorMessage) {
@@ -1048,38 +788,30 @@
                 document.body.style.overflow = 'hidden';
             }
         }
-        
+
+        // रीट्राई
         function retry() {
             const errorOverlay = document.getElementById('error-overlay');
             if (errorOverlay) {
                 errorOverlay.style.display = 'none';
-                document.body.style.overflow = 'hidden';
-                startQuiz();
+                document.body.style.overflow = 'auto';
+                startQuiz(); // पुनः चेक
             }
         }
-        
+
+        // होम पर वापस
         function goToHome() {
-            window.location.href = 'https://jaatpankaj610.github.io/PAID-QUIZ/home.html';
+            window.location.href = 'home.html';
         }
-        
-        window.onerror = function(message) {
-            console.error('Global error:', message);
-            showErrorOverlay('कनेक्शन खो गया, कृपया पुनः प्रयास करें!');
-            return true;
+
+        // पेज लोड पर चेक (डिले के साथ)
+        window.onload = function() {
+            setTimeout(() => {
+                if (!checkPaymentStatus()) {
+                    showErrorOverlay('पेमेंट स्टेटस चेक करने में त्रुटि, कृपया पुनः प्रयास करें!');
+                }
+            }, 1000); // 1 सेकंड डिले
         };
-        
-        window.addEventListener('online', () => {
-            checkNetworkStatus();
-            if (!document.getElementById('error-overlay').style.display === 'flex') {
-                startQuiz();
-            }
-        });
-        
-        window.addEventListener('offline', () => {
-            showErrorOverlay('कनेक्शन खो गया, कृपया पुनः प्रयास करें!');
-        });
-        
-        checkPaymentStatus();
     </script>
 </body>
 </html>
