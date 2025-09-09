@@ -20,7 +20,6 @@
             --light: #f8f9fa;
             --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --timer-gradient: linear-gradient(135deg, #ff6b6b, #ff8e53);
         }
         
         * {
@@ -457,29 +456,6 @@
             box-shadow: 0 8px 20px rgba(74, 0, 224, 0.4);
         }
         
-        /* ऑटो नेक्स्ट टाइमर */
-        .auto-next-timer {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: var(--timer-gradient);
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
-            padding: 6px 10px;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
-            z-index: 2;
-            display: none;
-            animation: pulse 1s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
         @media (min-width: 601px) {
             body {
                 padding: 0;
@@ -594,13 +570,6 @@
                 padding: 12px 25px;
                 width: 100%;
             }
-            
-            .auto-next-timer {
-                bottom: 20px;
-                right: 20px;
-                font-size: 16px;
-                padding: 8px 12px;
-            }
         }
     </style>
 </head>
@@ -650,11 +619,6 @@
                 <p id="result-message"></p>
                 <button class="restart-btn" onclick="restartQuiz()">फिर से शुरू करें</button>
             </div>
-            
-            <!-- ऑटो नेक्स्ट टाइमर -->
-            <div class="auto-next-timer" id="auto-next-timer">
-                अगला सवाल <span id="timer-count">3</span>
-            </div>
         </div>
     </div>
     
@@ -662,9 +626,6 @@
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
-        let autoNextTimer;
-        let timerCount = 3;
-        
         // पेमेंट चेक
         function checkPaymentStatus() {
             const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
@@ -678,7 +639,6 @@
                 window.location.href = 'index.html';
             }
         }
-        
         // क्विज़ शुरू
         function startQuiz() {
             document.getElementById('welcome-message').style.display = 'none';
@@ -710,21 +670,11 @@
                     document.getElementById('welcome-message').style.display = 'block';
                 });
         }
-        
         function showQuestion() {
-            // Clear any existing timer
-            if (autoNextTimer) {
-                clearInterval(autoNextTimer);
-            }
-            
-            // Hide timer initially
-            document.getElementById('auto-next-timer').style.display = 'none';
-            
             if (currentQuestionIndex >= questions.length) {
                 showResults();
                 return;
             }
-            
             const question = questions[currentQuestionIndex];
             document.getElementById('question-text').textContent = question.question;
             document.getElementById('current-question').textContent = currentQuestionIndex + 1;
@@ -732,7 +682,6 @@
             document.getElementById('progress').style.width = progress + '%';
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
-            
             question.options.forEach(option => {
                 const btn = document.createElement('button');
                 btn.classList.add('option-btn');
@@ -741,16 +690,13 @@
                 optionsContainer.appendChild(btn);
             });
         }
-        
         function selectOption(selected) {
             const question = questions[currentQuestionIndex];
             const isCorrect = selected === question.correctAnswer;
-            
             if (isCorrect) {
                 score++;
                 document.getElementById('score').textContent = score;
             }
-            
             const buttons = document.querySelectorAll('.option-btn');
             buttons.forEach(btn => {
                 btn.disabled = true;
@@ -760,47 +706,18 @@
                     btn.classList.add('incorrect');
                 }
             });
-            
-            // Vibrate on answer
-            if ('vibrate' in navigator) {
-                navigator.vibrate(200);
-            }
-            
-            // Show auto next timer
-            const autoNextTimerElement = document.getElementById('auto-next-timer');
-            const timerCountElement = document.getElementById('timer-count');
-            autoNextTimerElement.style.display = 'block';
-            timerCount = 3;
-            timerCountElement.textContent = timerCount;
-            
-            // Start countdown for auto next question
-            autoNextTimer = setInterval(() => {
-                timerCount--;
-                timerCountElement.textContent = timerCount;
-                
-                if (timerCount <= 0) {
-                    clearInterval(autoNextTimer);
-                    currentQuestionIndex++;
-                    showQuestion();
-                }
-            }, 1000);
+            setTimeout(() => {
+                currentQuestionIndex++;
+                showQuestion();
+            }, 1500);
         }
-        
         function showResults() {
-            // Clear any existing timer
-            if (autoNextTimer) {
-                clearInterval(autoNextTimer);
-            }
-            
             document.getElementById('question-section').style.display = 'none';
             document.getElementById('options-container').innerHTML = '';
             document.getElementById('quiz-footer').style.display = 'none';
-            document.getElementById('auto-next-timer').style.display = 'none';
-            
             const resultContainer = document.getElementById('result-container');
             resultContainer.style.display = 'block';
             document.getElementById('result-score').textContent = score + ' / ' + questions.length;
-            
             let message = '';
             if (score === questions.length) {
                 message = 'बधाई हो! पूर्ण अंक!';
@@ -809,10 +726,8 @@
             } else {
                 message = 'अभ्यास करें!';
             }
-            
             document.getElementById('result-message').textContent = message;
         }
-        
         function restartQuiz() {
             currentQuestionIndex = 0;
             score = 0;
@@ -821,7 +736,6 @@
             document.getElementById('quiz-footer').style.display = 'block';
             showQuestion();
         }
-        
         // पेज लोड पर चेक
         checkPaymentStatus();
     </script>
