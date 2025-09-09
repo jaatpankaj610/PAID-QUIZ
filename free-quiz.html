@@ -115,18 +115,24 @@
         let score = 0;
 
         document.addEventListener('DOMContentLoaded', () => {
-            checkNetworkStatus();
+            initializeQuiz();
             if (navigator.onLine) {
                 loadQuestions();
             }
         });
+
+        function initializeQuiz() {
+            checkNetworkStatus();
+            const quizSection = document.getElementById('quiz-section');
+            if (!quizSection) console.error('Quiz section not found');
+        }
 
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
             if (!offlineSection || !errorSection || !onlineContent) {
-                console.error('DOM elements not found');
+                console.error('Network status elements not found');
                 return;
             }
             if (!navigator.onLine) {
@@ -174,19 +180,31 @@
             if (questions.length === 0) {
                 loadQuestions().then(() => {
                     if (questions.length > 0) {
-                        document.querySelector('.quiz-info').style.display = 'none';
-                        document.getElementById('quiz-section').style.display = 'block';
-                        currentQuestionIndex = 0;
-                        score = 0;
-                        showQuestion();
+                        const quizInfo = document.querySelector('.quiz-info');
+                        const quizSection = document.getElementById('quiz-section');
+                        if (quizInfo && quizSection) {
+                            quizInfo.style.display = 'none';
+                            quizSection.style.display = 'block';
+                            currentQuestionIndex = 0;
+                            score = 0;
+                            showQuestion();
+                        } else {
+                            console.error('Quiz info or section not found');
+                        }
                     }
                 });
             } else {
-                document.querySelector('.quiz-info').style.display = 'none';
-                document.getElementById('quiz-section').style.display = 'block';
-                currentQuestionIndex = 0;
-                score = 0;
-                showQuestion();
+                const quizInfo = document.querySelector('.quiz-info');
+                const quizSection = document.getElementById('quiz-section');
+                if (quizInfo && quizSection) {
+                    quizInfo.style.display = 'none';
+                    quizSection.style.display = 'block';
+                    currentQuestionIndex = 0;
+                    score = 0;
+                    showQuestion();
+                } else {
+                    console.error('Quiz info or section not found');
+                }
             }
         }
 
@@ -196,7 +214,7 @@
             const result = document.getElementById('result');
             const nextBtn = document.getElementById('next-btn');
             if (!questionText || !optionsList || !result || !nextBtn) {
-                console.error('Quiz elements not found');
+                console.error('Quiz elements not found:', { questionText, optionsList, result, nextBtn });
                 return;
             }
 
