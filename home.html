@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My App</title>
+  <title>My Quiz App</title>
   <style>
     body {
       margin: 0;
@@ -32,9 +32,27 @@
       border-bottom-right-radius: 20px;
       z-index: 1000;
     }
+    .intro {
+      margin: 20px auto;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      max-width: 400px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .intro h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .intro p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
     .container {
       max-width: 400px;
-      margin: 20px auto;
+      margin: 0 auto;
       padding: 10px;
     }
     .card {
@@ -94,6 +112,9 @@
         max-width: 100%;
         margin: 0 auto;
       }
+      .intro {
+        max-width: 600px;
+      }
     }
     
     @media (min-width: 1024px) {
@@ -106,6 +127,17 @@
         margin: 1%;
         vertical-align: top;
       }
+      .intro {
+        max-width: 800px;
+      }
+    }
+
+    .offline-message {
+      display: none;
+      color: #dc3545;
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -114,17 +146,57 @@
   <div class="status-bar">
     My Quiz App
   </div>
+  <div class="intro">
+    <h2>🌟 स्वागत है राजस्थान GK क्विज़ में!</h2>
+    <p>अपने ज्ञान को परखें और राजस्थान की संस्कृति से जुड़ें। फ्री और पेड क्विज़ के साथ मज़ा लें!</p>
+  </div>
   <div class="container">
     <!-- Free Quiz Card -->
     <div class="card">
-      <img src="image1.png" alt="Image 1">
-      <a href="free-quiz.html" class="btn free">Free Quiz</a>
+      <img src="image1.png" alt="Image 1" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x200?text=Free+Quiz+Image'; this.style.display='block'">
+      <a href="free-quiz.html" class="btn free" onclick="handleClick(this.href, event)">Free Quiz</a>
     </div>
     <!-- Paid Quiz Card -->
     <div class="card">
-      <img src="image2.png" alt="Image 2">
-      <a href="index.html" class="btn paid">Paid Quiz</a>
+      <img src="image2.png" alt="Image 2" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x200?text=Paid+Quiz+Image'; this.style.display='block'">
+      <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
     </div>
+    <div id="offline-message" class="offline-message">ऑफलाइन मोड: लिंक काम नहीं करेंगे!</div>
   </div>
+
+  <script>
+    // ऑफलाइन चेक और हैंडलिंग
+    function checkOnlineStatus() {
+      if (!navigator.onLine) {
+        document.getElementById('offline-message').style.display = 'block';
+      } else {
+        document.getElementById('offline-message').style.display = 'none';
+      }
+    }
+
+    // बटन क्लिक हैंडलर
+    function handleClick(url, event) {
+      if (!navigator.onLine) {
+        event.preventDefault();
+        alert('ऑफलाइन हैं! इंटरनेट कनेक्शन चेक करें।');
+      } else {
+        window.location.href = url;
+      }
+    }
+
+    // पेज लोड और नेटवर्क स्टेटस चेक
+    window.addEventListener('load', checkOnlineStatus);
+    window.addEventListener('online', checkOnlineStatus);
+    window.addEventListener('offline', checkOnlineStatus);
+
+    // इमेज लोडिंग के लिए फॉल्बैक
+    document.querySelectorAll('img').forEach(img => {
+      if (!img.complete) {
+        img.onerror = () => {
+          img.src = `https://via.placeholder.com/400x200?text=${encodeURIComponent(img.alt)}`;
+        };
+      }
+    });
+  </script>
 </body>
 </html>
