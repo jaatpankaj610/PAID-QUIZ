@@ -2,7 +2,10 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>राजस्थान GK क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -32,8 +35,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            overflow-y: auto;
+            padding: 10px;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
         }
         
         .app-container {
@@ -43,36 +51,66 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             overflow: hidden;
+            height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         .quiz-header {
             background: var(--gradient);
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             color: white;
+            flex-shrink: 0;
         }
         
         .quiz-header h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+        
+        .user-info {
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
         }
         
         .quiz-container {
-            padding: 25px;
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .welcome-message {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.7);
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .welcome-message i {
-            font-size: 40px;
+            font-size: 30px;
             color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        .welcome-message h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        
+        .welcome-message p {
+            font-size: 16px;
             margin-bottom: 15px;
+            line-height: 1.3;
         }
         
         .start-quiz-btn {
@@ -80,11 +118,12 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 12px 25px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 100%;
         }
         
         .start-quiz-btn:hover {
@@ -95,12 +134,12 @@
         .loading {
             text-align: center;
             padding: 20px;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--primary);
         }
         
         .loading i {
-            font-size: 30px;
+            font-size: 24px;
             margin-right: 10px;
             animation: spin 1s linear infinite;
         }
@@ -111,40 +150,46 @@
         }
         
         .question-section {
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         
         .question-count {
             font-size: 14px;
             color: var(--dark);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
         
         #question-text {
-            font-size: 22px;
+            font-size: 18px;
             color: var(--dark);
             line-height: 1.4;
             font-weight: 600;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .options-section {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 15px;
         }
         
         .option-btn {
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
-            padding: 15px 20px;
-            font-size: 16px;
+            padding: 12px 15px;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            text-align: left;
+            line-height: 1.3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .option-btn:hover {
@@ -165,14 +210,15 @@
         }
         
         .quiz-footer {
-            margin-top: 20px;
+            margin-top: 15px;
+            flex-shrink: 0;
         }
         
         .progress-bar {
             height: 8px;
             background: #e0e0e0;
             border-radius: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             overflow: hidden;
         }
         
@@ -187,21 +233,22 @@
             text-align: right;
             font-weight: 600;
             color: var(--dark);
+            font-size: 16px;
         }
         
         .result-container {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.7);
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .score-value {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--secondary);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .restart-btn {
@@ -209,16 +256,123 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            width: 100%;
         }
         
-        @media (max-width: 600px) {
-            .quiz-header h1 { font-size: 24px; }
-            #question-text { font-size: 18px; }
-            .option-btn { padding: 12px 15px; font-size: 15px; }
+        @media (min-width: 601px) {
+            body {
+                padding: 20px;
+                overflow-y: auto;
+                position: static;
+                height: auto;
+            }
+            
+            .app-container {
+                height: auto;
+                max-height: none;
+            }
+            
+            .quiz-header {
+                padding: 20px;
+            }
+            
+            .quiz-header h1 {
+                font-size: 28px;
+                margin-bottom: 0;
+            }
+            
+            .user-info {
+                font-size: 16px;
+            }
+            
+            .quiz-container {
+                padding: 25px;
+            }
+            
+            .welcome-message {
+                padding: 20px;
+            }
+            
+            .welcome-message i {
+                font-size: 40px;
+                margin-bottom: 15px;
+            }
+            
+            .welcome-message h2 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            
+            .welcome-message p {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+            
+            .start-quiz-btn {
+                padding: 15px 30px;
+                font-size: 18px;
+                width: auto;
+            }
+            
+            .loading {
+                font-size: 18px;
+            }
+            
+            .loading i {
+                font-size: 30px;
+            }
+            
+            .question-section {
+                margin-bottom: 25px;
+            }
+            
+            .question-count {
+                margin-bottom: 10px;
+            }
+            
+            #question-text {
+                font-size: 22px;
+            }
+            
+            .options-section {
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+            
+            .option-btn {
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+            
+            .quiz-footer {
+                margin-top: 20px;
+            }
+            
+            .progress-bar {
+                margin-bottom: 15px;
+            }
+            
+            .score-display {
+                font-size: 18px;
+            }
+            
+            .result-container {
+                padding: 20px;
+            }
+            
+            .score-value {
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+            
+            .restart-btn {
+                padding: 12px 25px;
+                width: auto;
+            }
         }
     </style>
 </head>
@@ -275,13 +429,11 @@
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
-
         // पेमेंट चेक
         function checkPaymentStatus() {
             const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
             const now = new Date();
             const expiryDate = paymentData.access_expiry_date ? new Date(paymentData.access_expiry_date) : null;
-
             if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
                 const daysLeft = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
                 document.getElementById('days-left').textContent = daysLeft;
@@ -290,12 +442,10 @@
                 window.location.href = 'index.html';
             }
         }
-
         // क्विज़ शुरू
         function startQuiz() {
             document.getElementById('welcome-message').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
-
             fetch('questions.json')
                 .then(response => {
                     if (!response.ok) {
@@ -323,20 +473,16 @@
                     document.getElementById('welcome-message').style.display = 'block';
                 });
         }
-
         function showQuestion() {
             if (currentQuestionIndex >= questions.length) {
                 showResults();
                 return;
             }
-
             const question = questions[currentQuestionIndex];
             document.getElementById('question-text').textContent = question.question;
             document.getElementById('current-question').textContent = currentQuestionIndex + 1;
-
             const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
             document.getElementById('progress').style.width = progress + '%';
-
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             question.options.forEach(option => {
@@ -347,16 +493,13 @@
                 optionsContainer.appendChild(btn);
             });
         }
-
         function selectOption(selected) {
             const question = questions[currentQuestionIndex];
             const isCorrect = selected === question.correctAnswer;
-
             if (isCorrect) {
                 score++;
                 document.getElementById('score').textContent = score;
             }
-
             const buttons = document.querySelectorAll('.option-btn');
             buttons.forEach(btn => {
                 btn.disabled = true;
@@ -366,22 +509,18 @@
                     btn.classList.add('incorrect');
                 }
             });
-
             setTimeout(() => {
                 currentQuestionIndex++;
                 showQuestion();
             }, 1500);
         }
-
         function showResults() {
             document.getElementById('question-section').style.display = 'none';
             document.getElementById('options-container').innerHTML = '';
             document.getElementById('quiz-footer').style.display = 'none';
-
             const resultContainer = document.getElementById('result-container');
             resultContainer.style.display = 'block';
             document.getElementById('result-score').textContent = score + ' / ' + questions.length;
-
             let message = '';
             if (score === questions.length) {
                 message = 'बधाई हो! पूर्ण अंक!';
@@ -392,7 +531,6 @@
             }
             document.getElementById('result-message').textContent = message;
         }
-
         function restartQuiz() {
             currentQuestionIndex = 0;
             score = 0;
@@ -401,7 +539,6 @@
             document.getElementById('quiz-footer').style.display = 'block';
             showQuestion();
         }
-
         // पेज लोड पर चेक
         checkPaymentStatus();
     </script>
