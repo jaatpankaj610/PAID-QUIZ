@@ -111,9 +111,8 @@
 <body>
     <div class="container">
         <div class="screen active" id="home-screen"></div>
-        <div class="screen" id="free-quiz-screen"></div>
         <div class="screen" id="paid-quiz-screen"></div>
-        <div class="screen" id="quiz-screen"></div>
+        <!-- free-quiz-screen और quiz-screen बाद में ऐड होंगे जब तू फाइल्स भेजेगा -->
     </div>
     <button class="home-btn" id="home-button">🏠 होम</button>
 
@@ -121,9 +120,8 @@
         // स्क्रीन लोड
         const screens = {
             'home-screen': 'home.html',
-            'free-quiz-screen': 'free-quiz.html',
-            'paid-quiz-screen': 'index.html',
-            'quiz-screen': 'quiz.html'
+            'paid-quiz-screen': 'index.html' // तेरी मौजूदा index.html
+            // 'free-quiz-screen' और 'quiz-screen' बाद में ऐड होंगे
         };
 
         function loadScreen(screenId) {
@@ -145,7 +143,7 @@
                             .then(response => response.text())
                             .then(html => {
                                 newScreen.innerHTML = html;
-                                // होम बटन अपडेट
+                                // होम बटन अपडेट (मौजूदा index.html में home-btn मौजूद है)
                                 const homeBtn = newScreen.querySelector('.home-btn');
                                 if (homeBtn) homeBtn.onclick = () => loadScreen('home-screen');
                             })
@@ -170,11 +168,14 @@
         });
 
         // होम बटन क्लिक
-        document.getElementById('home-button').onclick = () => loadScreen('home-screen');
+        document.getElementById('home-button').onclick = () => loadScreen('paid-quiz-screen');
 
-        // स्क्रीन नेविगेशन (उदाहरण लिंक)
+        // स्क्रीन नेविगेशन (उदाहरण)
         function navigateTo(screenId) {
-            if (screens[screenId]) loadScreen(screenId);
+            if (screens[screenId]) {
+                window.history.pushState({}, '', `?screen=${screenId}`);
+                loadScreen(screenId);
+            }
         }
     </script>
 </body>
