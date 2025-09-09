@@ -228,10 +228,10 @@
             }
 
             const question = questions[currentQuestionIndex];
-            if (!question || !question.question) {
-                questionText.textContent = 'सवाल लोड नहीं हुआ!';
+            if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 4) {
+                questionText.textContent = 'सवाल या विकल्प लोड नहीं हुए!';
                 optionsList.innerHTML = '';
-                console.error('Invalid question:', question);
+                console.error('Invalid question data:', question);
                 return;
             }
 
@@ -240,19 +240,12 @@
             result.style.display = 'none';
             nextBtn.style.display = 'none';
 
-            if (question.options && Array.isArray(question.options) && question.options.length >= 4) {
-                question.options.forEach((option, index) => {
-                    const li = document.createElement('li');
-                    li.textContent = option || 'विकल्प गायब';
-                    li.onclick = () => checkAnswer(index);
-                    optionsList.appendChild(li);
-                });
-            } else {
+            question.options.forEach((option, index) => {
                 const li = document.createElement('li');
-                li.textContent = 'विकल्प लोड नहीं हुए!';
+                li.textContent = option || 'विकल्प गायब';
+                li.onclick = () => checkAnswer(index);
                 optionsList.appendChild(li);
-                console.error('Invalid options:', question.options);
-            }
+            });
         }
 
         function checkAnswer(selectedIndex) {
