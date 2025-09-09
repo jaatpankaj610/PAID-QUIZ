@@ -14,7 +14,7 @@
             --primary: #2563eb;
             --secondary: #7c3aed;
             --accent: #ec4899;
-            --success: #10b981;
+            --success: #047857; /* Darker green for tick */
             --danger: #ef4444;
             --warning: #f59e0b;
             --light: #ffffff;
@@ -51,8 +51,7 @@
         
         .container { 
             width: 100%; 
-            max-width: 600px; 
-            height: 100vh; 
+            height: 100vh; /* Full height */
             background: var(--light); 
             border-radius: 0; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
@@ -64,24 +63,10 @@
         
         .scrollable-content { 
             flex: 1; 
-            overflow-y: auto; 
+            overflow-y: hidden; /* No scroll */
             overflow-x: hidden; 
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) var(--light);
-        }
-        
-        .scrollable-content::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .scrollable-content::-webkit-scrollbar-track {
-            background: var(--light);
-        }
-        
-        .scrollable-content::-webkit-scrollbar-thumb {
-            background-color: var(--primary);
-            border-radius: 3px;
+            scrollbar-width: none; /* Hide scrollbar */
         }
         
         .header { 
@@ -91,6 +76,7 @@
             color: var(--light); 
             position: relative; 
             overflow: hidden;
+            flex-shrink: 0;
         }
         
         .header::before {
@@ -115,6 +101,8 @@
             margin-bottom: 8px; 
             color: var(--light);
             letter-spacing: -0.5px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .header p { 
@@ -122,11 +110,16 @@
             font-weight: 500; 
             color: rgba(255,255,255,0.9);
             letter-spacing: 0.2px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .content { 
             padding: 15px; 
             padding-bottom: 20px; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
         }
         
         .quiz-info { 
@@ -138,6 +131,8 @@
             text-align: center; 
             border: 1px solid rgba(0,0,0,0.05);
             animation: fadeInUp 0.6s ease-out;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         @keyframes fadeInUp {
@@ -160,6 +155,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .quiz-info p { 
@@ -167,6 +164,8 @@
             font-weight: 500; 
             color: var(--gray);
             margin-bottom: 20px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .features { 
@@ -187,6 +186,8 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             animation: fadeIn 0.5s ease-out;
             animation-fill-mode: both;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .features li:nth-child(1) { animation-delay: 0.1s; }
@@ -276,10 +277,15 @@
             border: 1px solid rgba(0,0,0,0.05);
             position: relative;
             animation: fadeInUp 0.5s ease-out;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .question-container {
-            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .question { 
@@ -299,6 +305,10 @@
         
         .options { 
             list-style: none;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .options li { 
@@ -327,7 +337,7 @@
         }
         
         .options li.correct { 
-            background: rgba(16, 185, 129, 0.1); 
+            background: rgba(4, 120, 87, 0.1); /* Darker green background */
             border-color: var(--success);
             color: var(--success);
             font-weight: 600;
@@ -339,6 +349,7 @@
             font-weight: 900;
             margin-left: auto;
             font-size: 16px;
+            color: var(--success); /* Darker green tick */
         }
         
         .options li.incorrect { 
@@ -371,8 +382,8 @@
         
         .result.success { 
             color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            background: rgba(4, 120, 87, 0.1); /* Darker green background */
+            border: 1px solid rgba(4, 120, 87, 0.2);
         }
         
         .result.error { 
@@ -409,6 +420,8 @@
             box-shadow: var(--card-shadow); 
             margin: 20px 0; 
             border: 1px solid rgba(0,0,0,0.05);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .custom-design { 
@@ -443,6 +456,8 @@
             padding: 14px;
             border-radius: 12px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .progress-bar {
@@ -499,7 +514,93 @@
             100% { transform: scale(1); }
         }
         
-        /* बड़े स्क्रीन के लिए मीडिया क्वेरी */
+        .error-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .error-container {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            max-width: 90%;
+            width: 300px;
+        }
+
+        .error-image {
+            width: 120px;
+            height: 120px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--light);
+            font-size: 40px;
+        }
+
+        .error-message {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .retry-btn {
+            background: var(--gradient);
+            color: var(--light);
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: var(--button-shadow);
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+        }
+
+        /* Home Button */
+        .home-btn {
+            background: var(--gray);
+            color: var(--light);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .home-btn:hover {
+            background: #475569;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(71, 85, 105, 0.25);
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 30px 20px; 
@@ -536,7 +637,7 @@
                 width: 36px;
                 height: 36px;
             }
-            .start-btn, .premium-btn { 
+            .start-btn, .premium-btn, .home-btn { 
                 padding: 16px 24px; 
                 font-size: 18px; 
             }
@@ -632,6 +733,10 @@
                             <span>पेड क्विज़ आज़माएँ</span>
                             <i class="fas fa-crown"></i>
                         </button>
+                        <button class="home-btn" onclick="goToHome()">
+                            <span>होम</span>
+                            <i class="fas fa-home"></i>
+                        </button>
                     </div>
                     <div id="free-quiz-section" class="quiz-section">
                         <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
@@ -648,34 +753,52 @@
                                 <span>पेड क्विज़ अनलॉक करें</span>
                                 <i class="fas fa-crown"></i>
                             </button>
+                            <button class="home-btn" onclick="goToHome()">
+                                <span>होम</span>
+                                <i class="fas fa-home"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div id="error-overlay" class="error-overlay">
+        <div class="error-container">
+            <div class="error-image">❌</div>
+            <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें!</p>
+            <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
+            <button class="home-btn" onclick="goToHome()">होम</button>
+        </div>
+    </div>
+
     <script>
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
         let autoNextTimer;
         let timerCount = 3;
+
         document.addEventListener('DOMContentLoaded', () => {
             initializeQuiz();
             if (navigator.onLine) {
                 loadQuestions();
             }
         });
+
         function initializeQuiz() {
             checkNetworkStatus();
             console.log('DOM loaded, initializing free quiz');
         }
+
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('free-offline-section');
             const errorSection = document.getElementById('free-error-section');
             const onlineContent = document.getElementById('free-online-content');
-            if (!offlineSection || !errorSection || !onlineContent) {
+            const errorOverlay = document.getElementById('error-overlay');
+            if (!offlineSection || !errorSection || !onlineContent || !errorOverlay) {
                 console.error('Network status elements not found for free quiz');
+                showErrorOverlay();
                 return;
             }
             if (!navigator.onLine) {
@@ -688,11 +811,14 @@
                 onlineContent.style.display = 'block';
             }
         }
+
         async function loadQuestions() {
             const errorSection = document.getElementById('free-error-section');
             const onlineContent = document.getElementById('free-online-content');
-            if (!errorSection || !onlineContent) {
+            const errorOverlay = document.getElementById('error-overlay');
+            if (!errorSection || !onlineContent || !errorOverlay) {
                 console.error('Error/Online sections not found for free quiz');
+                showErrorOverlay();
                 return;
             }
             try {
@@ -708,11 +834,11 @@
                 if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions found');
             } catch (error) {
                 console.error('Failed to load questions:', error);
-                errorSection.style.display = 'block';
-                onlineContent.style.display = 'none';
+                showErrorOverlay();
                 if ('vibrate' in navigator) navigator.vibrate(200);
             }
         }
+
         function startQuiz() {
             if (!navigator.onLine) {
                 document.getElementById('free-offline-section').style.display = 'block';
@@ -732,6 +858,7 @@
                             showQuestion();
                         } else {
                             console.error('Quiz info or section not found for free quiz');
+                            showErrorOverlay();
                         }
                     }
                 });
@@ -747,9 +874,11 @@
                     showQuestion();
                 } else {
                     console.error('Quiz info or section not found for free quiz');
+                    showErrorOverlay();
                 }
             }
         }
+
         function updateScore() {
             const scoreDisplay = document.getElementById('score-display');
             const scoreValue = document.getElementById('score-value');
@@ -758,6 +887,7 @@
                 scoreDisplay.style.display = 'block';
             }
         }
+
         function updateProgressBar() {
             const progressBar = document.getElementById('progress-bar');
             if (progressBar) {
@@ -765,6 +895,7 @@
                 progressBar.style.width = `${progress}%`;
             }
         }
+
         function showQuestion() {
             const questionText = document.getElementById('free-question-text');
             const optionsList = document.getElementById('free-options-list');
@@ -775,15 +906,14 @@
             
             if (!questionText || !optionsList || !result || !nextBtn || !autoNextTimerElement || !timerCountElement) {
                 console.error('Free quiz elements not found');
+                showErrorOverlay();
                 return;
             }
             
-            // Clear any existing timer
             if (autoNextTimer) {
                 clearInterval(autoNextTimer);
             }
             
-            // Hide timer initially
             autoNextTimerElement.style.display = 'none';
             
             if (currentQuestionIndex >= questions.length) {
@@ -798,9 +928,8 @@
             
             const question = questions[currentQuestionIndex];
             if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 4) {
-                questionText.textContent = 'सवाल या विकल्प लोड नहीं हुए!';
-                optionsList.innerHTML = '';
                 console.error('Invalid question data for free quiz:', question);
+                showErrorOverlay();
                 return;
             }
             
@@ -810,7 +939,6 @@
             nextBtn.style.display = 'none';
             updateProgressBar();
             
-            // Animate options appearance
             question.options.forEach((option, index) => {
                 const li = document.createElement('li');
                 li.textContent = option || 'विकल्प गायब';
@@ -819,7 +947,6 @@
                 li.onclick = () => checkAnswer(index);
                 optionsList.appendChild(li);
                 
-                // Stagger animation for options
                 setTimeout(() => {
                     li.style.transition = 'all 0.3s ease';
                     li.style.opacity = '1';
@@ -827,6 +954,7 @@
                 }, index * 80);
             });
         }
+
         function checkAnswer(selectedIndex) {
             const question = questions[currentQuestionIndex];
             const options = document.querySelectorAll('#free-options-list li');
@@ -836,6 +964,7 @@
             
             if (!result || !options.length || !autoNextTimerElement || !timerCountElement) {
                 console.error('Result or options not found for free quiz');
+                showErrorOverlay();
                 return;
             }
             
@@ -857,12 +986,10 @@
             
             result.style.display = 'block';
             
-            // Show auto next timer
             autoNextTimerElement.style.display = 'block';
             timerCount = 3;
             timerCountElement.textContent = timerCount;
             
-            // Start countdown for auto next question
             autoNextTimer = setInterval(() => {
                 timerCount--;
                 timerCountElement.textContent = timerCount;
@@ -876,27 +1003,52 @@
             
             if ('vibrate' in navigator) navigator.vibrate(200);
         }
+
         function nextQuestion() {
-            // Clear any existing timer
             if (autoNextTimer) {
                 clearInterval(autoNextTimer);
             }
             currentQuestionIndex++;
             showQuestion();
         }
+
+        function showErrorOverlay() {
+            const errorOverlay = document.getElementById('error-overlay');
+            if (errorOverlay) {
+                errorOverlay.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function retry() {
+            const errorOverlay = document.getElementById('error-overlay');
+            if (errorOverlay) {
+                errorOverlay.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+                checkNetworkStatus();
+                if (navigator.onLine) {
+                    loadQuestions().then(() => {
+                        if (questions.length > 0) {
+                            startQuiz();
+                        }
+                    });
+                }
+            }
+        }
+
+        function goToHome() {
+            window.location.href = 'https://jaatpankaj610.github.io/PAID-QUIZ/home.html';
+        }
+
         window.onerror = function(message) {
             console.error('Global error for free quiz:', message);
-            const errorSection = document.getElementById('free-error-section');
-            const onlineContent = document.getElementById('free-online-content');
-            if (errorSection && onlineContent) {
-                errorSection.style.display = 'block';
-                onlineContent.style.display = 'none';
-                if ('vibrate' in navigator) navigator.vibrate(200);
-            }
+            showErrorOverlay();
             return true;
         };
+
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
+
         function goToPremium() {
             window.location.href = 'https://jaatpankaj610.github.io/PAID-QUIZ/index.html';
         }
