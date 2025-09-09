@@ -114,13 +114,25 @@
         
         .welcome-message {
             text-align: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            background: var(--light);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(142, 45, 226, 0.1);
             position: relative;
             overflow: hidden;
+            animation: fadeInScale 0.8s ease-out;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         
         .welcome-message::before {
@@ -134,28 +146,98 @@
             z-index: 0;
         }
         
-        .welcome-message i {
-            font-size: 30px;
-            color: var(--warning);
-            margin-bottom: 10px;
+        .welcome-icon {
+            font-size: 60px;
+            color: var(--primary);
+            margin-bottom: 15px;
             position: relative;
             z-index: 1;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
         
         .welcome-message h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
             line-height: 1.2;
             position: relative;
             z-index: 1;
+            color: var(--dark);
         }
         
         .welcome-message p {
             font-size: 16px;
-            margin-bottom: 15px;
-            line-height: 1.3;
+            margin-bottom: 25px;
+            line-height: 1.5;
             position: relative;
             z-index: 1;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(142, 45, 226, 0.1);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.2s; }
+        .feature-card:nth-child(2) { animation-delay: 0.3s; }
+        .feature-card:nth-child(3) { animation-delay: 0.4s; }
+        .feature-card:nth-child(4) { animation-delay: 0.5s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card i {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .feature-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            font-size: 13px;
+            color: var(--dark);
+            opacity: 0.8;
         }
         
         .start-quiz-btn {
@@ -163,8 +245,8 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 16px 25px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -172,7 +254,18 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
-            box-shadow: 0 4px 10px rgba(74, 0, 224, 0.3);
+            box-shadow: 0 6px 20px rgba(74, 0, 224, 0.3);
+            animation: pulseBtn 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 6px 20px rgba(74, 0, 224, 0.3); }
+            50% { box-shadow: 0 6px 25px rgba(74, 0, 224, 0.5); }
+            100% { box-shadow: 0 6px 20px rgba(74, 0, 224, 0.3); }
         }
         
         .start-quiz-btn::before {
@@ -194,7 +287,7 @@
         
         .start-quiz-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.4);
+            box-shadow: 0 10px 25px rgba(74, 0, 224, 0.5);
         }
         
         .loading {
@@ -513,28 +606,50 @@
             }
             
             .welcome-message {
-                padding: 20px;
+                padding: 30px;
             }
             
-            .welcome-message i {
-                font-size: 40px;
-                margin-bottom: 15px;
+            .welcome-icon {
+                font-size: 80px;
+                margin-bottom: 20px;
             }
             
             .welcome-message h2 {
-                font-size: 24px;
-                margin-bottom: 10px;
+                font-size: 32px;
+                margin-bottom: 15px;
             }
             
             .welcome-message p {
                 font-size: 18px;
-                margin-bottom: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .feature-cards {
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .feature-card i {
+                font-size: 36px;
+                margin-bottom: 15px;
+            }
+            
+            .feature-card h3 {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+            
+            .feature-card p {
+                font-size: 15px;
             }
             
             .start-quiz-btn {
-                padding: 15px 30px;
-                font-size: 18px;
-                width: 100%;
+                padding: 18px 30px;
+                font-size: 20px;
             }
             
             .loading {
@@ -615,10 +730,39 @@
         
         <div class="quiz-container">
             <div class="welcome-message" id="welcome-message">
-                <i class="fas fa-smile"></i>
-                <h2>स्वागत है!</h2>
-                <p>क्विज़ शुरू करने के लिए बटन दबाएं।</p>
-                <button class="start-quiz-btn" onclick="startQuiz()">क्विज़ शुरू करें</button>
+                <div class="welcome-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h2>राजस्थान GK चैलेंज</h2>
+                <p>अपने ज्ञान का परीक्षण करें और राजस्थान की समृद्ध संस्कृति के बारे में और जानें</p>
+                
+                <div class="feature-cards">
+                    <div class="feature-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>चुनौतीपूर्ण</h3>
+                        <p>विविध कठिनाई स्तर के सवाल</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>समय-बाध्य</h3>
+                        <p>प्रत्येक सवाल के लिए सीमित समय</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>प्रगति ट्रैक</h3>
+                        <p>अपने प्रदर्शन को ट्रैक करें</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-certificate"></i>
+                        <h3>प्रमाणपत्र</h3>
+                        <p>सफलता पर प्रमाणपत्र प्राप्त करें</p>
+                    </div>
+                </div>
+                
+                <button class="start-quiz-btn" onclick="startQuiz()">
+                    <span>क्विज़ शुरू करें</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
             
             <div class="loading" id="loading" style="display: none;">
