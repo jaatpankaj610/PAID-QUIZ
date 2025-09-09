@@ -6,28 +6,35 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>🌟 राजस्थान GK फ्री क्विज़ 🌟</title>
+    <title>राजस्थान GK फ्री क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=Noto+Serif+Devanagari:wght@400;700;900&display=swap');
         :root {
-            --primary: #ff0066;
-            --secondary: #00ccff;
-            --success: #00b894;
-            --danger: #d63031;
-            --warning: #fdcb6e;
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
             --light: #ffffff;
-            --dark: #000000;
+            --dark: #1e293b;
+            --gray: #64748b;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --offline-gradient: linear-gradient(135deg, #6b7280, #4b5563);
-            --error-gradient: linear-gradient(135deg, #ff4d4d, #ff1a1a);
-            --premium-gradient: linear-gradient(135deg, #ffcc00, #ff9900);
-            --card-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            --button-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            --premium-gradient: linear-gradient(135deg, #f59e0b, #ef4444);
+            --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            --button-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Serif Devanagari', 'Poppins', sans-serif; }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; 
+        }
+        
         body { 
-            background: var(--gradient); 
+            background: linear-gradient(135deg, #f0f9ff, #e9d5ff);
             min-height: 100vh; 
             display: flex; 
             justify-content: center; 
@@ -40,22 +47,21 @@
             top: 0; 
             left: 0; 
             touch-action: manipulation;
-            background-size: cover;
-            background-attachment: fixed;
         }
+        
         .container { 
             width: 100%; 
             max-width: 600px; 
             height: 100vh; 
-            background: rgba(255, 255, 255, 0.95); 
+            background: var(--light); 
             border-radius: 0; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
             overflow: hidden; 
             display: flex; 
             flex-direction: column; 
-            position: relative; 
-            backdrop-filter: blur(10px);
+            position: relative;
         }
+        
         .scrollable-content { 
             flex: 1; 
             overflow-y: auto; 
@@ -64,483 +70,389 @@
             scrollbar-width: thin;
             scrollbar-color: var(--primary) var(--light);
         }
+        
         .scrollable-content::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
+        
         .scrollable-content::-webkit-scrollbar-track {
             background: var(--light);
         }
+        
         .scrollable-content::-webkit-scrollbar-thumb {
             background-color: var(--primary);
-            border-radius: 4px;
+            border-radius: 3px;
         }
+        
         .header { 
             background: var(--gradient); 
             padding: 20px 15px; 
             text-align: center; 
             color: var(--light); 
             position: relative; 
-            overflow: hidden; 
-            animation: headerGlow 3s ease-in-out infinite alternate;
-            background-image: 
-                linear-gradient(135deg, var(--primary), var(--secondary)),
-                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
-            background-size: 100% 100%, 100% 100%;
+            overflow: hidden;
         }
-        @keyframes headerGlow { 
-            0% { box-shadow: 0 0 20px rgba(255,0,102,0.5); } 
-            100% { box-shadow: 0 0 40px rgba(0,204,255,0.7); } 
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            z-index: 0;
         }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
         .header h1 { 
-            font-size: 28px; 
-            font-weight: 900; 
+            font-size: 26px; 
+            font-weight: 800; 
             margin-bottom: 8px; 
             color: var(--light);
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            animation: textFloat 3s ease-in-out infinite;
-            line-height: 1.2;
+            letter-spacing: -0.5px;
         }
-        @keyframes textFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
+        
         .header p { 
-            font-size: 16px; 
-            font-weight: 900; 
-            color: var(--light); 
-            letter-spacing: 0.5px;
-            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            line-height: 1.3;
+            font-size: 15px; 
+            font-weight: 500; 
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 0.2px;
         }
+        
         .content { 
             padding: 15px; 
             padding-bottom: 20px; 
         }
+        
         .quiz-info { 
             background: var(--light); 
-            border-radius: 15px; 
+            border-radius: 16px; 
             padding: 20px; 
             margin-bottom: 20px; 
             box-shadow: var(--card-shadow); 
             text-align: center; 
-            border: 2px solid var(--primary); 
-            animation: fadeIn 1s ease-in;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeInUp 0.6s ease-out;
         }
-        .quiz-info::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-            opacity: 0.3;
-            z-index: 0;
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        @keyframes fadeIn { 
-            0% { opacity: 0; transform: translateY(20px); } 
-            100% { opacity: 1; transform: translateY(0); } 
-        }
+        
         .quiz-info h2 { 
-            font-size: 24px; 
-            font-weight: 900; 
+            font-size: 22px; 
+            font-weight: 700; 
             color: var(--dark); 
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-            line-height: 1.2;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+        
         .quiz-info p { 
-            font-size: 16px; 
-            font-weight: 900; 
-            color: var(--dark);
-            position: relative;
-            z-index: 1;
-            line-height: 1.3;
+            font-size: 15px; 
+            font-weight: 500; 
+            color: var(--gray);
+            margin-bottom: 20px;
         }
+        
         .features { 
             list-style: none; 
-            margin-bottom: 20px; 
-            position: relative;
-            z-index: 1;
+            margin-bottom: 20px;
         }
+        
         .features li { 
             margin-bottom: 10px; 
             display: flex; 
             align-items: center; 
-            font-size: 16px; 
-            font-weight: 900; 
-            color: var(--dark); 
-            animation: slideIn 0.5s ease-in-out;
-            background: rgba(255,255,255,0.7);
-            padding: 10px 12px;
+            font-size: 15px; 
+            font-weight: 500; 
+            color: var(--dark);
+            background: rgba(241, 245, 249, 0.7);
+            padding: 12px 15px;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            line-height: 1.3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
         }
-        @keyframes slideIn { 
-            0% { opacity: 0; transform: translateX(-20px); } 
-            100% { opacity: 1; transform: translateX(0); } 
+        
+        .features li:nth-child(1) { animation-delay: 0.1s; }
+        .features li:nth-child(2) { animation-delay: 0.2s; }
+        .features li:nth-child(3) { animation-delay: 0.3s; }
+        .features li:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
+        
         .features li i { 
             margin-right: 12px; 
             color: var(--success); 
-            font-size: 20px; 
-            animation: pulse 2s infinite;
-            background: rgba(0,184,148,0.1);
-            width: 36px;
-            height: 36px;
+            font-size: 18px;
+            background: rgba(16, 185, 129, 0.1);
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
-        @keyframes pulse { 
-            0% { transform: scale(1); } 
-            50% { transform: scale(1.1); } 
-            100% { transform: scale(1); } 
-        }
+        
         .start-btn { 
             background: var(--gradient); 
             color: var(--light); 
             border: none; 
-            border-radius: 50px; 
-            padding: 15px 25px; 
-            font-size: 18px; 
-            font-weight: 900; 
+            border-radius: 12px; 
+            padding: 14px 20px; 
+            font-size: 16px; 
+            font-weight: 600; 
             cursor: pointer; 
             width: 100%; 
             transition: all 0.3s ease; 
             box-shadow: var(--button-shadow);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            line-height: 1.3;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .start-btn::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.2);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-            z-index: -1;
-        }
-        .start-btn:hover::before {
-            transform: translateX(0);
-        }
+        
         .start-btn:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 15px 30px rgba(255,0,102,0.5); 
-            background: linear-gradient(135deg, #00ccff, #ff0066);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
         }
+        
         .premium-btn { 
             background: var(--premium-gradient); 
-            color: var(--dark); 
+            color: var(--light); 
             border: none; 
-            border-radius: 50px; 
-            padding: 12px 25px; 
+            border-radius: 12px; 
+            padding: 14px 20px; 
             font-size: 16px; 
-            font-weight: 900; 
+            font-weight: 600; 
             cursor: pointer; 
             width: 100%; 
-            margin-top: 12px; 
             transition: all 0.3s ease; 
             box-shadow: var(--button-shadow);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            line-height: 1.3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .premium-btn::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.3);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-            z-index: -1;
-        }
-        .premium-btn:hover::before {
-            transform: translateX(0);
-        }
+        
         .premium-btn:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 15px 30px rgba(255,204,0,0.5); 
-            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
         }
+        
         .quiz-section { 
             display: none; 
             background: var(--light); 
-            border-radius: 15px; 
+            border-radius: 16px; 
             padding: 15px; 
             margin-bottom: 20px; 
             box-shadow: var(--card-shadow); 
-            border: 2px solid var(--primary);
+            border: 1px solid rgba(0,0,0,0.05);
             position: relative;
-            overflow: hidden;
+            animation: fadeInUp 0.5s ease-out;
         }
-        .quiz-section::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-            opacity: 0.3;
-            z-index: 0;
-        }
+        
         .question-container {
             position: relative;
-            z-index: 1;
         }
+        
         .question { 
             font-size: 18px; 
-            font-weight: 900; 
+            font-weight: 600; 
             color: var(--dark); 
             margin-bottom: 15px;
-            background: rgba(255,255,255,0.7);
-            padding: 15px;
+            background: rgba(241, 245, 249, 0.7);
+            padding: 16px;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            line-height: 1.5;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .options { 
+            list-style: none;
+        }
+        
+        .options li { 
+            background: var(--light); 
+            padding: 14px 16px; 
+            margin-bottom: 10px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            font-size: 15px; 
+            font-weight: 500; 
+            color: var(--dark); 
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             line-height: 1.4;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            display: flex;
+            align-items: center;
         }
-        .question::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--gradient);
-            border-radius: 0 0 12px 12px;
-        }
-        .options { 
-            list-style: none;
-            position: relative;
-            z-index: 1;
-        }
-        .options li { 
-            background: rgba(230, 230, 250, 0.8); 
-            padding: 12px 15px; 
-            margin-bottom: 8px; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            font-size: 16px; 
-            font-weight: 900; 
-            color: var(--dark); 
-            border: 1px solid rgba(255,0,102,0.2);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            line-height: 1.3;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        .options li::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            background: rgba(255,255,255,0.3);
-            transition: width 0.3s ease;
-            z-index: -1;
-        }
-        .options li:hover::before {
-            width: 100%;
-        }
+        
         .options li:hover { 
-            background: rgba(255,0,102,0.15); 
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: rgba(241, 245, 249, 0.8);
+            border-color: var(--primary);
+            transform: translateX(3px);
         }
+        
         .options li.correct { 
-            background: rgba(0,184,148,0.2); 
-            border: 2px solid var(--success); 
-            animation: correctAnswer 0.5s ease;
-            position: relative;
-            overflow: hidden;
+            background: rgba(16, 185, 129, 0.1); 
+            border-color: var(--success);
+            color: var(--success);
+            font-weight: 600;
         }
+        
         .options li.correct::after {
             content: "\f00c";
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--success);
-            font-size: 20px;
+            margin-left: auto;
+            font-size: 16px;
         }
+        
         .options li.incorrect { 
-            background: rgba(214,48,49,0.2); 
-            border: 2px solid var(--danger); 
-            animation: incorrectAnswer 0.5s ease;
-            position: relative;
-            overflow: hidden;
+            background: rgba(239, 68, 68, 0.1); 
+            border-color: var(--danger);
+            color: var(--danger);
+            font-weight: 600;
         }
+        
         .options li.incorrect::after {
             content: "\f00d";
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--danger);
-            font-size: 20px;
+            margin-left: auto;
+            font-size: 16px;
         }
-        @keyframes correctAnswer { 
-            0% { transform: scale(1); } 
-            50% { transform: scale(1.05); } 
-            100% { transform: scale(1); } 
-        }
-        @keyframes incorrectAnswer { 
-            0% { transform: translateX(10px); } 
-            50% { transform: translateX(-10px); } 
-            100% { transform: translateX(0); } 
-        }
+        
         .result { 
             margin-top: 15px; 
             font-size: 16px; 
-            font-weight: 900; 
-            color: var(--dark); 
+            font-weight: 600; 
             text-align: center; 
             display: none;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
-            position: relative;
-            z-index: 1;
-            line-height: 1.3;
+            line-height: 1.4;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
+        
         .result.success { 
-            color: var(--success); 
-            animation: fadeIn 0.5s ease;
-            background: rgba(0,184,148,0.1);
-            border: 1px solid var(--success);
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
+        
         .result.error { 
-            color: var(--danger); 
-            animation: fadeIn 0.5s ease;
-            background: rgba(214,48,49,0.1);
-            border: 1px solid var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
+        
         .next-btn { 
             background: var(--gradient); 
             color: var(--light); 
             border: none; 
-            border-radius: 50px; 
-            padding: 12px; 
+            border-radius: 12px; 
+            padding: 14px; 
             font-size: 16px; 
-            font-weight: 900; 
+            font-weight: 600; 
             cursor: pointer; 
             width: 100%; 
             margin-top: 15px; 
             display: none; 
             box-shadow: var(--button-shadow);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            line-height: 1.3;
         }
-        .next-btn::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.2);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-            z-index: -1;
-        }
-        .next-btn:hover::before {
-            transform: translateX(0);
-        }
+        
         .next-btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 20px rgba(255,0,102,0.5); 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
         }
+        
         .offline-section, .error-section { 
             text-align: center; 
             padding: 20px; 
             background: var(--light); 
-            border-radius: 15px; 
+            border-radius: 16px; 
             box-shadow: var(--card-shadow); 
             margin: 20px 0; 
-            border: 2px solid var(--primary);
+            border: 1px solid rgba(0,0,0,0.05);
         }
+        
         .custom-design { 
-            width: 180px; 
-            height: 180px; 
+            width: 140px; 
+            height: 140px; 
             margin: 0 auto 15px; 
-            border-radius: 12px; 
+            border-radius: 16px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
             color: var(--light); 
-            font-size: 24px; 
-            font-weight: 900; 
+            font-size: 20px; 
+            font-weight: 700; 
             text-align: center; 
-            line-height: 1.3; 
-            animation: pulse 2s infinite;
-            box-shadow: var(--button-shadow);
-            position: relative;
-            overflow: hidden;
-        }
-        .custom-design::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-            opacity: 0.5;
-        }
-        .offline-section .custom-design { 
-            background: var(--offline-gradient); 
-        }
-        .error-section .custom-design { 
-            background: var(--error-gradient); 
-        }
-        .offline-message, .error-message { 
-            font-size: 18px; 
-            font-weight: 900; 
-            color: var(--dark);
-            background: rgba(255,255,255,0.7);
-            padding: 12px;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
             line-height: 1.3;
         }
+        
+        .offline-section .custom-design { 
+            background: var(--gray); 
+        }
+        
+        .error-section .custom-design { 
+            background: var(--danger); 
+        }
+        
+        .offline-message, .error-message { 
+            font-size: 16px; 
+            font-weight: 600; 
+            color: var(--dark);
+            background: rgba(241, 245, 249, 0.7);
+            padding: 14px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+        
         .progress-bar {
             height: 6px;
-            background: rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.05);
             border-radius: 3px;
             margin: 15px 0;
             overflow: hidden;
         }
+        
         .progress {
             height: 100%;
             background: var(--gradient);
@@ -548,37 +460,39 @@
             width: 0%;
             transition: width 0.3s ease;
         }
+        
         .score-display {
             position: absolute;
             top: 15px;
             right: 15px;
             background: var(--light);
             color: var(--dark);
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 600;
             padding: 8px 12px;
-            border-radius: 50px;
+            border-radius: 30px;
             box-shadow: var(--button-shadow);
             z-index: 2;
             display: none;
-            line-height: 1.3;
+            border: 1px solid rgba(0,0,0,0.08);
         }
+        
         .auto-next-timer {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: var(--primary);
+            bottom: 15px;
+            right: 15px;
+            background: var(--accent);
             color: var(--light);
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 600;
             padding: 6px 10px;
-            border-radius: 50px;
+            border-radius: 30px;
             box-shadow: var(--button-shadow);
             z-index: 2;
             display: none;
-            animation: pulse 1s infinite;
-            line-height: 1.3;
+            animation: pulse 1.5s infinite;
         }
+        
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -588,15 +502,14 @@
         /* बड़े स्क्रीन के लिए मीडिया क्वेरी */
         @media (min-width: 601px) {
             .header { 
-                padding: 40px 20px; 
+                padding: 30px 20px; 
             }
             .header h1 { 
-                font-size: 44px; 
-                margin-bottom: 12px; 
+                font-size: 32px; 
+                margin-bottom: 10px; 
             }
             .header p { 
-                font-size: 24px; 
-                font-weight: 900; 
+                font-size: 18px; 
             }
             .content { 
                 padding: 30px; 
@@ -607,61 +520,48 @@
                 margin-bottom: 30px; 
             }
             .quiz-info h2 { 
-                font-size: 34px; 
+                font-size: 28px; 
                 margin-bottom: 15px;
             }
             .quiz-info p { 
-                font-size: 22px; 
-                font-weight: 900; 
+                font-size: 18px; 
             }
             .features li { 
-                font-size: 24px; 
-                font-weight: 900; 
-                margin-bottom: 15px;
-                padding: 12px 15px;
+                font-size: 16px; 
+                margin-bottom: 12px;
+                padding: 14px 16px;
             }
             .features li i { 
-                font-size: 30px; 
-                width: 50px;
-                height: 50px;
-                margin-right: 15px;
+                font-size: 20px; 
+                width: 36px;
+                height: 36px;
             }
-            .start-btn { 
-                padding: 20px 35px; 
-                font-size: 24px; 
-                font-weight: 900; 
-            }
-            .premium-btn { 
-                padding: 15px 30px; 
-                font-size: 24px; 
-                font-weight: 900; 
-                margin-top: 15px; 
+            .start-btn, .premium-btn { 
+                padding: 16px 24px; 
+                font-size: 18px; 
             }
             .quiz-section { 
-                padding: 30px; 
+                padding: 25px; 
                 margin-bottom: 30px; 
             }
             .question { 
-                font-size: 26px; 
-                margin-bottom: 25px;
+                font-size: 22px; 
+                margin-bottom: 20px;
                 padding: 20px;
             }
             .options li { 
-                padding: 18px; 
+                padding: 16px 20px; 
                 margin-bottom: 12px;
-                font-size: 24px;
-                font-weight: 900;
+                font-size: 16px;
             }
             .result { 
-                margin-top: 25px; 
-                font-size: 24px; 
-                font-weight: 900;
-                padding: 15px;
+                margin-top: 20px; 
+                font-size: 18px; 
+                padding: 16px;
             }
             .next-btn { 
-                padding: 18px; 
-                font-size: 24px; 
-                font-weight: 900;
+                padding: 16px; 
+                font-size: 18px; 
                 margin-top: 20px;
             }
             .offline-section, .error-section { 
@@ -669,16 +569,13 @@
                 margin: 30px 0; 
             }
             .custom-design { 
-                width: 220px; 
-                height: 220px; 
-                margin: 0 auto 20px; 
-                font-size: 30px; 
-                font-weight: 900;
+                width: 180px; 
+                height: 180px; 
+                font-size: 24px;
             }
             .offline-message, .error-message { 
-                font-size: 26px; 
-                font-weight: 900;
-                padding: 15px;
+                font-size: 18px; 
+                padding: 16px;
             }
             .progress-bar {
                 height: 8px;
@@ -687,13 +584,13 @@
             .score-display {
                 top: 20px;
                 right: 20px;
-                font-size: 20px;
+                font-size: 16px;
                 padding: 10px 15px;
             }
             .auto-next-timer {
-                bottom: 15px;
-                right: 15px;
-                font-size: 16px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 14px;
                 padding: 8px 12px;
             }
         }
@@ -702,31 +599,39 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-crown"></i> राजस्थान GK फ्री क्विज़ 🌟</h1>
-            <p>अपने ज्ञान को टेस्ट करें और प्रीमियम क्विज़ अनलॉक करें!</p>
+            <div class="header-content">
+                <h1>राजस्थान GK फ्री क्विज़</h1>
+                <p>अपने ज्ञान को टेस्ट करें और प्रीमियम क्विज़ अनलॉक करें</p>
+            </div>
         </div>
         <div class="scrollable-content">
             <div class="content">
                 <div id="free-offline-section" class="offline-section" style="display: none;">
-                    <div class="custom-design">📴 Free Quiz Offline</div>
-                    <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें।</p>
+                    <div class="custom-design">📴</div>
+                    <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
                 </div>
                 <div id="free-error-section" class="error-section" style="display: none;">
-                    <div class="custom-design">⚠️ Free Quiz Error</div>
-                    <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें।</p>
+                    <div class="custom-design">⚠️</div>
+                    <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें</p>
                 </div>
                 <div id="free-online-content">
                     <div class="quiz-info">
-                        <h2><i class="fas fa-star"></i> फ्री क्विज़</h2>
-                        <p>राजस्थान GK के सवालों से तैयारी शुरू करें!</p>
+                        <h2><i class="fas fa-star" style="color: #f59e0b;"></i> फ्री क्विज़</h2>
+                        <p>राजस्थान GK के सवालों से तैयारी शुरू करें</p>
                         <ul class="features">
                             <li><i class="fas fa-check-circle"></i> मुफ्त 10+ सवाल</li>
                             <li><i class="fas fa-check-circle"></i> तुरंत परिणाम</li>
                             <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
                             <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
                         </ul>
-                        <button class="start-btn" onclick="startQuiz()">क्विज़ शुरू करें 🚀</button>
-                        <button class="premium-btn" onclick="goToPremium()">पेड क्विज़ आज़माएँ <i class="fas fa-crown"></i></button>
+                        <button class="start-btn" onclick="startQuiz()">
+                            <span>क्विज़ शुरू करें</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="premium-btn" onclick="goToPremium()">
+                            <span>पेड क्विज़ आज़माएँ</span>
+                            <i class="fas fa-crown"></i>
+                        </button>
                     </div>
                     <div id="free-quiz-section" class="quiz-section">
                         <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
@@ -739,7 +644,10 @@
                             <ul class="options" id="free-options-list"></ul>
                             <div id="free-result" class="result"></div>
                             <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
-                            <button class="premium-btn" onclick="goToPremium()">पेड क्विज़ अनलॉक करें <i class="fas fa-crown"></i></button>
+                            <button class="premium-btn" onclick="goToPremium()">
+                                <span>पेड क्विज़ अनलॉक करें</span>
+                                <i class="fas fa-crown"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -907,7 +815,7 @@
                 const li = document.createElement('li');
                 li.textContent = option || 'विकल्प गायब';
                 li.style.opacity = '0';
-                li.style.transform = 'translateY(20px)';
+                li.style.transform = 'translateY(10px)';
                 li.onclick = () => checkAnswer(index);
                 optionsList.appendChild(li);
                 
@@ -916,7 +824,7 @@
                     li.style.transition = 'all 0.3s ease';
                     li.style.opacity = '1';
                     li.style.transform = 'translateY(0)';
-                }, index * 100);
+                }, index * 80);
             });
         }
         function checkAnswer(selectedIndex) {
@@ -940,7 +848,7 @@
             if (selectedIndex === question.correctAnswer) {
                 score++;
                 updateScore();
-                result.textContent = 'सही जवाब! 🎉';
+                result.textContent = 'सही जवाब!';
                 result.className = 'result success';
             } else {
                 result.textContent = `गलत जवाब! सही: ${question.options[question.correctAnswer]}`;
