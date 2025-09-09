@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>My App</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      border: 5px solid #000; /* काली पट्टी चारों तरफ */
+      padding: 20px;
+      border-radius: 10px;
+      background: #fff;
+      max-width: 350px;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-box {
+      margin: 20px auto;
+    }
+
+    .image-box img {
+      width: 300px;   /* image का size fix */
+      height: 200px;
+      object-fit: cover;
+      border: 2px solid #000;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 20px;
+      padding: 15px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn.free {
+      background: #28a745; /* ग्रीन */
+    }
+
+    .btn.free:hover {
+      background: #218838; /* डार्कर ग्रीन */
+      transform: scale(1.05);
+    }
+
+    .btn.paid {
+      background: #007bff; /* पहले वाला ब्लू */
+    }
+
+    .btn.paid:hover {
+      background: #0056b3; /* डार्कर ब्लू */
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- पहली Image -->
+    <div class="image-box">
+      <img src="https://raw.githubusercontent.com/username/repo/main/image1.png" alt="Image 1">
+    </div>
+
+    <!-- पहला Button -->
+    <a href="free-quiz.html" class="btn free">Free Quiz</a>
+
+    <!-- दूसरी Image -->
+    <div class="image-box">
+      <img src="https://raw.githubusercontent.com/username/repo/main/image2.png" alt="Image 2">
+    </div>
+
+    <!-- दूसरा Button -->
+    <a href="index.html" class="btn paid">Paid Quiz</a>
+  </div>
+
+</body>
+</html>
