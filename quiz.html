@@ -859,12 +859,26 @@
         let autoNextTimer;
         let timerCount = 3;
         
+        // ऑफलाइन बैकअप डेटा (यदि नेटवर्क फेल हो)
+        const offlineQuestions = [
+            {
+                question: "राजस्थान की राजधानी क्या है?",
+                options: ["जयपुर", "जोधपुर", "उदयपुर", "कोटा"],
+                correctAnswer: "जयपुर"
+            },
+            {
+                question: "राजस्थान का सबसे बड़ा रेगिस्तान कौन सा है?",
+                options: ["थार", "ग्रेट इंडियन", "छोटा रेगिस्तान", "सोहागपुर"],
+                correctAnswer: "थार"
+            }
+        ];
+        
         // नेटवर्क चेक
         function checkNetworkStatus() {
             return navigator.onLine;
         }
         
-        // पेमेंट चेक (कस्टम ओवरले के साथ)
+        // पेमेंट चेक (बटन क्लिक पर चेक)
         function checkPaymentStatus() {
             const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
             const now = new Date();
@@ -872,10 +886,10 @@
             if (paymentData.status === 'approved' && expiryDate && now <= expiryDate) {
                 const daysLeft = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
                 document.getElementById('days-left').textContent = daysLeft;
-                document.getElementById('welcome-message').style.display = 'block';
-            } else {
-                showPaymentError();
+                return true;
             }
+            showPaymentError();
+            return false;
         }
         
         // पेमेंट एरर ओवरले
@@ -889,10 +903,12 @@
             }
         }
         
-        // क्विज़ शुरू
+        // क्विज़ शुरू (पेमेंट चेक के साथ)
         function startQuiz() {
+            if (!checkPaymentStatus()) return; // पेमेंट चेक फेल होने पर स्टॉप
             if (!checkNetworkStatus()) {
-                showErrorOverlay('कनेक्शन खो गया, कृपया पुनः प्रयास करें!');
+                questions = offlineQuestions;
+                loadQuiz();
                 return;
             }
             document.getElementById('welcome-message').style.display = 'none';
@@ -910,22 +926,29 @@
                 return response.json();
             })
             .then(data => {
-                questions = data.questions || [];
-                if (questions.length === 0) throw new Error('त्रुटि');
-                document.getElementById('total-questions').textContent = questions.length;
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('question-section').style.display = 'block';
-                document.getElementById('quiz-footer').style.display = 'block';
-                currentQuestionIndex = 0;
-                score = 0;
-                document.getElementById('score').textContent = score;
-                showQuestion();
+                questions = data.questions || offlineQuestions;
+                loadQuiz();
             })
             .catch(error => {
-                document.getElementById('loading').style.display = 'none';
-                showErrorOverlay('कनेक्शन खो गया, कृपया पुनः प्रयास करें!');
-                if ('vibrate' in navigator) navigator.vibrate(200);
+                console.error('Fetch error:', error);
+                questions = offlineQuestions;
+                loadQuiz();
             });
+        }
+        
+        // क्विज़ लोड
+        function loadQuiz() {
+            document.getElementById('loading').style.display = 'none';
+            if (questions.length === 0) {
+                showErrorOverlay('सवाल उपलब्ध नहीं हैं, कृपया पुनः प्रयास करें!');
+                return;
+            }
+            document.getElementById('question-section').style.display = 'block';
+            document.getElementById('quiz-footer').style.display = 'block';
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('score').textContent = score;
+            showQuestion();
         }
         
         function showQuestion() {
@@ -1055,8 +1078,6 @@
         window.addEventListener('offline', () => {
             showErrorOverlay('कनेक्शन खो गया, कृपया पुनः प्रयास करें!');
         });
-        
-        checkPaymentStatus();
     </script>
 </body>
 </html>
