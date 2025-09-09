@@ -176,7 +176,7 @@
 </head>
 <body>
   <div class="status-bar">
-    My Quiz App
+    MIND_GRID
   </div>
   <div class="intro">
     <h2>🌟 स्वागत है राजस्थान GK क्विज़ में!</h2>
@@ -196,7 +196,6 @@
   <div id="offline-overlay" class="offline-overlay">
     <div id="offline-overlay-message" class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें।</div>
   </div>
-
   <script>
     // ऑफलाइन चेक और हैंडलिंग
     function checkOnlineStatus() {
@@ -214,7 +213,6 @@
         document.body.style.overflow = 'hidden'; // Keep no scroll
       }
     }
-
     // बटन क्लिक हैंडलर
     function handleClick(url, event) {
       if (!navigator.onLine) {
@@ -224,12 +222,10 @@
         window.location.href = url;
       }
     }
-
     // पेज लोड और नेटवर्क स्टेटस चेक
     window.addEventListener('load', checkOnlineStatus);
     window.addEventListener('online', checkOnlineStatus);
     window.addEventListener('offline', checkOnlineStatus);
-
     // इमेज लोडिंग के लिए फॉल्बैक
     document.querySelectorAll('img').forEach(img => {
       if (!img.complete) {
