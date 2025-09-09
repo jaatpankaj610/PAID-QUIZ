@@ -77,15 +77,15 @@
         </div>
         <div class="scrollable-content">
             <div class="content">
-                <div id="offline-section" class="offline-section" style="display: none;">
-                    <div class="custom-design">📴 Rajasthan GK Quiz 🌟<br>Offline</div>
+                <div id="free-offline-section" class="offline-section" style="display: none;">
+                    <div class="custom-design">📴 Free Quiz Offline</div>
                     <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें।</p>
                 </div>
-                <div id="error-section" class="error-section" style="display: none;">
-                    <div class="custom-design">⚠️ Rajasthan GK Quiz 🌟<br>Error</div>
+                <div id="free-error-section" class="error-section" style="display: none;">
+                    <div class="custom-design">⚠️ Free Quiz Error</div>
                     <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें।</p>
                 </div>
-                <div id="online-content">
+                <div id="free-online-content">
                     <div class="quiz-info">
                         <h2><i class="fas fa-star"></i> फ्री क्विज़</h2>
                         <p>राजस्थान GK के सवालों से तैयारी शुरू करें!</p>
@@ -98,10 +98,10 @@
                         <button class="start-btn" onclick="startQuiz()">क्विज़ शुरू करें 🚀</button>
                         <button class="premium-btn" onclick="goToPremium()">पेड क्विज़ आज़माएँ <i class="fas fa-crown"></i></button>
                     </div>
-                    <div id="quiz-section" class="quiz-section">
-                        <div class="question" id="question-text"></div>
-                        <ul class="options" id="options-list"></ul>
-                        <div id="result" class="result"></div>
+                    <div id="free-quiz-section" class="quiz-section">
+                        <div class="question" id="free-question-text"></div>
+                        <ul class="options" id="free-options-list"></ul>
+                        <div id="free-result" class="result"></div>
                         <button class="next-btn" onclick="nextQuestion()">अगला सवाल</button>
                         <button class="premium-btn" onclick="goToPremium()">पेड क्विज़ अनलॉक करें <i class="fas fa-crown"></i></button>
                     </div>
@@ -123,15 +123,15 @@
 
         function initializeQuiz() {
             checkNetworkStatus();
-            console.log('DOM loaded, initializing quiz');
+            console.log('DOM loaded, initializing free quiz');
         }
 
         function checkNetworkStatus() {
-            const offlineSection = document.getElementById('offline-section');
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
+            const offlineSection = document.getElementById('free-offline-section');
+            const errorSection = document.getElementById('free-error-section');
+            const onlineContent = document.getElementById('free-online-content');
             if (!offlineSection || !errorSection || !onlineContent) {
-                console.error('Network status elements not found');
+                console.error('Network status elements not found for free quiz');
                 return;
             }
             if (!navigator.onLine) {
@@ -146,10 +146,10 @@
         }
 
         async function loadQuestions() {
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
+            const errorSection = document.getElementById('free-error-section');
+            const onlineContent = document.getElementById('free-online-content');
             if (!errorSection || !onlineContent) {
-                console.error('Error/Online sections not found');
+                console.error('Error/Online sections not found for free quiz');
                 return;
             }
             try {
@@ -161,7 +161,7 @@
                 });
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 questions = await response.json();
-                console.log('Questions loaded:', questions);
+                console.log('Questions loaded for free quiz:', questions);
                 if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions found');
             } catch (error) {
                 console.error('Failed to load questions:', error);
@@ -173,14 +173,14 @@
 
         function startQuiz() {
             if (!navigator.onLine) {
-                document.getElementById('offline-section').style.display = 'block';
+                document.getElementById('free-offline-section').style.display = 'block';
                 return;
             }
             if (questions.length === 0) {
                 loadQuestions().then(() => {
                     if (questions.length > 0) {
                         const quizInfo = document.querySelector('.quiz-info');
-                        const quizSection = document.getElementById('quiz-section');
+                        const quizSection = document.getElementById('free-quiz-section');
                         if (quizInfo && quizSection) {
                             quizInfo.style.display = 'none';
                             quizSection.style.display = 'block';
@@ -188,13 +188,13 @@
                             score = 0;
                             showQuestion();
                         } else {
-                            console.error('Quiz info or section not found');
+                            console.error('Quiz info or section not found for free quiz');
                         }
                     }
                 });
             } else {
                 const quizInfo = document.querySelector('.quiz-info');
-                const quizSection = document.getElementById('quiz-section');
+                const quizSection = document.getElementById('free-quiz-section');
                 if (quizInfo && quizSection) {
                     quizInfo.style.display = 'none';
                     quizSection.style.display = 'block';
@@ -202,18 +202,18 @@
                     score = 0;
                     showQuestion();
                 } else {
-                    console.error('Quiz info or section not found');
+                    console.error('Quiz info or section not found for free quiz');
                 }
             }
         }
 
         function showQuestion() {
-            const questionText = document.getElementById('question-text');
-            const optionsList = document.getElementById('options-list');
-            const result = document.getElementById('result');
-            const nextBtn = document.getElementById('next-btn');
+            const questionText = document.getElementById('free-question-text');
+            const optionsList = document.getElementById('free-options-list');
+            const result = document.getElementById('free-result');
+            const nextBtn = document.querySelector('.next-btn'); // Class के बजाय ID इस्तेमाल कर सकते हैं
             if (!questionText || !optionsList || !result || !nextBtn) {
-                console.error('Quiz elements not found:', { questionText, optionsList, result, nextBtn });
+                console.error('Free quiz elements not found:', { questionText, optionsList, result, nextBtn });
                 return;
             }
 
@@ -231,7 +231,7 @@
             if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 4) {
                 questionText.textContent = 'सवाल या विकल्प लोड नहीं हुए!';
                 optionsList.innerHTML = '';
-                console.error('Invalid question data:', question);
+                console.error('Invalid question data for free quiz:', question);
                 return;
             }
 
@@ -250,11 +250,11 @@
 
         function checkAnswer(selectedIndex) {
             const question = questions[currentQuestionIndex];
-            const options = document.querySelectorAll('.options li');
-            const result = document.getElementById('result');
-            const nextBtn = document.getElementById('next-btn');
+            const options = document.querySelectorAll('#free-options-list li');
+            const result = document.getElementById('free-result');
+            const nextBtn = document.querySelector('.next-btn');
             if (!result || !nextBtn || !options.length) {
-                console.error('Result or options not found');
+                console.error('Result or options not found for free quiz');
                 return;
             }
 
@@ -283,9 +283,9 @@
         }
 
         window.onerror = function(message) {
-            console.error('Global error:', message);
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
+            console.error('Global error for free quiz:', message);
+            const errorSection = document.getElementById('free-error-section');
+            const onlineContent = document.getElementById('free-online-content');
             if (errorSection && onlineContent) {
                 errorSection.style.display = 'block';
                 onlineContent.style.display = 'none';
