@@ -590,19 +590,21 @@
             showQuestion();
         }
 
-        // ग्लोबल एरर हैंडलिंग
+        // ग्लोबल एरर हैंडलिंग (Service Worker फेल होने पर भी क्विज़ चले)
         window.onerror = function(message, source, lineno, colno, error) {
+            console.error('Global error:', message, error);
+            // Service Worker या अन्य एरर पर क्विज़ को प्रभावित न करे
+            if (questions.length > 0 && currentQuestionIndex < questions.length) {
+                return true; // एरर को साइलेंट कर, क्विज़ जारी रख
+            }
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
-            console.error('Global error:', message, error);
-            if (!errorSection.style.display || errorSection.style.display === 'none') {
-                errorSection.style.display = 'block';
-                onlineContent.style.display = 'none';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+            errorSection.style.display = 'block';
+            onlineContent.style.display = 'none';
+            if ('vibrate' in navigator) {
+                navigator.vibrate(200);
             }
-            return true; // प्रिवेंट डिफॉल्ट एरर हैंडलिंग
+            return true;
         };
 
         // पेज लोड और नेटवर्क स्टेटस चेक
