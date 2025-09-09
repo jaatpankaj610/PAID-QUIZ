@@ -25,343 +25,48 @@
             --premium-gradient: linear-gradient(135deg, #ffcc00, #ff9900);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Noto Serif Devanagari', 'Poppins', sans-serif;
-        }
-
-        body {
-            background: var(--gradient);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-            overflow-x: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100vh;
-            top: 0;
-            left: 0;
-            touch-action: pan-y;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            height: 100vh;
-            background: var(--light);
-            border-radius: 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .scrollable-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .header {
-            background: var(--gradient);
-            padding: 40px 20px;
-            text-align: center;
-            color: var(--light);
-            position: relative;
-            overflow: hidden;
-            animation: headerGlow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes headerGlow {
-            0% { box-shadow: 0 0 20px rgba(255, 0, 102, 0.5); }
-            100% { box-shadow: 0 0 40px rgba(0, 204, 255, 0.7); }
-        }
-
-        .header h1 {
-            font-size: 44px;
-            font-weight: 900;
-            margin-bottom: 12px;
-            color: var(--light);
-        }
-
-        .header p {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--light);
-            letter-spacing: 0.5px;
-        }
-
-        .content {
-            padding: 30px;
-            padding-bottom: 40px;
-        }
-
-        .quiz-info {
-            background: var(--light);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            border: 2px solid var(--primary);
-            animation: fadeIn 1s ease-in;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .quiz-info h2 {
-            font-size: 34px;
-            font-weight: 900;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .quiz-info p {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--dark);
-        }
-
-        .features {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-
-        .features li {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--dark);
-            animation: slideIn 0.5s ease-in-out;
-        }
-
-        @keyframes slideIn {
-            0% { opacity: 0; transform: translateX(-20px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
-
-        .features li i {
-            margin-right: 15px;
-            color: var(--success);
-            font-size: 30px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .start-btn {
-            background: var(--gradient);
-            color: var(--light);
-            border: none;
-            border-radius: 50px;
-            padding: 20px 35px;
-            font-size: 24px;
-            font-weight: 900;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 0, 102, 0.4);
-        }
-
-        .start-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 0, 102, 0.5);
-            background: linear-gradient(135deg, #00ccff, #ff0066);
-        }
-
-        .premium-btn {
-            background: var(--premium-gradient);
-            color: var(--dark);
-            border: none;
-            border-radius: 50px;
-            padding: 15px 30px;
-            font-size: 24px;
-            font-weight: 900;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4);
-        }
-
-        .premium-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 204, 0, 0.5);
-            background: linear-gradient(135deg, #ff9900, #ffcc00);
-        }
-
-        .quiz-section {
-            display: none;
-            background: var(--light);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            border: 2px solid var(--primary);
-        }
-
-        .question {
-            font-size: 26px;
-            font-weight: 900;
-            color: var(--dark);
-            margin-bottom: 25px;
-        }
-
-        .options {
-            list-style: none;
-        }
-
-        .options li {
-            background: #e6e6fa;
-            padding: 18px;
-            margin-bottom: 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--dark);
-            border: 1px solid rgba(255, 0, 102, 0.2);
-        }
-
-        .options li:hover {
-            background: rgba(255, 0, 102, 0.15);
-            transform: translateX(5px);
-        }
-
-        .options li.correct {
-            background: rgba(0, 184, 148, 0.2);
-            border: 2px solid var(--success);
-            animation: correctAnswer 0.5s ease;
-        }
-
-        .options li.incorrect {
-            background: rgba(214, 48, 49, 0.2);
-            border: 2px solid var(--danger);
-            animation: incorrectAnswer 0.5s ease;
-        }
-
-        @keyframes correctAnswer {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes incorrectAnswer {
-            0% { transform: translateX(10px); }
-            50% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
-        }
-
-        .result {
-            margin-top: 25px;
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--dark);
-            text-align: center;
-            display: none;
-        }
-
-        .result.success {
-            color: var(--success);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .result.error {
-            color: var(--danger);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .next-btn {
-            background: var(--gradient);
-            color: var(--light);
-            border: none;
-            border-radius: 50px;
-            padding: 18px;
-            font-size: 24px;
-            font-weight: 900;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            display: none;
-            box-shadow: 0 5px 15px rgba(255, 0, 102, 0.4);
-        }
-
-        .next-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 0, 102, 0.5);
-        }
-
-        .offline-section, .error-section {
-            text-align: center;
-            padding: 30px;
-            background: var(--light);
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            margin: 30px 0;
-            border: 2px solid var(--primary);
-        }
-
-        .custom-design {
-            width: 220px;
-            height: 220px;
-            margin: 0 auto 20px;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--light);
-            font-size: 30px;
-            font-weight: 900;
-            text-align: center;
-            line-height: 1.3;
-            animation: pulse 2s infinite;
-        }
-
-        .offline-section .custom-design {
-            background: var(--offline-gradient);
-        }
-
-        .error-section .custom-design {
-            background: var(--error-gradient);
-        }
-
-        .offline-message, .error-message {
-            font-size: 26px;
-            font-weight: 900;
-            color: var(--dark);
-        }
-
-        @media (max-width: 600px) {
-            .header h1 { font-size: 38px; }
-            .header p { font-size: 22px; }
-            .start-btn, .premium-btn { font-size: 22px; padding: 16px 30px; }
-            .custom-design { font-size: 28px; width: 180px; height: 180px; }
-            .question { font-size: 24px; }
-            .options li { font-size: 22px; }
-            .quiz-info h2 { font-size: 32px; }
-            .quiz-info p { font-size: 20px; }
-            .features li { font-size: 22px; }
-            .result { font-size: 22px; }
-            .next-btn { font-size: 22px; }
-            .offline-message, .error-message { font-size: 24px; }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Serif Devanagari', 'Poppins', sans-serif; }
+        body { background: var(--gradient); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 0; overflow-x: hidden; position: fixed; width: 100%; height: 100vh; top: 0; left: 0; touch-action: pan-y; }
+        .container { width: 100%; max-width: 600px; height: 100vh; background: var(--light); border-radius: 0; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .scrollable-content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+        .header { background: var(--gradient); padding: 40px 20px; text-align: center; color: var(--light); position: relative; overflow: hidden; animation: headerGlow 3s ease-in-out infinite alternate; }
+        @keyframes headerGlow { 0% { box-shadow: 0 0 20px rgba(255,0,102,0.5); } 100% { box-shadow: 0 0 40px rgba(0,204,255,0.7); } }
+        .header h1 { font-size: 44px; font-weight: 900; margin-bottom: 12px; color: var(--light); }
+        .header p { font-size: 24px; font-weight: 900; color: var(--light); letter-spacing: 0.5px; }
+        .content { padding: 30px; padding-bottom: 40px; }
+        .quiz-info { background: var(--light); border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); text-align: center; border: 2px solid var(--primary); animation: fadeIn 1s ease-in; }
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        .quiz-info h2 { font-size: 34px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
+        .quiz-info p { font-size: 22px; font-weight: 900; color: var(--dark); }
+        .features { list-style: none; margin-bottom: 30px; }
+        .features li { margin-bottom: 15px; display: flex; align-items: center; font-size: 24px; font-weight: 900; color: var(--dark); animation: slideIn 0.5s ease-in-out; }
+        @keyframes slideIn { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
+        .features li i { margin-right: 15px; color: var(--success); font-size: 30px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .start-btn { background: var(--gradient); color: var(--light); border: none; border-radius: 50px; padding: 20px 35px; font-size: 24px; font-weight: 900; cursor: pointer; width: 100%; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255,0,102,0.4); }
+        .start-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255,0,102,0.5); background: linear-gradient(135deg, #00ccff, #ff0066); }
+        .premium-btn { background: var(--premium-gradient); color: var(--dark); border: none; border-radius: 50px; padding: 15px 30px; font-size: 24px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 15px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255,204,0,0.4); }
+        .premium-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255,204,0,0.5); background: linear-gradient(135deg, #ff9900, #ffcc00); }
+        .quiz-section { display: none; background: var(--light); border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); border: 2px solid var(--primary); }
+        .question { font-size: 26px; font-weight: 900; color: var(--dark); margin-bottom: 25px; }
+        .options { list-style: none; }
+        .options li { background: #e6e6fa; padding: 18px; margin-bottom: 12px; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; font-size: 24px; font-weight: 900; color: var(--dark); border: 1px solid rgba(255,0,102,0.2); }
+        .options li:hover { background: rgba(255,0,102,0.15); transform: translateX(5px); }
+        .options li.correct { background: rgba(0,184,148,0.2); border: 2px solid var(--success); animation: correctAnswer 0.5s ease; }
+        .options li.incorrect { background: rgba(214,48,49,0.2); border: 2px solid var(--danger); animation: incorrectAnswer 0.5s ease; }
+        @keyframes correctAnswer { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes incorrectAnswer { 0% { transform: translateX(10px); } 50% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+        .result { margin-top: 25px; font-size: 24px; font-weight: 900; color: var(--dark); text-align: center; display: none; }
+        .result.success { color: var(--success); animation: fadeIn 0.5s ease; }
+        .result.error { color: var(--danger); animation: fadeIn 0.5s ease; }
+        .next-btn { background: var(--gradient); color: var(--light); border: none; border-radius: 50px; padding: 18px; font-size: 24px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; display: none; box-shadow: 0 5px 15px rgba(255,0,102,0.4); }
+        .next-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,0,102,0.5); }
+        .offline-section, .error-section { text-align: center; padding: 30px; background: var(--light); border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); margin: 30px 0; border: 2px solid var(--primary); }
+        .custom-design { width: 220px; height: 220px; margin: 0 auto 20px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--light); font-size: 30px; font-weight: 900; text-align: center; line-height: 1.3; animation: pulse 2s infinite; }
+        .offline-section .custom-design { background: var(--offline-gradient); }
+        .error-section .custom-design { background: var(--error-gradient); }
+        .offline-message, .error-message { font-size: 26px; font-weight: 900; color: var(--dark); }
+        @media (max-width: 600px) { .header h1 { font-size: 38px; } .header p { font-size: 22px; } .start-btn, .premium-btn { font-size: 22px; padding: 16px 30px; } .custom-design { font-size: 28px; width: 180px; height: 180px; } .question { font-size: 24px; } .options li { font-size: 22px; } .quiz-info h2 { font-size: 32px; } .quiz-info p { font-size: 20px; } .features li { font-size: 22px; } .result { font-size: 22px; } .next-btn { font-size: 22px; } .offline-message, .error-message { font-size: 24px; } }
     </style>
 </head>
 <body>
@@ -370,37 +75,29 @@
             <h1><i class="fas fa-crown"></i> राजस्थान GK फ्री क्विज़ 🌟</h1>
             <p>अपने ज्ञान को टेस्ट करें और प्रीमियम क्विज़ अनलॉक करें!</p>
         </div>
-
         <div class="scrollable-content">
             <div class="content">
                 <div id="offline-section" class="offline-section" style="display: none;">
-                    <div class="custom-design">
-                        📴 Rajasthan GK Quiz 🌟<br>Offline
-                    </div>
-                    <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
+                    <div class="custom-design">📴 Rajasthan GK Quiz 🌟<br>Offline</div>
+                    <p class="offline-message">कृपया इंटरनेट चेक करें और पुनः प्रयास करें।</p>
                 </div>
-
                 <div id="error-section" class="error-section" style="display: none;">
-                    <div class="custom-design">
-                        ⚠️ Rajasthan GK Quiz 🌟<br>Error
-                    </div>
-                    <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
+                    <div class="custom-design">⚠️ Rajasthan GK Quiz 🌟<br>Error</div>
+                    <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें।</p>
                 </div>
-
                 <div id="online-content">
                     <div class="quiz-info">
                         <h2><i class="fas fa-star"></i> फ्री क्विज़</h2>
-                        <p>राजस्थान GK के रोमांचक सवालों के साथ अपनी तैयारी शुरू करें!</p>
+                        <p>राजस्थान GK के सवालों से तैयारी शुरू करें!</p>
                         <ul class="features">
-                            <li><i class="fas fa-check-circle"></i> मुफ्त में 10+ दैनिक सवाल</li>
-                            <li><i class="fas fa-check-circle"></i> तुरंत परिणाम और फीडबैक</li>
-                            <li><i class="fas fa-check-circle"></i> मोबाइल और डेस्कटॉप पर शानदार अनुभव</li>
-                            <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड सवाल</li>
+                            <li><i class="fas fa-check-circle"></i> मुफ्त 10+ सवाल</li>
+                            <li><i class="fas fa-check-circle"></i> तुरंत परिणाम</li>
+                            <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
+                            <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
                         </ul>
                         <button class="start-btn" onclick="startQuiz()">क्विज़ शुरू करें 🚀</button>
                         <button class="premium-btn" onclick="goToPremium()">पेड क्विज़ आज़माएँ <i class="fas fa-crown"></i></button>
                     </div>
-
                     <div id="quiz-section" class="quiz-section">
                         <div class="question" id="question-text"></div>
                         <ul class="options" id="options-list"></ul>
@@ -412,26 +109,15 @@
             </div>
         </div>
     </div>
-
     <script>
-        // Service Worker रजिस्टर (केवल स्टैटिक फाइल्स के लिए)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/PAID-QUIZ/sw.js', { scope: '/PAID-QUIZ/' })
-                .then(() => {
-                    console.log('Service Worker Registered');
-                })
-                .catch(error => {
-                    console.warn('Service Worker Registration Failed:', error);
-                    // फेल होने पर भी क्विज़ चलेगा
-                });
-        }
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
 
-        // नेटवर्क और एरर स्टेटस चेक
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
-
             if (!navigator.onLine) {
                 offlineSection.style.display = 'block';
                 errorSection.style.display = 'none';
@@ -443,64 +129,33 @@
             }
         }
 
-        // सवाल JSON से लोड (retry और timeout के साथ)
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-
-        async function loadQuestions(retries = 3, delay = 2000) {
-            const offlineSection = document.getElementById('offline-section');
+        async function loadQuestions() {
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
-            for (let attempt = 1; attempt <= retries; attempt++) {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 सेकंड टाइमआउट
-                    const response = await fetch('https://jaatpankaj610.github.io/PAID-QUIZ/freequestions.json', {
-                        method: 'GET',
-                        mode: 'cors',
-                        cache: 'no-store',
-                        credentials: 'omit',
-                        signal: controller.signal
-                    });
-                    clearTimeout(timeoutId);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    questions = await response.json();
-                    if (!Array.isArray(questions) || questions.length === 0) {
-                        throw new Error('Invalid or empty questions data');
-                    }
-                    console.log('Questions loaded successfully:', questions);
-                    return;
-                } catch (error) {
-                    console.error(`Attempt ${attempt} failed to load questions:`, error);
-                    if (attempt === retries) {
-                        errorSection.style.display = 'block';
-                        offlineSection.style.display = 'none';
-                        onlineContent.style.display = 'none';
-                        if ('vibrate' in navigator) {
-                            navigator.vibrate(200);
-                        }
-                    } else {
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                    }
-                }
+            try {
+                const response = await fetch('https://jaatpankaj610.github.io/PAID-QUIZ/freequestions.json', {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-store',
+                    credentials: 'omit'
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                questions = await response.json();
+                console.log('Questions loaded:', questions);
+                if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions found');
+            } catch (error) {
+                console.error('Failed to load questions:', error);
+                errorSection.style.display = 'block';
+                onlineContent.style.display = 'none';
+                if ('vibrate' in navigator) navigator.vibrate(200);
             }
         }
 
-        // क्विज़ शुरू
         function startQuiz() {
             if (!navigator.onLine) {
                 document.getElementById('offline-section').style.display = 'block';
-                document.getElementById('error-section').style.display = 'none';
-                document.getElementById('online-content').style.display = 'none';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
                 return;
             }
-
             if (questions.length === 0) {
                 loadQuestions().then(() => {
                     if (questions.length > 0) {
@@ -520,7 +175,6 @@
             }
         }
 
-        // सवाल दिखाएँ
         function showQuestion() {
             const questionText = document.getElementById('question-text');
             const optionsList = document.getElementById('options-list');
@@ -538,34 +192,43 @@
             }
 
             const question = questions[currentQuestionIndex];
-            questionText.textContent = question.question;
+            questionText.textContent = question.question || 'सवाल नहीं मिला';
             optionsList.innerHTML = '';
             result.style.display = 'none';
             nextBtn.style.display = 'none';
 
-            question.options.forEach((option, index) => {
+            if (question.options && Array.isArray(question.options) && question.options.length >= 4) {
+                question.options.forEach((option, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = option || 'विकल्प नहीं मिला';
+                    li.onclick = () => checkAnswer(index);
+                    optionsList.appendChild(li);
+                });
+            } else {
                 const li = document.createElement('li');
-                li.textContent = option;
-                li.onclick = () => checkAnswer(index);
+                li.textContent = 'विकल्प लोड नहीं हुए!';
                 optionsList.appendChild(li);
-            });
+                console.error('Invalid options:', question.options);
+            }
         }
 
-        // जवाब चेक
         function checkAnswer(selectedIndex) {
             const question = questions[currentQuestionIndex];
             const options = document.querySelectorAll('.options li');
             const result = document.getElementById('result');
             const nextBtn = document.getElementById('next-btn');
 
+            if (!question || !question.options || selectedIndex >= question.options.length) {
+                result.textContent = 'जवाब चेक में त्रुटि!';
+                result.className = 'result error';
+                result.style.display = 'block';
+                return;
+            }
+
             options.forEach((option, index) => {
-                option.onclick = null; // डिसएबल ऑप्शन्स
-                if (index === question.correctAnswer) {
-                    option.classList.add('correct');
-                }
-                if (index === selectedIndex && selectedIndex !== question.correctAnswer) {
-                    option.classList.add('incorrect');
-                }
+                option.onclick = null;
+                if (index === question.correctAnswer) option.classList.add('correct');
+                if (index === selectedIndex && selectedIndex !== question.correctAnswer) option.classList.add('incorrect');
             });
 
             if (selectedIndex === question.correctAnswer) {
@@ -573,51 +236,33 @@
                 result.textContent = 'सही जवाब! 🎉';
                 result.className = 'result success';
             } else {
-                result.textContent = `गलत जवाब! सही जवाब: ${question.options[question.correctAnswer]}`;
+                result.textContent = `गलत जवाब! सही: ${question.options[question.correctAnswer]}`;
                 result.className = 'result error';
             }
-
             result.style.display = 'block';
             nextBtn.style.display = 'block';
-            if ('vibrate' in navigator) {
-                navigator.vibrate(200);
-            }
+            if ('vibrate' in navigator) navigator.vibrate(200);
         }
 
-        // अगला सवाल
         function nextQuestion() {
             currentQuestionIndex++;
             showQuestion();
         }
 
-        // ग्लोबल एरर हैंडलिंग (Service Worker फेल होने पर भी क्विज़ चले)
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.error('Global error:', message, error);
-            // Service Worker या अन्य एरर पर क्विज़ को प्रभावित न करे
-            if (questions.length > 0 && currentQuestionIndex < questions.length) {
-                return true; // एरर को साइलेंट कर, क्विज़ जारी रख
-            }
+        window.onerror = function(message) {
+            console.error('Global error:', message);
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
             errorSection.style.display = 'block';
             onlineContent.style.display = 'none';
-            if ('vibrate' in navigator) {
-                navigator.vibrate(200);
-            }
+            if ('vibrate' in navigator) navigator.vibrate(200);
             return true;
         };
 
-        // पेज लोड और नेटवर्क स्टेटस चेक
-        window.addEventListener('load', () => {
-            checkNetworkStatus();
-            if (navigator.onLine) {
-                loadQuestions();
-            }
-        });
+        window.addEventListener('load', checkNetworkStatus);
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
 
-        // पेड क्विज़ पर रीडायरेक्ट
         function goToPremium() {
             window.location.href = 'https://jaatpankaj610.github.io/PAID-QUIZ/index.html';
         }
