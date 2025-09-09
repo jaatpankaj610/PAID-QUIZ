@@ -12,7 +12,7 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
     if (event.request.url.includes('/freequestions.json')) {
-        return fetch(event.request); // JSON को कैश न करे, सीधा फेच करे
+        return fetch(event.request, { cache: 'no-store' }); // JSON को सीधा फेच, कैश न करे
     }
     event.respondWith(
         caches.match(event.request).then((response) => {
