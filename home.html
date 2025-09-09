@@ -2,18 +2,18 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- No zoom -->
   <title>My Quiz App</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       text-align: center;
-      background: #fff;   /* अब पूरी screen सफेद होगी */
+      background: #fff;
       font-family: Arial, sans-serif;
-      padding-top: 70px; /* स्टेटस बार के लिए जगह */
+      height: 100vh;
+      overflow: hidden; /* No scroll or zoom */
     }
-    /* Status bar design */
     .status-bar {
       position: fixed;
       top: 0;
@@ -33,7 +33,7 @@
       z-index: 1000;
     }
     .intro {
-      margin: 20px auto;
+      margin: 70px auto 20px; /* स्टेटस बार के नीचे से शुरू */
       padding: 15px;
       background: #f8f9fa;
       border-radius: 10px;
@@ -54,14 +54,19 @@
       max-width: 400px;
       margin: 0 auto;
       padding: 10px;
+      height: calc(100vh - 130px); /* स्टेटस बार और इंट्रो के लिए जगह */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .card {
       border: 2px solid #333;
       border-radius: 12px;
       background: #fff;
-      margin: 20px 0;
+      margin: 10px 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       overflow: hidden;
+      flex: 1;
     }
     .card img {
       width: 100%;
@@ -75,7 +80,7 @@
     .btn {
       display: block;
       width: 90%;
-      margin: 5px auto; /* और कम मार्जिन */
+      margin: 5px auto;
       padding: 12px 0;
       font-size: 18px;
       font-weight: bold;
@@ -84,39 +89,28 @@
       cursor: pointer;
       color: #fff;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: none; /* No animation */
     }
     .btn.free {
       background: #28a745;
     }
     .btn.free:hover {
-      background: #218838;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background: #28a745; /* No hover effect */
     }
     .btn.paid {
       background: #007bff;
     }
     .btn.paid:hover {
-      background: #0056b3;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background: #007bff; /* No hover effect */
     }
-    
-    /* रेस्पॉन्सिव डिज़ाइन */
     @media (min-width: 768px) {
       .container {
         max-width: 600px;
-      }
-      .status-bar {
-        max-width: 100%;
-        margin: 0 auto;
       }
       .intro {
         max-width: 600px;
       }
     }
-    
     @media (min-width: 1024px) {
       .container {
         max-width: 800px;
@@ -131,7 +125,6 @@
         max-width: 800px;
       }
     }
-
     .offline-message {
       display: none;
       color: #dc3545;
@@ -142,7 +135,6 @@
   </style>
 </head>
 <body>
-  <!-- Status bar -->
   <div class="status-bar">
     My Quiz App
   </div>
@@ -151,12 +143,10 @@
     <p>अपने ज्ञान को परखें और राजस्थान की संस्कृति से जुड़ें। फ्री और पेड क्विज़ के साथ मज़ा लें!</p>
   </div>
   <div class="container">
-    <!-- Free Quiz Card -->
     <div class="card">
       <img src="image1.png" alt="Image 1" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x200?text=Free+Quiz+Image'; this.style.display='block'">
       <a href="free-quiz.html" class="btn free" onclick="handleClick(this.href, event)">Free Quiz</a>
     </div>
-    <!-- Paid Quiz Card -->
     <div class="card">
       <img src="image2.png" alt="Image 2" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x200?text=Paid+Quiz+Image'; this.style.display='block'">
       <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
