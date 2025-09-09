@@ -314,6 +314,29 @@
             .submit-btn { font-size: 16px; padding: 15px 25px; }
             .custom-design { font-size: 20px; }
         }
+
+        .home-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #000;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .home-btn:hover {
+            background-color: #333;
+        }
     </style>
 </head>
 <body>
@@ -369,13 +392,13 @@
                         <div id="form-error" class="error-text"></div>
                         <div class="form-group">
                             <label for="user_id">अपना ईमेल ID दर्ज करें</label>
-                            <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.com" required>
+                            <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.gmail.com" required>
                             <div id="user_id_error" class="error-text"></div>
                         </div>
                         
                         <div class="form-group">
                             <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
-                            <input type="text" id="mobile_number" name="mobile_number" placeholder="7665274721" required>
+                            <input type="text" id="mobile_number" name="mobile_number" placeholder="76652XXXXX" required>
                             <div id="mobile_number_error" class="error-text"></div>
                         </div>
                         
@@ -708,6 +731,12 @@
         window.addEventListener('load', checkNetworkStatus);
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
+
+        // होम पर वापस
+        function goToHome() {
+            window.location.href = 'home.html';
+        }
     </script>
+    <button class="home-btn" onclick="goToHome()">होम</button>
 </body>
 </html>
