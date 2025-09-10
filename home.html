@@ -16,6 +16,11 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
     .status-bar {
       width: 100%;
@@ -42,12 +47,13 @@
       border-radius: 10px;
       max-width: 100%;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin: 10px;
+      margin: 0 10px;
       flex-shrink: 0;
       width: calc(100% - 20px);
-      position: relative;
-      z-index: 1;
+      position: fixed;
       top: 60px;
+      left: 0;
+      z-index: 1;
     }
     .intro h2 {
       font-size: 18px;
@@ -67,11 +73,11 @@
       align-items: center;
       padding: 10px;
       width: 100%;
-      height: calc(100vh - 60px);
+      height: calc(100vh - 60px - 120px); /* Adjust for status-bar and intro height */
       box-sizing: border-box;
       overflow: hidden;
       position: fixed;
-      top: 60px;
+      top: 180px; /* Below status-bar and intro */
       left: 0;
       right: 0;
       bottom: 0;
