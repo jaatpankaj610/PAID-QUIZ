@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- No zoom -->
   <title>My Quiz App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       margin: 0;
@@ -15,6 +16,35 @@
       display: flex;
       flex-direction: column;
       overflow: hidden; /* No scroll or zoom */
+    }
+    .notification-bar {
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      color: #fff;
+      padding: 12px 15px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2000;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.15);
+      animation: pulseNotification 2s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .notification-bar i {
+      font-size: 16px;
+    }
+    @keyframes pulseNotification {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
     }
     .status-bar {
       width: 100%;
@@ -31,6 +61,7 @@
       border-bottom-right-radius: 20px;
       z-index: 1000;
       flex-shrink: 0;
+      margin-top: 50px; /* Space for notification bar */
     }
     .intro {
       padding: 15px;
@@ -58,6 +89,7 @@
       justify-content: flex-start;
       align-items: center;
       padding: 10px;
+      padding-top: 50px; /* Space for notification bar */
       width: 100%;
       box-sizing: border-box;
       overflow-y: auto; /* Only vertical scroll if needed */
@@ -108,6 +140,73 @@
     .btn.paid:hover {
       background: #007bff; /* No hover effect */
     }
+    .error-section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      z-index: 2000;
+      display: none;
+    }
+    .error-image {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      animation: zoomInOut 2s infinite;
+    }
+    .error-message {
+      font-size: 18px;
+      color: #333;
+      font-weight: 600;
+      text-align: center;
+      max-width: 80%;
+    }
+    .offline-section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      z-index: 2000;
+      display: none;
+    }
+    .offline-image {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      animation: zoomInOut 2s infinite;
+    }
+    .offline-message {
+      font-size: 18px;
+      color: #333;
+      font-weight: 600;
+      text-align: center;
+      max-width: 80%;
+    }
+    @keyframes zoomInOut {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
     @media (min-width: 768px) {
       .container {
         flex-direction: row;
@@ -127,6 +226,10 @@
       .btn {
         font-size: 18px; /* Normal font size for tablet */
         padding: 12px 0;
+      }
+      .notification-bar {
+        font-size: 16px;
+        padding: 15px 20px;
       }
     }
     @media (min-width: 1024px) {
@@ -148,33 +251,13 @@
         padding: 12px 0;
       }
     }
-    .offline-message {
-      display: none;
-      color: #dc3545;
-      font-weight: bold;
-      margin: 20px auto;
-      font-size: 16px;
-      max-width: 400px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .offline-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
   </style>
 </head>
 <body>
+  <div class="notification-bar">
+    <i class="fas fa-info-circle"></i>
+    Back Button से बाहर न निकलें, होम बटन का उपयोग करें!
+  </div>
   <div class="status-bar">
     MIND_GRID
   </div>
@@ -191,37 +274,55 @@
       <img src="image2.png" alt="Image 2" onload="this.style.display='block'" onerror="this.src='https://via.placeholder.com/400x180?text=Paid+Quiz+Image'; this.style.display='block'">
       <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
     </div>
-    <div id="offline-message" class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें।</div>
   </div>
-  <div id="offline-overlay" class="offline-overlay">
-    <div id="offline-overlay-message" class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें।</div>
+  <div id="offline-section" class="offline-section">
+    <img src="offline.png" alt="Offline Error" class="offline-image" onerror="this.style.display='none'">
+    <div class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें।</div>
+  </div>
+  <div id="error-section" class="error-section">
+    <img src="error.png" alt="General Error" class="error-image" onerror="this.style.display='none'">
+    <div class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</div>
   </div>
   <script>
-    // ऑफलाइन चेक और हैंडलिंग
+    // ऑफलाइन और एरर चेक
     function checkOnlineStatus() {
-      const offlineMessage = document.getElementById('offline-message');
-      const offlineOverlay = document.getElementById('offline-overlay');
-      const offlineOverlayMessage = document.getElementById('offline-overlay-message');
+      const offlineSection = document.getElementById('offline-section');
+      const errorSection = document.getElementById('error-section');
+      const container = document.querySelector('.container');
       if (!navigator.onLine) {
-        offlineMessage.style.display = 'none'; // Normal message hide
-        offlineOverlay.style.display = 'flex'; // Show overlay
-        offlineOverlayMessage.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        offlineSection.style.display = 'flex';
+        errorSection.style.display = 'none';
+        container.style.display = 'none';
+        document.body.style.overflow = 'hidden';
       } else {
-        offlineMessage.style.display = 'none';
-        offlineOverlay.style.display = 'none';
-        document.body.style.overflow = 'hidden'; // Keep no scroll
+        offlineSection.style.display = 'none';
+        errorSection.style.display = 'none';
+        container.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
       }
     }
     // बटन क्लिक हैंडलर
     function handleClick(url, event) {
       if (!navigator.onLine) {
         event.preventDefault();
-        alert('कृपया इंटरनेट कनेक्शन चेक करें।');
+        document.getElementById('offline-section').style.display = 'flex';
+        document.querySelector('.container').style.display = 'none';
       } else {
         window.location.href = url;
       }
     }
+    // ग्लोबल एरर हैंडलिंग
+    window.onerror = function(message, source, lineno, colno, error) {
+      const errorSection = document.getElementById('error-section');
+      const container = document.querySelector('.container');
+      errorSection.style.display = 'flex';
+      container.style.display = 'none';
+      console.error('Global error:', message, error);
+      if ('vibrate' in navigator) {
+        navigator.vibrate([200, 100, 200]);
+      }
+      return true;
+    };
     // पेज लोड और नेटवर्क स्टेटस चेक
     window.addEventListener('load', checkOnlineStatus);
     window.addEventListener('online', checkOnlineStatus);
@@ -231,9 +332,25 @@
       if (!img.complete) {
         img.onerror = () => {
           img.src = `https://via.placeholder.com/400x180?text=${encodeURIComponent(img.alt)}`;
+          if (img.classList.contains('offline-image') || img.classList.contains('error-image')) {
+            img.style.display = 'none';
+          }
         };
       }
     });
+    // डिवाइस बैक बटन को ब्लॉक करना
+    window.addEventListener('popstate', function(event) {
+      event.preventDefault();
+      const notificationBar = document.querySelector('.notification-bar');
+      notificationBar.style.animation = 'pulseNotification 1s 2';
+      setTimeout(() => {
+        notificationBar.style.animation = 'pulseNotification 2s infinite';
+      }, 2000);
+      if ('vibrate' in navigator) {
+        navigator.vibrate([200, 100, 200]);
+      }
+    });
+    history.pushState(null, null, window.location.href);
   </script>
 </body>
 </html>
