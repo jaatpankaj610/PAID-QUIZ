@@ -127,6 +127,7 @@
       color: #fff;
       text-decoration: none;
       transition: none; /* No animation */
+      opacity: 1; /* Default opacity */
     }
     .btn.free {
       background: #28a745;
@@ -140,23 +141,27 @@
     .btn.paid:hover {
       background: #007bff; /* No hover effect */
     }
-    .error-section {
+    .btn.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .offline-section, .error-section {
       position: fixed;
-      top: 0;
+      top: 50px; /* Below notification bar */
       left: 0;
       width: 100%;
-      height: 100vh;
-      background: rgba(255, 255, 255, 0.95);
+      height: calc(100vh - 50px); /* Adjust for notification bar */
+      background: rgba(255, 255, 255, 0.7); /* Semi-transparent */
+      backdrop-filter: blur(5px); /* Glassmorphic effect */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 25px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      z-index: 2000;
+      z-index: 1500; /* Above container, below notification bar */
       display: none;
     }
-    .error-image {
+    .offline-image, .error-image {
       width: 100%;
       max-width: 200px;
       height: auto;
@@ -164,38 +169,7 @@
       border-radius: 10px;
       animation: zoomInOut 2s infinite;
     }
-    .error-message {
-      font-size: 18px;
-      color: #333;
-      font-weight: 600;
-      text-align: center;
-      max-width: 80%;
-    }
-    .offline-section {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: rgba(255, 255, 255, 0.95);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 25px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      z-index: 2000;
-      display: none;
-    }
-    .offline-image {
-      width: 100%;
-      max-width: 200px;
-      height: auto;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      animation: zoomInOut 2s infinite;
-    }
-    .offline-message {
+    .offline-message, .error-message {
       font-size: 18px;
       color: #333;
       font-weight: 600;
@@ -277,7 +251,7 @@
   </div>
   <div id="offline-section" class="offline-section">
     <img src="offline.png" alt="Offline Error" class="offline-image" onerror="this.style.display='none'">
-    <div class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें।</div>
+    <div class="offline-message">इंटरनेट कनेक्ट करें और क्विज़ शुरू करें!</div>
   </div>
   <div id="error-section" class="error-section">
     <img src="error.png" alt="General Error" class="error-image" onerror="this.style.display='none'">
@@ -288,35 +262,50 @@
     function checkOnlineStatus() {
       const offlineSection = document.getElementById('offline-section');
       const errorSection = document.getElementById('error-section');
-      const container = document.querySelector('.container');
+      const buttons = document.querySelectorAll('.btn');
       if (!navigator.onLine) {
         offlineSection.style.display = 'flex';
         errorSection.style.display = 'none';
-        container.style.display = 'none';
-        document.body.style.overflow = 'hidden';
+        buttons.forEach(btn => btn.classList.add('disabled')); // Disable buttons
       } else {
         offlineSection.style.display = 'none';
         errorSection.style.display = 'none';
-        container.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+        buttons.forEach(btn => btn.classList.remove('disabled')); // Enable buttons
       }
     }
     // बटन क्लिक हैंडलर
     function handleClick(url, event) {
+      event.preventDefault();
       if (!navigator.onLine) {
-        event.preventDefault();
         document.getElementById('offline-section').style.display = 'flex';
-        document.querySelector('.container').style.display = 'none';
+        if ('vibrate' in navigator) {
+          navigator.vibrate([200, 100, 200]);
+        }
       } else {
-        window.location.href = url;
+        // Check if target page exists
+        fetch(url, { method: 'HEAD', cache: 'no-store' })
+          .then(response => {
+            if (response.ok) {
+              window.location.href = url;
+            } else {
+              document.getElementById('error-section').style.display = 'flex';
+              if ('vibrate' in navigator) {
+                navigator.vibrate([200, 100, 200]);
+              }
+            }
+          })
+          .catch(() => {
+            document.getElementById('error-section').style.display = 'flex';
+            if ('vibrate' in navigator) {
+              navigator.vibrate([200, 100, 200]);
+            }
+          });
       }
     }
     // ग्लोबल एरर हैंडलिंग
     window.onerror = function(message, source, lineno, colno, error) {
       const errorSection = document.getElementById('error-section');
-      const container = document.querySelector('.container');
       errorSection.style.display = 'flex';
-      container.style.display = 'none';
       console.error('Global error:', message, error);
       if ('vibrate' in navigator) {
         navigator.vibrate([200, 100, 200]);
@@ -331,8 +320,9 @@
     document.querySelectorAll('img').forEach(img => {
       if (!img.complete) {
         img.onerror = () => {
-          img.src = `https://via.placeholder.com/400x180?text=${encodeURIComponent(img.alt)}`;
-          if (img.classList.contains('offline-image') || img.classList.contains('error-image')) {
+          if (!img.classList.contains('offline-image') && !img.classList.contains('error-image')) {
+            img.src = `https://via.placeholder.com/400x180?text=${encodeURIComponent(img.alt)}`;
+          } else {
             img.style.display = 'none';
           }
         };
