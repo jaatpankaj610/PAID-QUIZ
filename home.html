@@ -73,7 +73,7 @@
       align-items: center;
       padding: 10px;
       width: 100%;
-      height: calc(100vh - 60px - 120px - 60px); /* Adjust for status-bar, intro, and refresh button */
+      height: calc(100vh - 60px - 120px - 60px);
       box-sizing: border-box;
       overflow: hidden;
       position: fixed;
@@ -265,9 +265,11 @@
   <script>
     // रिफ्रेश ऐप फंक्शन
     function refreshApp() {
+      const offlineSection = document.getElementById('offline-section');
+      const errorSection = document.getElementById('error-section');
       if (!navigator.onLine) {
-        document.getElementById('offline-section').style.display = 'flex';
-        document.getElementById('error-section').style.display = 'none';
+        offlineSection.style.display = 'flex';
+        errorSection.style.display = 'none';
         if ('vibrate' in navigator) {
           navigator.vibrate([200, 100, 200]);
         }
@@ -290,9 +292,11 @@
     // बटन क्लिक हैंडलर
     function handleClick(url, event) {
       event.preventDefault();
+      const offlineSection = document.getElementById('offline-section');
+      const errorSection = document.getElementById('error-section');
       if (!navigator.onLine) {
-        document.getElementById('offline-section').style.display = 'flex';
-        document.getElementById('error-section').style.display = 'none';
+        offlineSection.style.display = 'flex';
+        errorSection.style.display = 'none';
         if ('vibrate' in navigator) {
           navigator.vibrate([200, 100, 200]);
         }
@@ -304,23 +308,23 @@
             if (response.ok) {
               window.location.href = url;
             } else {
-              document.getElementById('error-section').style.display = 'flex';
-              document.getElementById('offline-section').style.display = 'none';
+              errorSection.style.display = 'flex';
+              offlineSection.style.display = 'none';
               if ('vibrate' in navigator) {
                 navigator.vibrate([200, 100, 200]);
               }
             }
           })
           .catch(() => {
-            document.getElementById('error-section').style.display = 'flex';
-            document.getElementById('offline-section').style.display = 'none';
+            errorSection.style.display = 'flex';
+            offlineSection.style.display = 'none';
             if ('vibrate' in navigator) {
               navigator.vibrate([200, 100, 200]);
             }
           });
       } catch (error) {
-        document.getElementById('error-section').style.display = 'flex';
-        document.getElementById('offline-section').style.display = 'none';
+        errorSection.style.display = 'flex';
+        offlineSection.style.display = 'none';
         if ('vibrate' in navigator) {
           navigator.vibrate([200, 100, 200]);
         }
