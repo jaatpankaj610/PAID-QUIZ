@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -203,6 +204,13 @@
             border: 2px dashed #ddd;
         }
         
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+        
         .upi-id {
             background: rgba(74, 0, 224, 0.1);
             border-radius: 12px;
@@ -299,28 +307,38 @@
         }
         
         .offline-section, .error-section {
-            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 25px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            margin: 25px 0;
+            z-index: 1000;
         }
         
         .custom-design {
-            width: 200px;
-            height: 200px;
+            width: 80%;
+            max-width: 300px;
+            height: 300px;
             margin: 0 auto 15px;
-            border-radius: 12px;
+            border-radius: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
             text-align: center;
             line-height: 1.2;
+            background: var(--error-gradient);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         
         .offline-section .custom-design {
@@ -332,16 +350,29 @@
         }
         
         .offline-message, .error-message {
-            font-size: 18px;
+            font-size: 20px;
             color: #333;
-            font-weight: 500;
+            font-weight: 600;
+            text-align: center;
+            max-width: 80%;
+        }
+        
+        @keyframes zoomInOut {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .offline-section .custom-design, .error-section .custom-design {
+            animation: zoomInOut 2s infinite;
         }
         
         @media (max-width: 600px) {
             .header h1 { font-size: 28px; }
             .price-tag { font-size: 36px; }
             .submit-btn { font-size: 16px; padding: 15px 25px; }
-            .custom-design { font-size: 20px; }
+            .custom-design { font-size: 20px; height: 250px; }
+            .offline-message, .error-message { font-size: 18px; }
         }
     </style>
 </head>
@@ -385,11 +416,11 @@
                     <div class="qr-section">
                         <h3>आसान UPI पेमेंट</h3>
                         <div class="qr-code">
-                            <img src="https://via.placeholder.com/200x200?text=Amazon+Pay+QR" alt="QR Code">
+                            <img src="qrcode.png" alt="UPI QR Code" onerror="this.style.display='none'; document.getElementById('error-section').style.display='flex'; document.getElementById('online-content').style.display='none';">
                         </div>
                         <div class="upi-id">
                             <i class="fas fa-copy"></i>
-                            your-amazon-pay@upi
+                            9057650616@amazon.pay
                         </div>
                         <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
                     </div>
@@ -457,7 +488,7 @@
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
             if (!navigator.onLine) {
-                offlineSection.style.display = 'block';
+                offlineSection.style.display = 'flex';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'none';
             } else {
@@ -545,7 +576,7 @@
                 try {
                     const response = await fetch('quiz.html', { method: 'HEAD', cache: 'no-store' });
                     if (response.status === 404 || response.status === 503) {
-                        errorSection.style.display = 'block';
+                        errorSection.style.display = 'flex';
                         onlineContent.style.display = 'none';
                         console.error('quiz.html unavailable:', response.status);
                     } else {
@@ -554,7 +585,7 @@
                     }
                 } catch (error) {
                     console.error('Error checking quiz.html:', error);
-                    errorSection.style.display = 'block';
+                    errorSection.style.display = 'flex';
                     onlineContent.style.display = 'none';
                     if ('vibrate' in navigator) {
                         navigator.vibrate(200);
@@ -687,6 +718,10 @@
                 payment_method: 'upi'
             };
             try {
+                // Storage quota check and cleanup
+                let testKey = 'temp_quota_test';
+                localStorage.setItem(testKey, 'test');
+                localStorage.removeItem(testKey);
                 // मौजूदा पेमेंट्स लोड करें - बेहतर एरर हैंडलिंग के साथ
                 let payments = [];
                 try {
@@ -700,6 +735,9 @@
                 } catch (e) {
                     console.error('Error parsing payments from localStorage:', e);
                     payments = [];
+                }
+                if (payments.length > 50) {
+                    payments = payments.slice(-50);
                 }
                 
                 console.log('Current payments before adding:', payments);
@@ -756,7 +794,7 @@
         window.onerror = function(message, source, lineno, colno, error) {
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
-            errorSection.style.display = 'block';
+            errorSection.style.display = 'flex';
             onlineContent.style.display = 'none';
             console.error('Global error:', message, error);
             if ('vibrate' in navigator) {
@@ -775,3 +813,4 @@
     </script>
 </body>
 </html>
+```
