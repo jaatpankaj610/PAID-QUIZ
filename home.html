@@ -73,11 +73,11 @@
       align-items: center;
       padding: 10px;
       width: 100%;
-      height: calc(100vh - 60px - 120px); /* Adjust for status-bar and intro height */
+      height: calc(100vh - 60px - 120px);
       box-sizing: border-box;
       overflow: hidden;
       position: fixed;
-      top: 180px; /* Below status-bar and intro */
+      top: 180px;
       left: 0;
       right: 0;
       bottom: 0;
@@ -135,17 +135,20 @@
     }
     .offline-section, .error-section {
       position: fixed;
-      top: 60px;
-      left: 0;
-      width: 100%;
-      height: calc(100vh - 60px);
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(5px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      height: auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 25px;
+      padding: 20px;
       z-index: 500;
       display: none;
     }
@@ -159,10 +162,10 @@
     }
     .offline-image, .error-image {
       width: 100%;
-      max-width: 200px;
+      max-width: 150px;
       height: auto;
-      margin-bottom: 20px;
-      border-radius: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
       animation: zoomInOut 2s infinite;
     }
     @keyframes zoomInOut {
@@ -232,11 +235,11 @@
   </div>
   <div id="offline-section" class="offline-section">
     <img src="offline.png" alt="Offline Error" class="offline-image" onerror="this.style.display='none'">
-    <div class="error-message">इंटरनेट कनेक्शन नहीं है!</div>
+    <div class="error-message">⚠️ ऑफलाइन: कृपया इंटरनेट से कनेक्ट करें!</div>
   </div>
   <div id="error-section" class="error-section">
     <img src="error.png" alt="Network Error" class="error-image" onerror="this.style.display='none'">
-    <div class="error-message">नेटवर्क चेक करें!</div>
+    <div class="error-message">⚠️ नेटवर्क त्रुटि: कृपया कनेक्शन जाँचें!</div>
   </div>
   <script>
     // ऑफलाइन और एरर चेक
