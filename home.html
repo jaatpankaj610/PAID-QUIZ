@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>My Quiz App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MIND_GRID">
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIk1JTkRfR1JJRCIsInNob3J0X25hbWUiOiAiTUlORF9HUklEIiwic3RhcnRfdXJsIjogIi4iLCJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmZmYiLCJ0aGVtZV9jb2xvciI6ICIjMDA3YmZmIn0=">
   <style>
     body {
       margin: 0;
@@ -236,7 +241,59 @@
     // सर्विस वर्कर रजिस्ट्रेशन
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+        navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
+          const CACHE_NAME = 'mind-grid-cache-v1';
+          const urlsToCache = [
+            '/',
+            'index.html',
+            'free-quiz.html',
+            'image1.png',
+            'image2.png',
+            'offline.png',
+            'error.png',
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+          ];
+          
+          self.addEventListener('install', event => {
+            event.waitUntil(
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  return cache.addAll(urlsToCache);
+                })
+            );
+          });
+          
+          self.addEventListener('fetch', event => {
+            event.respondWith(
+              caches.match(event.request)
+                .then(response => {
+                  if (response) {
+                    return response;
+                  }
+                  return fetch(event.request).catch(() => {
+                    if (event.request.destination === 'document') {
+                      return caches.match('/');
+                    }
+                  });
+                })
+            );
+          });
+          
+          self.addEventListener('activate', event => {
+            const cacheWhitelist = [CACHE_NAME];
+            event.waitUntil(
+              caches.keys().then(cacheNames => {
+                return Promise.all(
+                  cacheNames.map(cacheName => {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                      return caches.delete(cacheName);
+                    }
+                  })
+                );
+              })
+            );
+          });
+        `)).then(function(registration) {
           console.log('ServiceWorker registration successful with scope: ', registration.scope);
         }, function(err) {
           console.log('ServiceWorker registration failed: ', err);
@@ -428,6 +485,25 @@
           }
         });
       }
+    });
+    
+    // ऐप को फुल स्क्रीन मोड में खोलने के लिए
+    window.addEventListener('load', function() {
+      // यूजर इंटरैक्शन के बाद फुल स्क्रीन मोड में जाएं
+      document.addEventListener('click', function() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+            !document.mozFullScreenElement && !document.msFullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+          } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+          }
+        }
+      }, { once: true });
     });
   </script>
 </body>
