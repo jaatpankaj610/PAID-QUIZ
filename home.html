@@ -73,14 +73,14 @@
       align-items: center;
       padding: 10px;
       width: 100%;
-      height: calc(100vh - 60px - 120px);
+      height: calc(100vh - 60px - 120px - 60px); /* Adjust for status-bar, intro, and refresh button */
       box-sizing: border-box;
       overflow: hidden;
       position: fixed;
       top: 180px;
       left: 0;
       right: 0;
-      bottom: 0;
+      bottom: 60px;
       z-index: 0;
       opacity: 1;
     }
@@ -132,6 +132,24 @@
     }
     .btn.paid:hover {
       background: #007bff;
+    }
+    .btn.refresh {
+      background: #6c757d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn.refresh:hover {
+      background: #6c757d;
+    }
+    .refresh-btn-container {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      z-index: 1;
     }
     .offline-section, .error-section {
       position: fixed;
@@ -233,6 +251,9 @@
       <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
     </div>
   </div>
+  <div class="refresh-btn-container">
+    <button class="btn refresh" onclick="refreshApp()"><i class="fas fa-sync-alt"></i> Refresh App</button>
+  </div>
   <div id="offline-section" class="offline-section">
     <img src="offline.png" alt="Offline Error" class="offline-image" onerror="this.style.display='none'">
     <div class="error-message">⚠️ ऑफलाइन: कृपया इंटरनेट से कनेक्ट करें!</div>
@@ -242,6 +263,18 @@
     <div class="error-message">⚠️ नेटवर्क त्रुटि: कृपया कनेक्शन जाँचें!</div>
   </div>
   <script>
+    // रिफ्रेश ऐप फंक्शन
+    function refreshApp() {
+      if (!navigator.onLine) {
+        document.getElementById('offline-section').style.display = 'flex';
+        document.getElementById('error-section').style.display = 'none';
+        if ('vibrate' in navigator) {
+          navigator.vibrate([200, 100, 200]);
+        }
+        return;
+      }
+      location.reload();
+    }
     // ऑफलाइन और एरर चेक
     function checkOnlineStatus() {
       const offlineSection = document.getElementById('offline-section');
