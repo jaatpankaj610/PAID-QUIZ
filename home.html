@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- No zoom -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>My Quiz App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -15,36 +15,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden; /* No scroll or zoom */
-    }
-    .notification-bar {
-      background: linear-gradient(135deg, #007bff, #00c6ff);
-      color: #fff;
-      padding: 12px 15px;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 2000;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(8px);
-      background: rgba(255, 255, 255, 0.15);
-      animation: pulseNotification 2s infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .notification-bar i {
-      font-size: 16px;
-    }
-    @keyframes pulseNotification {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
+      overflow: hidden;
     }
     .status-bar {
       width: 100%;
@@ -61,7 +32,8 @@
       border-bottom-right-radius: 20px;
       z-index: 1000;
       flex-shrink: 0;
-      margin-top: 50px; /* Space for notification bar */
+      position: absolute;
+      top: 0;
     }
     .intro {
       padding: 15px;
@@ -71,6 +43,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin: 10px;
       flex-shrink: 0;
+      width: 100%;
     }
     .intro h2 {
       font-size: 18px;
@@ -89,11 +62,17 @@
       justify-content: flex-start;
       align-items: center;
       padding: 10px;
-      padding-top: 50px; /* Space for notification bar */
       width: 100%;
+      height: 100%;
       box-sizing: border-box;
-      overflow-y: auto; /* Only vertical scroll if needed */
-      -webkit-overflow-scrolling: touch; /* Smooth scroll for mobile */
+      overflow: hidden;
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 0;
+      opacity: 1;
     }
     .card {
       border: 2px solid #333;
@@ -104,10 +83,12 @@
       overflow: hidden;
       width: 100%;
       max-width: 400px;
+      height: auto;
     }
     .card img {
       width: 100%;
-      height: 180px; /* Reduced height to fit better on small screens */
+      height: auto;
+      max-height: 180px;
       object-fit: cover;
       display: block;
       margin: 0;
@@ -118,48 +99,52 @@
       display: block;
       width: 90%;
       margin: 5px auto;
-      padding: 10px 0; /* Reduced padding for better fit */
-      font-size: 16px; /* Reduced font size for small screens */
+      padding: 10px 0;
+      font-size: 16px;
       font-weight: bold;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       color: #fff;
       text-decoration: none;
-      transition: none; /* No animation */
-      opacity: 1; /* Default opacity */
+      transition: none;
+      opacity: 1;
     }
     .btn.free {
       background: #28a745;
     }
     .btn.free:hover {
-      background: #28a745; /* No hover effect */
+      background: #28a745;
     }
     .btn.paid {
       background: #007bff;
     }
     .btn.paid:hover {
-      background: #007bff; /* No hover effect */
-    }
-    .btn.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+      background: #007bff;
     }
     .offline-section, .error-section {
       position: fixed;
-      top: 50px; /* Below notification bar */
+      top: 60px;
       left: 0;
       width: 100%;
-      height: calc(100vh - 50px); /* Adjust for notification bar */
-      background: rgba(255, 255, 255, 0.7); /* Semi-transparent */
-      backdrop-filter: blur(5px); /* Glassmorphic effect */
+      height: calc(100vh - 60px);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(5px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 25px;
-      z-index: 1500; /* Above container, below notification bar */
+      z-index: 500;
       display: none;
+    }
+    .offline-section .error-message, .error-section .error-message {
+      color: #dc3545;
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 18px;
+      text-align: center;
+      max-width: 80%;
     }
     .offline-image, .error-image {
       width: 100%;
@@ -168,13 +153,6 @@
       margin-bottom: 20px;
       border-radius: 10px;
       animation: zoomInOut 2s infinite;
-    }
-    .offline-message, .error-message {
-      font-size: 18px;
-      color: #333;
-      font-weight: 600;
-      text-align: center;
-      max-width: 80%;
     }
     @keyframes zoomInOut {
       0% { transform: scale(1); }
@@ -195,15 +173,11 @@
         max-width: 600px;
       }
       .card img {
-        height: 200px; /* Normal height for tablet */
+        max-height: 200px;
       }
       .btn {
-        font-size: 18px; /* Normal font size for tablet */
+        font-size: 18px;
         padding: 12px 0;
-      }
-      .notification-bar {
-        font-size: 16px;
-        padding: 15px 20px;
       }
     }
     @media (min-width: 1024px) {
@@ -218,20 +192,16 @@
         max-width: 800px;
       }
       .card img {
-        height: 200px; /* Normal height for laptop */
+        max-height: 200px;
       }
       .btn {
-        font-size: 18px; /* Normal font size for laptop */
+        font-size: 18px;
         padding: 12px 0;
       }
     }
   </style>
 </head>
 <body>
-  <div class="notification-bar">
-    <i class="fas fa-info-circle"></i>
-    Back Button से बाहर न निकलें, होम बटन का उपयोग करें!
-  </div>
   <div class="status-bar">
     MIND_GRID
   </div>
@@ -251,26 +221,23 @@
   </div>
   <div id="offline-section" class="offline-section">
     <img src="offline.png" alt="Offline Error" class="offline-image" onerror="this.style.display='none'">
-    <div class="offline-message">इंटरनेट कनेक्ट करें और क्विज़ शुरू करें!</div>
+    <div class="error-message">इंटरनेट कनेक्शन नहीं है!</div>
   </div>
   <div id="error-section" class="error-section">
-    <img src="error.png" alt="General Error" class="error-image" onerror="this.style.display='none'">
-    <div class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</div>
+    <img src="error.png" alt="Network Error" class="error-image" onerror="this.style.display='none'">
+    <div class="error-message">नेटवर्क चेक करें!</div>
   </div>
   <script>
     // ऑफलाइन और एरर चेक
     function checkOnlineStatus() {
       const offlineSection = document.getElementById('offline-section');
       const errorSection = document.getElementById('error-section');
-      const buttons = document.querySelectorAll('.btn');
       if (!navigator.onLine) {
         offlineSection.style.display = 'flex';
         errorSection.style.display = 'none';
-        buttons.forEach(btn => btn.classList.add('disabled')); // Disable buttons
       } else {
         offlineSection.style.display = 'none';
         errorSection.style.display = 'none';
-        buttons.forEach(btn => btn.classList.remove('disabled')); // Enable buttons
       }
     }
     // बटन क्लिक हैंडलर
@@ -278,17 +245,20 @@
       event.preventDefault();
       if (!navigator.onLine) {
         document.getElementById('offline-section').style.display = 'flex';
+        document.getElementById('error-section').style.display = 'none';
         if ('vibrate' in navigator) {
           navigator.vibrate([200, 100, 200]);
         }
-      } else {
-        // Check if target page exists
+        return;
+      }
+      try {
         fetch(url, { method: 'HEAD', cache: 'no-store' })
           .then(response => {
             if (response.ok) {
               window.location.href = url;
             } else {
               document.getElementById('error-section').style.display = 'flex';
+              document.getElementById('offline-section').style.display = 'none';
               if ('vibrate' in navigator) {
                 navigator.vibrate([200, 100, 200]);
               }
@@ -296,16 +266,24 @@
           })
           .catch(() => {
             document.getElementById('error-section').style.display = 'flex';
+            document.getElementById('offline-section').style.display = 'none';
             if ('vibrate' in navigator) {
               navigator.vibrate([200, 100, 200]);
             }
           });
+      } catch (error) {
+        document.getElementById('error-section').style.display = 'flex';
+        document.getElementById('offline-section').style.display = 'none';
+        if ('vibrate' in navigator) {
+          navigator.vibrate([200, 100, 200]);
+        }
       }
     }
     // ग्लोबल एरर हैंडलिंग
     window.onerror = function(message, source, lineno, colno, error) {
       const errorSection = document.getElementById('error-section');
       errorSection.style.display = 'flex';
+      document.getElementById('offline-section').style.display = 'none';
       console.error('Global error:', message, error);
       if ('vibrate' in navigator) {
         navigator.vibrate([200, 100, 200]);
@@ -328,19 +306,6 @@
         };
       }
     });
-    // डिवाइस बैक बटन को ब्लॉक करना
-    window.addEventListener('popstate', function(event) {
-      event.preventDefault();
-      const notificationBar = document.querySelector('.notification-bar');
-      notificationBar.style.animation = 'pulseNotification 1s 2';
-      setTimeout(() => {
-        notificationBar.style.animation = 'pulseNotification 2s infinite';
-      }, 2000);
-      if ('vibrate' in navigator) {
-        navigator.vibrate([200, 100, 200]);
-      }
-    });
-    history.pushState(null, null, window.location.href);
   </script>
 </body>
 </html>
