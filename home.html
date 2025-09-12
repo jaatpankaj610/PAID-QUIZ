@@ -1,510 +1,501 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>My Quiz App</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="MIND_GRID">
-  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIk1JTkRfR1JJRCIsInNob3J0X25hbWUiOiAiTUlORF9HUklEIiwic3RhcnRfdXJsIjogIi4iLCJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmZmYiLCJ0aGVtZV9jb2xvciI6ICIjMDA3YmZmIn0=">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      background: #fff;
-      font-family: Arial, sans-serif;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .status-bar {
-      width: 100%;
-      height: 60px;
-      background: linear-gradient(135deg, #007bff, #00c6ff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 20px;
-      font-weight: bold;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      z-index: 1000;
-      flex-shrink: 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
-    .intro {
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      max-width: 100%;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin: 0 10px;
-      flex-shrink: 0;
-      width: calc(100% - 20px);
-      position: fixed;
-      top: 60px;
-      left: 0;
-      z-index: 1;
-    }
-    .intro h2 {
-      font-size: 18px;
-      color: #333;
-      margin-bottom: 10px;
-    }
-    .intro p {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.5;
-    }
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 10px;
-      width: 100%;
-      height: calc(100vh - 60px - 120px - 60px);
-      box-sizing: border-box;
-      overflow: hidden;
-      position: fixed;
-      top: 180px;
-      left: 0;
-      right: 0;
-      bottom: 60px;
-      z-index: 0;
-      opacity: 1;
-    }
-    .card {
-      border: 2px solid #333;
-      border-radius: 12px;
-      background: #fff;
-      margin: 10px 0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      overflow: hidden;
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      flex-shrink: 0;
-    }
-    .card img {
-      width: 100%;
-      height: auto;
-      max-height: 180px;
-      object-fit: cover;
-      display: block;
-      margin: 0;
-      padding: 0;
-      border-bottom: 1px solid #ddd;
-    }
-    .btn {
-      display: block;
-      width: 90%;
-      margin: 5px auto;
-      padding: 10px 0;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #fff;
-      text-decoration: none;
-      transition: none;
-      opacity: 1;
-    }
-    .btn.free {
-      background: #28a745;
-    }
-    .btn.free:hover {
-      background: #28a745;
-    }
-    .btn.paid {
-      background: #007bff;
-    }
-    .btn.paid:hover {
-      background: #007bff;
-    }
-    .btn.refresh {
-      background: #6c757d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .btn.refresh:hover {
-      background: #6c757d;
-    }
-    .refresh-btn-container {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      z-index: 1;
-    }
-    .offline-section, .error-section {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 400px;
-      height: auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 500;
-      display: none;
-    }
-    .offline-section .error-message, .error-section .error-message {
-      color: #dc3545;
-      font-weight: bold;
-      margin-top: 10px;
-      font-size: 18px;
-      text-align: center;
-      max-width: 80%;
-    }
-    .offline-image, .error-image {
-      width: 100%;
-      max-width: 150px;
-      height: auto;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      animation: zoomInOut 2s infinite;
-    }
-    @keyframes zoomInOut {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    @media (min-width: 768px) {
-      .container {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .card {
-        width: 45%;
-        margin: 10px;
-      }
-      .intro {
-        max-width: 600px;
-      }
-      .card img {
-        max-height: 200px;
-      }
-      .btn {
-        font-size: 18px;
-        padding: 12px 0;
-      }
-    }
-    @media (min-width: 1024px) {
-      .container {
-        max-width: 800px;
-      }
-      .card {
-        width: 45%;
-        margin: 10px;
-      }
-      .intro {
-        max-width: 800px;
-      }
-      .card img {
-        max-height: 200px;
-      }
-      .btn {
-        font-size: 18px;
-        padding: 12px 0;
-      }
-    }
-  </style>
-  <script>
-    // सर्विस वर्कर रजिस्ट्रेशन
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
-          const CACHE_NAME = 'mind-grid-cache-v1';
-          const urlsToCache = [
-            '/',
-            'index.html',
-            'free-quiz.html',
-            'image1.png',
-            'image2.png',
-            'offline.png',
-            'error.png',
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
-          ];
-          
-          self.addEventListener('install', event => {
-            event.waitUntil(
-              caches.open(CACHE_NAME)
-                .then(cache => {
-                  return cache.addAll(urlsToCache);
-                })
-            );
-          });
-          
-          self.addEventListener('fetch', event => {
-            event.respondWith(
-              caches.match(event.request)
-                .then(response => {
-                  if (response) {
-                    return response;
-                  }
-                  return fetch(event.request).catch(() => {
-                    if (event.request.destination === 'document') {
-                      return caches.match('/');
-                    }
-                  });
-                })
-            );
-          });
-          
-          self.addEventListener('activate', event => {
-            const cacheWhitelist = [CACHE_NAME];
-            event.waitUntil(
-              caches.keys().then(cacheNames => {
-                return Promise.all(
-                  cacheNames.map(cacheName => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
-                      return caches.delete(cacheName);
-                    }
-                  })
-                );
-              })
-            );
-          });
-        `)).then(function(registration) {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-          console.log('ServiceWorker registration failed: ', err);
-        });
-      });
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>राजस्थान GK Quiz - होम</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e8ff 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            min-width: 100vw;
+            position: relative;
+            color: #333;
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            overscroll-behavior: none;
+        }
+        /* ======================================
+           HEADER: TEXT MUST BE FULLY VISIBLE ON MOBILE
+        ====================================== */
+        .header {
+            width: 100%;
+            padding: 20px 12px; /* Reduced padding for mobile */
+            text-align: left;
+            background: linear-gradient(135deg, #1a237e, #3949ab);
+            box-shadow: 0 6px 20px rgba(26, 35, 126, 0.3);
+            position: relative;
+            z-index: 10;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            min-height: 60px;
+            overflow: visible;
+            max-width: 100vw;
+            box-sizing: border-box;
+            font-size: 14px; /* For safety on small screens */
+        }
+        .trophy-icon {
+            font-size: 36px;
+            color: white;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+            opacity: 0.95;
+            flex-shrink: 0;
+        }
+        h1 {
+            color: white;
+            font-size: 20px; /* Reduced to fit small screens */
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.3; /* ✅ बदलाव: थोड़ा बढ़ाया ताकि दो लाइनों में अच्छा दिखे */
+            letter-spacing: -0.2px;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            font-family: 'Segoe UI Bold', sans-serif;
+            /* white-space: nowrap; ✅ हटाया: अब टेक्स्ट ब्रेक हो सकेगा */
+            overflow: hidden; /* ✅ जोड़ा: extra को छिपाने के लिए */
+            text-align: left;
+            flex-grow: 1;
+            padding-left: 6px;
+            padding-right: 6px;
+            max-width: calc(100vw - 80px); /* Ensures no cut on ANY device */
+            word-wrap: normal;
+            hyphens: none;
+        }
+        /* ======================================
+           CONTAINER
+        ====================================== */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            flex: 1;
+            min-height: 0;
+            padding: 18px 12px;
+            gap: 20px;
+            overflow: visible;
+            position: relative;
+        }
+        /* ======================================
+           QUIZ OPTION CARD
+        ====================================== */
+        .quiz-option {
+            background: rgba(255,255,255,0.93);
+            border-radius: 24px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.1),
+                inset 0 0 18px rgba(255,255,255,0.7);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 240px;
+        }
+        .quiz-option::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #4CAF50, #8BC34A);
+            border-radius: 10px 0 0 10px;
+            transition: all 0.4s ease;
+        }
+        .quiz-option.free-option::before {
+            background: linear-gradient(to bottom, #4CAF50, #8BC34A);
+        }
+        .quiz-option.paid-option::before {
+            background: linear-gradient(to bottom, #FF9800, #FF5722);
+        }
+        .quiz-option:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 
+                0 16px 35px rgba(0,0,0,0.15),
+                inset 0 0 22px rgba(255,255,255,0.8);
+        }
+        /* ✅ BOTH THUMBNAILS — SAME SIZE, NO CUT */
+        .thumbnail {
+            width: 100%;
+            height: 150px; /* ✅ FIXED: Both images same size */
+            object-fit: contain; /* ✅ Contain: पूरी इमेज दिखेगी बिना कटे */
+            border-radius: 18px;
+            margin-bottom: 16px;
+            box-shadow: 
+                0 6px 18px rgba(0,0,0,0.1),
+                0 0 0 3px rgba(255,255,255,0.6),
+                0 0 0 5px rgba(200,200,200,0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        .thumbnail::after {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 20px;
+            border: 1.5px solid transparent;
+            background: linear-gradient(45deg, #4CAF50, #FF9800, #667eea, #764ba2);
+            background-size: 400% 400%;
+            animation: gradientBorder 6s ease infinite;
+            z-index: -1;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        @keyframes gradientBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .quiz-option:hover .thumbnail {
+            transform: scale(1.02);
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.15),
+                0 0 0 3px rgba(255,255,255,0.7),
+                0 0 0 5px rgba(200,200,200,0.3);
+        }
+        .quiz-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .free-title {
+            color: #2e7d32;
+        }
+        .paid-title {
+            color: #e65100;
+        }
+        .quiz-badge {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .paid-badge {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+        }
+        /* ======================================
+           BUTTON: CUSTOM RIPPLE — INSIDE ROUNDED AREA ONLY
+        ====================================== */
+        button {
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 18px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden; /* 👈 CRITICAL: Hides ripple outside button */
+            color: white;
+            font-family: inherit;
+            box-shadow: 0 7px 20px rgba(0,0,0,0.15);
+            outline: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            min-width: 180px;
+            min-height: 50px;
+            line-height: 1;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #free-btn {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A, #66BB6A, #43A047);
+            background-size: 400% 400%;
+            animation: rainbowGradient 4s ease infinite;
+        }
+        #paid-btn {
+            background: linear-gradient(135deg, #FF9800, #FF5722, #F57C00, #E64A19);
+            background-size: 400% 400%;
+            animation: rainbowGradient 4s ease infinite;
+        }
+        @keyframes rainbowGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        button:hover {
+            transform: translateY(-6px) scale(1.015);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            background-size: 300% 300%;
+        }
+        button:active {
+            transform: scale(0.96);
+            box-shadow: 0 5px 18px rgba(0,0,0,0.15);
+        }
+        /* ✅ PROFESSIONAL RIPPLE — ONLY INSIDE BUTTON'S ROUNDED AREA */
+        button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2); /* ✅ Light blue-white glow — NOT BLUE OUTSIDE */
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+            pointer-events: none;
+            z-index: 1;
+        }
+        button:active::before {
+            width: 160px;
+            height: 160px;
+            opacity: 0.3;
+        }
+        .btn-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0;
+            line-height: 1;
+        }
+        .hint-text {
+            font-size: 11px;
+            color: #777;
+            margin-top: 12px;
+            font-style: italic;
+            line-height: 1.4;
+            opacity: 0.9;
+            text-align: center;
+            max-width: 85%;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.015); }
+            100% { transform: scale(1); }
+        }
+        /* ======================================
+           FOOTER: WHITE BG DIMMED
+        ====================================== */
+        .footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 14px 14px;
+            background-color: rgba(255,255,255,0.85); /* ✅ Reduced from 0.95 to 0.85 — LESS WHITE */
+            box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(200,200,200,0.3);
+        }
+        #refresh-btn {
+            background: linear-gradient(135deg, #5c6bc0, #3f51b5);
+            color: white;
+            padding: 12px 26px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 6px 20px rgba(63, 81, 181, 0.3);
+            transition: all 0.3s ease;
+            min-width: 160px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            -webkit-tap-highlight-color: transparent;
+        }
+        #refresh-btn:hover {
+            background: linear-gradient(135deg, #4e5aa6, #3448a3);
+            box-shadow: 0 8px 25px rgba(63, 81, 181, 0.4);
+            transform: translateY(-2px);
+        }
+        #refresh-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 15px rgba(63, 81, 181, 0.3);
+        }
+        .icon {
+            font-size: 16px;
+        }
+        /* ======================================
+           RESPONSIVE ADJUSTMENTS — MOBILE FIRST
+        ====================================== */
+        @media (max-width: 480px) {
+            .header { 
+                padding: 16px 8px; /* ✅ बदलाव: padding और कम किया */
+                min-height: 70px; /* थोड़ा ऊंचाई बढ़ाई दो लाइनों के लिए */
+            }
+            .trophy-icon { font-size: 32px; } /* छोटा आइकन */
+            h1 { 
+                font-size: 18px; /* ✅ बदलाव: मोबाइल पर छोटा font-size */
+                line-height: 1.3;
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+            .container { padding: 16px 10px; }
+            .quiz-option { padding: 18px; min-height: 220px; }
+            .thumbnail { height: 140px; }
+            .quiz-title { font-size: 17px; }
+            button { 
+                padding: 16px 36px; 
+                font-size: 15px; 
+                margin-top: 16px; 
+                min-height: 48px;
+            }
+            .btn-text { font-size: 14px; }
+            .hint-text { font-size: 10px; }
+            .footer { padding: 12px 12px; }
+            #refresh-btn { padding: 10px 24px; font-size: 13px; }
+        }
+        @media (min-width: 768px) {
+            .header { padding: 24px 16px; }
+            .trophy-icon { font-size: 40px; }
+            h1 { font-size: 22px; }
+            .container { padding: 20px 16px; }
+            .quiz-option { padding: 24px; min-height: 260px; }
+            .thumbnail { height: 160px; }
+            .quiz-title { font-size: 19px; }
+            button { padding: 18px 40px; font-size: 16px; }
+            .hint-text { font-size: 11px; }
+            .footer { padding: 16px 16px; }
+            #refresh-btn { padding: 12px 28px; font-size: 14px; }
+        }
+        @media (min-width: 1024px) {
+            .header { padding: 28px 20px; }
+            .trophy-icon { font-size: 44px; }
+            h1 { font-size: 24px; }
+            .container { padding: 28px 20px; }
+            .quiz-option { padding: 28px; min-height: 280px; }
+            .thumbnail { height: 180px; }
+            .quiz-title { font-size: 20px; }
+            button { padding: 20px 48px; font-size: 17px; }
+            .hint-text { font-size: 12px; }
+            .footer { padding: 18px 20px; }
+            #refresh-btn { padding: 14px 32px; font-size: 15px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="status-bar">
-    MIND_GRID
-  </div>
-  <div class="intro">
-    <h2>🌟 स्वागत है राजस्थान GK क्विज़ में!</h2>
-    <p>अपने ज्ञान को परखें और राजस्थान की संस्कृति से जुड़ें। फ्री और पेड क्विज़ के साथ मज़ा लें!</p>
-  </div>
-  <div class="container">
-    <div class="card">
-      <img src="image1.png" alt="Image 1" onload="this.style.display='block'" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgNDAwIDE4MCI+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxODAiIGZpbGw9IiNlOWVjZWYiIHJ4PSI4IiByeT0iOCIvPgogIDx0ZXh0IHg9IjIwMCIgeT0iOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzQ5NTA1NyI+RnJlZSBRdWl6PC90ZXh0Pgo8L3N2Zz4='; this.style.display='block'">
-      <a href="free-quiz.html" class="btn free" onclick="handleClick(this.href, event)">Free Quiz</a>
+    <div class="header">
+        <span class="trophy-icon">🏆</span>
+        <h1>राजस्थान GK Quiz में आपका स्वागत है</h1>
     </div>
-    <div class="card">
-      <img src="image2.png" alt="Image 2" onload="this.style.display='block'" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgNDAwIDE4MCI+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxODAiIGZpbGw9IiNlOWVjZWYiIHJ4PSI4IiByeT0iOCIvPgogIDx0ZXh0IHg9IjIwMCIgeT0iOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzQ5NTA1NyI+UGFpZCBRdWl6PC90ZXh0Pgo8L3N2Zz4='; this.style.display='block'">
-      <a href="index.html" class="btn paid" onclick="handleClick(this.href, event)">Paid Quiz</a>
+    <div class="container">
+        <div class="quiz-option free-option">
+            <img src="free_thumbnail.jpg" alt="फ्री Quiz थंबनेल" class="thumbnail">
+            <div class="quiz-title free-title">
+                <i class="fas fa-gift"></i>
+                फ्री Quiz
+                <span class="quiz-badge">Free</span>
+            </div>
+            <button id="free-btn" onclick="navigateTo('free')" class="pulse">
+                <span class="btn-text">
+                    <i class="fas fa-play"></i>
+                    Start Free Quiz
+                </span>
+            </button>
+            <p class="hint-text">टैप करें और शुरू करें!</p>
+        </div>
+        <div class="quiz-option paid-option">
+            <img src="paid_thumbnail.jpg" alt="पेड Quiz थंबनेल" class="thumbnail">
+            <div class="quiz-title paid-title">
+                <i class="fas fa-crown"></i>
+                पेड Quiz
+                <span class="quiz-badge paid-badge">Premium</span>
+            </div>
+            <button id="paid-btn" onclick="navigateTo('paid')" class="pulse">
+                <span class="btn-text">
+                    <i class="fas fa-lock-open"></i>
+                    Unlock Premium Quiz
+                </span>
+            </button>
+            <p class="hint-text">अधिक सवालों के लिए अनलॉक करें!</p>
+        </div>
     </div>
-  </div>
-  <div class="refresh-btn-container">
-    <button class="btn refresh" onclick="refreshApp()"><i class="fas fa-sync-alt"></i> Refresh App</button>
-  </div>
-  <div id="offline-section" class="offline-section">
-    <img src="offline.png" alt="Offline Error" class="offline-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCI+CiAgPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxNTAiIGZpbGw9IiNmOGY5ZmEiIHJ4PSIxMCIgcnk9IjEwIi8+CiAgPHBhdGggZD0iTTc1LDMwIEw5NSw3MCBMNTUsNzAgWiIgZmlsbD0iI2RjMzU0NSIvPgogIDx0ZXh0IHg9Ijc1IiB5PSIxMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzMzMyI+T2ZmbGluZTwvdGV4dD4KPC9zdmc+'">
-    <div class="error-message">⚠️ ऑफलाइन: कृपया इंटरनेट से कनेक्ट करें!</div>
-  </div>
-  <div id="error-section" class="error-section">
-    <img src="error.png" alt="Network Error" class="error-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCI+CiAgPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxNTAiIGZpbGw9IiNmOGY5ZmEiIHJ4PSIxMCIgcnk9IjEwIi8+CiAgPHBhdGggZD0iTTc1LDMwIEw5NSw3MCBMNTUsNzAgWiIgZmlsbD0iI2RjMzU0NSIvPgogIDx0ZXh0IHg9Ijc1IiB5PSIxMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzMzMyI+RXJyb3I8L3RleHQ+Cjwvc3ZnPg=='">
-    <div class="error-message">⚠️ नेटवर्क त्रुटि: कृपया कनेक्शन जाँचें!</div>
-  </div>
-  <script>
-    // रिफ्रेश ऐप फंक्शन
-    function refreshApp() {
-      const offlineSection = document.getElementById('offline-section');
-      const errorSection = document.getElementById('error-section');
-      if (!navigator.onLine) {
-        offlineSection.style.display = 'flex';
-        errorSection.style.display = 'none';
-        if ('vibrate' in navigator) {
-          navigator.vibrate([200, 100, 200]);
-        }
-        return;
-      }
-      location.reload();
-    }
-    
-    // ऑफलाइन और एरर चेक
-    function checkOnlineStatus() {
-      const offlineSection = document.getElementById('offline-section');
-      const errorSection = document.getElementById('error-section');
-      if (!navigator.onLine) {
-        offlineSection.style.display = 'flex';
-        errorSection.style.display = 'none';
-      } else {
-        offlineSection.style.display = 'none';
-        errorSection.style.display = 'none';
-      }
-    }
-    
-    // बटन क्लिक हैंडलर
-    function handleClick(url, event) {
-      event.preventDefault();
-      const offlineSection = document.getElementById('offline-section');
-      const errorSection = document.getElementById('error-section');
-      if (!navigator.onLine) {
-        offlineSection.style.display = 'flex';
-        errorSection.style.display = 'none';
-        if ('vibrate' in navigator) {
-          navigator.vibrate([200, 100, 200]);
-        }
-        return;
-      }
-      try {
-        fetch(url, { method: 'HEAD', cache: 'no-store' })
-          .then(response => {
-            if (response.ok) {
-              window.location.href = url;
+    <div class="footer">
+        <button id="refresh-btn" onclick="navigateTo('home')">
+            <i class="fas fa-sync-alt icon"></i>
+            रिफ्रेश करें
+        </button>
+    </div>
+    <script>
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // नेविगेशन फंक्शन - App Inventor को संदेश भेजता है
+        function navigateTo(page) {
+            if (window.AppInventor) {
+                // App Inventor के साथ कम्युनिकेट करने के लिए
+                window.AppInventor.setWebViewString(page);
             } else {
-              errorSection.style.display = 'flex';
-              offlineSection.style.display = 'none';
-              if ('vibrate' in navigator) {
-                navigator.vibrate([200, 100, 200]);
-              }
+                // अगर App Inventor उपलब्ध नहीं है, तो डिफ़ॉल्ट रूप से नेविगेट करें
+                console.log('App Inventor not available, navigating to:', page);
+                
+                if (page === 'free') {
+                    window.location.href = 'free-quiz.html';
+                } else if (page === 'paid') {
+                    window.location.href = 'paid-quiz.html';
+                } else if (page === 'home') {
+                    window.location.href = 'home.html';
+                }
             }
-          })
-          .catch(() => {
-            errorSection.style.display = 'flex';
-            offlineSection.style.display = 'none';
-            if ('vibrate' in navigator) {
-              navigator.vibrate([200, 100, 200]);
-            }
-          });
-      } catch (error) {
-        errorSection.style.display = 'flex';
-        offlineSection.style.display = 'none';
-        if ('vibrate' in navigator) {
-          navigator.vibrate([200, 100, 200]);
         }
-      }
-    }
-    
-    // ग्लोबल एरर हैंडलिंग
-    window.onerror = function(message, source, lineno, colno, error) {
-      const errorSection = document.getElementById('error-section');
-      errorSection.style.display = 'flex';
-      document.getElementById('offline-section').style.display = 'none';
-      console.error('Global error:', message, error);
-      if ('vibrate' in navigator) {
-        navigator.vibrate([200, 100, 200]);
-      }
-      return true;
-    };
-    
-    // पेज लोड और नेटवर्क स्टेटस चेक
-    window.addEventListener('load', checkOnlineStatus);
-    window.addEventListener('online', checkOnlineStatus);
-    window.addEventListener('offline', checkOnlineStatus);
-    
-    // इमेज लोडिंग के लिए फॉलबैक
-    document.querySelectorAll('img').forEach(img => {
-      if (!img.complete) {
-        img.onerror = () => {
-          if (!img.classList.contains('offline-image') && !img.classList.contains('error-image')) {
-            if (img.alt === "Image 1") {
-              img.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgNDAwIDE4MCI+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxODAiIGZpbGw9IiNlOWVjZWYiIHJ4PSI4IiByeT0iOCIvPgogIDx0ZXh0IHg9IjIwMCIgeT0iOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzQ5NTA1NyI+RnJlZSBRdWl6PC90ZXh0Pgo8L3N2Zz4=';
-            } else if (img.alt === "Image 2") {
-              img.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgNDAwIDE4MCI+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxODAiIGZpbGw9IiNlOWVjZWYiIHJ4PSI4IiByeT0iOCIvPgogIDx0ZXh0IHg9IjIwMCIgeT0iOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzQ5NTA1NyI+UGFpZCBRdWl6PC90ZXh0Pgo8L3N2Zz4=';
-            }
-          }
-        };
-      }
-    });
-    
-    // कैश से छवियां लोड करने की कोशिश करें
-    window.addEventListener('load', function() {
-      if ('caches' in window) {
-        caches.match('image1.png').then(function(response) {
-          if (response) {
-            const img1 = document.querySelector('img[alt="Image 1"]');
-            if (img1) {
-              response.blob().then(function(blob) {
-                const url = URL.createObjectURL(blob);
-                img1.src = url;
-              });
-            }
-          }
-        });
-        
-        caches.match('image2.png').then(function(response) {
-          if (response) {
-            const img2 = document.querySelector('img[alt="Image 2"]');
-            if (img2) {
-              response.blob().then(function(blob) {
-                const url = URL.createObjectURL(blob);
-                img2.src = url;
-              });
-            }
-          }
-        });
-        
-        caches.match('offline.png').then(function(response) {
-          if (response) {
-            const offlineImg = document.querySelector('.offline-image');
-            if (offlineImg) {
-              response.blob().then(function(blob) {
-                const url = URL.createObjectURL(blob);
-                offlineImg.src = url;
-              });
-            }
-          }
-        });
-        
-        caches.match('error.png').then(function(response) {
-          if (response) {
-            const errorImg = document.querySelector('.error-image');
-            if (errorImg) {
-              response.blob().then(function(blob) {
-                const url = URL.createObjectURL(blob);
-                errorImg.src = url;
-              });
-            }
-          }
-        });
-      }
-    });
-    
-    // ऐप को फुल स्क्रीन मोड में खोलने के लिए
-    window.addEventListener('load', function() {
-      // यूजर इंटरैक्शन के बाद फुल स्क्रीन मोड में जाएं
-      document.addEventListener('click', function() {
-        if (!document.fullscreenElement && !document.webkitFullscreenElement && 
-            !document.mozFullScreenElement && !document.msFullscreenElement) {
-          if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-          } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen();
-          } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-          } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
-          }
-        }
-      }, { once: true });
-    });
-  </script>
+    </script>
 </body>
 </html>
