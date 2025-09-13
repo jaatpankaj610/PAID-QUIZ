@@ -1,17 +1,18 @@
-```html
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <meta name="theme-color" content="#4a00e0">
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-        
         :root {
             --primary: #4a00e0;
             --secondary: #8e2de2;
@@ -24,355 +25,545 @@
             --offline-gradient: linear-gradient(135deg, #636e72, #b2bec3);
             --error-gradient: linear-gradient(135deg, #ff7675, #d63031);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Noto Sans Devanagari', sans-serif;
         }
-        
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            touch-action: pan-y;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            min-height: 100vh;
+            background: linear-gradient(120deg, #e0c3fc, #8ec5fc);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0;
-            overflow-x: hidden;
+            min-height: 100vh;
+            min-width: 100vw;
             position: fixed;
-            width: 100%;
-            height: 100vh;
             top: 0;
             left: 0;
-            touch-action: pan-y;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            overscroll-behavior: none;
         }
-        
+
         .container {
             width: 100%;
-            max-width: 600px;
             height: 100vh;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            background: var(--light);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
-        
+
         .scrollable-content {
             flex: 1;
             overflow-y: auto;
-            overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        
+
+        .scrollable-content::-webkit-scrollbar {
+            display: none;
+        }
+
         .header {
             background: var(--gradient);
-            padding: 30px 20px;
+            padding: 16px 12px;
             text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
+            color: var(--light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .header h1 {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-        
-        .content {
-            padding: 25px;
-            padding-bottom: 30px;
-        }
-        
-        .payment-info {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .price-tag {
-            font-size: 40px;
-            font-weight: 800;
-            color: var(--secondary);
-            margin: 15px 0;
-            text-align: center;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .price-period {
-            font-size: 18px;
-            color: #555;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        
-        .features {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-        
-        .features li {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            font-size: 16px;
-            color: #333;
-            font-weight: 500;
-        }
-        
-        .features li i {
-            margin-right: 12px;
-            color: var(--success);
             font-size: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 16px;
-        }
-        
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(74, 0, 224, 0.15);
-        }
-        
-        .form-group .error-text {
-            color: var(--danger);
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        #form-error {
-            color: var(--danger);
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-align: center;
-            display: none;
-        }
-        
-        .qr-section {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .qr-code {
-            width: 200px;
-            height: 200px;
-            background: #f5f5f5;
-            border-radius: 12px;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #ddd;
-        }
-        
-        .qr-code img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 12px;
-        }
-        
-        .upi-id {
-            background: rgba(74, 0, 224, 0.1);
-            border-radius: 12px;
-            padding: 12px;
-            margin: 15px 0;
-            font-weight: 600;
-            color: var(--primary);
-            word-break: break-all;
-            font-size: 16px;
-        }
-        
-        .submit-btn {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 18px 30px;
-            font-size: 18px;
             font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(74, 0, 224, 0.3);
-        }
-        
-        .status-message {
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 20px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 16px;
-            display: none;
-        }
-        
-        .status-message.success {
-            background: rgba(0, 184, 148, 0.15);
-            color: var(--success);
-            border: 1px solid var(--success);
-            display: block;
-        }
-        
-        .status-message.pending {
-            background: rgba(253, 203, 110, 0.15);
-            color: var(--warning);
-            border: 1px solid var(--warning);
-            display: block;
-        }
-        
-        .clear-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 15px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            font-size: 16px;
-        }
-        
-        .home-btn {
-            background: var(--dark);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 10px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            font-size: 16px;
+            margin-bottom: 6px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 4px 10px rgba(45, 52, 54, 0.3);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: calc(100vw - 24px);
+        }
+
+        .header p {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.9;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: calc(100vw - 24px);
+        }
+
+        .content {
+            padding: 72px 12px 80px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .payment-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-info h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .price-tag {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 12px 0;
+            text-align: center;
+        }
+
+        .price-period {
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 16px;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--dark);
+            font-weight: 500;
+            padding: 8px;
+            background: rgba(241, 245, 249, 0.7);
+            border-radius: 8px;
+        }
+
+        .features li i {
+            margin-right: 10px;
+            color: var(--success);
+            font-size: 16px;
+            background: rgba(0, 184, 148, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
-        
-        .home-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(45, 52, 54, 0.4);
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+        }
+
+        .form-group .error-text {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        #form-error {
+            color: var(--danger);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .qr-section {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .qr-code {
+            width: 160px;
+            height: 160px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ddd;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .upi-id {
+            background: rgba(74, 0, 224, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 12px 0;
+            font-weight: 600;
+            color: var(--primary);
+            word-break: break-all;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn {
+            background: var(--gradient);
+            color: var(--light);
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 0, 224, 0.2);
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(0, 184, 148, 0.2);
+        }
+
+        .status-message.pending {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(253, 203, 110, 0.2);
+        }
+
+        .clear-btn, .home-btn {
+            background: var(--dark);
+            color: var(--light);
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .clear-btn:hover, .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
             background: linear-gradient(135deg, #2d3436, #636e72);
         }
-        
+
         .home-btn i {
-            font-size: 18px;
+            font-size: 16px;
         }
-        
+
         .offline-section, .error-section {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--light);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
-        
+
         .custom-design {
-            width: 80%;
-            max-width: 300px;
-            height: 300px;
-            margin: 0 auto 15px;
-            border-radius: 15px;
+            width: 100%;
+            max-width: 240px;
+            height: 200px;
+            margin: 0 auto 12px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: 800;
+            color: var(--light);
+            font-size: 18px;
+            font-weight: 700;
             text-align: center;
-            line-height: 1.2;
-            background: var(--error-gradient);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            line-height: 1.4;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .offline-section .custom-design {
             background: var(--offline-gradient);
         }
-        
+
         .error-section .custom-design {
             background: var(--error-gradient);
         }
-        
+
         .offline-message, .error-message {
-            font-size: 20px;
-            color: #333;
+            font-size: 16px;
+            color: var(--dark);
             font-weight: 600;
             text-align: center;
-            max-width: 80%;
+            max-width: 90%;
         }
-        
+
         @keyframes zoomInOut {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
-        
+
         .offline-section .custom-design, .error-section .custom-design {
-            animation: zoomInOut 2s infinite;
+            animation: zoomInOut 2s infinite ease-in-out;
         }
-        
-        @media (max-width: 600px) {
-            .header h1 { font-size: 28px; }
-            .price-tag { font-size: 36px; }
-            .submit-btn { font-size: 16px; padding: 15px 25px; }
-            .custom-design { font-size: 20px; height: 250px; }
-            .offline-message, .error-message { font-size: 18px; }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .header {
+                padding: 12px 8px;
+            }
+            .header h1 {
+                font-size: 18px;
+                max-width: calc(100vw - 20px);
+            }
+            .header p {
+                font-size: 11px;
+                max-width: calc(100vw - 20px);
+            }
+            .content {
+                padding: 64px 8px 72px;
+                gap: 12px;
+            }
+            .payment-info {
+                padding: 12px;
+            }
+            .payment-info h2 {
+                font-size: 16px;
+            }
+            .price-tag {
+                font-size: 28px;
+            }
+            .price-period {
+                font-size: 13px;
+            }
+            .features li {
+                font-size: 13px;
+                padding: 6px;
+            }
+            .features li i {
+                font-size: 14px;
+                width: 20px;
+                height: 20px;
+            }
+            .form-group label {
+                font-size: 13px;
+            }
+            .form-group input, .form-group textarea {
+                padding: 8px;
+                font-size: 13px;
+            }
+            .form-group .error-text {
+                font-size: 11px;
+            }
+            #form-error {
+                font-size: 13px;
+            }
+            .qr-section {
+                padding: 12px;
+                margin: 12px 0;
+            }
+            .qr-code {
+                width: 140px;
+                height: 140px;
+            }
+            .upi-id {
+                font-size: 13px;
+                padding: 8px;
+            }
+            .submit-btn, .clear-btn, .home-btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+            .status-message {
+                font-size: 13px;
+                padding: 10px;
+            }
+            .custom-design {
+                max-width: 200px;
+                height: 180px;
+                font-size: 16px;
+            }
+            .offline-message, .error-message {
+                font-size: 14px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .header {
+                padding: 20px 16px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .header p {
+                font-size: 14px;
+            }
+            .content {
+                padding: 80px 16px 88px;
+                gap: 20px;
+            }
+            .payment-info {
+                padding: 20px;
+            }
+            .payment-info h2 {
+                font-size: 20px;
+            }
+            .price-tag {
+                font-size: 36px;
+            }
+            .price-period {
+                font-size: 16px;
+            }
+            .features li {
+                font-size: 15px;
+                padding: 10px;
+            }
+            .features li i {
+                font-size: 18px;
+                width: 28px;
+                height: 28px;
+            }
+            .form-group label {
+                font-size: 15px;
+            }
+            .form-group input, .form-group textarea {
+                padding: 12px;
+                font-size: 15px;
+            }
+            .form-group .error-text {
+                font-size: 13px;
+            }
+            #form-error {
+                font-size: 15px;
+            }
+            .qr-section {
+                padding: 20px;
+                margin: 20px 0;
+            }
+            .qr-code {
+                width: 180px;
+                height: 180px;
+            }
+            .upi-id {
+                font-size: 15px;
+                padding: 12px;
+            }
+            .submit-btn, .clear-btn, .home-btn {
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+            .status-message {
+                font-size: 15px;
+                padding: 14px;
+            }
+            .custom-design {
+                max-width: 280px;
+                height: 220px;
+                font-size: 20px;
+            }
+            .offline-message, .error-message {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -387,14 +578,14 @@
             <div class="content">
                 <div id="offline-section" class="offline-section" style="display: none;">
                     <div class="custom-design">
-                        📴 Rajasthan GK Quiz 🌟<br>Offline
+                        📴 ऑफ़लाइन
                     </div>
                     <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
                 </div>
                 
                 <div id="error-section" class="error-section" style="display: none;">
                     <div class="custom-design">
-                        ⚠️ Rajasthan GK Quiz 🌟<br>Error
+                        ⚠️ त्रुटि
                     </div>
                     <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
                 </div>
@@ -429,13 +620,13 @@
                         <div id="form-error" class="error-text"></div>
                         <div class="form-group">
                             <label for="user_id">अपना ईमेल ID दर्ज करें</label>
-                            <input type="text" id="user_id" name="user_id" placeholder="support@rajasthangkquiz.gmail.com" required>
+                            <input type="text" id="user_id" name="user_id" placeholder="उदाहरण: example@domain.com" required>
                             <div id="user_id_error" class="error-text"></div>
                         </div>
                         
                         <div class="form-group">
                             <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
-                            <input type="text" id="mobile_number" name="mobile_number" placeholder="76652XXXXX" required>
+                            <input type="text" id="mobile_number" name="mobile_number" placeholder="उदाहरण: 76652XXXXX" required>
                             <div id="mobile_number_error" class="error-text"></div>
                         </div>
                         
@@ -457,19 +648,18 @@
                         </div>
                         
                         <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
+                        <button type="button" class="clear-btn" onclick="clearStorage()">पेमेंट डेटा रीसेट करें</button>
+                        <button type="button" class="home-btn" onclick="goToHome()"><i class="fas fa-home"></i> होम</button>
                     </form>
                     
                     <div id="status-message" class="status-message"></div>
-                    
-                    <button class="clear-btn" onclick="clearStorage()">पेमेंट डेटा रीसेट करें</button>
-                    <button class="home-btn" onclick="goToHome()"><i class="fas fa-home"></i> होम</button>
                 </div>
             </div>
         </div>
     </div>
     
     <script>
-        // Service Worker रजिस्टर
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/PAID-QUIZ/sw.js').then(() => {
                 console.log('Service Worker Registered');
@@ -477,12 +667,14 @@
                 console.error('Service Worker Error:', error);
             });
         }
-        // यूनिक ID जनरेटर
+
+        // Unique ID Generator
         function generateUniqueId() {
             return window.crypto && crypto.randomUUID ? crypto.randomUUID() : 
                    Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
         }
-        // नेटवर्क और एरर स्टेटस चेक
+
+        // Network and Error Status Check
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
             const errorSection = document.getElementById('error-section');
@@ -495,14 +687,14 @@
                 offlineSection.style.display = 'none';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
-                // केवल तभी चेक करें जब यूजर पहले से ही फॉर्म भर चुका हो
                 const userId = document.getElementById('user_id').value.trim();
                 if (userId) {
                     checkPaymentStatus();
                 }
             }
         }
-        // पेमेंट स्टेटस चेक - बेहतर एरर हैंडलिंग के साथ
+
+        // Payment Status Check
         async function checkPaymentStatus() {
             const statusElement = document.getElementById('status-message');
             const errorSection = document.getElementById('error-section');
@@ -510,7 +702,6 @@
             const formError = document.getElementById('form-error');
             
             try {
-                // सभी पेमेंट्स लोड करें - बेहतर एरर हैंडलिंग के साथ
                 let payments = [];
                 try {
                     const paymentsData = localStorage.getItem('payments');
@@ -525,15 +716,9 @@
                     payments = [];
                 }
                 
-                console.log('Payments loaded in checkPaymentStatus:', payments);
-                
-                // यूजर ID प्राप्त करें
                 const userId = document.getElementById('user_id').value.trim() || 'unknown';
-                
-                // उस यूजर के सभी पेमेंट्स फ़िल्टर करें जो approved हैं
                 const userPayments = payments.filter(p => p.user_id === userId && p.status === 'approved');
                 
-                // सबसे हाल का approved पेमेंट ढूंढें
                 const latestApproved = userPayments.reduce((latest, payment) => {
                     if (!latest || new Date(payment.submission_date) > new Date(latest.submission_date)) {
                         return payment;
@@ -544,7 +729,6 @@
                 const now = new Date();
                 let expiryDate = null;
                 
-                // expiry date चेक करें
                 if (latestApproved && latestApproved.access_expiry_date) {
                     try {
                         expiryDate = new Date(latestApproved.access_expiry_date);
@@ -557,14 +741,11 @@
                     }
                 }
                 
-                // अगर वैलिड पेमेंट है तो quiz.html पर रीडायरेक्ट करें
                 if (latestApproved && expiryDate && now <= expiryDate) {
                     console.log('Redirecting to quiz.html: Valid approved payment for user', userId, latestApproved);
                     window.location.href = 'quiz.html';
                     return;
-                } 
-                // अगर पेमेंट एक्सपायर हो गया है
-                else if (latestApproved && expiryDate && now > expiryDate) {
+                } else if (latestApproved && expiryDate && now > expiryDate) {
                     statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
                     statusElement.className = 'status-message error';
                     statusElement.style.display = 'block';
@@ -572,7 +753,6 @@
                     return;
                 }
                 
-                // quiz.html चेक करें
                 try {
                     const response = await fetch('quiz.html', { method: 'HEAD', cache: 'no-store' });
                     if (response.status === 404 || response.status === 503) {
@@ -600,7 +780,8 @@
                 }
             }
         }
-        // सिमुलेटेड SMS
+
+        // Simulated SMS
         function sendSMS(toPhone, message) {
             console.log(`नोटिफिकेशन ${toPhone} को: ${message}`);
             const statusElement = document.getElementById('status-message');
@@ -608,94 +789,81 @@
             statusElement.className = 'status-message success';
             statusElement.style.display = 'block';
         }
-        // फॉर्म वैलिडेशन
+
+        // Form Validation
         function validateForm() {
             let isValid = true;
             const userId = document.getElementById('user_id').value.trim();
             const mobileNumber = document.getElementById('mobile_number').value.trim();
             const transactionId = document.getElementById('transaction_id').value.trim();
             const amount = document.getElementById('amount').value.trim();
-            // रीसेट एरर मैसेज
+
             document.getElementById('form-error').style.display = 'none';
             document.getElementById('user_id_error').style.display = 'none';
             document.getElementById('mobile_number_error').style.display = 'none';
             document.getElementById('transaction_id_error').style.display = 'none';
             document.getElementById('amount_error').style.display = 'none';
-            // ईमेल वैलिडेशन
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!userId) {
                 document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
                 document.getElementById('user_id_error').style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             } else if (!emailRegex.test(userId)) {
-                document.getElementById('user_id_error').textContent = 'कृपया सही ईमेल फॉर्मेट दर्ज करें (उदाहरण: example@domain.com)!';
+                document.getElementById('user_id_error').textContent = 'कृपया सही ईमेल फॉर्मेट दर्ज करें!';
                 document.getElementById('user_id_error').style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             }
-            // मोबाइल नंबर वैलिडेशन
+
             const mobileRegex = /^\d{10}$/;
             if (!mobileNumber) {
                 document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
                 document.getElementById('mobile_number_error').style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             } else if (!mobileRegex.test(mobileNumber)) {
                 document.getElementById('mobile_number_error').textContent = 'कृपया ठीक 10 अंकों का मोबाइल नंबर दर्ज करें!';
                 document.getElementById('mobile_number_error').style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             }
-            // ट्रांजैक्शन ID वैलिडेशन
+
             if (!transactionId) {
                 document.getElementById('transaction_id_error').textContent = 'कृपया UPI ट्रांजैक्शन ID दर्ज करें!';
                 document.getElementById('transaction_id_error').style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             }
-            // राशि वैलिडेशन
+
             if (!amount) {
                 document.getElementById('amount_error').textContent = 'कृपया पेमेंट राशि दर्ज करें!';
                 document.getElementById('amount_error').style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             } else if (amount !== '49') {
                 document.getElementById('amount_error').textContent = 'कृपया सही राशि (₹49) दर्ज करें!';
                 document.getElementById('amount_error').style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             }
+
             return isValid;
         }
-        // पेमेंट सबमिट - बेहतर एरर हैंडलिंग के साथ
+
+        // Submit Payment
         function submitPayment() {
             if (!navigator.onLine) {
                 const formError = document.getElementById('form-error');
                 formError.textContent = 'कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।';
                 formError.style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
                 return;
             }
-            if (!validateForm()) {
-                return;
-            }
+
+            if (!validateForm()) return;
+
             const userId = document.getElementById('user_id').value.trim();
             const mobileNumber = document.getElementById('mobile_number').value.trim();
             const transactionId = document.getElementById('transaction_id').value.trim();
@@ -703,9 +871,11 @@
             const paymentNote = document.getElementById('payment_note').value.trim();
             const statusElement = document.getElementById('status-message');
             const formError = document.getElementById('form-error');
+
             statusElement.textContent = 'आपकी रिक्वेस्ट प्रोसेस हो रही है...';
             statusElement.className = 'status-message pending';
             statusElement.style.display = 'block';
+
             const paymentData = {
                 id: generateUniqueId(),
                 user_id: userId,
@@ -717,39 +887,34 @@
                 status: 'pending',
                 payment_method: 'upi'
             };
+
             try {
-                // Storage quota check and cleanup
                 let testKey = 'temp_quota_test';
                 localStorage.setItem(testKey, 'test');
                 localStorage.removeItem(testKey);
-                // मौजूदा पेमेंट्स लोड करें - बेहतर एरर हैंडलिंग के साथ
+
                 let payments = [];
                 try {
                     const paymentsData = localStorage.getItem('payments');
                     if (paymentsData) {
                         payments = JSON.parse(paymentsData);
-                        if (!Array.isArray(payments)) {
-                            payments = [];
-                        }
+                        if (!Array.isArray(payments)) payments = [];
                     }
                 } catch (e) {
                     console.error('Error parsing payments from localStorage:', e);
                     payments = [];
                 }
-                if (payments.length > 50) {
-                    payments = payments.slice(-50);
-                }
-                
-                console.log('Current payments before adding:', payments);
-                // नई रिक्वेस्ट जोड़ें
+
+                if (payments.length > 50) payments = payments.slice(-50);
+
                 payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
-                console.log('Payment stored in localStorage:', paymentData);
-                console.log('All payments in localStorage after adding:', payments);
+
                 const adminMessage = `नया पेमेंट रिक्वेस्ट: यूजर ${userId}, मोबाइल ${mobileNumber}, ट्रांजैक्शन ID ${transactionId}, राशि ₹${amount}।`;
                 sendSMS('7665274721', adminMessage);
                 const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको 30 दिन की प्रीमियम एक्सेस मिलेगी।`;
                 sendSMS(mobileNumber, userMessage);
+
                 statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद नोटिफिकेशन भेजा गया है।`;
                 statusElement.className = 'status-message success';
                 document.getElementById('payment-form').style.display = 'none';
@@ -758,12 +923,11 @@
                 formError.textContent = 'पेमेंट रिक्वेस्ट प्रोसेस करने में त्रुटि। कृपया अपनी डिवाइस सेटिंग्स चेक करें और पुनः प्रयास करें।';
                 formError.style.display = 'block';
                 statusElement.style.display = 'none';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
             }
         }
-        // LocalStorage क्लियर
+
+        // Clear Storage
         function clearStorage() {
             try {
                 localStorage.removeItem('payments');
@@ -773,44 +937,44 @@
                 statusElement.style.display = 'block';
                 document.getElementById('payment-form').style.display = 'block';
                 document.getElementById('payment-form').reset();
-                // रीसेट एरर मैसेज
                 document.getElementById('form-error').style.display = 'none';
                 document.getElementById('user_id_error').style.display = 'none';
                 document.getElementById('mobile_number_error').style.display = 'none';
                 document.getElementById('transaction_id_error').style.display = 'none';
                 document.getElementById('amount_error').style.display = 'none';
-                console.log('localStorage cleared');
             } catch (error) {
                 console.error('Error clearing localStorage:', error);
                 const formError = document.getElementById('form-error');
                 formError.textContent = 'डेटा रीसेट करने में त्रुटि। कृपया अपनी डिवाइस सेटिंग्स चेक करें और पुनः प्रयास करें।';
                 formError.style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                if ('vibrate' in navigator) navigator.vibrate(200);
             }
         }
-        // ग्लोबल एरर हैंडलिंग
+
+        // Global Error Handling
         window.onerror = function(message, source, lineno, colno, error) {
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
             errorSection.style.display = 'flex';
             onlineContent.style.display = 'none';
             console.error('Global error:', message, error);
-            if ('vibrate' in navigator) {
-                navigator.vibrate(200);
-            }
+            if ('vibrate' in navigator) navigator.vibrate(200);
             return true;
         };
-        // पेज लोड और नेटवर्क स्टेटस चेक
+
+        // Event Listeners
         window.addEventListener('load', checkNetworkStatus);
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
-        // होम पर वापस
+
+        // Go to Home
         function goToHome() {
-            window.location.href = 'home.html';
+            if (window.AppInventor) {
+                window.AppInventor.setWebViewString('home.html');
+            } else {
+                window.location.href = 'home.html';
+            }
         }
     </script>
 </body>
 </html>
-```
