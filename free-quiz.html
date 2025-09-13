@@ -2,24 +2,25 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>राजस्थान GK फ्री क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
             --secondary: #7c3aed;
             --accent: #ec4899;
-            --success: #047857; /* Darker green for tick */
+            --success: #047857;
             --danger: #ef4444;
             --warning: #f59e0b;
             --light: #ffffff;
-            --dark: #1e293b;
-            --gray: #64748b;
+            --dark: #000000;
+            --gray: #000000;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
             --premium-gradient: linear-gradient(135deg, #f59e0b, #ef4444);
             --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
@@ -31,6 +32,7 @@
             padding: 0; 
             box-sizing: border-box; 
             font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; 
+            font-weight: 600;
         }
         
         body { 
@@ -42,36 +44,37 @@
             padding: 0; 
             overflow: hidden; 
             position: fixed; 
-            width: 100%; 
+            width: 100vw; 
             height: 100vh; 
             top: 0; 
             left: 0; 
-            touch-action: manipulation;
+            touch-action: none;
         }
         
         .container { 
-            width: 100%; 
-            height: 100vh; /* Full height */
+            width: 100vw; 
+            height: 100vh;
             background: var(--light); 
             border-radius: 0; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
             overflow: hidden; 
             display: flex; 
             flex-direction: column; 
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
         
         .scrollable-content { 
             flex: 1; 
-            overflow-y: hidden; /* No scroll */
-            overflow-x: hidden; 
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Hide scrollbar */
+            overflow: hidden;
+            -webkit-overflow-scrolling: none;
+            scrollbar-width: none;
         }
         
         .header { 
             background: var(--gradient); 
-            padding: 20px 15px; 
+            padding: 15px; 
             text-align: center; 
             color: var(--light); 
             position: relative; 
@@ -96,7 +99,7 @@
         }
         
         .header h1 { 
-            font-size: 26px; 
+            font-size: 24px; 
             font-weight: 800; 
             margin-bottom: 8px; 
             color: var(--light);
@@ -106,33 +109,35 @@
         }
         
         .header p { 
-            font-size: 15px; 
-            font-weight: 500; 
-            color: rgba(255,255,255,0.9);
+            font-size: 14px; 
+            font-weight: 700;
+            color: #ffffff;
             letter-spacing: 0.2px;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
         
         .content { 
-            padding: 15px; 
-            padding-bottom: 20px; 
+            padding: 10px; 
+            padding-bottom: 80px; 
             flex: 1; 
             display: flex; 
             flex-direction: column; 
+            max-width: 100%;
         }
         
         .quiz-info { 
             background: var(--light); 
             border-radius: 16px; 
-            padding: 20px; 
-            margin-bottom: 20px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
             box-shadow: var(--card-shadow); 
             text-align: center; 
             border: 1px solid rgba(0,0,0,0.05);
             animation: fadeInUp 0.6s ease-out;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            max-width: 100%;
         }
         
         @keyframes fadeInUp {
@@ -147,10 +152,10 @@
         }
         
         .quiz-info h2 { 
-            font-size: 22px; 
-            font-weight: 700; 
-            color: var(--dark); 
-            margin-bottom: 12px;
+            font-size: 20px; 
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -160,29 +165,29 @@
         }
         
         .quiz-info p { 
-            font-size: 15px; 
-            font-weight: 500; 
-            color: var(--gray);
-            margin-bottom: 20px;
+            font-size: 14px; 
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 15px;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
         
         .features { 
             list-style: none; 
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .features li { 
-            margin-bottom: 10px; 
+            margin-bottom: 8px; 
             display: flex; 
             align-items: center; 
-            font-size: 15px; 
-            font-weight: 500; 
+            font-size: 14px; 
+            font-weight: 700;
             color: var(--dark);
             background: rgba(241, 245, 249, 0.7);
-            padding: 12px 15px;
-            border-radius: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             animation: fadeIn 0.5s ease-out;
             animation-fill-mode: both;
@@ -207,12 +212,12 @@
         }
         
         .features li i { 
-            margin-right: 12px; 
+            margin-right: 10px; 
             color: var(--success); 
-            font-size: 18px;
+            font-size: 16px;
             background: rgba(16, 185, 129, 0.1);
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -225,14 +230,14 @@
             color: var(--light); 
             border: none; 
             border-radius: 12px; 
-            padding: 14px 20px; 
-            font-size: 16px; 
-            font-weight: 600; 
+            padding: 12px 18px; 
+            font-size: 15px; 
+            font-weight: 700;
             cursor: pointer; 
             width: 100%; 
             transition: all 0.3s ease; 
             box-shadow: var(--button-shadow);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -249,9 +254,9 @@
             color: var(--light); 
             border: none; 
             border-radius: 12px; 
-            padding: 14px 20px; 
-            font-size: 16px; 
-            font-weight: 600; 
+            padding: 12px 18px; 
+            font-size: 15px; 
+            font-weight: 700;
             cursor: pointer; 
             width: 100%; 
             transition: all 0.3s ease; 
@@ -271,8 +276,8 @@
             display: none; 
             background: var(--light); 
             border-radius: 16px; 
-            padding: 15px; 
-            margin-bottom: 20px; 
+            padding: 10px; 
+            margin-bottom: 15px; 
             box-shadow: var(--card-shadow); 
             border: 1px solid rgba(0,0,0,0.05);
             position: relative;
@@ -280,27 +285,31 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            width: 100%;
+            max-width: 100%;
         }
         
         .question-container {
             flex: 1;
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
         
         .question { 
-            font-size: 18px; 
-            font-weight: 600; 
-            color: var(--dark); 
-            margin-bottom: 15px;
+            font-size: 16px; 
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
             background: rgba(241, 245, 249, 0.7);
-            padding: 16px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             line-height: 1.5;
             word-wrap: break-word;
             overflow-wrap: break-word;
             border-left: 4px solid var(--primary);
+            width: 100%;
         }
         
         .options { 
@@ -309,38 +318,56 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            width: 100%;
         }
         
         .options li { 
-            background: var(--light); 
-            padding: 14px 16px; 
+            background: linear-gradient(135deg, #0d9488, #4b5563); 
+            padding: 14px 18px; 
             margin-bottom: 10px; 
-            border-radius: 12px; 
+            border-radius: 20px; 
             cursor: pointer; 
-            transition: all 0.2s ease; 
-            font-size: 15px; 
-            font-weight: 500; 
-            color: var(--dark); 
-            border: 1px solid rgba(0,0,0,0.08);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            transition: all 0.3s ease; 
+            font-size: 16px; 
+            font-weight: 700;
+            color: #ffffff;
+            border: 2px solid #0d9488;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
             line-height: 1.4;
             word-wrap: break-word;
             overflow-wrap: break-word;
             display: flex;
             align-items: center;
+            position: relative;
+            width: 100%;
+            animation: popIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         
         .options li:hover { 
-            background: rgba(241, 245, 249, 0.8);
-            border-color: var(--primary);
-            transform: translateX(3px);
+            background: linear-gradient(135deg, #14b8a6, #6b7280);
+            border: 2px solid #14b8a6;
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
         }
         
         .options li.correct { 
-            background: rgba(4, 120, 87, 0.1); /* Darker green background */
-            border-color: var(--success);
-            color: var(--success);
-            font-weight: 600;
+            background: linear-gradient(135deg, #10b981, #047857);
+            border: 2px solid #10b981;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            animation: pop3D 0.4s ease-out forwards;
         }
         
         .options li.correct::after {
@@ -348,15 +375,17 @@
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             margin-left: auto;
-            font-size: 16px;
-            color: var(--success); /* Darker green tick */
+            font-size: 18px;
+            color: #ffffff;
         }
         
         .options li.incorrect { 
-            background: rgba(239, 68, 68, 0.1); 
-            border-color: var(--danger);
-            color: var(--danger);
-            font-weight: 600;
+            background: linear-gradient(135deg, #f87171, #ef4444); 
+            border: 2px solid #f87171;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+            animation: pop3D 0.4s ease-out forwards;
         }
         
         .options li.incorrect::after {
@@ -364,25 +393,41 @@
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             margin-left: auto;
-            font-size: 16px;
+            font-size: 18px;
+        }
+        
+        @keyframes pop3D {
+            0% {
+                transform: perspective(600px) rotateX(0deg) scale(1);
+                box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            }
+            50% {
+                transform: perspective(600px) rotateX(10deg) scale(1.05);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+            }
+            100% {
+                transform: perspective(600px) rotateX(0deg) scale(1);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            }
         }
         
         .result { 
-            margin-top: 15px; 
-            font-size: 16px; 
-            font-weight: 600; 
+            margin-top: 10px; 
+            font-size: 14px; 
+            font-weight: 700;
             text-align: center; 
             display: none;
-            padding: 14px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 10px;
             line-height: 1.4;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            width: 100%;
         }
         
         .result.success { 
             color: var(--success);
-            background: rgba(4, 120, 87, 0.1); /* Darker green background */
+            background: rgba(4, 120, 87, 0.1);
             border: 1px solid rgba(4, 120, 87, 0.2);
         }
         
@@ -397,12 +442,12 @@
             color: var(--light); 
             border: none; 
             border-radius: 12px; 
-            padding: 14px; 
-            font-size: 16px; 
-            font-weight: 600; 
+            padding: 12px; 
+            font-size: 15px; 
+            font-weight: 700;
             cursor: pointer; 
             width: 100%; 
-            margin-top: 15px; 
+            margin-top: 10px; 
             display: none; 
             box-shadow: var(--button-shadow);
         }
@@ -414,27 +459,28 @@
         
         .offline-section, .error-section { 
             text-align: center; 
-            padding: 20px; 
+            padding: 15px; 
             background: var(--light); 
             border-radius: 16px; 
             box-shadow: var(--card-shadow); 
-            margin: 20px 0; 
+            margin: 15px 0; 
             border: 1px solid rgba(0,0,0,0.05);
             word-wrap: break-word;
             overflow-wrap: break-word;
+            width: 100%;
         }
         
         .custom-design { 
-            width: 140px; 
-            height: 140px; 
-            margin: 0 auto 15px; 
+            width: 120px; 
+            height: 120px; 
+            margin: 0 auto 10px; 
             border-radius: 16px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
             color: var(--light); 
-            font-size: 20px; 
+            font-size: 18px; 
             font-weight: 700; 
             text-align: center; 
             line-height: 1.3;
@@ -449,23 +495,25 @@
         }
         
         .offline-message, .error-message { 
-            font-size: 16px; 
-            font-weight: 600; 
+            font-size: 14px; 
+            font-weight: 700;
             color: var(--dark);
             background: rgba(241, 245, 249, 0.7);
-            padding: 14px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             word-wrap: break-word;
             overflow-wrap: break-word;
+            width: 100%;
         }
         
         .progress-bar {
-            height: 6px;
+            height: 5px;
             background: rgba(0,0,0,0.05);
             border-radius: 3px;
-            margin: 15px 0;
+            margin: 10px 0;
             overflow: hidden;
+            width: 100%;
         }
         
         .progress {
@@ -477,41 +525,18 @@
         }
         
         .score-display {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            margin: 10px 0;
             background: var(--light);
             color: var(--dark);
-            font-size: 14px;
-            font-weight: 600;
-            padding: 8px 12px;
-            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 10px;
+            border-radius: 25px;
             box-shadow: var(--button-shadow);
-            z-index: 2;
             display: none;
             border: 1px solid rgba(0,0,0,0.08);
-        }
-        
-        .auto-next-timer {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: var(--accent);
-            color: var(--light);
-            font-size: 13px;
-            font-weight: 600;
-            padding: 6px 10px;
-            border-radius: 30px;
-            box-shadow: var(--button-shadow);
-            z-index: 2;
-            display: none;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            text-align: center;
+            width: 100%;
         }
         
         .error-overlay {
@@ -519,8 +544,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.7);
             z-index: 3000;
             align-items: center;
@@ -530,32 +555,35 @@
 
         .error-container {
             background: var(--light);
-            padding: 20px;
+            padding: 15px;
             border-radius: 16px;
             box-shadow: var(--card-shadow);
             text-align: center;
             max-width: 90%;
-            width: 300px;
+            width: 100%;
+            max-width: 280px;
         }
 
         .error-image {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             background: var(--danger);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
+            margin: 0 auto 10px;
             color: var(--light);
-            font-size: 40px;
+            font-size: 36px;
         }
 
         .error-message {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--dark);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .retry-btn {
@@ -563,9 +591,9 @@
             color: var(--light);
             border: none;
             border-radius: 12px;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 10px 18px;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
             box-shadow: var(--button-shadow);
@@ -576,15 +604,71 @@
             box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
         }
 
-        /* Home Button */
-        .home-btn {
-            background: var(--gray);
+        .score-section {
+            display: none;
+            background: var(--light);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out;
+            flex: 1;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .score-section h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .score-details {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 15px;
+            background: rgba(241, 245, 249, 0.7);
+            padding: 12px;
+            border-radius: 10px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: var(--light);
+            font-size: 24px;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .restart-btn {
+            background: var(--gradient);
             color: var(--light);
             border: none;
             border-radius: 12px;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
             margin-top: 10px;
@@ -595,104 +679,100 @@
             gap: 8px;
         }
 
-        .home-btn:hover {
-            background: #475569;
+        .restart-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(71, 85, 105, 0.25);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
         }
 
         @media (min-width: 601px) {
             .header { 
-                padding: 30px 20px; 
+                padding: 20px; 
             }
             .header h1 { 
-                font-size: 32px; 
+                font-size: 28px; 
                 margin-bottom: 10px; 
             }
             .header p { 
-                font-size: 18px; 
+                font-size: 16px; 
             }
             .content { 
-                padding: 30px; 
-                padding-bottom: 40px; 
+                padding: 15px; 
+                padding-bottom: 90px; 
             }
             .quiz-info { 
-                padding: 30px; 
-                margin-bottom: 30px; 
+                padding: 20px; 
+                margin-bottom: 20px; 
             }
             .quiz-info h2 { 
-                font-size: 28px; 
-                margin-bottom: 15px;
+                font-size: 24px; 
+                margin-bottom: 12px;
             }
             .quiz-info p { 
-                font-size: 18px; 
+                font-size: 16px; 
             }
             .features li { 
-                font-size: 16px; 
-                margin-bottom: 12px;
-                padding: 14px 16px;
+                font-size: 15px; 
+                margin-bottom: 10px;
+                padding: 12px 14px;
             }
             .features li i { 
-                font-size: 20px; 
-                width: 36px;
-                height: 36px;
-            }
-            .start-btn, .premium-btn, .home-btn { 
-                padding: 16px 24px; 
                 font-size: 18px; 
+                width: 32px;
+                height: 32px;
+            }
+            .start-btn, .premium-btn, .restart-btn { 
+                padding: 14px 20px; 
+                font-size: 16px; 
             }
             .quiz-section { 
-                padding: 25px; 
-                margin-bottom: 30px; 
+                padding: 15px; 
+                margin-bottom: 20px; 
             }
             .question { 
-                font-size: 22px; 
-                margin-bottom: 20px;
-                padding: 20px;
+                font-size: 18px; 
+                margin-bottom: 12px;
+                padding: 14px;
             }
             .options li { 
                 padding: 16px 20px; 
                 margin-bottom: 12px;
-                font-size: 16px;
+                font-size: 17px;
             }
             .result { 
-                margin-top: 20px; 
-                font-size: 18px; 
-                padding: 16px;
+                margin-top: 12px; 
+                font-size: 16px; 
+                padding: 14px;
             }
             .next-btn { 
-                padding: 16px; 
-                font-size: 18px; 
-                margin-top: 20px;
+                padding: 14px; 
+                font-size: 16px; 
+                margin-top: 12px;
             }
-            .offline-section, .error-section { 
-                padding: 30px; 
-                margin: 30px 0; 
+            .offline-section, .error-section, .score-section { 
+                padding: 20px; 
+                margin: 20px 0; 
             }
             .custom-design { 
-                width: 180px; 
-                height: 180px; 
-                font-size: 24px;
+                width: 140px; 
+                height: 140px; 
+                font-size: 20px;
             }
-            .offline-message, .error-message { 
-                font-size: 18px; 
-                padding: 16px;
+            .offline-message, .error-message, .score-details { 
+                font-size: 16px; 
+                padding: 14px;
             }
             .progress-bar {
-                height: 8px;
-                margin: 20px 0;
+                height: 6px;
+                margin: 12px 0;
             }
             .score-display {
-                top: 20px;
-                right: 20px;
-                font-size: 16px;
-                padding: 10px 15px;
-            }
-            .auto-next-timer {
-                bottom: 20px;
-                right: 20px;
                 font-size: 14px;
                 padding: 8px 12px;
+            }
+            .score-circle {
+                width: 120px;
+                height: 120px;
+                font-size: 28px;
             }
         }
     </style>
@@ -710,10 +790,12 @@
                 <div id="free-offline-section" class="offline-section" style="display: none;">
                     <div class="custom-design">📴</div>
                     <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
+                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
                 </div>
                 <div id="free-error-section" class="error-section" style="display: none;">
                     <div class="custom-design">⚠️</div>
                     <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें</p>
+                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
                 </div>
                 <div id="free-online-content">
                     <div class="quiz-info">
@@ -729,18 +811,12 @@
                             <span>क्विज़ शुरू करें</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
-                        <button class="premium-btn" onclick="goToPremium()">
-                            <span>पेड क्विज़ आज़माएँ</span>
-                            <i class="fas fa-crown"></i>
-                        </button>
-                        <button class="home-btn" onclick="goToHome()">
-                            <span>होम</span>
-                            <i class="fas fa-home"></i>
+                        <button class="premium-btn" onclick="restartQuiz()">
+                            <span>क्विज़ रिफ्रेश करें</span>
+                            <i class="fas fa-redo"></i>
                         </button>
                     </div>
                     <div id="free-quiz-section" class="quiz-section">
-                        <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
-                        <div class="auto-next-timer" id="auto-next-timer">अगला सवाल <span id="timer-count">3</span></div>
                         <div class="question-container">
                             <div class="question" id="free-question-text"></div>
                             <div class="progress-bar">
@@ -748,16 +824,26 @@
                             </div>
                             <ul class="options" id="free-options-list"></ul>
                             <div id="free-result" class="result"></div>
+                            <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
                             <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
-                            <button class="premium-btn" onclick="goToPremium()">
-                                <span>पेड क्विज़ अनलॉक करें</span>
-                                <i class="fas fa-crown"></i>
-                            </button>
-                            <button class="home-btn" onclick="goToHome()">
-                                <span>होम</span>
-                                <i class="fas fa-home"></i>
+                            <button class="premium-btn" onclick="restartQuiz()">
+                                <span>क्विज़ रिफ्रेश करें</span>
+                                <i class="fas fa-redo"></i>
                             </button>
                         </div>
+                    </div>
+                    <div id="score-section" class="score-section">
+                        <div class="score-circle" id="final-score-circle">0/0</div>
+                        <h2><i class="fas fa-trophy" style="color: #f59e0b;"></i> क्विज़ समाप्त!</h2>
+                        <div class="score-details" id="score-details"></div>
+                        <button class="restart-btn" onclick="restartQuiz()">
+                            <span>क्विज़ पुनः शुरू करें</span>
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <button class="premium-btn" onclick="restartQuiz()">
+                            <span>क्विज़ रिफ्रेश करें</span>
+                            <i class="fas fa-redo"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -768,7 +854,6 @@
             <div class="error-image">❌</div>
             <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें!</p>
             <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
-            <button class="home-btn" onclick="goToHome()">होम</button>
         </div>
     </div>
 
@@ -776,8 +861,18 @@
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
-        let autoNextTimer;
-        let timerCount = 3;
+
+        // Initialize sound effects
+        const correctSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1998/1998.wav'); // Enthusiastic sound
+        const incorrectSound = new Audio('https://assets.mixkit.co/active_storage/sfx/916/916.wav'); // Soft error sound
+
+        // Ensure audio plays after user interaction
+        function unlockAudio() {
+            correctSound.load();
+            incorrectSound.load();
+            document.removeEventListener('click', unlockAudio);
+        }
+        document.addEventListener('click', unlockAudio);
 
         document.addEventListener('DOMContentLoaded', () => {
             initializeQuiz();
@@ -849,9 +944,11 @@
                     if (questions.length > 0) {
                         const quizInfo = document.querySelector('.quiz-info');
                         const quizSection = document.getElementById('free-quiz-section');
-                        if (quizInfo && quizSection) {
+                        const scoreSection = document.getElementById('score-section');
+                        if (quizInfo && quizSection && scoreSection) {
                             quizInfo.style.display = 'none';
                             quizSection.style.display = 'block';
+                            scoreSection.style.display = 'none';
                             currentQuestionIndex = 0;
                             score = 0;
                             updateScore();
@@ -865,9 +962,11 @@
             } else {
                 const quizInfo = document.querySelector('.quiz-info');
                 const quizSection = document.getElementById('free-quiz-section');
-                if (quizInfo && quizSection) {
+                const scoreSection = document.getElementById('score-section');
+                if (quizInfo && quizSection && scoreSection) {
                     quizInfo.style.display = 'none';
                     quizSection.style.display = 'block';
+                    scoreSection.style.display = 'none';
                     currentQuestionIndex = 0;
                     score = 0;
                     updateScore();
@@ -901,28 +1000,15 @@
             const optionsList = document.getElementById('free-options-list');
             const result = document.getElementById('free-result');
             const nextBtn = document.getElementById('next-btn');
-            const autoNextTimerElement = document.getElementById('auto-next-timer');
-            const timerCountElement = document.getElementById('timer-count');
             
-            if (!questionText || !optionsList || !result || !nextBtn || !autoNextTimerElement || !timerCountElement) {
+            if (!questionText || !optionsList || !result || !nextBtn) {
                 console.error('Free quiz elements not found');
                 showErrorOverlay();
                 return;
             }
             
-            if (autoNextTimer) {
-                clearInterval(autoNextTimer);
-            }
-            
-            autoNextTimerElement.style.display = 'none';
-            
             if (currentQuestionIndex >= questions.length) {
-                questionText.textContent = 'क्विज़ समाप्त!';
-                optionsList.innerHTML = '';
-                result.textContent = `आपका स्कोर: ${score}/${questions.length}`;
-                result.className = 'result success';
-                result.style.display = 'block';
-                nextBtn.style.display = 'none';
+                showFinalScore();
                 return;
             }
             
@@ -943,26 +1029,47 @@
                 const li = document.createElement('li');
                 li.textContent = option || 'विकल्प गायब';
                 li.style.opacity = '0';
-                li.style.transform = 'translateY(10px)';
+                li.style.transform = 'scale(0.9) translateY(15px)';
                 li.onclick = () => checkAnswer(index);
                 optionsList.appendChild(li);
                 
                 setTimeout(() => {
-                    li.style.transition = 'all 0.3s ease';
+                    li.style.transition = 'all 0.5s ease';
                     li.style.opacity = '1';
-                    li.style.transform = 'translateY(0)';
-                }, index * 80);
+                    li.style.transform = 'scale(1) translateY(0)';
+                }, index * 100);
             });
+        }
+
+        function triggerConfetti() {
+            confetti({
+                particleCount: 200,
+                spread: 90,
+                origin: { y: 0.4 },
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'],
+                shapes: ['square', 'circle', 'star'],
+                ticks: 300,
+                gravity: 0.8,
+                scalar: 1.2
+            });
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00'],
+                    shapes: ['square', 'circle'],
+                    ticks: 200
+                });
+            }, 200);
         }
 
         function checkAnswer(selectedIndex) {
             const question = questions[currentQuestionIndex];
             const options = document.querySelectorAll('#free-options-list li');
             const result = document.getElementById('free-result');
-            const autoNextTimerElement = document.getElementById('auto-next-timer');
-            const timerCountElement = document.getElementById('timer-count');
             
-            if (!result || !options.length || !autoNextTimerElement || !timerCountElement) {
+            if (!result || !options.length) {
                 console.error('Result or options not found for free quiz');
                 showErrorOverlay();
                 return;
@@ -979,37 +1086,69 @@
                 updateScore();
                 result.textContent = 'सही जवाब!';
                 result.className = 'result success';
+                triggerConfetti();
+                try {
+                    correctSound.play().catch(e => console.error('Correct sound failed:', e));
+                } catch (e) {
+                    console.error('Correct sound error:', e);
+                }
             } else {
                 result.textContent = `गलत जवाब! सही: ${question.options[question.correctAnswer]}`;
                 result.className = 'result error';
+                try {
+                    incorrectSound.play().catch(e => console.error('Incorrect sound failed:', e));
+                } catch (e) {
+                    console.error('Incorrect sound error:', e);
+                }
             }
             
             result.style.display = 'block';
             
-            autoNextTimerElement.style.display = 'block';
-            timerCount = 3;
-            timerCountElement.textContent = timerCount;
-            
-            autoNextTimer = setInterval(() => {
-                timerCount--;
-                timerCountElement.textContent = timerCount;
-                
-                if (timerCount <= 0) {
-                    clearInterval(autoNextTimer);
-                    currentQuestionIndex++;
-                    showQuestion();
-                }
-            }, 1000);
-            
             if ('vibrate' in navigator) navigator.vibrate(200);
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                showQuestion();
+            }, 1500);
         }
 
-        function nextQuestion() {
-            if (autoNextTimer) {
-                clearInterval(autoNextTimer);
+        function showFinalScore() {
+            const quizSection = document.getElementById('free-quiz-section');
+            const scoreSection = document.getElementById('score-section');
+            const finalScoreCircle = document.getElementById('final-score-circle');
+            const scoreDetails = document.getElementById('score-details');
+            
+            if (!quizSection || !scoreSection || !finalScoreCircle || !scoreDetails) {
+                console.error('Score section elements not found');
+                showErrorOverlay();
+                return;
             }
-            currentQuestionIndex++;
-            showQuestion();
+            
+            quizSection.style.display = 'none';
+            scoreSection.style.display = 'flex';
+            
+            finalScoreCircle.textContent = `${score}/${questions.length}`;
+            const percentage = ((score / questions.length) * 100).toFixed(2);
+            scoreDetails.innerHTML = `
+                आपका स्कोर: ${score}/${questions.length}<br>
+                प्रतिशत: ${percentage}%<br>
+                सही जवाब: ${score}<br>
+                गलत जवाब: ${questions.length - score}<br>
+                समय: ${new Date().toLocaleTimeString()}
+            `;
+        }
+
+        function restartQuiz() {
+            const quizSection = document.getElementById('free-quiz-section');
+            const scoreSection = document.getElementById('score-section');
+            if (quizSection && scoreSection) {
+                scoreSection.style.display = 'none';
+                quizSection.style.display = 'block';
+                currentQuestionIndex = 0;
+                score = 0;
+                updateScore();
+                showQuestion();
+            }
         }
 
         function showErrorOverlay() {
@@ -1037,7 +1176,11 @@
         }
 
         function goToHome() {
-            window.location.href = 'https://jaatpankaj610.github.io/PAID-QUIZ/home.html';
+            if (window.AppInventor) {
+                window.AppInventor.setWebViewString('home.html');
+            } else {
+                window.location.href = 'home.html';
+            }
         }
 
         window.onerror = function(message) {
@@ -1050,7 +1193,11 @@
         window.addEventListener('offline', checkNetworkStatus);
 
         function goToPremium() {
-            window.location.href = 'https://jaatpankaj610.github.io/PAID-QUIZ/index.html';
+            if (window.AppInventor) {
+                window.AppInventor.setWebViewString('paid-quiz.html');
+            } else {
+                window.location.href = 'https://jaatpankaj610.github.io/PAID-QUIZ/index.html';
+            }
         }
     </script>
 </body>
