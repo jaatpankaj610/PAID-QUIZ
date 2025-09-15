@@ -654,7 +654,7 @@
                         </div>
                         
                         <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
-                        <button type="button" class="clear-btn" onclick="clearStorage()">पेमेंट डेटा रीसेट करें</button>
+                        <button type="button" class="clear-btn" onclick="clearDb()">पेमेंट डेटा रीसेट करें</button>
                         <button type="button" class="home-btn" onclick="goToHome()"><i class="fas fa-home"></i> होम</button>
                     </form>
                     
@@ -665,24 +665,36 @@
     </div>
     
     <script>
-        // Replace with your actual Google Apps Script URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgj95btbh7BT4glh2BCRKUIZuav1vMluySQdZVHhBK_qOqCgjcTs6xzheRfooIscYv/exec';
 
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/PAID-QUIZ/sw.js').then(() => {
-                console.log('Service Worker Registered');
-            }).catch(error => {
-                console.error('Service Worker Error:', error);
-            });
-        }
+        // TinyDB Initialization
+        const TinyDB = {
+            _db: {},
+            setItem: function(key, value) {
+                this._db[key] = value;
+                window.location.href = 'index.html?db_update=true&' + key + '=' + value;
+            },
+            getItem: function(key) {
+                const params = new URLSearchParams(window.location.search);
+                if (params.has(key)) {
+                    return params.get(key);
+                }
+                return this._db[key] || null;
+            },
+            removeItem: function(key) {
+                delete this._db[key];
+                // Optionally remove from URL on a fresh page load
+                const params = new URLSearchParams(window.location.search);
+                params.delete(key);
+                window.location.href = window.location.pathname + '?' + params.toString();
+            }
+        };
 
         // Network and Error Status Check
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
-            const errorMessage = document.getElementById('error-message');
             if (!navigator.onLine) {
                 offlineSection.style.display = 'flex';
                 errorSection.style.display = 'none';
@@ -691,7 +703,7 @@
                 offlineSection.style.display = 'none';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
-                const userId = localStorage.getItem('paymentRequestUserId') || (new URLSearchParams(window.location.search)).get('user_id');
+                const userId = TinyDB.getItem('paymentRequestUserId');
                 if (userId) {
                     checkPaymentStatus();
                 }
@@ -704,15 +716,10 @@
             const form = document.getElementById('payment-form');
             
             try {
-                // Check for userId in localStorage or URL
-                let userId = localStorage.getItem('paymentRequestUserId');
-                if (!userId) {
-                    const params = new URLSearchParams(window.location.search);
-                    userId = params.get('user_id');
-                }
+                const userId = TinyDB.getItem('paymentRequestUserId');
 
                 if (!userId) {
-                    console.log('No user ID found in storage or URL.');
+                    console.log('No user ID found in TinyDB.');
                     form.style.display = 'block';
                     statusElement.style.display = 'none';
                     return;
@@ -751,7 +758,7 @@
                         statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
                         statusElement.className = 'status-message error';
                         form.style.display = 'block';
-                        localStorage.removeItem('paymentRequestUserId'); // Also clear from local storage
+                        TinyDB.removeItem('paymentRequestUserId');
                         return;
                     }
                 } else {
@@ -887,19 +894,11 @@
                     statusElement.textContent = result.message || 'पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई!';
                     statusElement.className = 'status-message success';
                     
-                    // Try to save userId in localStorage, if it fails, redirect with a query parameter
-                    try {
-                        localStorage.setItem('paymentRequestUserId', data.user_id);
-                        setTimeout(() => {
-                            checkPaymentStatus();
-                        }, 5000); // Wait 5 seconds for Google Sheet to update
-                    } catch (e) {
-                        console.error("localStorage failed, redirecting with user_id in URL:", e);
-                        const params = new URLSearchParams();
-                        params.append('user_id', data.user_id);
-                        window.location.href = `index.html?${params.toString()}`;
-                        return;
-                    }
+                    TinyDB.setItem('paymentRequestUserId', data.user_id);
+                    
+                    setTimeout(() => {
+                        checkPaymentStatus();
+                    }, 5000);
                 } else {
                     throw new Error(result.message || 'Unknown error');
                 }
@@ -912,10 +911,12 @@
             }
         }
 
-        function clearStorage() {
-            localStorage.clear();
-            const url = window.location.href.split('?')[0];
-            window.location.href = url;
+        function clearDb() {
+            TinyDB.removeItem('paymentRequestUserId');
+            document.getElementById('payment-form').reset();
+            document.getElementById('status-message').style.display = 'none';
+            document.getElementById('payment-form').style.display = 'block';
+            console.log('TinyDB cleared.');
         }
 
         function goToHome() {
@@ -923,6 +924,10 @@
         }
 
         window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('user_id')) {
+                document.getElementById('user_id').value = params.get('user_id');
+            }
             checkNetworkStatus();
         });
         window.addEventListener('online', checkNetworkStatus);
