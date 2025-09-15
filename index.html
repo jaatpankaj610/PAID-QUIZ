@@ -317,6 +317,13 @@
             box-shadow: 0 6px 16px rgba(74, 0, 224, 0.2);
         }
 
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .status-message {
             padding: 12px;
             border-radius: 8px;
@@ -337,6 +344,12 @@
             background: rgba(253, 203, 110, 0.1);
             color: var(--warning);
             border: 1px solid rgba(253, 203, 110, 0.2);
+        }
+
+        .status-message.error {
+            background: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(214, 48, 49, 0.2);
         }
 
         .clear-btn, .home-btn {
@@ -562,7 +575,7 @@
                     <div class="custom-design">
                         ⚠️ त्रुटि
                     </div>
-                    <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
+                    <p class="error-message" id="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
                 </div>
                 
                 <div id="online-content">
@@ -582,7 +595,7 @@
                     <div class="qr-section">
                         <h3>आसान UPI पेमेंट</h3>
                         <div class="qr-code">
-                            <img src="qrcode.png" alt="UPI QR Code" onerror="this.style.display='none'; document.getElementById('error-section').style.display='flex'; document.getElementById('online-content').style.display='none';">
+                            <img src="qrcode.png" alt="UPI QR Code" onerror="this.style.display='none'; document.getElementById('error-section').style.display='flex'; document.getElementById('online-content').style.display='none'; document.getElementById('error-message').textContent='QR कोड लोड करने में त्रुटि। कृपया UPI ID का उपयोग करें।';">
                         </div>
                         <div class="upi-id">
                             <i class="fas fa-copy"></i>
@@ -619,7 +632,7 @@
                         
                         <div class="form-group">
                             <label for="amount">पेमेंट राशि</label>
-                            <input type="text" id="amount" name="amount" placeholder="49" required>
+                            <input type="text" id="amount" name="amount" placeholder="49" value="49" required>
                             <div id="amount_error" class="error-text"></div>
                         </div>
                         
@@ -652,7 +665,7 @@
     </div>
     
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdUtrVGLtpgToQu3AvQQCrPFS5j-otONgpb0FOI1YMnvYGwlwo3jyLRnNg3v68yViz/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgj95btbh7BT4glh2BCRKUIZuav1vMluySQdZVHhBK_qOqCgjcTs6xzheRfooIscYv/exec';
 
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
@@ -666,7 +679,7 @@
         // Unique ID Generator
         function generateUniqueId() {
             return window.crypto && crypto.randomUUID ? crypto.randomUUID() : 
-                   Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+                Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
         }
 
         // Network and Error Status Check
@@ -674,6 +687,7 @@
             const offlineSection = document.getElementById('offline-section');
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
+            const errorMessage = document.getElementById('error-message');
             if (!navigator.onLine) {
                 offlineSection.style.display = 'flex';
                 errorSection.style.display = 'none';
@@ -692,96 +706,73 @@
         // Payment Status Check
         async function checkPaymentStatus() {
             const statusElement = document.getElementById('status-message');
-            const errorSection = document.getElementById('error-section');
+            const form = document.getElementById('payment-form');
             const onlineContent = document.getElementById('online-content');
-            const formError = document.getElementById('form-error');
             
             try {
-                let payments = [];
-                try {
-                    const response = await fetch(SCRIPT_URL, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        payments = data.payments || [];
-                    }
-                } catch (e) {
-                    console.error('Error fetching payments from script:', e);
-                }
-                
-                try {
-                    const paymentsData = localStorage.getItem('payments');
-                    if (paymentsData) {
-                        const localPayments = JSON.parse(paymentsData);
-                        if (Array.isArray(localPayments)) {
-                            payments = payments.concat(localPayments);
-                        }
-                    }
-                } catch (e) {
-                    console.error('Error parsing payments from localStorage:', e);
-                }
-                
-                const userId = document.getElementById('user_id').value.trim() || 'unknown';
-                const userPayments = payments.filter(p => p.user_id === userId && p.status === 'approved');
-                
-                const latestApproved = userPayments.reduce((latest, payment) => {
-                    if (!latest || new Date(payment.submission_date) > new Date(latest.submission_date)) {
-                        return payment;
-                    }
-                    return latest;
-                }, null);
-                
-                const now = new Date();
-                let expiryDate = null;
-                
-                if (latestApproved && latestApproved.access_expiry_date) {
-                    try {
-                        expiryDate = new Date(latestApproved.access_expiry_date);
-                        if (isNaN(expiryDate.getTime())) {
-                            expiryDate = null;
-                        }
-                    } catch (e) {
-                        console.error('Error parsing expiry date:', e);
-                        expiryDate = null;
-                    }
-                }
-                
-                if (latestApproved && expiryDate && now <= expiryDate) {
-                    console.log('Redirecting to quiz.html: Valid approved payment for user', userId, latestApproved);
-                    window.location.href = 'quiz.html';
-                    return;
-                } else if (latestApproved && expiryDate && now > expiryDate) {
-                    statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
-                    statusElement.className = 'status-message error';
-                    statusElement.style.display = 'block';
-                    document.getElementById('payment-form').style.display = 'block';
+                const userId = localStorage.getItem('paymentRequestUserId');
+                if (!userId) {
+                    console.log('No user ID found in storage.');
+                    form.style.display = 'block';
+                    statusElement.style.display = 'none';
                     return;
                 }
+
+                form.style.display = 'none';
+                statusElement.textContent = 'पेमेंट स्टेटस चेक हो रहा है...';
+                statusElement.className = 'status-message pending';
+                statusElement.style.display = 'block';
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
                 
-                try {
-                    const response = await fetch('quiz.html', { method: 'HEAD', cache: 'no-store' });
-                    if (response.status === 404 || response.status === 503) {
-                        errorSection.style.display = 'flex';
-                        onlineContent.style.display = 'none';
-                        console.error('quiz.html unavailable:', response.status);
+                const data = await response.json();
+                if (data.status !== 'success') {
+                    throw new Error(data.message || 'Failed to fetch payments');
+                }
+                const payments = data.payments || [];
+                
+                const latestApproved = payments.find(p => p.user_id === userId && p.status === 'approved');
+                
+                if (latestApproved) {
+                    const expiryDate = new Date(latestApproved.access_expiry_date);
+                    const now = new Date();
+                    if (now <= expiryDate) {
+                        console.log('Redirecting to quiz.html: Valid approved payment for user', userId);
+                        window.location.href = 'file:///android_asset/quiz.html';
+                        return;
                     } else {
-                        errorSection.style.display = 'none';
-                        onlineContent.style.display = 'block';
+                        statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
+                        statusElement.className = 'status-message error';
+                        form.style.display = 'block';
+                        localStorage.removeItem('paymentRequestUserId');
+                        return;
                     }
-                } catch (error) {
-                    console.error('Error checking quiz.html:', error);
-                    errorSection.style.display = 'flex';
-                    onlineContent.style.display = 'none';
-                    if ('vibrate' in navigator) {
-                        navigator.vibrate(200);
+                } else {
+                    const latestPending = payments.find(p => p.user_id === userId && p.status === 'pending');
+                    if (latestPending) {
+                         statusElement.textContent = 'आपकी पेमेंट रिक्वेस्ट अप्रूवल के लिए भेजी जा चुकी है। कृपया 15-20 मिनट इंतज़ार करें।';
+                         statusElement.className = 'status-message pending';
+                         form.style.display = 'none';
+                         return;
                     }
                 }
+                
+                form.style.display = 'block';
+                statusElement.style.display = 'none';
+
             } catch (error) {
                 console.error('Error checking payment status:', error);
-                formError.textContent = 'पेमेंट स्टेटस चेक में त्रुटि। कृपया पुनः प्रयास करें या इंटरनेट चेक करें।';
-                formError.style.display = 'block';
+                statusElement.textContent = `पेमेंट स्टेटस चेक में त्रुटि: ${error.message}। कृपया पुनः प्रयास करें।`;
+                statusElement.className = 'status-message error';
+                statusElement.style.display = 'block';
+                form.style.display = 'block';
                 if ('vibrate' in navigator) {
                     navigator.vibrate(200);
                 }
@@ -791,10 +782,7 @@
         // Simulated SMS
         function sendSMS(toPhone, message) {
             console.log(`नोटिफिकेशन ${toPhone} को: ${message}`);
-            const statusElement = document.getElementById('status-message');
-            statusElement.textContent = message;
-            statusElement.className = 'status-message success';
-            statusElement.style.display = 'block';
+            // In a real app, you'd integrate with an SMS API here.
         }
 
         // Form Validation
@@ -804,7 +792,9 @@
             const mobileNumber = document.getElementById('mobile_number').value.trim();
             const transactionId = document.getElementById('transaction_id').value.trim();
             const amount = document.getElementById('amount').value.trim();
+            const paymentMade = document.getElementById('payment_made').checked;
 
+            // Reset errors
             document.getElementById('form-error').style.display = 'none';
             document.getElementById('user_id_error').style.display = 'none';
             document.getElementById('mobile_number_error').style.display = 'none';
@@ -812,171 +802,139 @@
             document.getElementById('amount_error').style.display = 'none';
             document.getElementById('payment_made_error').style.display = 'none';
 
+            // Validate User ID (Email)
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!userId) {
                 document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
                 document.getElementById('user_id_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             } else if (!emailRegex.test(userId)) {
                 document.getElementById('user_id_error').textContent = 'कृपया सही ईमेल फॉर्मेट दर्ज करें!';
-                document.getElementById('user_id_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
+                document.getElementById('user_id_error').style.style.display = 'block';
                 isValid = false;
             }
 
+            // Validate Mobile Number (10 digits)
             const mobileRegex = /^\d{10}$/;
             if (!mobileNumber) {
                 document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
                 document.getElementById('mobile_number_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             } else if (!mobileRegex.test(mobileNumber)) {
-                document.getElementById('mobile_number_error').textContent = 'कृपया ठीक 10 अंकों का मोबाइल नंबर दर्ज करें!';
+                document.getElementById('mobile_number_error').textContent = 'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!';
                 document.getElementById('mobile_number_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             }
 
+            // Validate Transaction ID
             if (!transactionId) {
                 document.getElementById('transaction_id_error').textContent = 'कृपया UPI ट्रांजैक्शन ID दर्ज करें!';
                 document.getElementById('transaction_id_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             }
 
-            if (!amount) {
-                document.getElementById('amount_error').textContent = 'कृपया पेमेंट राशि दर्ज करें!';
+            // Validate Amount
+            const parsedAmount = parseFloat(amount);
+            if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
+                document.getElementById('amount_error').textContent = 'कृपया सही राशि दर्ज करें!';
                 document.getElementById('amount_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
-                isValid = false;
-            } else if (amount !== '49') {
-                document.getElementById('amount_error').textContent = 'कृपया सही राशि (₹49) दर्ज करें!';
-                document.getElementById('amount_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
             }
 
-            const paymentMade = document.getElementById('payment_made').checked;
+            // Validate Checkbox
             if (!paymentMade) {
-                document.getElementById('payment_made_error').textContent = 'पेमेंट करने के बाद कृपया इस बॉक्स को टिक करें।';
+                document.getElementById('payment_made_error').textContent = 'कृपया पेमेंट करने के बाद इस बॉक्स को टिक करें!';
                 document.getElementById('payment_made_error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
                 isValid = false;
+            }
+
+            if ('vibrate' in navigator && !isValid) {
+                navigator.vibrate(200);
             }
 
             return isValid;
         }
 
-        // Submit Payment
         async function submitPayment() {
-            if (!navigator.onLine) {
-                document.getElementById('form-error').textContent = 'कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।';
-                document.getElementById('form-error').style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
+            if (!validateForm()) {
                 return;
             }
 
-            if (!validateForm()) return;
-
-            const userId = document.getElementById('user_id').value.trim();
-            const mobileNumber = document.getElementById('mobile_number').value.trim();
-            const transactionId = document.getElementById('transaction_id').value.trim();
-            const amount = document.getElementById('amount').value.trim();
-            const paymentNote = document.getElementById('payment_note').value.trim();
+            const form = document.getElementById('payment-form');
             const statusElement = document.getElementById('status-message');
-            const formError = document.getElementById('form-error');
+            const submitBtn = document.querySelector('.submit-btn');
 
-            statusElement.textContent = 'आपकी रिक्वेस्ट प्रोसेस हो रही है...';
+            statusElement.textContent = 'पेमेंट रिक्वेस्ट प्रोसेस हो रही है...';
             statusElement.className = 'status-message pending';
             statusElement.style.display = 'block';
+            submitBtn.disabled = true;
 
-            const paymentData = {
-                id: generateUniqueId(),
-                user_id: userId,
-                mobile_number: mobileNumber,
-                transaction_id: transactionId,
-                amount: amount,
-                payment_note: paymentNote,
-                submission_date: new Date().toISOString(),
-                status: 'pending',
-                payment_method: 'upi'
-            };
-
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(paymentData)
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
                 });
 
-                if (response.ok) {
-                    statusElement.textContent = `पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई! ${userId}, आपको धन्यवाद नोटिफिकेशन भेजा गया है।`;
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    statusElement.textContent = result.message || 'पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई!';
                     statusElement.className = 'status-message success';
-                    document.getElementById('payment-form').style.display = 'none';
-                    const userMessage = `धन्यवाद ${userId}! आपकी पेमेंट रिक्वेस्ट प्राप्त हो गई है। वेरिफिकेशन के बाद आपको 30 दिन की प्रीमियम एक्सेस मिलेगी।`;
-                    sendSMS(mobileNumber, userMessage);
+                    sendSMS(data.mobile_number, "आपकी प्रीमियम एक्सेस रिक्वेस्ट मिल गई है। 15 मिनट में अप्रूव हो जाएगी।");
+                    localStorage.setItem('paymentRequestUserId', data.user_id);
+                    setTimeout(() => {
+                        checkPaymentStatus();
+                    }, 10000); // 10 seconds for initial check
                 } else {
-                    throw new Error('Server response not ok');
+                    throw new Error(result.message || 'Unknown error');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                formError.textContent = 'पेमेंट रिक्वेस्ट प्रोसेस करने में त्रुटि। कृपया इंटरनेट चेक करें।';
-                formError.style.display = 'block';
-                statusElement.style.display = 'none';
-                if ('vibrate' in navigator) navigator.vibrate(200);
+                console.error('Error submitting payment:', error);
+                statusElement.textContent = `रिक्वेस्ट भेजने में त्रुटि: ${error.message}`;
+                statusElement.className = 'status-message error';
+            } finally {
+                submitBtn.disabled = false;
             }
         }
 
-        // Clear Storage
         function clearStorage() {
-            try {
-                localStorage.removeItem('payments');
-                const statusElement = document.getElementById('status-message');
-                statusElement.textContent = 'आपका डेटा सफलतापूर्वक रीसेट हो गया है। कृपया पेमेंट जानकारी दोबारा दर्ज करें।';
-                statusElement.className = 'status-message success';
-                statusElement.style.display = 'block';
-                document.getElementById('payment-form').style.display = 'block';
-                document.getElementById('payment-form').reset();
-                document.getElementById('form-error').style.display = 'none';
-                document.getElementById('user_id_error').style.display = 'none';
-                document.getElementById('mobile_number_error').style.display = 'none';
-                document.getElementById('transaction_id_error').style.display = 'none';
-                document.getElementById('amount_error').style.display = 'none';
-                document.getElementById('payment_made_error').style.display = 'none';
-            } catch (error) {
-                console.error('Error clearing localStorage:', error);
-                const formError = document.getElementById('form-error');
-                formError.textContent = 'डेटा रीसेट करने में त्रुटि। कृपया अपनी डिवाइस सेटिंग्स चेक करें और पुनः प्रयास करें।';
-                formError.style.display = 'block';
-                if ('vibrate' in navigator) navigator.vibrate(200);
-            }
+            localStorage.clear();
+            document.getElementById('payment-form').reset();
+            document.getElementById('status-message').style.display = 'none';
+            document.getElementById('payment-form').style.display = 'block';
+            console.log('Local storage cleared.');
         }
 
-        // Global Error Handling
-        window.onerror = function(message, source, lineno, colno, error) {
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
-            errorSection.style.display = 'flex';
-            onlineContent.style.display = 'none';
-            console.error('Global error:', message, error);
-            if ('vibrate' in navigator) navigator.vibrate(200);
-            return true;
-        };
+        function goToHome() {
+            window.location.href = 'file:///android_asset/quiz.html';
+        }
 
-        // Event Listeners
-        window.addEventListener('load', checkNetworkStatus);
+        window.addEventListener('load', () => {
+            checkNetworkStatus();
+        });
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
 
-        // Go to Home
-        function goToHome() {
-            if (window.AppInventor) {
-                window.AppInventor.setWebViewString('home.html');
-            } else {
-                window.location.href = 'home.html';
-            }
-        }
+        document.getElementById('upi-id-copy').addEventListener('click', () => {
+            const upiId = '9057650616@amazon.pay';
+            navigator.clipboard.writeText(upiId).then(() => {
+                alert('UPI ID कॉपी हो गई है!');
+            }).catch(err => {
+                console.error('Failed to copy UPI ID: ', err);
+            });
+        });
     </script>
 </body>
 </html>
