@@ -665,6 +665,7 @@
     </div>
     
     <script>
+        // Replace with your actual Google Apps Script URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgj95btbh7BT4glh2BCRKUIZuav1vMluySQdZVHhBK_qOqCgjcTs6xzheRfooIscYv/exec';
 
         // Service Worker Registration
@@ -674,12 +675,6 @@
             }).catch(error => {
                 console.error('Service Worker Error:', error);
             });
-        }
-
-        // Unique ID Generator
-        function generateUniqueId() {
-            return window.crypto && crypto.randomUUID ? crypto.randomUUID() : 
-                Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
         }
 
         // Network and Error Status Check
@@ -696,7 +691,7 @@
                 offlineSection.style.display = 'none';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
-                const userId = document.getElementById('user_id').value.trim();
+                const userId = localStorage.getItem('paymentRequestUserId') || (new URLSearchParams(window.location.search)).get('user_id');
                 if (userId) {
                     checkPaymentStatus();
                 }
@@ -707,12 +702,17 @@
         async function checkPaymentStatus() {
             const statusElement = document.getElementById('status-message');
             const form = document.getElementById('payment-form');
-            const onlineContent = document.getElementById('online-content');
             
             try {
-                const userId = localStorage.getItem('paymentRequestUserId');
+                // Check for userId in localStorage or URL
+                let userId = localStorage.getItem('paymentRequestUserId');
                 if (!userId) {
-                    console.log('No user ID found in storage.');
+                    const params = new URLSearchParams(window.location.search);
+                    userId = params.get('user_id');
+                }
+
+                if (!userId) {
+                    console.log('No user ID found in storage or URL.');
                     form.style.display = 'block';
                     statusElement.style.display = 'none';
                     return;
@@ -751,7 +751,7 @@
                         statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
                         statusElement.className = 'status-message error';
                         form.style.display = 'block';
-                        localStorage.removeItem('paymentRequestUserId');
+                        localStorage.removeItem('paymentRequestUserId'); // Also clear from local storage
                         return;
                     }
                 } else {
@@ -777,12 +777,6 @@
                     navigator.vibrate(200);
                 }
             }
-        }
-
-        // Simulated SMS
-        function sendSMS(toPhone, message) {
-            console.log(`नोटिफिकेशन ${toPhone} को: ${message}`);
-            // In a real app, you'd integrate with an SMS API here.
         }
 
         // Form Validation
@@ -892,11 +886,20 @@
                 if (result.status === 'success') {
                     statusElement.textContent = result.message || 'पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई!';
                     statusElement.className = 'status-message success';
-                    sendSMS(data.mobile_number, "आपकी प्रीमियम एक्सेस रिक्वेस्ट मिल गई है। 15 मिनट में अप्रूव हो जाएगी।");
-                    localStorage.setItem('paymentRequestUserId', data.user_id);
-                    setTimeout(() => {
-                        checkPaymentStatus();
-                    }, 10000); // 10 seconds for initial check
+                    
+                    // Try to save userId in localStorage, if it fails, redirect with a query parameter
+                    try {
+                        localStorage.setItem('paymentRequestUserId', data.user_id);
+                        setTimeout(() => {
+                            checkPaymentStatus();
+                        }, 5000); // Wait 5 seconds for Google Sheet to update
+                    } catch (e) {
+                        console.error("localStorage failed, redirecting with user_id in URL:", e);
+                        const params = new URLSearchParams();
+                        params.append('user_id', data.user_id);
+                        window.location.href = `index.html?${params.toString()}`;
+                        return;
+                    }
                 } else {
                     throw new Error(result.message || 'Unknown error');
                 }
@@ -911,10 +914,8 @@
 
         function clearStorage() {
             localStorage.clear();
-            document.getElementById('payment-form').reset();
-            document.getElementById('status-message').style.display = 'none';
-            document.getElementById('payment-form').style.display = 'block';
-            console.log('Local storage cleared.');
+            const url = window.location.href.split('?')[0];
+            window.location.href = url;
         }
 
         function goToHome() {
@@ -927,7 +928,7 @@
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
 
-        document.getElementById('upi-id-copy').addEventListener('click', () => {
+        document.querySelector('.upi-id').addEventListener('click', () => {
             const upiId = '9057650616@amazon.pay';
             navigator.clipboard.writeText(upiId).then(() => {
                 alert('UPI ID कॉपी हो गई है!');
