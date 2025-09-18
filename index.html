@@ -352,7 +352,7 @@
             border: 1px solid rgba(214, 48, 49, 0.2);
         }
 
-        .clear-btn, .home-btn {
+        .clear-btn, .check-btn {
             background: var(--dark);
             color: var(--light);
             border: none;
@@ -371,14 +371,10 @@
             gap: 8px;
         }
 
-        .clear-btn:hover, .home-btn:hover {
+        .clear-btn:hover, .check-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
             background: linear-gradient(135deg, #2d3436, #636e72);
-        }
-
-        .home-btn i {
-            font-size: 16px;
         }
 
         .offline-section, .error-section {
@@ -395,6 +391,55 @@
             padding: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+        }
+        
+        .processing-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .processing-screen .app-logo-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .processing-screen .processing-message {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .custom-design {
@@ -449,7 +494,6 @@
             margin-bottom: 12px;
             transition: all 0.3s ease;
         }
-
         .checkbox-container:hover {
             background: rgba(74, 0, 224, 0.1);
             box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
@@ -495,7 +539,137 @@
         .checkbox-container:hover .tooltip {
             display: block;
         }
+        
+        /* New Modal Styles */
+        .modal {
+            display: none; /* Initially hidden */
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding-top: 60px;
+            animation: fadeInModal 0.3s ease-in-out;
+        }
 
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            position: relative;
+            text-align: center;
+            transform: translateY(0);
+            animation: slideInUp 0.4s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-btn:hover, .close-btn:focus {
+            color: #000;
+        }
+
+        .modal-header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px 10px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .modal-body p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .next-steps {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid var(--primary);
+            text-align: left;
+        }
+
+        .next-steps p {
+            margin: 0 0 10px 0;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--dark);
+        }
+
+        .modal-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 0, 224, 0.2);
+        }
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            background: var(--secondary);
+        }
+
+        .modal-instruction {
+            font-size: 12px !important;
+            color: #777 !important;
+            margin-top: 8px !important;
+        }
+        
         @media (max-width: 480px) {
             .header { padding: 12px 8px; }
             .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
@@ -517,12 +691,15 @@
             .instructions { font-size: 13px; }
             .instructions li { margin-bottom: 6px; }
             .instructions li i { font-size: 14px; }
-            .submit-btn, .clear-btn, .home-btn { padding: 10px 20px; font-size: 13px; }
+            .submit-btn, .clear-btn, .check-btn { padding: 10px 20px; font-size: 13px; }
             .status-message { font-size: 13px; padding: 10px; }
             .custom-design { max-width: 200px; height: 180px; font-size: 16px; }
             .offline-message, .error-message { font-size: 14px; }
             .checkbox-container { padding: 8px; }
             .checkbox-hint { font-size: 11px; }
+            
+            .processing-screen .app-logo-name { font-size: 20px; }
+            .processing-screen .processing-message { font-size: 16px; }
         }
 
         @media (min-width: 768px) {
@@ -546,17 +723,48 @@
             .instructions { font-size: 15px; }
             .instructions li { margin-bottom: 10px; }
             .instructions li i { font-size: 18px; }
-            .submit-btn, .clear-btn, .home-btn { padding: 14px 28px; font-size: 15px; }
+            .submit-btn, .clear-btn, .check-btn { padding: 14px 28px; font-size: 15px; }
             .status-message { font-size: 15px; padding: 14px; }
             .custom-design { max-width: 280px; height: 220px; font-size: 20px; }
             .offline-message, .error-message { font-size: 18px; }
             .checkbox-container { padding: 12px; }
             .checkbox-hint { font-size: 13px; }
+            
+            .processing-screen .app-logo-name { font-size: 28px; }
+            .processing-screen .processing-message { font-size: 20px; }
         }
     </style>
 </head>
 <body>
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h2>पेमेंट रिक्वेस्ट सफल!</h2>
+            </div>
+            <div class="modal-body">
+                <p>आपकी पेमेंट रिक्वेस्ट हमें मिल गई है। आपका प्रीमियम अकाउंट 24 घंटे के भीतर एक्टिवेट हो जाएगा।</p>
+                <div class="next-steps">
+                    <p><b>अगला स्टेप:</b></p>
+                    <button class="modal-btn" onclick="checkStatusAndRedirect()">
+                        <i class="fas fa-sync-alt"></i> पेमेंट स्टेटस चेक करें
+                    </button>
+                    <p class="modal-instruction">पेमेंट अप्रूव होने पर यह बटन आपको सीधे क्विज़ पेज पर ले जाएगा।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
+        <div id="processing-screen" class="processing-screen">
+            <img src="rajasthan-gk-quiz-logo.png" alt="App Logo" style="width: 80px; height: 80px; margin-bottom: 20px;">
+            <div class="app-logo-name"><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</div>
+            <div class="processing-message">आपकी पेमेंट रिक्वेस्ट प्रोसेस हो रही है...</div>
+            <div class="spinner"></div>
+            <div class="processing-message" style="margin-top: 20px;">कुछ ही सेकंड्स में...</div>
+        </div>
+        
         <div class="header">
             <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
             <p>मात्र ₹49 में 30 दिन की प्रीमियम एक्सेस अनलॉक करें!</p>
@@ -641,9 +849,8 @@
                                 <label for="payment_made">
                                     <input type="checkbox" id="payment_made" name="payment_made">
                                     पेमेंट करने के बाद इस बॉक्स को टिक करें
-                                    <span class="tooltip">पहले QR कोड स्कैन करें, फिर टिक करें!</span>
+                                    <span class="checkbox-hint">पेमेंट रिक्वेस्ट भेजने के लिए QR कोड स्कैन करें और यहाँ टिक करें।</span>
                                 </label>
-                                <span class="checkbox-hint">पेमेंट रिक्वेस्ट भेजने के लिए QR कोड स्कैन करें और यहाँ टिक करें।</span>
                             </div>
                             <div id="payment_made_error" class="error-text"></div>
                         </div>
@@ -654,8 +861,8 @@
                         </div>
                         
                         <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
-                        <button type="button" class="clear-btn" onclick="clearDb()">पेमेंट डेटा रीसेट करें</button>
-                        <button type="button" class="home-btn" onclick="goToHome()"><i class="fas fa-home"></i> होम</button>
+                        <button type="button" class="check-btn" onclick="checkPaymentStatus()">पेमेंट स्टेटस चेक करें</button>
+                        <button type="button" class="clear-btn" onclick="clearLocalDb()">पेमेंट डेटा रीसेट करें</button>
                     </form>
                     
                     <div id="status-message" class="status-message"></div>
@@ -664,129 +871,192 @@
         </div>
     </div>
     
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgj95btbh7BT4glh2BCRKUIZuav1vMluySQdZVHhBK_qOqCgjcTs6xzheRfooIscYv/exec';
-
-        // TinyDB Initialization
-        const TinyDB = {
-            _db: {},
-            setItem: function(key, value) {
-                this._db[key] = value;
-                window.location.href = 'index.html?db_update=true&' + key + '=' + value;
-            },
-            getItem: function(key) {
-                const params = new URLSearchParams(window.location.search);
-                if (params.has(key)) {
-                    return params.get(key);
-                }
-                return this._db[key] || null;
-            },
-            removeItem: function(key) {
-                delete this._db[key];
-                // Optionally remove from URL on a fresh page load
-                const params = new URLSearchParams(window.location.search);
-                params.delete(key);
-                window.location.href = window.location.pathname + '?' + params.toString();
-            }
+        // आपके Firebase प्रोजेक्ट की कॉन्फ़िगरेशन
+        const firebaseConfig = {
+          apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+          authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+          databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+          projectId: "rajasthan-gk-quiz-41cc5",
+          storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
+          messagingSenderId: "876482514501",
+          appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+          measurementId: "G-VB140B6NCW"
         };
 
-        // Network and Error Status Check
+        // Firebase को शुरू करें
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function showProcessingScreen() {
+            document.getElementById('online-content').style.display = 'none';
+            document.getElementById('processing-screen').style.display = 'flex';
+        }
+
+        function hideProcessingScreen() {
+            document.getElementById('online-content').style.display = 'block';
+            document.getElementById('processing-screen').style.display = 'none';
+        }
+
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
-            const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
             if (!navigator.onLine) {
                 offlineSection.style.display = 'flex';
-                errorSection.style.display = 'none';
                 onlineContent.style.display = 'none';
+                document.getElementById('processing-screen').style.display = 'none';
             } else {
                 offlineSection.style.display = 'none';
-                errorSection.style.display = 'none';
-                onlineContent.style.display = 'block';
-                const userId = TinyDB.getItem('paymentRequestUserId');
-                if (userId) {
-                    checkPaymentStatus();
-                }
+                onlineContent.style.display = 'block'; 
             }
         }
+        
+        async function submitPayment() {
+            if (!validateForm()) {
+                return;
+            }
 
-        // Payment Status Check
-        async function checkPaymentStatus() {
-            const statusElement = document.getElementById('status-message');
-            const form = document.getElementById('payment-form');
+            showProcessingScreen();
+            
+            const userId = document.getElementById('user_id').value;
+            const mobileNumber = document.getElementById('mobile_number').value;
+            const transactionId = document.getElementById('transaction_id').value;
+            const amount = document.getElementById('amount').value;
+            const paymentNote = document.getElementById('payment_note').value;
             
             try {
-                const userId = TinyDB.getItem('paymentRequestUserId');
-
-                if (!userId) {
-                    console.log('No user ID found in TinyDB.');
-                    form.style.display = 'block';
-                    statusElement.style.display = 'none';
-                    return;
-                }
-
-                form.style.display = 'none';
-                statusElement.textContent = 'पेमेंट स्टेटस चेक हो रहा है...';
-                statusElement.className = 'status-message pending';
-                statusElement.style.display = 'block';
-
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
-                }
+                const paymentsRef = database.ref('payments');
+                const newPaymentRef = paymentsRef.push();
                 
-                const data = await response.json();
-                if (data.status !== 'success') {
-                    throw new Error(data.message || 'Failed to fetch payments');
-                }
-                const payments = data.payments || [];
-                
-                const latestApproved = payments.find(p => p.user_id === userId && p.status === 'approved');
-                
-                if (latestApproved) {
-                    const expiryDate = new Date(latestApproved.access_expiry_date);
-                    const now = new Date();
-                    if (now <= expiryDate) {
-                        console.log('Redirecting to quiz.html: Valid approved payment for user', userId);
-                        window.location.href = 'file:///android_asset/quiz.html';
-                        return;
-                    } else {
-                        statusElement.textContent = 'आपकी प्रीमियम एक्सेस की वैलिडिटी खत्म हो गई है। कृपया दोबारा पेमेंट करें।';
-                        statusElement.className = 'status-message error';
-                        form.style.display = 'block';
-                        TinyDB.removeItem('paymentRequestUserId');
-                        return;
-                    }
-                } else {
-                    const latestPending = payments.find(p => p.user_id === userId && p.status === 'pending');
-                    if (latestPending) {
-                         statusElement.textContent = 'आपकी पेमेंट रिक्वेस्ट अप्रूवल के लिए भेजी जा चुकी है। कृपया 15-20 मिनट इंतज़ार करें।';
-                         statusElement.className = 'status-message pending';
-                         form.style.display = 'none';
-                         return;
-                    }
-                }
-                
-                form.style.display = 'block';
-                statusElement.style.display = 'none';
+                const payload = {
+                    user_id: userId,
+                    mobile_number: mobileNumber,
+                    transaction_id: transactionId,
+                    amount: amount,
+                    payment_note: paymentNote,
+                    status: 'pending', // डिफ़ॉल्ट स्टेटस 'pending' है
+                    timestamp: new Date().toISOString()
+                };
 
+                await newPaymentRef.set(payload);
+
+                hideProcessingScreen();
+                
+                // Call the new modal function
+                showSuccessModal(transactionId);
+
+                localStorage.setItem('paymentData', JSON.stringify({ 
+                    status: 'pending', 
+                    transactionId: transactionId, 
+                    firebaseId: newPaymentRef.key,
+                    userId: userId
+                }));
+                
             } catch (error) {
-                console.error('Error checking payment status:', error);
-                statusElement.textContent = `पेमेंट स्टेटस चेक में त्रुटि: ${error.message}। कृपया पुनः प्रयास करें।`;
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-                form.style.display = 'block';
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                hideProcessingScreen();
+                document.getElementById('status-message').className = 'status-message error';
+                document.getElementById('status-message').textContent = 'पेमेंट सबमिट करने में त्रुटि: ' + error.message;
+                document.getElementById('status-message').style.display = 'block';
+                console.error('Error:', error);
             }
         }
 
-        // Form Validation
+        async function checkPaymentStatus() {
+            const userId = document.getElementById('user_id').value.trim();
+            const storedData = JSON.parse(localStorage.getItem('paymentData'));
+
+            if (!userId) {
+                const formTransactionId = document.getElementById('transaction_id').value.trim();
+                if (!storedData && !formTransactionId) {
+                    alert('कृपया ईमेल ID या ट्रांजैक्शन ID दर्ज करें!');
+                    return;
+                }
+            }
+            
+            let transactionIdToCheck = '';
+            let firebaseId = '';
+            let userIdToCheck = userId;
+
+            if (storedData && storedData.userId === userId) {
+                transactionIdToCheck = storedData.transactionId;
+                firebaseId = storedData.firebaseId;
+            } else {
+                const transactionIdFromForm = document.getElementById('transaction_id').value.trim();
+                if (!transactionIdFromForm) {
+                    alert('कृपया ट्रांजैक्शन ID दर्ज करें या पहले पेमेंट रिक्वेस्ट सबमिट करें!');
+                    return;
+                }
+                transactionIdToCheck = transactionIdFromForm;
+            }
+
+            if (!userIdToCheck && storedData) {
+                userIdToCheck = storedData.userId;
+            } else if (!userIdToCheck) {
+                alert('कृपया ईमेल ID दर्ज करें!');
+                return;
+            }
+
+            showProcessingScreen();
+
+            const paymentsRef = database.ref('payments');
+            
+            let queryRef = paymentsRef.orderByChild('user_id').equalTo(userIdToCheck);
+            
+            try {
+                const snapshot = await queryRef.once('value');
+                const payments = snapshot.val();
+                let foundPayment = null;
+
+                if (payments) {
+                    for (let key in payments) {
+                        if (payments[key].transaction_id === transactionIdToCheck) {
+                            foundPayment = payments[key];
+                            firebaseId = key;
+                            break;
+                        }
+                    }
+                }
+
+                hideProcessingScreen();
+                const statusMessage = document.getElementById('status-message');
+
+                if (foundPayment) {
+                    if (foundPayment.status === 'approved') {
+                        statusMessage.className = 'status-message success';
+                        statusMessage.textContent = 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।';
+                        statusMessage.style.display = 'block';
+
+                        localStorage.setItem('paymentData', JSON.stringify({ status: 'approved', transactionId: foundPayment.transaction_id, firebaseId: firebaseId, userId: userIdToCheck }));
+
+                        setTimeout(() => {
+                            window.location.href = 'quiz.html';
+                        }, 5000);
+
+                    } else if (foundPayment.status === 'pending') {
+                        statusMessage.className = 'status-message pending';
+                        statusMessage.textContent = 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।';
+                        statusMessage.style.display = 'block';
+                    } else if (foundPayment.status === 'rejected') {
+                        statusMessage.className = 'status-message error';
+                        statusMessage.textContent = 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।';
+                        statusMessage.style.display = 'block';
+                    }
+                } else {
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = 'इस ईमेल ID और ट्रांजैक्शन ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।';
+                    statusMessage.style.display = 'block';
+                }
+            } catch (error) {
+                hideProcessingScreen();
+                document.getElementById('status-message').className = 'status-message error';
+                document.getElementById('status-message').textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि: ' + error.message;
+                document.getElementById('status-message').style.display = 'block';
+                console.error('Error:', error);
+            }
+        }
+
         function validateForm() {
             let isValid = true;
             const userId = document.getElementById('user_id').value.trim();
@@ -795,7 +1065,6 @@
             const amount = document.getElementById('amount').value.trim();
             const paymentMade = document.getElementById('payment_made').checked;
 
-            // Reset errors
             document.getElementById('form-error').style.display = 'none';
             document.getElementById('user_id_error').style.display = 'none';
             document.getElementById('mobile_number_error').style.display = 'none';
@@ -803,7 +1072,6 @@
             document.getElementById('amount_error').style.display = 'none';
             document.getElementById('payment_made_error').style.display = 'none';
 
-            // Validate User ID (Email)
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!userId) {
                 document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
@@ -811,11 +1079,10 @@
                 isValid = false;
             } else if (!emailRegex.test(userId)) {
                 document.getElementById('user_id_error').textContent = 'कृपया सही ईमेल फॉर्मेट दर्ज करें!';
-                document.getElementById('user_id_error').style.style.display = 'block';
+                document.getElementById('user_id_error').style.display = 'block';
                 isValid = false;
             }
 
-            // Validate Mobile Number (10 digits)
             const mobileRegex = /^\d{10}$/;
             if (!mobileNumber) {
                 document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
@@ -827,14 +1094,12 @@
                 isValid = false;
             }
 
-            // Validate Transaction ID
             if (!transactionId) {
                 document.getElementById('transaction_id_error').textContent = 'कृपया UPI ट्रांजैक्शन ID दर्ज करें!';
                 document.getElementById('transaction_id_error').style.display = 'block';
                 isValid = false;
             }
 
-            // Validate Amount
             const parsedAmount = parseFloat(amount);
             if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
                 document.getElementById('amount_error').textContent = 'कृपया सही राशि दर्ज करें!';
@@ -842,7 +1107,6 @@
                 isValid = false;
             }
 
-            // Validate Checkbox
             if (!paymentMade) {
                 document.getElementById('payment_made_error').textContent = 'कृपया पेमेंट करने के बाद इस बॉक्स को टिक करें!';
                 document.getElementById('payment_made_error').style.display = 'block';
@@ -856,80 +1120,55 @@
             return isValid;
         }
 
-        async function submitPayment() {
-            if (!validateForm()) {
-                return;
-            }
-
-            const form = document.getElementById('payment-form');
-            const statusElement = document.getElementById('status-message');
-            const submitBtn = document.querySelector('.submit-btn');
-
-            statusElement.textContent = 'पेमेंट रिक्वेस्ट प्रोसेस हो रही है...';
-            statusElement.className = 'status-message pending';
-            statusElement.style.display = 'block';
-            submitBtn.disabled = true;
-
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-            
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const result = await response.json();
-                if (result.status === 'success') {
-                    statusElement.textContent = result.message || 'पेमेंट रिक्वेस्ट सफलतापूर्वक भेजी गई!';
-                    statusElement.className = 'status-message success';
-                    
-                    TinyDB.setItem('paymentRequestUserId', data.user_id);
-                    
-                    setTimeout(() => {
-                        checkPaymentStatus();
-                    }, 5000);
-                } else {
-                    throw new Error(result.message || 'Unknown error');
-                }
-            } catch (error) {
-                console.error('Error submitting payment:', error);
-                statusElement.textContent = `रिक्वेस्ट भेजने में त्रुटि: ${error.message}`;
-                statusElement.className = 'status-message error';
-            } finally {
-                submitBtn.disabled = false;
-            }
-        }
-
-        function clearDb() {
-            TinyDB.removeItem('paymentRequestUserId');
+        function clearLocalDb() {
+            localStorage.clear();
             document.getElementById('payment-form').reset();
             document.getElementById('status-message').style.display = 'none';
-            document.getElementById('payment-form').style.display = 'block';
-            console.log('TinyDB cleared.');
+            console.log('Local storage cleared.');
         }
 
-        function goToHome() {
-            window.location.href = 'file:///android_asset/quiz.html';
+        // New Modal Functions
+        function showSuccessModal(transactionId) {
+            document.getElementById('success-modal').style.display = 'flex';
+            document.getElementById('online-content').style.display = 'none';
+            localStorage.setItem('lastTransactionId', transactionId);
         }
 
+        function closeModal() {
+            document.getElementById('success-modal').style.display = 'none';
+            document.getElementById('online-content').style.display = 'block';
+        }
+
+        function checkStatusAndRedirect() {
+            const lastTransactionId = localStorage.getItem('lastTransactionId');
+            const storedData = JSON.parse(localStorage.getItem('paymentData'));
+            const userId = storedData ? storedData.userId : null;
+            
+            if (lastTransactionId && userId) {
+                document.getElementById('transaction_id').value = lastTransactionId;
+                document.getElementById('user_id').value = userId;
+                checkPaymentStatus();
+                closeModal();
+            } else {
+                alert('कोई हाल की ट्रांजैक्शन आईडी नहीं मिली। कृपया फ़ॉर्म भरें।');
+                closeModal();
+            }
+        }
+        
         window.addEventListener('load', () => {
             const params = new URLSearchParams(window.location.search);
             if (params.has('user_id')) {
                 document.getElementById('user_id').value = params.get('user_id');
             }
             checkNetworkStatus();
+            
+            // Check for previous session data and show modal if needed
+            const storedData = JSON.parse(localStorage.getItem('paymentData'));
+            if (storedData && storedData.status === 'pending') {
+                showSuccessModal(storedData.transactionId);
+            }
         });
+
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
 
