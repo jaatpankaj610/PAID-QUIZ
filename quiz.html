@@ -133,6 +133,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
         }
         
         .welcome-message::before {
@@ -205,7 +206,7 @@
         }
         
         .quiz-info-section li::before {
-            content: "\f058"; /* Check-circle icon */
+            content: "\f058";
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
@@ -228,7 +229,7 @@
             overflow: hidden;
             z-index: 1;
             box-shadow: 0 4px 10px rgba(74, 0, 224, 0.3);
-            margin-top: 20px; /* Added margin to push button down */
+            margin-top: 20px;
         }
         
         .start-quiz-btn::before {
@@ -252,76 +253,120 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(74, 0, 224, 0.4);
         }
+
+        /* क्विज़ स्क्रीन के लिए नए CSS */
+        .quiz-section {
+            display: none; /* यह शुरुआत में छिपा रहेगा */
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+        }
+
+        .question-box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
         
+        .question {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-btn {
+            background: #f0f0f0;
+            color: var(--dark);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            background: #e9e9e9;
+        }
+        
+        .option-btn.correct {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        
+        .option-btn.incorrect {
+            background-color: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .score-section {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
         @media (min-width: 601px) {
-            body {
-                padding: 0;
-                overflow: hidden;
-                position: fixed;
-                height: 100vh;
-            }
-            
             .app-container {
                 height: 100vh;
                 max-height: 100vh;
                 border-radius: 0;
                 margin: 0 auto;
             }
-            
-            .quiz-header {
-                padding: 20px;
-            }
-            
-            .quiz-header h1 {
-                font-size: 28px;
-                margin-bottom: 0;
-            }
-            
-            .user-info {
-                font-size: 16px;
-            }
-            
             .quiz-container {
                 padding: 25px;
-                justify-content: center;
             }
-            
             .welcome-message {
                 padding: 25px;
                 max-width: 500px;
             }
-            
             .welcome-message i {
                 font-size: 50px;
                 margin-bottom: 20px;
             }
-            
             .welcome-message h2 {
                 font-size: 28px;
                 margin-bottom: 15px;
             }
-            
             .welcome-message p {
                 font-size: 18px;
                 margin-bottom: 25px;
             }
-            
             .start-quiz-btn {
                 padding: 15px 30px;
                 font-size: 18px;
                 width: 100%;
                 max-width: 350px;
             }
-            
             .quiz-info-section {
                 padding: 20px;
                 max-width: 450px;
             }
-            
             .quiz-info-section h3 {
                 font-size: 20px;
             }
-            
             .quiz-info-section li {
                 font-size: 16px;
             }
@@ -335,7 +380,7 @@
         </div>
         
         <div class="quiz-container">
-            <div class="welcome-message" id="welcome-message">
+            <div class="welcome-message" id="welcome-screen">
                 <i class="fas fa-star-of-david"></i>
                 <h2>क्विज़ शुरू करें!</h2>
                 <p>राजस्थान के इतिहास, भूगोल, कला और संस्कृति पर अपने ज्ञान का परीक्षण करें।</p>
@@ -352,12 +397,128 @@
 
                 <button class="start-quiz-btn" onclick="startQuiz()">शुरू करें</button>
             </div>
+            
+            <div id="quiz-screen" class="quiz-section">
+                <div class="question-box">
+                    <p id="question-number" style="font-weight: bold;"></p>
+                    <p id="question" class="question"></p>
+                    <div id="options-container" class="options-container"></div>
+                </div>
+                <button id="next-btn" class="next-btn" style="display: none;">अगला</button>
+            </div>
+
+            <div id="score-screen" class="score-section">
+                <h2>आपका स्कोर</h2>
+                <p id="score-text"></p>
+                <button class="start-quiz-btn" onclick="resetQuiz()">फिर से शुरू करें</button>
+            </div>
         </div>
     </div>
     
     <script>
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const scoreScreen = document.getElementById('score-screen');
+        const questionText = document.getElementById('question');
+        const questionNumberText = document.getElementById('question-number');
+        const optionsContainer = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreText = document.getElementById('score-text');
+
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Fetch questions from questions.json
+        async function fetchQuestions() {
+            try {
+                const response = await fetch('questions.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                questions = await response.json();
+                console.log("Questions loaded:", questions);
+                if (questions.length > 0) {
+                    showQuestion();
+                } else {
+                    console.error("questions.json file is empty or formatted incorrectly.");
+                }
+            } catch (error) {
+                console.error("Error fetching questions:", error);
+                questionText.textContent = "प्रश्न लोड करने में कोई समस्या हुई। कृपया बाद में प्रयास करें।";
+                optionsContainer.innerHTML = '';
+            }
+        }
+
         function startQuiz() {
-            window.location.href = 'quiz.html';
+            welcomeScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            currentQuestionIndex = 0;
+            score = 0;
+            fetchQuestions();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showScore();
+                return;
+            }
+
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            questionNumberText.textContent = `प्रश्न ${currentQuestionIndex + 1}/${questions.length}`;
+            questionText.textContent = currentQuestion.question;
+            optionsContainer.innerHTML = '';
+            nextBtn.style.display = 'none';
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-btn');
+                button.addEventListener('click', () => selectOption(button, option));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectOption(selectedButton, selectedOption) {
+            const currentQuestion = questions[currentQuestionIndex];
+            const isCorrect = (selectedOption === currentQuestion.answer);
+
+            if (isCorrect) {
+                selectedButton.classList.add('correct');
+                score++;
+            } else {
+                selectedButton.classList.add('incorrect');
+                // Highlight the correct answer
+                Array.from(optionsContainer.children).forEach(button => {
+                    if (button.textContent === currentQuestion.answer) {
+                        button.classList.add('correct');
+                    }
+                });
+            }
+
+            // Disable all option buttons after selection
+            Array.from(optionsContainer.children).forEach(button => {
+                button.disabled = true;
+            });
+            
+            nextBtn.style.display = 'block';
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            showQuestion();
+        });
+
+        function showScore() {
+            quizScreen.style.display = 'none';
+            scoreScreen.style.display = 'block';
+            scoreText.textContent = `आपने ${questions.length} में से ${score} प्रश्नों के सही उत्तर दिए हैं।`;
+        }
+
+        function resetQuiz() {
+            scoreScreen.style.display = 'none';
+            welcomeScreen.style.display = 'block';
         }
     </script>
 </body>
