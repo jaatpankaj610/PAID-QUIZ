@@ -889,6 +889,62 @@
         // Firebase को शुरू करें
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+
+        // **नया: यह फंक्शन पेज लोड होते ही प्रीमियम एक्सेस को चेक करेगा**
+        async function checkPremiumAccess() {
+            const params = new URLSearchParams(window.location.search);
+            const userEmail = params.get('user_id');
+
+            if (!userEmail) {
+                // अगर URL में यूजर ईमेल नहीं है, तो पेमेंट पेज दिखाएं
+                document.getElementById('processing-screen').style.display = 'none';
+                document.getElementById('online-content').style.display = 'block';
+                return;
+            }
+
+            // ईमेल से अवैध अक्षरों को हटा दें
+            const userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+
+            try {
+                const paymentsRef = database.ref('payments');
+                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
+                const payments = snapshot.val();
+                let foundApprovedPayment = null;
+
+                if (payments) {
+                    for (let key in payments) {
+                        if (payments[key].status === 'approved' && payments[key].approved_at) {
+                            foundApprovedPayment = payments[key];
+                            break;
+                        }
+                    }
+                }
+
+                if (foundApprovedPayment) {
+                    const approvalDate = new Date(foundApprovedPayment.approved_at);
+                    const expiryDate = new Date(approvalDate);
+                    expiryDate.setDate(approvalDate.getDate() + 30); // 30 दिन जोड़ें
+                    const now = new Date();
+
+                    if (now < expiryDate) {
+                        // 30 दिन पूरे नहीं हुए, सीधे क्विज़ पेज पर भेजें
+                        window.location.href = 'quiz.html?user_id=' + userId;
+                        return;
+                    }
+                }
+                
+                // अगर कोई अप्रूव्ड पेमेंट नहीं मिली या 30 दिन पूरे हो गए, तो पेमेंट पेज दिखाएं
+                document.getElementById('user_id').value = userEmail; // ईमेल को फॉर्म में भरें
+                document.getElementById('processing-screen').style.display = 'none';
+                document.getElementById('online-content').style.display = 'block';
+
+            } catch (error) {
+                console.error("Access check error:", error);
+                // एरर होने पर भी पेमेंट पेज दिखाएं
+                document.getElementById('processing-screen').style.display = 'none';
+                document.getElementById('online-content').style.display = 'block';
+            }
+        }
         
         function showProcessingScreen() {
             document.getElementById('online-content').style.display = 'none';
@@ -927,7 +983,6 @@
             const paymentNote = document.getElementById('payment_note').value.trim();
             
             try {
-                // Payments डेटाबेस में नई रिक्वेस्ट सबमिट करें
                 const paymentsRef = database.ref('payments');
                 const newPaymentRef = paymentsRef.push();
                 
@@ -943,7 +998,6 @@
 
                 await newPaymentRef.set(payload);
 
-                // **यह नया कोड है जो डेटा को Firebase में सेव करता है**
                 const userDataRef = database.ref('user_session/' + userId);
                 await userDataRef.set({
                     transactionId: transactionId,
@@ -965,43 +1019,44 @@
         }
 
         async function checkPaymentStatus() {
-            const userId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+            const userIdInput = document.getElementById('user_id');
+            const statusMessage = document.getElementById('status-message');
+            const processingScreen = document.getElementById('processing-screen');
             
+            const userId = userIdInput.value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+
             if (!userId) {
-                alert('कृपया ईमेल ID दर्ज करें!');
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'कृपया अपना ईमेल ID दर्ज करें!';
+                statusMessage.style.display = 'block';
                 return;
             }
 
             showProcessingScreen();
             
             try {
-                // Firebase से सेव किया गया डेटा प्राप्त करें
                 const userDataRef = database.ref('user_session/' + userId);
                 const userDataSnapshot = await userDataRef.once('value');
                 const storedData = userDataSnapshot.val();
                 
                 let transactionIdToCheck = '';
-                let firebaseId = '';
                 
                 if (storedData && storedData.transactionId) {
                     transactionIdToCheck = storedData.transactionId;
-                    firebaseId = storedData.firebaseId;
                 } else {
                     transactionIdToCheck = document.getElementById('transaction_id').value.trim();
                     if (!transactionIdToCheck) {
                         hideProcessingScreen();
-                        document.getElementById('status-message').className = 'status-message error';
-                        document.getElementById('status-message').textContent = 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।';
-                        document.getElementById('status-message').style.display = 'block';
+                        statusMessage.className = 'status-message error';
+                        statusMessage.textContent = 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।';
+                        statusMessage.style.display = 'block';
                         return;
                     }
                 }
 
                 const paymentsRef = database.ref('payments');
                 
-                let queryRef = paymentsRef.orderByChild('user_id').equalTo(userId);
-                
-                const snapshot = await queryRef.once('value');
+                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                 const payments = snapshot.val();
                 let foundPayment = null;
 
@@ -1015,7 +1070,6 @@
                 }
 
                 hideProcessingScreen();
-                const statusMessage = document.getElementById('status-message');
 
                 if (foundPayment) {
                     if (foundPayment.status === 'approved') {
@@ -1024,7 +1078,7 @@
                         statusMessage.style.display = 'block';
 
                         setTimeout(() => {
-                            window.location.href = 'quiz.html';
+                            window.location.href = 'quiz.html?user_id=' + userId; // quiz.html पर ईमेल भी भेजें
                         }, 5000);
 
                     } else if (foundPayment.status === 'pending') {
@@ -1043,9 +1097,9 @@
                 }
             } catch (error) {
                 hideProcessingScreen();
-                document.getElementById('status-message').className = 'status-message error';
-                document.getElementById('status-message').textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि: ' + error.message;
-                document.getElementById('status-message').style.display = 'block';
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि: ' + error.message;
+                statusMessage.style.display = 'block';
                 console.error('Error:', error);
             }
         }
@@ -1149,6 +1203,9 @@
             if (params.has('user_id')) {
                 document.getElementById('user_id').value = params.get('user_id');
             }
+            
+            // नया: पेज लोड होते ही एक्सेस चेक करें
+            checkPremiumAccess();
             checkNetworkStatus();
         });
 
