@@ -2,15 +2,11 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>राजस्थान GK क्विज़ - एडमिन पैनल</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>एडमिन पैनल - पेमेंट अप्रूवल</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
         :root {
             --primary: #4a00e0;
             --secondary: #8e2de2;
@@ -21,327 +17,317 @@
             --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Noto Sans Devanagari', sans-serif;
         }
-
         body {
-            background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-            overflow-x: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100vh;
-            top: 0;
-            left: 0;
-            touch-action: pan-y;
+            background: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
         }
-
         .container {
-            width: 100%;
-            max-width: 800px;
-            height: 100vh;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-
-        .scrollable-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-
         .header {
             background: var(--gradient);
-            padding: 30px 20px;
+            color: var(--light);
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
             text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
         }
-
         .header h1 {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 24px;
+            font-weight: 700;
         }
-
         .header p {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.9;
-            font-weight: 400;
         }
-
-        .content {
-            padding: 25px;
-        }
-
-        .refresh-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .refresh-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.3);
-        }
-
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .admin-table th, .admin-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 14px;
-        }
-
-        .admin-table th {
-            background: var(--gradient);
-            color: white;
-            font-weight: 600;
-        }
-
-        .admin-table td {
-            color: #333;
-        }
-
-        .action-btn {
-            background: var(--success);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 15px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn.reject {
-            background: var(--danger);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .status-message {
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 20px;
+        .status-filter {
+            margin: 20px 0;
             text-align: center;
+        }
+        .status-filter button {
+            background: var(--dark);
+            color: var(--light);
+            border: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
             font-weight: 600;
-            font-size: 16px;
-            display: none;
+            transition: all 0.3s ease;
         }
-
-        .status-message.success {
-            background: rgba(0, 184, 148, 0.15);
-            color: var(--success);
-            border: 1px solid var(--success);
-            display: block;
+        .status-filter button.active {
+            background: var(--primary);
+            box-shadow: 0 4px 10px rgba(74, 0, 224, 0.3);
+            transform: translateY(-2px);
         }
-
-        .status-message.error {
-            background: rgba(214, 48, 49, 0.15);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            display: block;
+        #pending-requests-container {
+            margin-top: 20px;
         }
-
-        @media (max-width: 600px) {
-            .header h1 { font-size: 28px; }
-            .admin-table th, .admin-table td { font-size: 12px; padding: 10px; }
-            .action-btn { padding: 6px 10px; font-size: 12px; }
-            .refresh-btn { padding: 8px 16px; font-size: 13px; }
+        .request-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .request-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .request-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .request-card p {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .request-card .details {
+            font-weight: 500;
+        }
+        .request-card .status {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .status.pending {
+            background: var(--warning);
+            color: var(--dark);
+        }
+        .status.approved {
+            background: var(--success);
+            color: var(--light);
+        }
+        .status.rejected {
+            background: var(--danger);
+            color: var(--light);
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .actions button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .approve-btn {
+            background: var(--success);
+            color: var(--light);
+        }
+        .reject-btn {
+            background: var(--danger);
+            color: var(--light);
+        }
+        .approve-btn:hover { background: #009677; }
+        .reject-btn:hover { background: #b82c2c; }
+        .no-requests {
+            text-align: center;
+            color: #777;
+            margin-top: 40px;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-crown"></i> राजस्थान GK क्विज़ - एडमिन पैनल</h1>
-            <p>पेमेंट रिक्वेस्ट्स प्रबंधित करें</p>
+            <h1>एडमिन पैनल</h1>
+            <p>पेंडिंग पेमेंट रिक्वेस्ट अप्रूव करें</p>
+        </div>
+        
+        <div class="status-filter">
+            <button id="show-pending-btn" class="active">पेंडिंग</button>
+            <button id="show-approved-btn">अप्रूव्ड</button>
         </div>
 
-        <div class="scrollable-content">
-            <div class="content">
-                <button class="refresh-btn" onclick="loadPaymentRequests()"><i class="fas fa-sync-alt"></i> रिफ्रेश</button>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>यूजर ID</th>
-                            <th>मोबाइल नंबर</th>
-                            <th>ट्रांजैक्शन ID</th>
-                            <th>राशि</th>
-                            <th>दिनांक</th>
-                            <th>स्थिति</th>
-                            <th>एक्शन</th>
-                        </tr>
-                    </thead>
-                    <tbody id="payment-requests"></tbody>
-                </table>
-                <div id="status-message" class="status-message"></div>
-            </div>
-        </div>
+        <div id="loader" class="loader"></div>
+        
+        <div id="requests-list"></div>
+        
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdUtrVGLtpgToQu3AvQQCrPFS5j-otONgpb0FOI1YMnvYGwlwo3jyLRnNg3v68yViz/exec';
+        const firebaseConfig = {
+          apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+          authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+          databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+          projectId: "rajasthan-gk-quiz-41cc5",
+          storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
+          messagingSenderId: "876482514501",
+          appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+          measurementId: "G-VB140B6NCW"
+        };
 
-        // सिमुलेटेड SMS
-        function sendSMS(toPhone, message) {
-            console.log(`नोटिफिकेशन ${toPhone} को: ${message}`);
-            const statusElement = document.getElementById('status-message');
-            statusElement.textContent = `SMS भेजा गया: ${message}`;
-            statusElement.className = 'status-message success';
-            statusElement.style.display = 'block';
+        // Firebase को शुरू करें
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const paymentsRef = database.ref('payments');
+
+        const requestsList = document.getElementById('requests-list');
+        const loader = document.getElementById('loader');
+        const showPendingBtn = document.getElementById('show-pending-btn');
+        const showApprovedBtn = document.getElementById('show-approved-btn');
+
+        let currentFilter = 'pending';
+
+        function showLoader() {
+            loader.style.display = 'block';
+            requestsList.innerHTML = '';
         }
 
-        // पेमेंट रिक्वेस्ट्स लोड करें
-        async function loadPaymentRequests() {
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (!response.ok) {
-                    throw new Error('Server response not ok');
-                }
-                const data = await response.json();
-                const payments = data.payments || [];
-                console.log('Payments loaded from script:', payments);
-                const tbody = document.getElementById('payment-requests');
-                tbody.innerHTML = '';
+        function hideLoader() {
+            loader.style.display = 'none';
+        }
 
-                if (payments.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">कोई पेमेंट रिक्वेस्ट नहीं</td></tr>';
+        function fetchPayments() {
+            showLoader();
+            paymentsRef.once('value', (snapshot) => {
+                const payments = snapshot.val();
+                requestsList.innerHTML = '';
+                if (!payments) {
+                    requestsList.innerHTML = '<div class="no-requests">कोई पेमेंट रिक्वेस्ट नहीं मिली।</div>';
+                    hideLoader();
                     return;
                 }
 
-                payments.forEach(payment => {
-                    const row = document.createElement('tr');
-                    const status = payment.status || 'pending';
-                    row.innerHTML = `
-                        <td>${payment.user_id || 'N/A'}</td>
-                        <td>${payment.mobile_number || 'N/A'}</td>
-                        <td>${payment.transaction_id || 'N/A'}</td>
-                        <td>₹${payment.amount || 'N/A'}</td>
-                        <td>${payment.submission_date ? new Date(payment.submission_date).toLocaleString('hi-IN') : 'N/A'}</td>
-                        <td>${status === 'approved' ? 'अप्रूव्ड' : 'पेंडिंग'}</td>
-                        <td>
-                            ${status === 'pending' ? `
-                                <button class="action-btn" onclick="approvePayment('${payment.id}', '${payment.user_id || ''}', '${payment.mobile_number || ''}')">अप्रूव</button>
-                                <button class="action-btn reject" onclick="rejectPayment('${payment.id}', '${payment.user_id || ''}')">रिजेक्ट</button>
-                            ` : 'अप्रूव्ड - कोई एक्शन नहीं'}
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            } catch (error) {
-                console.error('Error loading payments:', error);
-                const tbody = document.getElementById('payment-requests');
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">पेमेंट रिक्वेस्ट्स लोड करने में त्रुटि</td></tr>';
-                const statusElement = document.getElementById('status-message');
-                statusElement.textContent = 'डेटा लोड करने में त्रुटि। कृपया इंटरनेट चेक करें और रिफ्रेश करें।';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-            }
-        }
+                const filteredPayments = Object.keys(payments).filter(key => {
+                    return payments[key].status === currentFilter;
+                }).map(key => ({
+                    id: key,
+                    ...payments[key]
+                }));
 
-        // पेमेंट अप्रूव करें
-        async function approvePayment(paymentId, userId, mobileNumber) {
-            try {
-                const approveData = {
-                    action: 'approve',
-                    id: paymentId,
-                    user_id: userId,
-                    mobile_number: mobileNumber
-                };
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(approveData)
-                });
-                if (response.ok) {
-                    console.log('Payment approved:', approveData);
-                    sendSMS(mobileNumber, `धन्यवाद ${userId}! आपका पेमेंट अप्रूव हो गया है। 30 दिन की प्रीमियम एक्सेस अनलॉक हो गई है।`);
-                    sendSMS('7665274721', `पेमेंट अप्रूव: यूजर ${userId}, ट्रांजैक्शन ID ${approveData.transaction_id || 'N/A'}`);
-                    loadPaymentRequests();
-                } else {
-                    throw new Error('Server response not ok');
+                if (filteredPayments.length === 0) {
+                    const message = currentFilter === 'pending' ? 'कोई पेंडिंग रिक्वेस्ट नहीं है।' : 'कोई अप्रूव्ड रिक्वेस्ट नहीं है।';
+                    requestsList.innerHTML = `<div class="no-requests">${message}</div>`;
+                    hideLoader();
+                    return;
                 }
-            } catch (error) {
-                console.error('Error approving payment:', error);
-                const statusElement = document.getElementById('status-message');
-                statusElement.textContent = 'पेमेंट अप्रूव करने में त्रुटि। कृपया पुनः प्रयास करें।';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-            }
-        }
 
-        // पेमेंट रिजेक्ट करें
-        async function rejectPayment(paymentId, userId) {
-            try {
-                const rejectData = {
-                    action: 'reject',
-                    id: paymentId,
-                    user_id: userId
-                };
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(rejectData)
+                filteredPayments.forEach(payment => {
+                    const card = createPaymentCard(payment);
+                    requestsList.appendChild(card);
                 });
-                if (response.ok) {
-                    console.log('Payment rejected, ID:', paymentId);
-                    sendSMS('7665274721', `पेमेंट रिजेक्ट: यूजर ${userId}, ट्रांजैक्शन ID ${rejectData.transaction_id || 'N/A'}`);
-                    loadPaymentRequests();
-                } else {
-                    throw new Error('Server response not ok');
-                }
-            } catch (error) {
-                console.error('Error rejecting payment:', error);
-                const statusElement = document.getElementById('status-message');
-                statusElement.textContent = 'पेमेंट रिजेक्ट करने में त्रुटि। कृपया पुनः प्रयास करें।';
-                statusElement.className = 'status-message error';
-                statusElement.style.display = 'block';
-            }
+                hideLoader();
+            }, (error) => {
+                console.error("Firebase डेटा पढ़ने में त्रुटि:", error);
+                requestsList.innerHTML = '<div class="no-requests">डेटा लोड करने में त्रुटि।</div>';
+                hideLoader();
+            });
         }
 
-        // पेज लोड पर रिक्वेस्ट्स लोड करें
-        window.addEventListener('load', loadPaymentRequests);
+        function createPaymentCard(payment) {
+            const card = document.createElement('div');
+            card.className = 'request-card';
+
+            const formattedDate = new Date(payment.timestamp).toLocaleString('hi-IN', {
+                day: 'numeric', month: 'long', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+
+            card.innerHTML = `
+                <h3><i class="fas fa-user-circle"></i> ${payment.user_id}</h3>
+                <p><strong>मोबाइल:</strong> <span class="details">${payment.mobile_number}</span></p>
+                <p><strong>ट्रांजैक्शन ID:</strong> <span class="details">${payment.transaction_id}</span></p>
+                <p><strong>राशि:</strong> <span class="details">₹${payment.amount}</span></p>
+                <p><strong>पेमेंट नोट:</strong> <span class="details">${payment.payment_note || 'कोई जानकारी नहीं'}</span></p>
+                <p><strong>दिनांक:</strong> <span class="details">${formattedDate}</span></p>
+                <span class="status ${payment.status}">${payment.status === 'pending' ? 'पेंडिंग' : 'अप्रूव्ड'}</span>
+            `;
+
+            if (payment.status === 'pending') {
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'actions';
+                
+                const approveBtn = document.createElement('button');
+                approveBtn.className = 'approve-btn';
+                approveBtn.textContent = 'अप्रूव करें';
+                approveBtn.onclick = () => updateStatus(payment.id, 'approved');
+
+                const rejectBtn = document.createElement('button');
+                rejectBtn.className = 'reject-btn';
+                rejectBtn.textContent = 'रिजेक्ट करें';
+                rejectBtn.onclick = () => updateStatus(payment.id, 'rejected');
+
+                actionsDiv.appendChild(approveBtn);
+                actionsDiv.appendChild(rejectBtn);
+                card.appendChild(actionsDiv);
+            }
+
+            return card;
+        }
+
+        function updateStatus(id, newStatus) {
+            showLoader();
+            const updates = {};
+            updates['/payments/' + id + '/status'] = newStatus;
+            
+            paymentsRef.update(updates)
+                .then(() => {
+                    console.log("Status updated successfully.");
+                    fetchPayments(); // अपडेट के बाद लिस्ट को रिफ्रेश करें
+                })
+                .catch((error) => {
+                    console.error("Status अपडेट करने में त्रुटि:", error);
+                    alert("स्टेटस अपडेट करने में समस्या हुई।");
+                    hideLoader();
+                });
+        }
+
+        showPendingBtn.addEventListener('click', () => {
+            currentFilter = 'pending';
+            showPendingBtn.classList.add('active');
+            showApprovedBtn.classList.remove('active');
+            fetchPayments();
+        });
+
+        showApprovedBtn.addEventListener('click', () => {
+            currentFilter = 'approved';
+            showApprovedBtn.classList.add('active');
+            showPendingBtn.classList.remove('active');
+            fetchPayments();
+        });
+
+        window.addEventListener('load', fetchPayments);
     </script>
 </body>
 </html>
