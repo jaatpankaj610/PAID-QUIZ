@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        /* All existing CSS remains unchanged */
         :root {
             --primary: #2563eb;
             --secondary: #7c3aed;
@@ -168,7 +169,7 @@
         
         .welcome-section p { 
             font-size: 14px; 
-            font-weight: 600;
+            font-weight: 700;
             color: var(--dark);
             margin-bottom: 15px;
             word-wrap: break-word;
@@ -816,7 +817,7 @@
                         <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> धन्यवाद!</h2>
                         <p>आपका भुगतान सफलतापूर्वक प्राप्त हो गया है। अब आप हमारे प्रीमियम राजस्थान सामान्य ज्ञान क्विज़ का आनंद ले सकते हैं।</p>
                         <ul class="features">
-                            <li><i class="fas fa-check-circle"></i> 50+ एक्सक्लूसिव सवाल</li>
+                            <li><i class="fas fa-check-circle"></i> 100+ एक्सक्लूसिव सवाल</li>
                             <li><i class="fas fa-check-circle"></i> तुरंत परिणाम</li>
                             <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
                             <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
@@ -871,10 +872,7 @@
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
-        
-        // GitHub रिपॉजिटरी जानकारी (हार्डकोडेड)
-        const githubUsername = "jaatpankaj610";
-        const githubRepo = "PAID-QUIZ";
+        let quizStarted = false;
 
         // Initialize sound effects
         const correctSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1998/1998.wav'); // Enthusiastic sound
@@ -922,14 +920,19 @@
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
             const errorOverlay = document.getElementById('error-overlay');
+            
             if (!errorSection || !onlineContent || !errorOverlay) {
                 console.error('Error/Online sections not found for paid quiz');
                 showErrorOverlay();
                 return;
             }
+            
             try {
-                // GitHub से questions.json फाइल लोड करें
-                const response = await fetch(`https://raw.githubusercontent.com/${githubUsername}/${githubRepo}/main/questions.json`, {
+                // यहाँ अपने GitHub रिपॉजिटरी का URL डालें
+                const repoUrl = 'https://raw.githubusercontent.com/jaatpankaj610/PAID-QUIZ/main/questions.json';
+                console.log('Attempting to load questions from:', repoUrl);
+                
+                const response = await fetch(repoUrl, {
                     method: 'GET',
                     mode: 'cors',
                     cache: 'no-store',
@@ -937,40 +940,65 @@
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
                 }
                 
                 const data = await response.json();
                 
-                // Validate data structure
-                if (!Array.isArray(data) || data.length === 0) {
-                    throw new Error('Invalid data format: expected an array of questions');
+                if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
+                    throw new Error('No questions found or invalid data format');
                 }
                 
-                // Validate each question
-                for (let i = 0; i < data.length; i++) {
-                    const question = data[i];
-                    if (!question.question || !question.options || !Array.isArray(question.options) || question.correct === undefined) {
-                        throw new Error(`Invalid question at index ${i}: missing required fields`);
+                // Validate each question and convert to our format
+                questions = [];
+                for (let i = 0; i < data.questions.length; i++) {
+                    const q = data.questions[i];
+                    if (!q.question || !q.options || !Array.isArray(q.options) || q.options.length < 4 || !q.correctAnswer) {
+                        throw new Error(`Invalid question at index ${i}: ${JSON.stringify(q)}`);
                     }
                     
-                    if (question.options.length < 2) {
-                        throw new Error(`Question at index ${i} must have at least 2 options`);
+                    // Find the index of the correct answer
+                    const correctIndex = q.options.findIndex(option => option === q.correctAnswer);
+                    if (correctIndex === -1) {
+                        throw new Error(`Correct answer "${q.correctAnswer}" not found in options for question at index ${i}`);
                     }
                     
-                    if (question.correct < 0 || question.correct >= question.options.length) {
-                        throw new Error(`Question at index ${i} has invalid correct answer index`);
-                    }
+                    // Convert to our format
+                    questions.push({
+                        question: q.question,
+                        options: q.options,
+                        correct: correctIndex
+                    });
                 }
                 
-                questions = data;
-                console.log('Questions loaded for paid quiz:', questions);
-                return true;
+                console.log('Successfully loaded and converted', questions.length, 'questions');
+                
             } catch (error) {
                 console.error('Failed to load questions:', error);
-                showErrorOverlay(error.message);
+                
+                // विस्तृत त्रुटि संदेश दिखाएं
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.innerHTML = `
+                    <strong>त्रुटि:</strong> ${error.message}<br><br>
+                    <strong>समाधान:</strong><br>
+                    1. अपने GitHub रिपॉजिटरी URL की जांच करें<br>
+                    2. questions.json फ़ाइल की संरचना की जांच करें<br>
+                    3. इंटरनेट कनेक्शन की जांच करें
+                `;
+                
+                const errorContainer = document.querySelector('.error-container');
+                if (errorContainer) {
+                    // पुराने संदेश को हटाएं और नया जोड़ें
+                    const oldMessage = errorContainer.querySelector('.error-message');
+                    if (oldMessage) {
+                        oldMessage.parentNode.removeChild(oldMessage);
+                    }
+                    errorContainer.insertBefore(errorMessage, errorContainer.firstChild);
+                }
+                
+                showErrorOverlay();
                 if ('vibrate' in navigator) navigator.vibrate(200);
-                return false;
             }
         }
 
@@ -980,42 +1008,42 @@
                 return;
             }
             
-            if (questions.length === 0) {
-                loadQuestions().then(success => {
-                    if (success && questions.length > 0) {
-                        const welcomeSection = document.getElementById('welcome-section');
-                        const quizSection = document.getElementById('quiz-section');
-                        const scoreSection = document.getElementById('score-section');
-                        if (welcomeSection && quizSection && scoreSection) {
-                            welcomeSection.style.display = 'none';
-                            quizSection.style.display = 'block';
-                            scoreSection.style.display = 'none';
-                            currentQuestionIndex = 0;
-                            score = 0;
-                            updateScore();
+            // Prevent multiple clicks
+            if (quizStarted) return;
+            quizStarted = true;
+            
+            // Show loading state
+            const welcomeSection = document.getElementById('welcome-section');
+            const quizSection = document.getElementById('quiz-section');
+            const scoreSection = document.getElementById('score-section');
+            
+            if (welcomeSection && quizSection && scoreSection) {
+                welcomeSection.style.display = 'none';
+                quizSection.style.display = 'block';
+                scoreSection.style.display = 'none';
+                
+                // Reset quiz state
+                currentQuestionIndex = 0;
+                score = 0;
+                updateScore();
+                
+                // Load questions if not already loaded
+                if (questions.length === 0) {
+                    loadQuestions().then(() => {
+                        if (questions.length > 0) {
                             showQuestion();
                         } else {
-                            console.error('Quiz sections not found for paid quiz');
                             showErrorOverlay();
                         }
-                    }
-                });
-            } else {
-                const welcomeSection = document.getElementById('welcome-section');
-                const quizSection = document.getElementById('quiz-section');
-                const scoreSection = document.getElementById('score-section');
-                if (welcomeSection && quizSection && scoreSection) {
-                    welcomeSection.style.display = 'none';
-                    quizSection.style.display = 'block';
-                    scoreSection.style.display = 'none';
-                    currentQuestionIndex = 0;
-                    score = 0;
-                    updateScore();
-                    showQuestion();
+                    }).catch(() => {
+                        showErrorOverlay();
+                    });
                 } else {
-                    console.error('Quiz sections not found for paid quiz');
-                    showErrorOverlay();
+                    showQuestion();
                 }
+            } else {
+                console.error('Quiz sections not found for paid quiz');
+                showErrorOverlay();
             }
         }
 
@@ -1054,7 +1082,7 @@
             }
             
             const question = questions[currentQuestionIndex];
-            if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 2) {
+            if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 4) {
                 console.error('Invalid question data for paid quiz:', question);
                 showErrorOverlay();
                 return;
@@ -1180,6 +1208,7 @@
         }
 
         function restartQuiz() {
+            quizStarted = false;
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
             if (quizSection && scoreSection) {
@@ -1192,28 +1221,24 @@
             }
         }
 
-        function showErrorOverlay(customMessage) {
+        function showErrorOverlay() {
             const errorOverlay = document.getElementById('error-overlay');
-            const errorMessage = document.querySelector('#error-overlay .error-message');
-            
             if (errorOverlay) {
-                if (customMessage && errorMessage) {
-                    errorMessage.textContent = `त्रुटि: ${customMessage}`;
-                }
                 errorOverlay.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
         }
 
         function retry() {
+            quizStarted = false;
             const errorOverlay = document.getElementById('error-overlay');
             if (errorOverlay) {
                 errorOverlay.style.display = 'none';
                 document.body.style.overflow = 'hidden';
                 checkNetworkStatus();
                 if (navigator.onLine) {
-                    loadQuestions().then(success => {
-                        if (success && questions.length > 0) {
+                    loadQuestions().then(() => {
+                        if (questions.length > 0) {
                             startQuiz();
                         }
                     });
