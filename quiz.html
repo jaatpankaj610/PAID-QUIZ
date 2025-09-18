@@ -2,524 +2,1233 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>राजस्थान GK क्विज़</title>
+    <title>राजस्थान GK पेड क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-        
         :root {
-            --primary: #4a00e0;
-            --secondary: #8e2de2;
-            --success: #00b894;
-            --danger: #d63031;
-            --warning: #fdcb6e;
-            --light: #f8f9fa;
-            --dark: #2d3436;
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #047857;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #ffffff;
+            --dark: #000000;
+            --gray: #000000;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --timer-gradient: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            --premium-gradient: linear-gradient(135deg, #f59e0b, #ef4444);
+            --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            --button-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --paid-color: #f59e0b;
+            --paid-gradient: linear-gradient(135deg, #f59e0b, #d97706);
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; 
+            font-weight: 600;
         }
         
-        body {
-            background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
+        body { 
+            background: linear-gradient(135deg, #f0f9ff, #e9d5ff);
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 0; 
+            overflow: hidden; 
+            position: fixed; 
+            width: 100vw; 
+            height: 100vh; 
+            top: 0; 
+            left: 0; 
+            touch-action: none;
+        }
+        
+        .container { 
+            width: 100vw; 
             height: 100vh;
+            background: var(--light); 
+            border-radius: 0; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            position: fixed;
             top: 0;
             left: 0;
-            touch-action: manipulation;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.4) 0%, transparent 20%),
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
         }
         
-        .app-container {
-            width: 100%;
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 0;
-            box-shadow: none;
+        .scrollable-content { 
+            flex: 1; 
             overflow: hidden;
-            height: 100vh;
-            max-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            -webkit-overflow-scrolling: none;
+            scrollbar-width: none;
         }
         
-        .quiz-header {
-            background: var(--gradient);
-            padding: 15px;
-            text-align: center;
-            color: white;
+        .header { 
+            background: var(--paid-gradient); 
+            padding: 15px; 
+            text-align: center; 
+            color: var(--light); 
+            position: relative; 
+            overflow: hidden;
             flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
         }
         
-        .quiz-header::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-            opacity: 0.3;
-            z-index: 0;
-        }
-        
-        .quiz-header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            line-height: 1.2;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-        
-        .user-info {
-            font-size: 14px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .quiz-container {
-            padding: 15px;
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            background: rgba(255, 255, 255, 0.9);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.8) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.8) 0%, transparent 20%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .welcome-message {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(142, 45, 226, 0.1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-        
-        .welcome-message::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(142, 45, 226, 0.05) 0%, transparent 70%);
-            z-index: 0;
-        }
-        
-        .welcome-message i {
-            font-size: 40px;
-            color: var(--primary);
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .welcome-message h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            line-height: 1.2;
-            position: relative;
-            z-index: 1;
-            color: var(--dark);
-        }
-        
-        .welcome-message p {
-            font-size: 16px;
-            margin-bottom: 20px;
-            line-height: 1.4;
-            position: relative;
-            z-index: 1;
-            color: var(--dark);
-        }
-        
-        .quiz-info-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(142, 45, 226, 0.1);
-            text-align: left;
-            width: 100%;
-            max-width: 450px;
-        }
-        
-        .quiz-info-section h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 5px;
-        }
-        
-        .quiz-info-section ul {
-            list-style: none;
-        }
-        
-        .quiz-info-section li {
-            font-size: 14px;
-            color: var(--dark);
-            margin-bottom: 8px;
-            position: relative;
-            padding-left: 25px;
-        }
-        
-        .quiz-info-section li::before {
-            content: "\f058";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            left: 0;
-            color: var(--success);
-        }
-        
-        .start-quiz-btn {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            box-shadow: 0 4px 10px rgba(74, 0, 224, 0.3);
-            margin-top: 20px;
-        }
-        
-        .start-quiz-btn::before {
+        .header::before {
             content: "";
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-            z-index: -1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            z-index: 0;
         }
         
-        .start-quiz-btn:hover::before {
-            transform: translateX(0);
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
         
-        .start-quiz-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.4);
-        }
-
-        /* क्विज़ स्क्रीन के लिए नए CSS */
-        .quiz-section {
-            display: none; /* यह शुरुआत में छिपा रहेगा */
-            width: 100%;
-            text-align: left;
-            padding: 20px;
-        }
-
-        .question-box {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .header h1 { 
+            font-size: 24px; 
+            font-weight: 800; 
+            margin-bottom: 8px; 
+            color: var(--light);
+            letter-spacing: -0.5px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
-        .question {
-            font-size: 18px;
+        .header p { 
+            font-size: 14px; 
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.2px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .content { 
+            padding: 10px; 
+            padding-bottom: 80px; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            max-width: 100%;
+        }
+        
+        .welcome-section { 
+            background: var(--light); 
+            border-radius: 16px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            box-shadow: var(--card-shadow); 
+            text-align: center; 
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeInUp 0.6s ease-out;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .welcome-section h2 { 
+            font-size: 20px; 
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .welcome-section p { 
+            font-size: 14px; 
             font-weight: 600;
             color: var(--dark);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
-        .options-container {
+        .paid-badge {
+            display: inline-block;
+            background: var(--paid-gradient);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(245, 158, 11, 0.3);
+        }
+        
+        .features { 
+            list-style: none; 
+            margin-bottom: 15px;
+        }
+        
+        .features li { 
+            margin-bottom: 8px; 
+            display: flex; 
+            align-items: center; 
+            font-size: 14px; 
+            font-weight: 700;
+            color: var(--dark);
+            background: rgba(241, 245, 249, 0.7);
+            padding: 10px 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .features li:nth-child(1) { animation-delay: 0.1s; }
+        .features li:nth-child(2) { animation-delay: 0.2s; }
+        .features li:nth-child(3) { animation-delay: 0.3s; }
+        .features li:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .features li i { 
+            margin-right: 10px; 
+            color: var(--paid-color); 
+            font-size: 16px;
+            background: rgba(245, 158, 11, 0.1);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .start-btn { 
+            background: var(--paid-gradient); 
+            color: var(--light); 
+            border: none; 
+            border-radius: 12px; 
+            padding: 12px 18px; 
+            font-size: 15px; 
+            font-weight: 700;
+            cursor: pointer; 
+            width: 100%; 
+            transition: all 0.3s ease; 
+            box-shadow: var(--button-shadow);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .start-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+        
+        .quiz-section { 
+            display: none; 
+            background: var(--light); 
+            border-radius: 16px; 
+            padding: 10px; 
+            margin-bottom: 15px; 
+            box-shadow: var(--card-shadow); 
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            animation: fadeInUp 0.5s ease-out;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            width: 100%;
+            max-width: 100%;
         }
         
-        .option-btn {
-            background: #f0f0f0;
+        .question-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .question { 
+            font-size: 16px; 
+            font-weight: 700;
             color: var(--dark);
-            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            background: rgba(241, 245, 249, 0.7);
+            padding: 12px;
             border-radius: 10px;
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            line-height: 1.5;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            border-left: 4px solid var(--paid-color);
+            width: 100%;
         }
         
-        .option-btn:hover {
-            background: #e9e9e9;
+        .options { 
+            list-style: none;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
         }
         
-        .option-btn.correct {
-            background-color: var(--success);
-            color: white;
-            border-color: var(--success);
+        .options li { 
+            background: linear-gradient(135deg, #0d9488, #4b5563); 
+            padding: 14px 18px; 
+            margin-bottom: 10px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            font-size: 16px; 
+            font-weight: 700;
+            color: #ffffff;
+            border: 2px solid #0d9488;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            animation: popIn 0.5s ease-out forwards;
         }
         
-        .option-btn.incorrect {
-            background-color: var(--danger);
-            color: white;
-            border-color: var(--danger);
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .options li:hover { 
+            background: linear-gradient(135deg, #14b8a6, #6b7280);
+            border: 2px solid #14b8a6;
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
+        }
+        
+        .options li.correct { 
+            background: linear-gradient(135deg, #10b981, #047857);
+            border: 2px solid #10b981;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            animation: pop3D 0.4s ease-out forwards;
+        }
+        
+        .options li.correct::after {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-left: auto;
+            font-size: 18px;
+            color: #ffffff;
+        }
+        
+        .options li.incorrect { 
+            background: linear-gradient(135deg, #f87171, #ef4444); 
+            border: 2px solid #f87171;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+            animation: pop3D 0.4s ease-out forwards;
+        }
+        
+        .options li.incorrect::after {
+            content: "\f00d";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-left: auto;
+            font-size: 18px;
+        }
+        
+        @keyframes pop3D {
+            0% {
+                transform: perspective(600px) rotateX(0deg) scale(1);
+                box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            }
+            50% {
+                transform: perspective(600px) rotateX(10deg) scale(1.05);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+            }
+            100% {
+                transform: perspective(600px) rotateX(0deg) scale(1);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            }
+        }
+        
+        .result { 
+            margin-top: 10px; 
+            font-size: 14px; 
+            font-weight: 700;
+            text-align: center; 
+            display: none;
+            padding: 12px;
+            border-radius: 10px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+        
+        .result.success { 
+            color: var(--success);
+            background: rgba(4, 120, 87, 0.1);
+            border: 1px solid rgba(4, 120, 87, 0.2);
+        }
+        
+        .result.error { 
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .next-btn { 
+            background: var(--paid-gradient); 
+            color: var(--light); 
+            border: none; 
+            border-radius: 12px; 
+            padding: 12px; 
+            font-size: 15px; 
+            font-weight: 700;
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 10px; 
+            display: none; 
+            box-shadow: var(--button-shadow);
+        }
+        
+        .next-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+        
+        .offline-section, .error-section { 
+            text-align: center; 
+            padding: 15px; 
+            background: var(--light); 
+            border-radius: 16px; 
+            box-shadow: var(--card-shadow); 
+            margin: 15px 0; 
+            border: 1px solid rgba(0,0,0,0.05);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+        
+        .custom-design { 
+            width: 120px; 
+            height: 120px; 
+            margin: 0 auto 10px; 
+            border-radius: 16px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--light); 
+            font-size: 18px; 
+            font-weight: 700; 
+            text-align: center; 
+            line-height: 1.3;
+        }
+        
+        .offline-section .custom-design { 
+            background: var(--gray); 
+        }
+        
+        .error-section .custom-design { 
+            background: var(--danger); 
+        }
+        
+        .offline-message, .error-message { 
+            font-size: 14px; 
+            font-weight: 700;
+            color: var(--dark);
+            background: rgba(241, 245, 249, 0.7);
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+        
+        .progress-bar {
+            height: 5px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--paid-gradient);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .score-display {
+            margin: 10px 0;
+            background: var(--light);
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 10px;
+            border-radius: 25px;
+            box-shadow: var(--button-shadow);
+            display: none;
+            border: 1px solid rgba(0,0,0,0.08);
+            text-align: center;
+            width: 100%;
+        }
+        
+        .error-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
 
-        .next-btn {
-            margin-top: 20px;
-            background: var(--gradient);
-            color: white;
+        .error-container {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            max-width: 90%;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .error-image {
+            width: 100px;
+            height: 100px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: var(--light);
+            font-size: 36px;
+        }
+
+        .error-message {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .retry-btn {
+            background: var(--paid-gradient);
+            color: var(--light);
             border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 12px;
+            padding: 10px 18px;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
+            width: 100%;
+            box-shadow: var(--button-shadow);
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
         }
 
         .score-section {
             display: none;
+            background: var(--light);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0,0,0,0.05);
             text-align: center;
-            padding: 20px;
+            animation: fadeInUp 0.6s ease-out;
+            flex: 1;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .score-section h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .score-details {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 15px;
+            background: rgba(241, 245, 249, 0.7);
+            padding: 12px;
+            border-radius: 10px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            background: var(--paid-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: var(--light);
+            font-size: 24px;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .restart-btn {
+            background: var(--paid-gradient);
+            color: var(--light);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(245, 158, 11, 0.2);
+            border-top: 5px solid var(--paid-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (min-width: 601px) {
-            .app-container {
-                height: 100vh;
-                max-height: 100vh;
-                border-radius: 0;
-                margin: 0 auto;
+            .header { 
+                padding: 20px; 
             }
-            .quiz-container {
-                padding: 25px;
+            .header h1 { 
+                font-size: 28px; 
+                margin-bottom: 10px; 
             }
-            .welcome-message {
-                padding: 25px;
-                max-width: 500px;
+            .header p { 
+                font-size: 16px; 
             }
-            .welcome-message i {
-                font-size: 50px;
-                margin-bottom: 20px;
+            .content { 
+                padding: 15px; 
+                padding-bottom: 90px; 
             }
-            .welcome-message h2 {
-                font-size: 28px;
-                margin-bottom: 15px;
+            .welcome-section { 
+                padding: 20px; 
+                margin-bottom: 20px; 
             }
-            .welcome-message p {
-                font-size: 18px;
-                margin-bottom: 25px;
+            .welcome-section h2 { 
+                font-size: 24px; 
+                margin-bottom: 12px;
             }
-            .start-quiz-btn {
-                padding: 15px 30px;
-                font-size: 18px;
-                width: 100%;
-                max-width: 350px;
+            .welcome-section p { 
+                font-size: 16px; 
             }
-            .quiz-info-section {
-                padding: 20px;
-                max-width: 450px;
+            .features li { 
+                font-size: 15px; 
+                margin-bottom: 10px;
+                padding: 12px 14px;
             }
-            .quiz-info-section h3 {
+            .features li i { 
+                font-size: 18px; 
+                width: 32px;
+                height: 32px;
+            }
+            .start-btn, .restart-btn { 
+                padding: 14px 20px; 
+                font-size: 16px; 
+            }
+            .quiz-section { 
+                padding: 15px; 
+                margin-bottom: 20px; 
+            }
+            .question { 
+                font-size: 18px; 
+                margin-bottom: 12px;
+                padding: 14px;
+            }
+            .options li { 
+                padding: 16px 20px; 
+                margin-bottom: 12px;
+                font-size: 17px;
+            }
+            .result { 
+                margin-top: 12px; 
+                font-size: 16px; 
+                padding: 14px;
+            }
+            .next-btn { 
+                padding: 14px; 
+                font-size: 16px; 
+                margin-top: 12px;
+            }
+            .offline-section, .error-section, .score-section { 
+                padding: 20px; 
+                margin: 20px 0; 
+            }
+            .custom-design { 
+                width: 140px; 
+                height: 140px; 
                 font-size: 20px;
             }
-            .quiz-info-section li {
-                font-size: 16px;
+            .offline-message, .error-message, .score-details { 
+                font-size: 16px; 
+                padding: 14px;
+            }
+            .progress-bar {
+                height: 6px;
+                margin: 12px 0;
+            }
+            .score-display {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+            .score-circle {
+                width: 120px;
+                height: 120px;
+                font-size: 28px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="quiz-header">
-            <h1>राजस्थान GK क्विज़</h1>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>राजस्थान GK पेड क्विज़</h1>
+                <p>प्रीमियम क्विज़ अनुभव का आनंद लें</p>
+            </div>
         </div>
-        
-        <div class="quiz-container">
-            <div class="welcome-message" id="welcome-screen">
-                <i class="fas fa-star-of-david"></i>
-                <h2>क्विज़ शुरू करें!</h2>
-                <p>राजस्थान के इतिहास, भूगोल, कला और संस्कृति पर अपने ज्ञान का परीक्षण करें।</p>
-                
-                <div class="quiz-info-section">
-                    <h3>क्विज़ की मुख्य विशेषताएँ:</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> 100+ नवीनतम GK प्रश्न</li>
-                        <li><i class="fas fa-check-circle"></i> तुरंत सही उत्तर और व्याख्या</li>
-                        <li><i class="fas fa-check-circle"></i> आसान और तेज़ इंटरफ़ेस</li>
-                        <li><i class="fas fa-check-circle"></i> सभी प्रतियोगी परीक्षाओं के लिए उपयोगी</li>
-                    </ul>
+        <div class="scrollable-content">
+            <div class="content">
+                <div id="offline-section" class="offline-section" style="display: none;">
+                    <div class="custom-design">📴</div>
+                    <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
+                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
                 </div>
-
-                <button class="start-quiz-btn" onclick="startQuiz()">शुरू करें</button>
-            </div>
-            
-            <div id="quiz-screen" class="quiz-section">
-                <div class="question-box">
-                    <p id="question-number" style="font-weight: bold;"></p>
-                    <p id="question" class="question"></p>
-                    <div id="options-container" class="options-container"></div>
+                <div id="error-section" class="error-section" style="display: none;">
+                    <div class="custom-design">⚠️</div>
+                    <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें</p>
+                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
                 </div>
-                <button id="next-btn" class="next-btn" style="display: none;">अगला</button>
-            </div>
-
-            <div id="score-screen" class="score-section">
-                <h2>आपका स्कोर</h2>
-                <p id="score-text"></p>
-                <button class="start-quiz-btn" onclick="resetQuiz()">फिर से शुरू करें</button>
+                <div id="online-content">
+                    <div class="welcome-section" id="welcome-section">
+                        <div class="paid-badge">प्रीमियम संस्करण</div>
+                        <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> धन्यवाद!</h2>
+                        <p>आपका भुगतान सफलतापूर्वक प्राप्त हो गया है। अब आप हमारे प्रीमियम राजस्थान सामान्य ज्ञान क्विज़ का आनंद ले सकते हैं।</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check-circle"></i> 50+ एक्सक्लूसिव सवाल</li>
+                            <li><i class="fas fa-check-circle"></i> तुरंत परिणाम</li>
+                            <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
+                            <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
+                        </ul>
+                        <button class="start-btn" onclick="startQuiz()">
+                            <span>क्विज़ शुरू करें</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div id="quiz-section" class="quiz-section">
+                        <div class="question-container">
+                            <div class="question" id="question-text">प्रश्न लोड हो रहा है...</div>
+                            <div class="progress-bar">
+                                <div class="progress" id="progress-bar"></div>
+                            </div>
+                            <ul class="options" id="options-list">
+                                <div class="loading-container">
+                                    <div class="spinner"></div>
+                                </div>
+                            </ul>
+                            <div id="result" class="result"></div>
+                            <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
+                            <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
+                            <button class="restart-btn" onclick="restartQuiz()">
+                                <span>क्विज़ पुनः शुरू करें</span>
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="score-section" class="score-section">
+                        <div class="score-circle" id="final-score-circle">0/0</div>
+                        <h2><i class="fas fa-trophy" style="color: #f59e0b;"></i> क्विज़ समाप्त!</h2>
+                        <div class="score-details" id="score-details"></div>
+                        <button class="restart-btn" onclick="restartQuiz()">
+                            <span>क्विज़ पुनः शुरू करें</span>
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
-    <script>
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const quizScreen = document.getElementById('quiz-screen');
-        const scoreScreen = document.getElementById('score-screen');
-        const questionText = document.getElementById('question');
-        const questionNumberText = document.getElementById('question-number');
-        const optionsContainer = document.getElementById('options-container');
-        const nextBtn = document.getElementById('next-btn');
-        const scoreText = document.getElementById('score-text');
+    <div id="error-overlay" class="error-overlay">
+        <div class="error-container">
+            <div class="error-image">❌</div>
+            <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें!</p>
+            <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
+        </div>
+    </div>
 
+    <script>
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
+        
+        // GitHub रिपॉजिटरी जानकारी (हार्डकोडेड)
+        const githubUsername = "jaatpankaj610";
+        const githubRepo = "PAID-QUIZ";
 
-        // Fetch questions from questions.json
-        async function fetchQuestions() {
+        // Initialize sound effects
+        const correctSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1998/1998.wav'); // Enthusiastic sound
+        const incorrectSound = new Audio('https://assets.mixkit.co/active_storage/sfx/916/916.wav'); // Soft error sound
+
+        // Ensure audio plays after user interaction
+        function unlockAudio() {
+            correctSound.load();
+            incorrectSound.load();
+            document.removeEventListener('click', unlockAudio);
+        }
+        document.addEventListener('click', unlockAudio);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeQuiz();
+        });
+
+        function initializeQuiz() {
+            checkNetworkStatus();
+            console.log('DOM loaded, initializing paid quiz');
+        }
+
+        function checkNetworkStatus() {
+            const offlineSection = document.getElementById('offline-section');
+            const errorSection = document.getElementById('error-section');
+            const onlineContent = document.getElementById('online-content');
+            const errorOverlay = document.getElementById('error-overlay');
+            if (!offlineSection || !errorSection || !onlineContent || !errorOverlay) {
+                console.error('Network status elements not found for paid quiz');
+                showErrorOverlay();
+                return;
+            }
+            if (!navigator.onLine) {
+                offlineSection.style.display = 'block';
+                errorSection.style.display = 'none';
+                onlineContent.style.display = 'none';
+            } else {
+                offlineSection.style.display = 'none';
+                errorSection.style.display = 'none';
+                onlineContent.style.display = 'block';
+            }
+        }
+
+        async function loadQuestions() {
+            const errorSection = document.getElementById('error-section');
+            const onlineContent = document.getElementById('online-content');
+            const errorOverlay = document.getElementById('error-overlay');
+            if (!errorSection || !onlineContent || !errorOverlay) {
+                console.error('Error/Online sections not found for paid quiz');
+                showErrorOverlay();
+                return;
+            }
             try {
-                const response = await fetch('questions.json');
+                // GitHub से questions.json फाइल लोड करें
+                const response = await fetch(`https://raw.githubusercontent.com/${githubUsername}/${githubRepo}/main/questions.json`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-store',
+                    credentials: 'omit'
+                });
+                
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                questions = await response.json();
-                console.log("Questions loaded:", questions);
-                if (questions.length > 0) {
-                    showQuestion();
-                } else {
-                    console.error("questions.json file is empty or formatted incorrectly.");
+                
+                const data = await response.json();
+                
+                // Validate data structure
+                if (!Array.isArray(data) || data.length === 0) {
+                    throw new Error('Invalid data format: expected an array of questions');
                 }
+                
+                // Validate each question
+                for (let i = 0; i < data.length; i++) {
+                    const question = data[i];
+                    if (!question.question || !question.options || !Array.isArray(question.options) || question.correct === undefined) {
+                        throw new Error(`Invalid question at index ${i}: missing required fields`);
+                    }
+                    
+                    if (question.options.length < 2) {
+                        throw new Error(`Question at index ${i} must have at least 2 options`);
+                    }
+                    
+                    if (question.correct < 0 || question.correct >= question.options.length) {
+                        throw new Error(`Question at index ${i} has invalid correct answer index`);
+                    }
+                }
+                
+                questions = data;
+                console.log('Questions loaded for paid quiz:', questions);
+                return true;
             } catch (error) {
-                console.error("Error fetching questions:", error);
-                questionText.textContent = "प्रश्न लोड करने में कोई समस्या हुई। कृपया बाद में प्रयास करें।";
-                optionsContainer.innerHTML = '';
+                console.error('Failed to load questions:', error);
+                showErrorOverlay(error.message);
+                if ('vibrate' in navigator) navigator.vibrate(200);
+                return false;
             }
         }
 
         function startQuiz() {
-            welcomeScreen.style.display = 'none';
-            quizScreen.style.display = 'block';
-            currentQuestionIndex = 0;
-            score = 0;
-            fetchQuestions();
+            if (!navigator.onLine) {
+                document.getElementById('offline-section').style.display = 'block';
+                return;
+            }
+            
+            if (questions.length === 0) {
+                loadQuestions().then(success => {
+                    if (success && questions.length > 0) {
+                        const welcomeSection = document.getElementById('welcome-section');
+                        const quizSection = document.getElementById('quiz-section');
+                        const scoreSection = document.getElementById('score-section');
+                        if (welcomeSection && quizSection && scoreSection) {
+                            welcomeSection.style.display = 'none';
+                            quizSection.style.display = 'block';
+                            scoreSection.style.display = 'none';
+                            currentQuestionIndex = 0;
+                            score = 0;
+                            updateScore();
+                            showQuestion();
+                        } else {
+                            console.error('Quiz sections not found for paid quiz');
+                            showErrorOverlay();
+                        }
+                    }
+                });
+            } else {
+                const welcomeSection = document.getElementById('welcome-section');
+                const quizSection = document.getElementById('quiz-section');
+                const scoreSection = document.getElementById('score-section');
+                if (welcomeSection && quizSection && scoreSection) {
+                    welcomeSection.style.display = 'none';
+                    quizSection.style.display = 'block';
+                    scoreSection.style.display = 'none';
+                    currentQuestionIndex = 0;
+                    score = 0;
+                    updateScore();
+                    showQuestion();
+                } else {
+                    console.error('Quiz sections not found for paid quiz');
+                    showErrorOverlay();
+                }
+            }
+        }
+
+        function updateScore() {
+            const scoreDisplay = document.getElementById('score-display');
+            const scoreValue = document.getElementById('score-value');
+            if (scoreDisplay && scoreValue) {
+                scoreValue.textContent = score;
+                scoreDisplay.style.display = 'block';
+            }
+        }
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) {
+                const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
         }
 
         function showQuestion() {
-            if (currentQuestionIndex >= questions.length) {
-                showScore();
+            const questionText = document.getElementById('question-text');
+            const optionsList = document.getElementById('options-list');
+            const result = document.getElementById('result');
+            const nextBtn = document.getElementById('next-btn');
+            
+            if (!questionText || !optionsList || !result || !nextBtn) {
+                console.error('Paid quiz elements not found');
+                showErrorOverlay();
                 return;
             }
-
-            const currentQuestion = questions[currentQuestionIndex];
             
-            questionNumberText.textContent = `प्रश्न ${currentQuestionIndex + 1}/${questions.length}`;
-            questionText.textContent = currentQuestion.question;
-            optionsContainer.innerHTML = '';
-            nextBtn.style.display = 'none';
-
-            currentQuestion.options.forEach(option => {
-                const button = document.createElement('button');
-                button.textContent = option;
-                button.classList.add('option-btn');
-                button.addEventListener('click', () => selectOption(button, option));
-                optionsContainer.appendChild(button);
-            });
-        }
-
-        function selectOption(selectedButton, selectedOption) {
-            const currentQuestion = questions[currentQuestionIndex];
-            const isCorrect = (selectedOption === currentQuestion.answer);
-
-            if (isCorrect) {
-                selectedButton.classList.add('correct');
-                score++;
-            } else {
-                selectedButton.classList.add('incorrect');
-                // Highlight the correct answer
-                Array.from(optionsContainer.children).forEach(button => {
-                    if (button.textContent === currentQuestion.answer) {
-                        button.classList.add('correct');
-                    }
-                });
+            if (currentQuestionIndex >= questions.length) {
+                showFinalScore();
+                return;
             }
+            
+            const question = questions[currentQuestionIndex];
+            if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 2) {
+                console.error('Invalid question data for paid quiz:', question);
+                showErrorOverlay();
+                return;
+            }
+            
+            questionText.textContent = question.question;
+            optionsList.innerHTML = '';
+            result.style.display = 'none';
+            nextBtn.style.display = 'none';
+            updateProgressBar();
+            
+            question.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.textContent = option || 'विकल्प गायब';
+                li.style.opacity = '0';
+                li.style.transform = 'scale(0.9) translateY(15px)';
+                li.onclick = () => checkAnswer(index);
+                optionsList.appendChild(li);
+                
+                setTimeout(() => {
+                    li.style.transition = 'all 0.5s ease';
+                    li.style.opacity = '1';
+                    li.style.transform = 'scale(1) translateY(0)';
+                }, index * 100);
+            });
+        }
 
-            // Disable all option buttons after selection
-            Array.from(optionsContainer.children).forEach(button => {
-                button.disabled = true;
+        function triggerConfetti() {
+            confetti({
+                particleCount: 200,
+                spread: 90,
+                origin: { y: 0.4 },
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'],
+                shapes: ['square', 'circle', 'star'],
+                ticks: 300,
+                gravity: 0.8,
+                scalar: 1.2
+            });
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00'],
+                    shapes: ['square', 'circle'],
+                    ticks: 200
+                });
+            }, 200);
+        }
+
+        function checkAnswer(selectedIndex) {
+            const question = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('#options-list li');
+            const result = document.getElementById('result');
+            
+            if (!result || !options.length) {
+                console.error('Result or options not found for paid quiz');
+                showErrorOverlay();
+                return;
+            }
+            
+            options.forEach((option, index) => {
+                option.onclick = null;
+                if (index === question.correct) option.classList.add('correct');
+                if (index === selectedIndex && selectedIndex !== question.correct) option.classList.add('incorrect');
             });
             
-            nextBtn.style.display = 'block';
+            if (selectedIndex === question.correct) {
+                score++;
+                updateScore();
+                result.textContent = 'सही जवाब!';
+                result.className = 'result success';
+                triggerConfetti();
+                try {
+                    correctSound.play().catch(e => console.error('Correct sound failed:', e));
+                } catch (e) {
+                    console.error('Correct sound error:', e);
+                }
+            } else {
+                result.textContent = `गलत जवाब! सही: ${question.options[question.correct]}`;
+                result.className = 'result error';
+                try {
+                    incorrectSound.play().catch(e => console.error('Incorrect sound failed:', e));
+                } catch (e) {
+                    console.error('Incorrect sound error:', e);
+                }
+            }
+            
+            result.style.display = 'block';
+            
+            if ('vibrate' in navigator) navigator.vibrate(200);
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                showQuestion();
+            }, 1500);
         }
 
-        nextBtn.addEventListener('click', () => {
-            currentQuestionIndex++;
-            showQuestion();
-        });
-
-        function showScore() {
-            quizScreen.style.display = 'none';
-            scoreScreen.style.display = 'block';
-            scoreText.textContent = `आपने ${questions.length} में से ${score} प्रश्नों के सही उत्तर दिए हैं।`;
+        function showFinalScore() {
+            const quizSection = document.getElementById('quiz-section');
+            const scoreSection = document.getElementById('score-section');
+            const finalScoreCircle = document.getElementById('final-score-circle');
+            const scoreDetails = document.getElementById('score-details');
+            
+            if (!quizSection || !scoreSection || !finalScoreCircle || !scoreDetails) {
+                console.error('Score section elements not found');
+                showErrorOverlay();
+                return;
+            }
+            
+            quizSection.style.display = 'none';
+            scoreSection.style.display = 'flex';
+            
+            finalScoreCircle.textContent = `${score}/${questions.length}`;
+            const percentage = ((score / questions.length) * 100).toFixed(2);
+            scoreDetails.innerHTML = `
+                आपका स्कोर: ${score}/${questions.length}<br>
+                प्रतिशत: ${percentage}%<br>
+                सही जवाब: ${score}<br>
+                गलत जवाब: ${questions.length - score}<br>
+                समय: ${new Date().toLocaleTimeString()}
+            `;
         }
 
-        function resetQuiz() {
-            scoreScreen.style.display = 'none';
-            welcomeScreen.style.display = 'block';
+        function restartQuiz() {
+            const quizSection = document.getElementById('quiz-section');
+            const scoreSection = document.getElementById('score-section');
+            if (quizSection && scoreSection) {
+                scoreSection.style.display = 'none';
+                quizSection.style.display = 'block';
+                currentQuestionIndex = 0;
+                score = 0;
+                updateScore();
+                showQuestion();
+            }
         }
+
+        function showErrorOverlay(customMessage) {
+            const errorOverlay = document.getElementById('error-overlay');
+            const errorMessage = document.querySelector('#error-overlay .error-message');
+            
+            if (errorOverlay) {
+                if (customMessage && errorMessage) {
+                    errorMessage.textContent = `त्रुटि: ${customMessage}`;
+                }
+                errorOverlay.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function retry() {
+            const errorOverlay = document.getElementById('error-overlay');
+            if (errorOverlay) {
+                errorOverlay.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+                checkNetworkStatus();
+                if (navigator.onLine) {
+                    loadQuestions().then(success => {
+                        if (success && questions.length > 0) {
+                            startQuiz();
+                        }
+                    });
+                }
+            }
+        }
+
+        window.onerror = function(message) {
+            console.error('Global error for paid quiz:', message);
+            showErrorOverlay();
+            return true;
+        };
+
+        window.addEventListener('online', checkNetworkStatus);
+        window.addEventListener('offline', checkNetworkStatus);
     </script>
 </body>
 </html>
