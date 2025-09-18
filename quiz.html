@@ -698,6 +698,100 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* New styles for offline professional image with animation */
+        .offline-image-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .offline-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4b5563, #1f2937);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
+            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+        }
+
+        .offline-image::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .offline-icon {
+            font-size: 70px;
+            color: #ffffff;
+            position: relative;
+            z-index: 2;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .offline-waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .wave {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            animation: wave 1.5s infinite ease-in-out;
+        }
+
+        .wave:nth-child(2) { animation-delay: 0.2s; }
+        .wave:nth-child(3) { animation-delay: 0.4s; }
+        .wave:nth-child(4) { animation-delay: 0.6s; }
+        .wave:nth-child(5) { animation-delay: 0.8s; }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); opacity: 0.7; }
+            50% { transform: translateY(-15px); opacity: 1; }
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 20px; 
@@ -788,6 +882,13 @@
                 height: 120px;
                 font-size: 28px;
             }
+            .offline-image-container {
+                width: 220px;
+                height: 220px;
+            }
+            .offline-icon {
+                font-size: 90px;
+            }
         }
     </style>
 </head>
@@ -802,7 +903,18 @@
         <div class="scrollable-content">
             <div class="content">
                 <div id="offline-section" class="offline-section" style="display: none;">
-                    <div class="custom-design">📴</div>
+                    <div class="offline-image-container">
+                        <div class="offline-image">
+                            <i class="fas fa-wifi-slash offline-icon"></i>
+                            <div class="offline-waves">
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                            </div>
+                        </div>
+                    </div>
                     <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
                     <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
                 </div>
