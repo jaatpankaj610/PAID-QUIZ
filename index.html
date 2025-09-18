@@ -862,7 +862,7 @@
                         
                         <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
                         <button type="button" class="check-btn" onclick="checkPaymentStatus()">पेमेंट स्टेटस चेक करें</button>
-                        <button type="button" class="clear-btn" onclick="clearLocalDb()">पेमेंट डेटा रीसेट करें</button>
+                        <button type="button" class="clear-btn" onclick="clearFirebaseData()">पेमेंट डेटा रीसेट करें</button>
                     </form>
                     
                     <div id="status-message" class="status-message"></div>
@@ -889,7 +889,7 @@
         // Firebase को शुरू करें
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
+        
         function showProcessingScreen() {
             document.getElementById('online-content').style.display = 'none';
             document.getElementById('processing-screen').style.display = 'flex';
@@ -912,7 +912,7 @@
                 onlineContent.style.display = 'block'; 
             }
         }
-        
+
         async function submitPayment() {
             if (!validateForm()) {
                 return;
@@ -920,13 +920,14 @@
 
             showProcessingScreen();
             
-            const userId = document.getElementById('user_id').value;
-            const mobileNumber = document.getElementById('mobile_number').value;
-            const transactionId = document.getElementById('transaction_id').value;
-            const amount = document.getElementById('amount').value;
-            const paymentNote = document.getElementById('payment_note').value;
+            const userId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const paymentNote = document.getElementById('payment_note').value.trim();
             
             try {
+                // Payments डेटाबेस में नई रिक्वेस्ट सबमिट करें
                 const paymentsRef = database.ref('payments');
                 const newPaymentRef = paymentsRef.push();
                 
@@ -936,23 +937,23 @@
                     transaction_id: transactionId,
                     amount: amount,
                     payment_note: paymentNote,
-                    status: 'pending', // डिफ़ॉल्ट स्टेटस 'pending' है
+                    status: 'pending',
                     timestamp: new Date().toISOString()
                 };
 
                 await newPaymentRef.set(payload);
 
+                // **यह नया कोड है जो डेटा को Firebase में सेव करता है**
+                const userDataRef = database.ref('user_session/' + userId);
+                await userDataRef.set({
+                    transactionId: transactionId,
+                    firebaseId: newPaymentRef.key,
+                    timestamp: new Date().toISOString()
+                });
+
                 hideProcessingScreen();
                 
-                // Call the new modal function
                 showSuccessModal(transactionId);
-
-                localStorage.setItem('paymentData', JSON.stringify({ 
-                    status: 'pending', 
-                    transactionId: transactionId, 
-                    firebaseId: newPaymentRef.key,
-                    userId: userId
-                }));
                 
             } catch (error) {
                 hideProcessingScreen();
@@ -964,47 +965,42 @@
         }
 
         async function checkPaymentStatus() {
-            const userId = document.getElementById('user_id').value.trim();
-            const storedData = JSON.parse(localStorage.getItem('paymentData'));
-
-            if (!userId) {
-                const formTransactionId = document.getElementById('transaction_id').value.trim();
-                if (!storedData && !formTransactionId) {
-                    alert('कृपया ईमेल ID या ट्रांजैक्शन ID दर्ज करें!');
-                    return;
-                }
-            }
+            const userId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
             
-            let transactionIdToCheck = '';
-            let firebaseId = '';
-            let userIdToCheck = userId;
-
-            if (storedData && storedData.userId === userId) {
-                transactionIdToCheck = storedData.transactionId;
-                firebaseId = storedData.firebaseId;
-            } else {
-                const transactionIdFromForm = document.getElementById('transaction_id').value.trim();
-                if (!transactionIdFromForm) {
-                    alert('कृपया ट्रांजैक्शन ID दर्ज करें या पहले पेमेंट रिक्वेस्ट सबमिट करें!');
-                    return;
-                }
-                transactionIdToCheck = transactionIdFromForm;
-            }
-
-            if (!userIdToCheck && storedData) {
-                userIdToCheck = storedData.userId;
-            } else if (!userIdToCheck) {
+            if (!userId) {
                 alert('कृपया ईमेल ID दर्ज करें!');
                 return;
             }
 
             showProcessingScreen();
-
-            const paymentsRef = database.ref('payments');
-            
-            let queryRef = paymentsRef.orderByChild('user_id').equalTo(userIdToCheck);
             
             try {
+                // Firebase से सेव किया गया डेटा प्राप्त करें
+                const userDataRef = database.ref('user_session/' + userId);
+                const userDataSnapshot = await userDataRef.once('value');
+                const storedData = userDataSnapshot.val();
+                
+                let transactionIdToCheck = '';
+                let firebaseId = '';
+                
+                if (storedData && storedData.transactionId) {
+                    transactionIdToCheck = storedData.transactionId;
+                    firebaseId = storedData.firebaseId;
+                } else {
+                    transactionIdToCheck = document.getElementById('transaction_id').value.trim();
+                    if (!transactionIdToCheck) {
+                        hideProcessingScreen();
+                        document.getElementById('status-message').className = 'status-message error';
+                        document.getElementById('status-message').textContent = 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।';
+                        document.getElementById('status-message').style.display = 'block';
+                        return;
+                    }
+                }
+
+                const paymentsRef = database.ref('payments');
+                
+                let queryRef = paymentsRef.orderByChild('user_id').equalTo(userId);
+                
                 const snapshot = await queryRef.once('value');
                 const payments = snapshot.val();
                 let foundPayment = null;
@@ -1013,7 +1009,6 @@
                     for (let key in payments) {
                         if (payments[key].transaction_id === transactionIdToCheck) {
                             foundPayment = payments[key];
-                            firebaseId = key;
                             break;
                         }
                     }
@@ -1027,8 +1022,6 @@
                         statusMessage.className = 'status-message success';
                         statusMessage.textContent = 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।';
                         statusMessage.style.display = 'block';
-
-                        localStorage.setItem('paymentData', JSON.stringify({ status: 'approved', transactionId: foundPayment.transaction_id, firebaseId: firebaseId, userId: userIdToCheck }));
 
                         setTimeout(() => {
                             window.location.href = 'quiz.html';
@@ -1045,7 +1038,7 @@
                     }
                 } else {
                     statusMessage.className = 'status-message error';
-                    statusMessage.textContent = 'इस ईमेल ID और ट्रांजैक्शन ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।';
+                    statusMessage.textContent = 'इस ईमेल ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।';
                     statusMessage.style.display = 'block';
                 }
             } catch (error) {
@@ -1120,18 +1113,25 @@
             return isValid;
         }
 
-        function clearLocalDb() {
-            localStorage.clear();
-            document.getElementById('payment-form').reset();
-            document.getElementById('status-message').style.display = 'none';
-            console.log('Local storage cleared.');
+        async function clearFirebaseData() {
+            const userId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+            if (!userId) {
+                alert('कृपया ईमेल ID दर्ज करें!');
+                return;
+            }
+            try {
+                const userDataRef = database.ref('user_session/' + userId);
+                await userDataRef.remove();
+                alert('आपका पेमेंट डेटा रीसेट हो गया है।');
+                document.getElementById('payment-form').reset();
+            } catch (error) {
+                alert('डेटा रीसेट करने में त्रुटि: ' + error.message);
+            }
         }
-
-        // New Modal Functions
+        
         function showSuccessModal(transactionId) {
             document.getElementById('success-modal').style.display = 'flex';
             document.getElementById('online-content').style.display = 'none';
-            localStorage.setItem('lastTransactionId', transactionId);
         }
 
         function closeModal() {
@@ -1140,19 +1140,8 @@
         }
 
         function checkStatusAndRedirect() {
-            const lastTransactionId = localStorage.getItem('lastTransactionId');
-            const storedData = JSON.parse(localStorage.getItem('paymentData'));
-            const userId = storedData ? storedData.userId : null;
-            
-            if (lastTransactionId && userId) {
-                document.getElementById('transaction_id').value = lastTransactionId;
-                document.getElementById('user_id').value = userId;
-                checkPaymentStatus();
-                closeModal();
-            } else {
-                alert('कोई हाल की ट्रांजैक्शन आईडी नहीं मिली। कृपया फ़ॉर्म भरें।');
-                closeModal();
-            }
+            closeModal();
+            checkPaymentStatus();
         }
         
         window.addEventListener('load', () => {
@@ -1161,12 +1150,6 @@
                 document.getElementById('user_id').value = params.get('user_id');
             }
             checkNetworkStatus();
-            
-            // Check for previous session data and show modal if needed
-            const storedData = JSON.parse(localStorage.getItem('paymentData'));
-            if (storedData && storedData.status === 'pending') {
-                showSuccessModal(storedData.transactionId);
-            }
         });
 
         window.addEventListener('online', checkNetworkStatus);
