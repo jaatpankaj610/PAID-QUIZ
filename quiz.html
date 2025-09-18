@@ -1003,6 +1003,7 @@
         });
 
         function initializeQuiz() {
+            // Initial network check when page loads
             checkNetworkStatus();
             console.log('DOM loaded, initializing paid quiz');
         }
@@ -1012,19 +1013,25 @@
             const errorSection = document.getElementById('error-section');
             const onlineContent = document.getElementById('online-content');
             const errorOverlay = document.getElementById('error-overlay');
+            
             if (!offlineSection || !errorSection || !onlineContent || !errorOverlay) {
                 console.error('Network status elements not found for paid quiz');
                 showErrorOverlay();
                 return;
             }
+            
             if (!navigator.onLine) {
+                // User is offline, show offline section
                 offlineSection.style.display = 'block';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'none';
+                console.log('User is offline, showing offline section');
             } else {
+                // User is online, show online content
                 offlineSection.style.display = 'none';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
+                console.log('User is online, showing online content');
             }
         }
 
@@ -1117,6 +1124,7 @@
         function startQuiz() {
             if (!navigator.onLine) {
                 document.getElementById('offline-section').style.display = 'block';
+                document.getElementById('online-content').style.display = 'none';
                 return;
             }
             
@@ -1357,6 +1365,21 @@
                 }
             }
         }
+
+        // Check network status when page becomes visible again
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                checkNetworkStatus();
+            }
+        });
+
+        // Handle page load when offline
+        window.addEventListener('load', () => {
+            if (!navigator.onLine) {
+                document.getElementById('offline-section').style.display = 'block';
+                document.getElementById('online-content').style.display = 'none';
+            }
+        });
 
         window.onerror = function(message) {
             console.error('Global error for paid quiz:', message);
