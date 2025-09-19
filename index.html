@@ -383,7 +383,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background: var(--light);
+            background: linear-gradient(135deg, #4a6fa5, #6989b9);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -391,6 +391,12 @@
             padding: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .processing-screen {
@@ -443,11 +449,10 @@
         }
 
         .custom-design {
-            width: 100%;
-            max-width: 240px;
+            width: 200px;
             height: 200px;
-            margin: 0 auto 12px;
-            border-radius: 12px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -457,11 +462,28 @@
             font-weight: 700;
             text-align: center;
             line-height: 1.4;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .offline-section .custom-design {
-            background: var(--offline-gradient);
+            background: linear-gradient(135deg, #4a6fa5, #6989b9);
+        }
+
+        .offline-section .custom-design::before {
+            content: "📵";
+            font-size: 80px;
+            animation: rotate 10s infinite linear;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .error-section .custom-design {
@@ -469,11 +491,18 @@
         }
 
         .offline-message, .error-message {
-            font-size: 16px;
-            color: var(--dark);
+            font-size: 18px;
+            color: #fff;
             font-weight: 600;
             text-align: center;
             max-width: 90%;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes zoomInOut {
@@ -481,7 +510,7 @@
             50% { transform: scale(1.02); }
         }
 
-        .offline-section .custom-design, .error-section .custom-design {
+        .error-section .custom-design {
             animation: zoomInOut 2s infinite ease-in-out;
         }
 
@@ -693,8 +722,8 @@
             .instructions li i { font-size: 14px; }
             .submit-btn, .clear-btn, .check-btn { padding: 10px 20px; font-size: 13px; }
             .status-message { font-size: 13px; padding: 10px; }
-            .custom-design { max-width: 200px; height: 180px; font-size: 16px; }
-            .offline-message, .error-message { font-size: 14px; }
+            .custom-design { width: 180px; height: 180px; font-size: 16px; }
+            .offline-message, .error-message { font-size: 16px; }
             .checkbox-container { padding: 8px; }
             .checkbox-hint { font-size: 11px; }
             
@@ -725,8 +754,8 @@
             .instructions li i { font-size: 18px; }
             .submit-btn, .clear-btn, .check-btn { padding: 14px 28px; font-size: 15px; }
             .status-message { font-size: 15px; padding: 14px; }
-            .custom-design { max-width: 280px; height: 220px; font-size: 20px; }
-            .offline-message, .error-message { font-size: 18px; }
+            .custom-design { width: 220px; height: 220px; font-size: 20px; }
+            .offline-message, .error-message { font-size: 20px; }
             .checkbox-container { padding: 12px; }
             .checkbox-hint { font-size: 13px; }
             
@@ -773,9 +802,7 @@
         <div class="scrollable-content">
             <div class="content">
                 <div id="offline-section" class="offline-section" style="display: none;">
-                    <div class="custom-design">
-                        📴 ऑफ़लाइन
-                    </div>
+                    <div class="custom-design"></div>
                     <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
                 </div>
                 
@@ -887,11 +914,35 @@
         };
 
         // Firebase को शुरू करें
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        let firebase;
+        let database;
+        
+        // नेटवर्क स्टेटस चेक करने वाला फंक्शन
+        function checkNetworkStatus() {
+            const offlineSection = document.getElementById('offline-section');
+            const onlineContent = document.getElementById('online-content');
+            const processingScreen = document.getElementById('processing-screen');
+            
+            if (!navigator.onLine) {
+                offlineSection.style.display = 'flex';
+                onlineContent.style.display = 'none';
+                processingScreen.style.display = 'none';
+            } else {
+                offlineSection.style.display = 'none';
+                onlineContent.style.display = 'block'; 
+            }
+        }
 
         // **नया: यह फंक्शन पेज लोड होते ही प्रीमियम एक्सेस को चेक करेगा**
         async function checkPremiumAccess() {
+            // पहले नेटवर्क स्टेटस चेक करें
+            checkNetworkStatus();
+            
+            // अगर ऑफलाइन है, तो आगे न बढ़ें
+            if (!navigator.onLine) {
+                return;
+            }
+
             const params = new URLSearchParams(window.location.search);
             const userEmail = params.get('user_id');
 
@@ -954,19 +1005,6 @@
         function hideProcessingScreen() {
             document.getElementById('online-content').style.display = 'block';
             document.getElementById('processing-screen').style.display = 'none';
-        }
-
-        function checkNetworkStatus() {
-            const offlineSection = document.getElementById('offline-section');
-            const onlineContent = document.getElementById('online-content');
-            if (!navigator.onLine) {
-                offlineSection.style.display = 'flex';
-                onlineContent.style.display = 'none';
-                document.getElementById('processing-screen').style.display = 'none';
-            } else {
-                offlineSection.style.display = 'none';
-                onlineContent.style.display = 'block'; 
-            }
         }
 
         async function submitPayment() {
@@ -1198,15 +1236,81 @@
             checkPaymentStatus();
         }
         
-        window.addEventListener('load', () => {
+        // नया: इमेज लोडिंग एरर हैंडलर
+        function handleImageError() {
+            checkNetworkStatus();
+        }
+        
+        // नया: ग्लोबल एरर हैंडलर
+        window.addEventListener('error', function(e) {
+            // अगर यह एक नेटवर्क एरर है, तो ऑफलाइन स्क्रीन दिखाएं
+            if (e.message.includes('Failed to fetch') || 
+                e.message.includes('NetworkError') || 
+                e.message.includes('net::ERR') ||
+                e.target.tagName === 'SCRIPT') {
+                checkNetworkStatus();
+            }
+        }, true);
+        
+        // नया: अनहैंडल्ड प्रॉमिस रिजेक्शन हैंडलर
+        window.addEventListener('unhandledrejection', function(e) {
+            // अगर यह एक नेटवर्क एरर है, तो ऑफलाइन स्क्रीन दिखाएं
+            if (e.reason.message && (
+                e.reason.message.includes('Failed to fetch') || 
+                e.reason.message.includes('NetworkError') || 
+                e.reason.message.includes('net::ERR'))) {
+                checkNetworkStatus();
+            }
+        });
+        
+        // नया: पेज विजिबिलिटी चेंज इवेंट हैंडलर
+        document.addEventListener('visibilitychange', function() {
+            // जब यूजर बैकग्राउंड से वापस आए, तो नेटवर्क स्टेटस चेक करें
+            if (!document.hidden) {
+                checkNetworkStatus();
+            }
+        });
+        
+        // सभी इमेज के लिए एरर हैंडलर जोड़ें
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', handleImageError);
+            });
+        });
+        
+        // नया: Firebase लोडिंग फंक्शन
+        function initializeFirebase() {
+            if (navigator.onLine) {
+                try {
+                    firebase = firebase.initializeApp(firebaseConfig);
+                    database = firebase.database();
+                    
+                    // अब प्रीमियम एक्सेस चेक करें
+                    checkPremiumAccess();
+                } catch (error) {
+                    console.error('Firebase initialization error:', error);
+                    // अगर Firebase लोड नहीं होता है, तो ऑनलाइन कंटेंट दिखाएं
+                    document.getElementById('processing-screen').style.display = 'none';
+                    document.getElementById('online-content').style.display = 'block';
+                }
+            } else {
+                // अगर ऑफलाइन है, तो ऑफलाइन स्क्रीन दिखाएं
+                checkNetworkStatus();
+            }
+        }
+        
+        window.addEventListener('load', function() {
             const params = new URLSearchParams(window.location.search);
             if (params.has('user_id')) {
                 document.getElementById('user_id').value = params.get('user_id');
             }
             
-            // नया: पेज लोड होते ही एक्सेस चेक करें
-            checkPremiumAccess();
+            // नया: पेज लोड होते ही नेटवर्क स्टेटस चेक करें
             checkNetworkStatus();
+            
+            // नया: Firebase इनिशियलाइज़ करें
+            initializeFirebase();
         });
 
         window.addEventListener('online', checkNetworkStatus);
