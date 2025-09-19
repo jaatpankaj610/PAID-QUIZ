@@ -1225,6 +1225,19 @@
             checkPaymentStatus();
         }
         
+        // नया: इमेज लोडिंग एरर हैंडलर
+        function handleImageError() {
+            checkNetworkStatus();
+        }
+        
+        // सभी इमेज के लिए एरर हैंडलर जोड़ें
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', handleImageError);
+            });
+        });
+        
         window.addEventListener('load', () => {
             const params = new URLSearchParams(window.location.search);
             if (params.has('user_id')) {
