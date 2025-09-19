@@ -914,35 +914,11 @@
         };
 
         // Firebase को शुरू करें
-        let firebase;
-        let database;
-        
-        // नेटवर्क स्टेटस चेक करने वाला फंक्शन
-        function checkNetworkStatus() {
-            const offlineSection = document.getElementById('offline-section');
-            const onlineContent = document.getElementById('online-content');
-            const processingScreen = document.getElementById('processing-screen');
-            
-            if (!navigator.onLine) {
-                offlineSection.style.display = 'flex';
-                onlineContent.style.display = 'none';
-                processingScreen.style.display = 'none';
-            } else {
-                offlineSection.style.display = 'none';
-                onlineContent.style.display = 'block'; 
-            }
-        }
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
         // **नया: यह फंक्शन पेज लोड होते ही प्रीमियम एक्सेस को चेक करेगा**
         async function checkPremiumAccess() {
-            // पहले नेटवर्क स्टेटस चेक करें
-            checkNetworkStatus();
-            
-            // अगर ऑफलाइन है, तो आगे न बढ़ें
-            if (!navigator.onLine) {
-                return;
-            }
-
             const params = new URLSearchParams(window.location.search);
             const userEmail = params.get('user_id');
 
@@ -1005,6 +981,19 @@
         function hideProcessingScreen() {
             document.getElementById('online-content').style.display = 'block';
             document.getElementById('processing-screen').style.display = 'none';
+        }
+
+        function checkNetworkStatus() {
+            const offlineSection = document.getElementById('offline-section');
+            const onlineContent = document.getElementById('online-content');
+            if (!navigator.onLine) {
+                offlineSection.style.display = 'flex';
+                onlineContent.style.display = 'none';
+                document.getElementById('processing-screen').style.display = 'none';
+            } else {
+                offlineSection.style.display = 'none';
+                onlineContent.style.display = 'block'; 
+            }
         }
 
         async function submitPayment() {
@@ -1236,81 +1225,15 @@
             checkPaymentStatus();
         }
         
-        // नया: इमेज लोडिंग एरर हैंडलर
-        function handleImageError() {
-            checkNetworkStatus();
-        }
-        
-        // नया: ग्लोबल एरर हैंडलर
-        window.addEventListener('error', function(e) {
-            // अगर यह एक नेटवर्क एरर है, तो ऑफलाइन स्क्रीन दिखाएं
-            if (e.message.includes('Failed to fetch') || 
-                e.message.includes('NetworkError') || 
-                e.message.includes('net::ERR') ||
-                e.target.tagName === 'SCRIPT') {
-                checkNetworkStatus();
-            }
-        }, true);
-        
-        // नया: अनहैंडल्ड प्रॉमिस रिजेक्शन हैंडलर
-        window.addEventListener('unhandledrejection', function(e) {
-            // अगर यह एक नेटवर्क एरर है, तो ऑफलाइन स्क्रीन दिखाएं
-            if (e.reason.message && (
-                e.reason.message.includes('Failed to fetch') || 
-                e.reason.message.includes('NetworkError') || 
-                e.reason.message.includes('net::ERR'))) {
-                checkNetworkStatus();
-            }
-        });
-        
-        // नया: पेज विजिबिलिटी चेंज इवेंट हैंडलर
-        document.addEventListener('visibilitychange', function() {
-            // जब यूजर बैकग्राउंड से वापस आए, तो नेटवर्क स्टेटस चेक करें
-            if (!document.hidden) {
-                checkNetworkStatus();
-            }
-        });
-        
-        // सभी इमेज के लिए एरर हैंडलर जोड़ें
-        document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('img');
-            images.forEach(img => {
-                img.addEventListener('error', handleImageError);
-            });
-        });
-        
-        // नया: Firebase लोडिंग फंक्शन
-        function initializeFirebase() {
-            if (navigator.onLine) {
-                try {
-                    firebase = firebase.initializeApp(firebaseConfig);
-                    database = firebase.database();
-                    
-                    // अब प्रीमियम एक्सेस चेक करें
-                    checkPremiumAccess();
-                } catch (error) {
-                    console.error('Firebase initialization error:', error);
-                    // अगर Firebase लोड नहीं होता है, तो ऑनलाइन कंटेंट दिखाएं
-                    document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('online-content').style.display = 'block';
-                }
-            } else {
-                // अगर ऑफलाइन है, तो ऑफलाइन स्क्रीन दिखाएं
-                checkNetworkStatus();
-            }
-        }
-        
-        window.addEventListener('load', function() {
+        window.addEventListener('load', () => {
             const params = new URLSearchParams(window.location.search);
             if (params.has('user_id')) {
                 document.getElementById('user_id').value = params.get('user_id');
             }
             
-            // नया: पेज लोड होते ही नेटवर्क स्टेटस चेक करें
+            // नया: पेज लोड होते ही एक्सेस चेक करें
+            checkPremiumAccess();
             checkNetworkStatus();
-            
-            // नया: Firebase इनिशियलाइज़ करें
-            initializeFirebase();
         });
 
         window.addEventListener('online', checkNetworkStatus);
