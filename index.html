@@ -765,24 +765,17 @@
     </style>
 </head>
 <body>
-    <div id="success-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div class="modal-header">
-                <i class="fas fa-check-circle success-icon"></i>
-                <h2>पेमेंट रिक्वेस्ट सफल!</h2>
-            </div>
-            <div class="modal-body">
-                <p>आपकी पेमेंट रिक्वेस्ट हमें मिल गई है। आपका प्रीमियम अकाउंट 24 घंटे के भीतर एक्टिवेट हो जाएगा।</p>
-                <div class="next-steps">
-                    <p><b>अगला स्टेप:</b></p>
-                    <button class="modal-btn" onclick="checkStatusAndRedirect()">
-                        <i class="fas fa-sync-alt"></i> पेमेंट स्टेटस चेक करें
-                    </button>
-                    <p class="modal-instruction">पेमेंट अप्रूव होने पर यह बटन आपको सीधे क्विज़ पेज पर ले जाएगा।</p>
-                </div>
-            </div>
+    <!-- नया: ऑफलाइन स्क्रीन सबसे पहले रखी गई है -->
+    <div id="offline-section" class="offline-section" style="display: none;">
+        <div class="custom-design"></div>
+        <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
+    </div>
+    
+    <div id="error-section" class="error-section" style="display: none;">
+        <div class="custom-design">
+            ⚠️ त्रुटि
         </div>
+        <p class="error-message" id="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
     </div>
 
     <div class="container">
@@ -801,18 +794,6 @@
         
         <div class="scrollable-content">
             <div class="content">
-                <div id="offline-section" class="offline-section" style="display: none;">
-                    <div class="custom-design"></div>
-                    <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
-                </div>
-                
-                <div id="error-section" class="error-section" style="display: none;">
-                    <div class="custom-design">
-                        ⚠️ त्रुटि
-                    </div>
-                    <p class="error-message" id="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
-                </div>
-                
                 <div id="online-content">
                     <div class="payment-info">
                         <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
@@ -898,17 +879,36 @@
         </div>
     </div>
     
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h2>पेमेंट रिक्वेस्ट सफल!</h2>
+            </div>
+            <div class="modal-body">
+                <p>आपकी पेमेंट रिक्वेस्ट हमें मिल गई है। आपका प्रीमियम अकाउंट 24 घंटे के भीतर एक्टिवेट हो जाएगा।</p>
+                <div class="next-steps">
+                    <p><b>अगला स्टेप:</b></p>
+                    <button class="modal-btn" onclick="checkStatusAndRedirect()">
+                        <i class="fas fa-sync-alt"></i> पेमेंट स्टेटस चेक करें
+                    </button>
+                    <p class="modal-instruction">पेमेंट अप्रूव होने पर यह बटन आपको सीधे क्विज़ पेज पर ले जाएगा।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // नया: तुरंत नेटवर्क स्टेटस चेक - पेज लोड होते ही चलेगा
         (function() {
-            // अगर पहले से ऑफलाइन है, तो ऑफलाइन स्क्रीन दिखाएं
+            // अगर पहले से ऑफलाइन है, तो ऑफलाइन स्क्रीन दिखाएं और बाकी सब कुछ छुपाएं
             if (!navigator.onLine) {
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('offline-section').style.display = 'flex';
                     document.getElementById('online-content').style.display = 'none';
                     document.getElementById('processing-screen').style.display = 'none';
+                    document.getElementById('error-section').style.display = 'none';
                 });
             }
         })();
@@ -998,13 +998,17 @@
         function checkNetworkStatus() {
             const offlineSection = document.getElementById('offline-section');
             const onlineContent = document.getElementById('online-content');
+            const errorSection = document.getElementById('error-section');
+            
             if (!navigator.onLine) {
                 offlineSection.style.display = 'flex';
                 onlineContent.style.display = 'none';
                 document.getElementById('processing-screen').style.display = 'none';
+                errorSection.style.display = 'none';
             } else {
                 offlineSection.style.display = 'none';
                 onlineContent.style.display = 'block'; 
+                errorSection.style.display = 'none';
             }
         }
 
