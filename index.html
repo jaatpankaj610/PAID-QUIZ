@@ -12,6 +12,8 @@
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
     <style>
         :root {
             --primary: #4a00e0;
@@ -564,9 +566,8 @@
             display: block;
         }
         
-        /* New Modal Styles */
         .modal {
-            display: none; /* Initially hidden */
+            display: none;
             position: fixed;
             z-index: 2000;
             left: 0;
@@ -721,7 +722,6 @@
             .offline-message, .error-message { font-size: 16px; }
             .checkbox-container { padding: 8px; }
             .checkbox-hint { font-size: 11px; }
-            
             .processing-screen .app-logo-name { font-size: 20px; }
             .processing-screen .processing-message { font-size: 16px; }
         }
@@ -753,14 +753,12 @@
             .offline-message, .error-message { font-size: 20px; }
             .checkbox-container { padding: 12px; }
             .checkbox-hint { font-size: 13px; }
-            
             .processing-screen .app-logo-name { font-size: 28px; }
             .processing-screen .processing-message { font-size: 20px; }
         }
     </style>
 </head>
 <body>
-    <!-- ऑफलाइन स्क्रीन -->
     <div id="offline-section" class="offline-section" style="display: none;">
         <div class="custom-design">
             <img src="offline-professional.png" alt="ऑफलाइन एरर" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
@@ -768,7 +766,6 @@
         <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
     </div>
     
-    <!-- एरर स्क्रीन -->
     <div id="error-section" class="error-section" style="display: none;">
         <div class="custom-design">
             <img src="error-professional.png" alt="एरर" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
@@ -866,7 +863,7 @@
                             <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
                         </div>
                         
-                        <button type="button" class="submit-btn" onclick="submitPayment()">पेमेंट रिक्वेस्ट भेजें</button>
+                        <button type="submit" class="submit-btn">पेमेंट रिक्वेस्ट भेजें</button>
                         <button type="button" class="check-btn" onclick="checkPaymentStatus()">पेमेंट स्टेटस चेक करें</button>
                         <button type="button" class="clear-btn" onclick="clearFirebaseData()">पेमेंट डेटा रीसेट करें</button>
                     </form>
@@ -898,9 +895,7 @@
     </div>
     
     <script>
-        // नया: तुरंत नेटवर्क स्टेटस चेक - पेज लोड होते ही चलेगा
         (function() {
-            // अगर पहले से ऑफलाइन है, तो ऑफलाइन स्क्रीन दिखाएं और बाकी सब कुछ छुपाएं
             if (!navigator.onLine) {
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('offline-section').style.display = 'flex';
@@ -911,77 +906,85 @@
             }
         })();
         
-        // आपके Firebase प्रोजेक्ट की कॉन्फ़िगरेशन
-        const firebaseConfig = {
-          apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
-          authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
-          databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
-          projectId: "rajasthan-gk-quiz-41cc5",
-          storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
-          messagingSenderId: "876482514501",
-          appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
-          measurementId: "G-VB140B6NCW"
-        };
+        document.addEventListener('DOMContentLoaded', function() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+                authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+                databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+                projectId: "rajasthan-gk-quiz-41cc5",
+                storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
+                messagingSenderId: "876482514501",
+                appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+                measurementId: "G-VB140B6NCW"
+            };
 
-        // Firebase को शुरू करें
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+            firebase.initializeApp(firebaseConfig);
+            const database = firebase.database();
 
-        // **नया: यह फंक्शन पेज लोड होते ही प्रीमियम एक्सेस को चेक करेगा**
-        async function checkPremiumAccess() {
-            const params = new URLSearchParams(window.location.search);
-            const userEmail = params.get('user_id');
+            async function checkPremiumAccess() {
+                const params = new URLSearchParams(window.location.search);
+                const userEmail = params.get('user_id');
 
-            if (!userEmail) {
-                // अगर URL में यूजर ईमेल नहीं है, तो पेमेंट पेज दिखाएं
-                document.getElementById('processing-screen').style.display = 'none';
-                document.getElementById('online-content').style.display = 'block';
-                return;
-            }
+                if (!userEmail) {
+                    document.getElementById('processing-screen').style.display = 'none';
+                    document.getElementById('online-content').style.display = 'block';
+                    return;
+                }
 
-            // ईमेल से अवैध अक्षरों को हटा दें
-            const userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+                const userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
 
-            try {
-                const paymentsRef = database.ref('payments');
-                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
-                const payments = snapshot.val();
-                let foundApprovedPayment = null;
+                try {
+                    const paymentsRef = database.ref('payments');
+                    const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
+                    const payments = snapshot.val();
+                    let foundApprovedPayment = null;
 
-                if (payments) {
-                    for (let key in payments) {
-                        if (payments[key].status === 'approved' && payments[key].approved_at) {
-                            foundApprovedPayment = payments[key];
-                            break;
+                    if (payments) {
+                        for (let key in payments) {
+                            if (payments[key].status === 'approved' && payments[key].approved_at) {
+                                foundApprovedPayment = payments[key];
+                                break;
+                            }
                         }
                     }
-                }
 
-                if (foundApprovedPayment) {
-                    const approvalDate = new Date(foundApprovedPayment.approved_at);
-                    const expiryDate = new Date(approvalDate);
-                    expiryDate.setDate(approvalDate.getDate() + 30); // 30 दिन जोड़ें
-                    const now = new Date();
+                    if (foundApprovedPayment) {
+                        const approvalDate = new Date(foundApprovedPayment.approved_at);
+                        const expiryDate = new Date(approvalDate);
+                        expiryDate.setDate(approvalDate.getDate() + 30);
+                        const now = new Date();
 
-                    if (now < expiryDate) {
-                        // 30 दिन पूरे नहीं हुए, सीधे क्विज़ पेज पर भेजें
-                        window.location.href = 'quiz.html?user_id=' + userId;
-                        return;
+                        if (now < expiryDate) {
+                            window.location.href = 'quiz.html?user_id=' + userId;
+                            return;
+                        }
                     }
-                }
-                
-                // अगर कोई अप्रूव्ड पेमेंट नहीं मिली या 30 दिन पूरे हो गए, तो पेमेंट पेज दिखाएं
-                document.getElementById('user_id').value = userEmail; // ईमेल को फॉर्म में भरें
-                document.getElementById('processing-screen').style.display = 'none';
-                document.getElementById('online-content').style.display = 'block';
+                    
+                    document.getElementById('user_id').value = userEmail;
+                    document.getElementById('processing-screen').style.display = 'none';
+                    document.getElementById('online-content').style.display = 'block';
 
-            } catch (error) {
-                console.error("Access check error:", error);
-                // एरर होने पर भी पेमेंट पेज दिखाएं
-                document.getElementById('processing-screen').style.display = 'none';
-                document.getElementById('online-content').style.display = 'block';
+                } catch (error) {
+                    console.error("Access check error:", error);
+                    document.getElementById('processing-screen').style.display = 'none';
+                    document.getElementById('online-content').style.display = 'block';
+                }
             }
-        }
+            
+            checkPremiumAccess();
+
+            // फॉर्म सबमिट इवेंट मजबूती से बाइंड
+            const paymentForm = document.getElementById('payment-form');
+            if (paymentForm) {
+                paymentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    console.log("Form submit event triggered"); // डिबग
+                    submitPayment();
+                });
+            } else {
+                console.error("Payment form not found in DOM"); // डिबग
+            }
+        });
         
         function showProcessingScreen() {
             document.getElementById('online-content').style.display = 'none';
@@ -1011,20 +1014,42 @@
         }
 
         async function submitPayment() {
-            if (!validateForm()) {
+            console.log("submitPayment function called"); // डिबग
+            const statusMessage = document.getElementById('status-message');
+
+            // नेटवर्क चेक
+            if (!navigator.onLine) {
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।';
+                statusMessage.style.display = 'block';
+                console.log("Offline detected"); // डिबग
+                return;
+            }
+
+            // वैलिडेशन चेक
+            const isValid = validateForm();
+            console.log("Form validation result:", isValid); // डिबग
+            if (!isValid) {
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'कृपया फॉर्म में सभी जरूरी जानकारी सही भरें।';
+                statusMessage.style.display = 'block';
                 return;
             }
 
             showProcessingScreen();
-            
+            console.log("Processing screen shown"); // डिबग
+
             const userId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
             const mobileNumber = document.getElementById('mobile_number').value.trim();
             const transactionId = document.getElementById('transaction_id').value.trim();
             const amount = document.getElementById('amount').value.trim();
             const paymentNote = document.getElementById('payment_note').value.trim();
             
+            console.log("Data to submit:", { userId, mobileNumber, transactionId, amount, paymentNote }); // डिबग
+
             try {
-                const paymentsRef = database.ref('payments');
+                console.log("Attempting Firebase write"); // डिबग
+                const paymentsRef = firebase.database().ref('payments');
                 const newPaymentRef = paymentsRef.push();
                 
                 const payload = {
@@ -1038,8 +1063,9 @@
                 };
 
                 await newPaymentRef.set(payload);
+                console.log("Payment data written to Firebase with key:", newPaymentRef.key); // डिबग
 
-                const userDataRef = database.ref('user_session/' + userId);
+                const userDataRef = firebase.database().ref('user_session/' + userId);
                 await userDataRef.set({
                     transactionId: transactionId,
                     firebaseId: newPaymentRef.key,
@@ -1047,15 +1073,15 @@
                 });
 
                 hideProcessingScreen();
-                
+                console.log("Processing screen hidden, showing success modal"); // डिबग
                 showSuccessModal(transactionId);
                 
             } catch (error) {
+                console.error("Firebase error:", error.message); // डिबग
                 hideProcessingScreen();
-                document.getElementById('status-message').className = 'status-message error';
-                document.getElementById('status-message').textContent = 'पेमेंट सबमिट करने में त्रुटि: ' + error.message;
-                document.getElementById('status-message').style.display = 'block';
-                console.error('Error:', error);
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'पेमेंट रिक्वेस्ट भेजने में समस्या हुई। कृपया दोबारा कोशिश करें।';
+                statusMessage.style.display = 'block';
             }
         }
 
@@ -1076,7 +1102,7 @@
             showProcessingScreen();
             
             try {
-                const userDataRef = database.ref('user_session/' + userId);
+                const userDataRef = firebase.database().ref('user_session/' + userId);
                 const userDataSnapshot = await userDataRef.once('value');
                 const storedData = userDataSnapshot.val();
                 
@@ -1095,7 +1121,7 @@
                     }
                 }
 
-                const paymentsRef = database.ref('payments');
+                const paymentsRef = firebase.database().ref('payments');
                 
                 const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                 const payments = snapshot.val();
@@ -1119,7 +1145,7 @@
                         statusMessage.style.display = 'block';
 
                         setTimeout(() => {
-                            window.location.href = 'quiz.html?user_id=' + userId; // quiz.html पर ईमेल भी भेजें
+                            window.location.href = 'quiz.html?user_id=' + userId;
                         }, 5000);
 
                     } else if (foundPayment.status === 'pending') {
@@ -1139,7 +1165,7 @@
             } catch (error) {
                 hideProcessingScreen();
                 statusMessage.className = 'status-message error';
-                statusMessage.textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि: ' + error.message;
+                statusMessage.textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि। कृपया दोबारा कोशिश करें।';
                 statusMessage.style.display = 'block';
                 console.error('Error:', error);
             }
@@ -1215,12 +1241,12 @@
                 return;
             }
             try {
-                const userDataRef = database.ref('user_session/' + userId);
+                const userDataRef = firebase.database().ref('user_session/' + userId);
                 await userDataRef.remove();
                 alert('आपका पेमेंट डेटा रीसेट हो गया है।');
                 document.getElementById('payment-form').reset();
             } catch (error) {
-                alert('डेटा रीसेट करने में त्रुटि: ' + error.message);
+                alert('डेटा रीसेट करने में समस्या हुई। कृपया इंटरनेट चेक करें और दोबारा कोशिश करें।');
             }
         }
         
@@ -1239,16 +1265,12 @@
             checkPaymentStatus();
         }
         
-        // नया: इमेज लोडिंग एरर हैंडलर
         function handleImageError() {
             checkNetworkStatus();
         }
         
-        // सभी इमेज के लिए एरर हैंडलर जोड़ें
         document.addEventListener('DOMContentLoaded', function() {
-            // नया: DOMContentLoaded पर भी नेटवर्क स्टेटस चेक करें
             checkNetworkStatus();
-            
             const images = document.querySelectorAll('img');
             images.forEach(img => {
                 img.addEventListener('error', handleImageError);
@@ -1260,9 +1282,6 @@
             if (params.has('user_id')) {
                 document.getElementById('user_id').value = params.get('user_id');
             }
-            
-            // नया: पेज लोड होते ही एक्सेस चेक करें
-            checkPremiumAccess();
             checkNetworkStatus();
         });
 
