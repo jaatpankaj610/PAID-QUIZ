@@ -790,49 +790,6 @@
             50% { transform: translateY(-15px); opacity: 1; }
         }
 
-        .access-expired {
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: center;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-
-        .access-expired h3 {
-            color: var(--danger);
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        .access-expired p {
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .renew-btn {
-            background: var(--danger);
-            color: var(--light);
-            border: none;
-            border-radius: 12px;
-            padding: 12px 18px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: var(--button-shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .renew-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
-        }
-        
         @media (min-width: 601px) {
             .header { 
                 padding: 20px; 
@@ -1005,14 +962,6 @@
                             <i class="fas fa-redo"></i>
                         </button>
                     </div>
-                    <div id="access-expired" class="access-expired" style="display: none;">
-                        <h3><i class="fas fa-exclamation-triangle"></i> आपकी प्रीमियम एक्सेस समाप्त हो गई है</h3>
-                        <p>आपकी 30 दिन की प्रीमियम एक्सेस समाप्त हो गई है। कृपया नीचे दिए गए बटन पर क्लिक करके अपनी एक्सेस रिन्यू करें।</p>
-                        <button class="renew-btn" onclick="renewAccess()">
-                            <span>एक्सेस रिन्यू करें</span>
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1026,16 +975,10 @@
     </div>
 
     <script>
-        // GitHub API configuration
-        const GITHUB_USERNAME = 'jaatpankaj610'; // अपना GitHub username यहाँ डालें
-        const GITHUB_REPO = 'PAID-QUIZ'; // अपना repository name यहाँ डालें
-        const GITHUB_FILE = 'access.json'; // फाइल का नाम
-
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
         let quizStarted = false;
-        let userEmail = '';
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
         const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
@@ -1049,86 +992,9 @@
         }
         document.addEventListener('click', unlockAudio);
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            // URL से यूजर ID प्राप्त करें
-            const params = new URLSearchParams(window.location.search);
-            userEmail = params.get('user_id');
-            
-            if (!userEmail) {
-                // लोकल स्टोरेज से यूजर ईमेल चेक करें
-                userEmail = localStorage.getItem('quiz_user_email');
-                
-                if (!userEmail) {
-                    // यूजर ID नहीं है, तो पेमेंट पेज पर रीडायरेक्ट करें
-                    window.location.href = 'payment.html';
-                    return;
-                }
-                
-                // URL में यूजर ID ऐड करें (बुकमार्क करने में मदद करेगा)
-                const newUrl = window.location.pathname + '?user_id=' + encodeURIComponent(userEmail);
-                window.history.replaceState({}, '', newUrl);
-            }
-            
-            // यूजर का एक्सेस वैलिडेट करें
-            const hasAccess = await validateUserAccess(userEmail);
-            
-            if (hasAccess) {
-                // एक्सेस वैलिड है, क्विज़ इनिशियलाइज़ करें
-                initializeQuiz();
-            } else {
-                // एक्सेस इनवैलिड है, एक्सेस एक्सपायर्ड मैसेज दिखाएं
-                showAccessExpired();
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeQuiz();
         });
-
-        // यूजर एक्सेस वैलिडेट करने का फंक्शन (अपडेटेड)
-        async function validateUserAccess(email) {
-            try {
-                // पहले लोकल स्टोरेज चेक करें
-                const localAccess = localStorage.getItem('quiz_user_access');
-                const localExpiry = localStorage.getItem('quiz_user_expiry');
-                
-                if (localAccess === 'approved' && localExpiry) {
-                    const now = new Date();
-                    const expiry = new Date(localExpiry);
-                    
-                    if (now < expiry) {
-                        return true; // लोकल स्टोरेज से वैलिडेशन सफल
-                    }
-                }
-                
-                // अगर लोकल स्टोरेज में नहीं है या एक्सपायर हो गया है, तो GitHub से चेक करें
-                const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${GITHUB_FILE}`);
-                const data = await response.json();
-                
-                // यूजर को ढूंढें
-                const user = data.users.find(u => u.email === email);
-                
-                if (user) {
-                    const now = new Date();
-                    const expiry = new Date(user.expiry);
-                    
-                    // चेक करें कि एक्सेस अभी भी वैलिड है या नहीं
-                    if (now < expiry) {
-                        // लोकल स्टोरेज में अपडेट करें
-                        localStorage.setItem('quiz_user_email', email);
-                        localStorage.setItem('quiz_user_access', 'approved');
-                        localStorage.setItem('quiz_user_expiry', user.expiry);
-                        
-                        return true;
-                    } else {
-                        // एक्सेस एक्सपायर हो गया है, लोकल स्टोरेज से हटाएं
-                        localStorage.removeItem('quiz_user_access');
-                        localStorage.removeItem('quiz_user_expiry');
-                    }
-                }
-                
-                return false;
-            } catch (error) {
-                console.error("Access validation error:", error);
-                return false;
-            }
-        }
 
         function initializeQuiz() {
             // Initial network check when page loads
@@ -1254,13 +1120,11 @@
             const welcomeSection = document.getElementById('welcome-section');
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
-            const accessExpired = document.getElementById('access-expired');
             
-            if (welcomeSection && quizSection && scoreSection && accessExpired) {
+            if (welcomeSection && quizSection && scoreSection) {
                 welcomeSection.style.display = 'none';
                 quizSection.style.display = 'block';
                 scoreSection.style.display = 'none';
-                accessExpired.style.display = 'none';
                 
                 currentQuestionIndex = 0;
                 score = 0;
@@ -1450,37 +1314,14 @@
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
             const welcomeSection = document.getElementById('welcome-section');
-            const accessExpired = document.getElementById('access-expired');
-            if (quizSection && scoreSection && welcomeSection && accessExpired) {
+            if (quizSection && scoreSection && welcomeSection) {
                 scoreSection.style.display = 'none';
                 quizSection.style.display = 'none';
-                accessExpired.style.display = 'none';
                 welcomeSection.style.display = 'block';
                 currentQuestionIndex = 0;
                 score = 0;
                 updateScore();
             }
-        }
-
-        // एक्सेस एक्सपायर्ड मैसेज दिखाने का फंक्शन
-        function showAccessExpired() {
-            const welcomeSection = document.getElementById('welcome-section');
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            const accessExpired = document.getElementById('access-expired');
-            
-            if (welcomeSection && quizSection && scoreSection && accessExpired) {
-                welcomeSection.style.display = 'none';
-                quizSection.style.display = 'none';
-                scoreSection.style.display = 'none';
-                accessExpired.style.display = 'block';
-            }
-        }
-
-        // एक्सेस रिन्यू करने का फंक्शन
-        function renewAccess() {
-            // पेमेंट पेज पर रीडायरेक्ट करें यूजर ईमेल के साथ
-            window.location.href = 'payment.html?user_id=' + encodeURIComponent(userEmail);
         }
 
         function showErrorOverlay() {
