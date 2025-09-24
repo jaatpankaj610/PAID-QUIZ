@@ -2,982 +2,660 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="theme-color" content="#D4AF37">
-    <title>राजस्थान GK क्विज़ - एडमिन पैनल</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Access Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
     <style>
-        :root {
-            --primary: #D4AF37; /* प्रोफेशनल गोल्ड */
-            --secondary: #B8860B; /* डार्क गोल्ड */
-            --accent: #FFD700; /* ब्राइट गोल्ड एक्सेंट */
-            --light: #f8f9fa;
-            --dark: #2d3436;
-            --success: #00b894;
-            --danger: #d63031;
-            --warning: #fdcb6e;
-            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --offline-gradient: linear-gradient(135deg, #636e72, #b2bec3);
-            --error-gradient: linear-gradient(135deg, #ff7675, #d63031);
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --text-primary: #333;
-            --text-secondary: #555;
-            --paid-gradient: linear-gradient(135deg, #f59e0b, #ef4444);
-            --paid-color: #f59e0b;
-            --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            --button-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
-            font-weight: 600;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            touch-action: pan-y;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: linear-gradient(120deg, #f9f7f2, #f0e6d2);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        body { 
+            font-family: 'Noto Sans Devanagari', sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
             min-height: 100vh;
-            min-width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            overscroll-behavior: none;
         }
-
         .container {
-            width: 100%;
-            height: 100vh;
-            background: var(--light);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0;
-            left: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
         }
-
-        .scrollable-content {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .scrollable-content::-webkit-scrollbar {
-            display: none;
-        }
-
-        .header {
-            background: var(--gradient);
-            padding: 16px 12px;
+        h1 {
             text-align: center;
-            color: var(--light);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .header h1 {
-            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 30px;
             font-weight: 700;
-            margin-bottom: 6px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: calc(100vw - 24px);
         }
-
-        .header p {
-            font-size: 12px;
-            font-weight: 500;
-            opacity: 0.9;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: calc(100vw - 24px);
+        .form-group { 
+            margin-bottom: 20px; 
         }
-
-        .content {
-            padding: 72px 12px 80px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* एडमिन लॉगिन सेक्शन */
-        .admin-login {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 400px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .admin-login h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .admin-login .form-group {
-            margin-bottom: 16px;
-        }
-
-        .admin-login label {
-            display: block;
-            margin-bottom: 6px;
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
             font-weight: 600;
-            color: var(--text-primary);
-            font-size: 14px;
+            color: #34495e;
         }
-
-        .admin-login input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
         }
-
-        .admin-login input:focus {
+        input:focus, select:focus {
+            border-color: #3498db;
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
-
-        .admin-login button {
-            background: var(--gradient);
-            color: var(--light);
+        button { 
+            padding: 12px 20px; 
+            background: #3498db;
+            color: white;
             border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: var(--button-shadow);
+            transition: background 0.3s;
         }
-
-        .admin-login button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(184, 134, 11, 0.4);
+        button:hover {
+            background: #2980b9;
         }
-
-        /* एडमिन डैशबोर्ड */
-        .admin-dashboard {
-            display: none;
-            flex: 1;
-            flex-direction: column;
-        }
-
-        .admin-header {
-            background: var(--gradient);
-            color: var(--light);
+        #message { 
+            margin-top: 20px;
             padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--light);
-            border: none;
             border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            font-weight: 500;
         }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
-
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            margin: 20px;
-            box-shadow: var(--card-shadow);
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
-
-        .stat-card {
-            text-align: center;
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(212, 175, 55, 0.1);
-            min-width: 120px;
+        .user-list {
+            margin-top: 30px;
         }
-
-        .stat-card .number {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .stat-card .label {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .requests-section {
-            flex: 1;
-            padding: 0 20px 20px;
-        }
-
-        .requests-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .user-list h2 {
+            color: #2c3e50;
             margin-bottom: 15px;
-        }
-
-        .requests-header h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .filter-tabs {
-            display: flex;
-            gap: 10px;
-        }
-
-        .filter-tab {
-            background: var(--light);
-            color: var(--text-secondary);
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 14px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
-
-        .filter-tab.active {
-            background: var(--gradient);
-            color: var(--light);
-            border-color: var(--primary);
-        }
-
-        .requests-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .request-card {
-            background: var(--card-bg);
-            border-radius: 12px;
+        .user-item {
+            background: #f8f9fa;
+            border-radius: 8px;
             padding: 15px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .request-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        }
-
-        .request-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #3498db;
         }
-
-        .request-id {
-            font-size: 14px;
+        .user-info {
+            flex: 1;
+        }
+        .user-email {
             font-weight: 600;
-            color: var(--text-secondary);
+            color: #2c3e50;
         }
-
-        .request-status {
-            padding: 4px 12px;
+        .user-date {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .user-status {
+            padding: 5px 10px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
         }
-
-        .status-pending {
-            background: rgba(253, 203, 110, 0.2);
-            color: var(--warning);
+        .status-active {
+            background: #d4edda;
+            color: #155724;
         }
-
-        .status-approved {
-            background: rgba(0, 184, 148, 0.2);
-            color: var(--success);
+        .status-expired {
+            background: #f8d7da;
+            color: #721c24;
         }
-
-        .status-rejected {
-            background: rgba(214, 48, 49, 0.2);
-            color: var(--danger);
+        .refresh-btn {
+            background: #2ecc71;
+            margin-left: 10px;
         }
-
-        .request-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+        .refresh-btn:hover {
+            background: #27ae60;
         }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .detail-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 2px;
-        }
-
-        .detail-value {
+        .delete-btn {
+            background: #e74c3c;
+            padding: 5px 10px;
             font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
         }
-
-        .request-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .approve-btn {
-            background: var(--success);
-            color: var(--light);
-        }
-
-        .approve-btn:hover {
-            background: #00a085;
-        }
-
-        .reject-btn {
-            background: var(--danger);
-            color: var(--light);
-        }
-
-        .reject-btn:hover {
+        .delete-btn:hover {
             background: #c0392b;
         }
-
-        .view-btn {
-            background: var(--primary);
-            color: var(--light);
+        .approve-btn {
+            background: #27ae60;
+            padding: 5px 10px;
+            font-size: 14px;
+            margin-right: 5px;
         }
-
-        .view-btn:hover {
-            background: var(--secondary);
+        .approve-btn:hover {
+            background: #229954;
         }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
+        .pending-users {
+            margin-top: 30px;
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #ffeaa7;
         }
-
-        .empty-state i {
-            font-size: 48px;
+        .pending-users h2 {
+            color: #856404;
             margin-bottom: 15px;
-            opacity: 0.5;
+            font-weight: 600;
         }
-
-        /* मौजूदा कोड की स्टाइल (पहले जैसी) */
-        .premium-quiz-btn {
-            background: var(--gradient);
-            color: var(--light);
-            border: none;
-            border-radius: 24px;
-            padding: 14px 24px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        .pending-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #f39c12;
+        }
+        .pending-info {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+        }
+        .pending-details {
+            flex: 1;
+        }
+        .pending-email {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .pending-date {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .actions {
+            margin-top: 10px;
+            display: flex;
             gap: 10px;
-            margin: 16px 0;
-            position: relative;
-            overflow: hidden;
         }
-
-        .premium-quiz-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
-
-        .premium-quiz-btn:hover::before {
-            left: 100%;
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            margin: 0 5px;
         }
-
-        .premium-quiz-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(184, 134, 11, 0.4);
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3498db;
         }
-
-        /* अन्य स्टाइल (पहले जैसी) */
-        .payment-info, .form-group, .submit-btn, .status-message, .modal, .processing-screen, .offline-section, .error-section, .welcome-section, .quiz-section, .score-section {
-            /* पहले जैसी स्टाइल यहाँ रखें */
-        }
-
-        @media (max-width: 768px) {
-            .stats-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .request-details {
-                grid-template-columns: 1fr;
-            }
-
-            .request-actions {
-                flex-direction: column;
-            }
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
-            <p>एडमिन पैनल</p>
+        <h1><i class="fas fa-user-shield"></i> Quiz Access Admin</h1>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-users">0</div>
+                <div class="stat-label">कुल यूजर्स</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="active-users">0</div>
+                <div class="stat-label">एक्टिव यूजर्स</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pending-users-count">0</div>
+                <div class="stat-label">पेंडिंग यूजर्स</div>
+            </div>
         </div>
         
-        <div class="scrollable-content">
-            <div class="content">
-                <!-- एडमिन लॉगिन सेक्शन -->
-                <div id="admin-login" class="admin-login">
-                    <h2><i class="fas fa-user-shield"></i> एडमिन लॉगिन</h2>
-                    <div class="form-group">
-                        <label for="admin-password">पासवर्ड</label>
-                        <input type="password" id="admin-password" placeholder="एडमिन पासवर्ड दर्ज करें">
-                    </div>
-                    <button onclick="adminLogin()">लॉगिन करें</button>
-                </div>
-                
-                <!-- एडमिन डैशबोर्ड -->
-                <div id="admin-dashboard" class="admin-dashboard">
-                    <div class="admin-header">
-                        <h2><i class="fas fa-tachometer-alt"></i> डैशबोर्ड</h2>
-                        <button class="logout-btn" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> लॉगआउट</button>
-                    </div>
-                    
-                    <div class="stats-container">
-                        <div class="stat-card">
-                            <div class="number" id="total-requests">0</div>
-                            <div class="label">कुल रिक्वेस्ट</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="number" id="pending-requests">0</div>
-                            <div class="label">पेंडिंग</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="number" id="approved-requests">0</div>
-                            <div class="label">अप्रूव्ड</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="number" id="rejected-requests">0</div>
-                            <div class="label">रिजेक्टेड</div>
-                        </div>
-                    </div>
-                    
-                    <div class="requests-section">
-                        <div class="requests-header">
-                            <h3>पेमेंट रिक्वेस्ट</h3>
-                            <div class="filter-tabs">
-                                <div class="filter-tab active" onclick="filterRequests('all')">सभी</div>
-                                <div class="filter-tab" onclick="filterRequests('pending')">पेंडिंग</div>
-                                <div class="filter-tab" onclick="filterRequests('approved')">अप्रूव्ड</div>
-                                <div class="filter-tab" onclick="filterRequests('rejected')">रिजेक्टेड</div>
-                            </div>
-                        </div>
-                        
-                        <div id="requests-list" class="requests-list">
-                            <div class="empty-state">
-                                <i class="fas fa-inbox"></i>
-                                <p>कोई रिक्वेस्ट नहीं मिली</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="form-group">
+            <label for="user-email">User Email:</label>
+            <input type="email" id="user-email" placeholder="user@example.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="access-duration">Access Duration:</label>
+            <select id="access-duration">
+                <option value="30">30 Days</option>
+                <option value="60">60 Days</option>
+                <option value="90">90 Days</option>
+            </select>
+        </div>
+        
+        <button onclick="addUser()"><i class="fas fa-plus-circle"></i> Add User Access</button>
+        <button onclick="loadUsers()" class="refresh-btn"><i class="fas fa-sync-alt"></i> Refresh List</button>
+        
+        <div id="message"></div>
+        
+        <div class="pending-users">
+            <h2><i class="fas fa-clock"></i> Pending Approvals</h2>
+            <div id="pending-users-container">
+                <p>Loading pending users...</p>
             </div>
         </div>
-    </div>
-    
-    <!-- रिक्वेस्ट डिटेल मॉडल -->
-    <div id="request-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeRequestModal()">&times;</span>
-            <div class="modal-header">
-                <i class="fas fa-receipt success-icon"></i>
-                <h2>रिक्वेस्ट डिटेल</h2>
-            </div>
-            <div class="modal-body">
-                <div id="request-details-content"></div>
-                <div class="request-actions">
-                    <button class="action-btn approve-btn" onclick="approveRequest()">
-                        <i class="fas fa-check"></i> अप्रूव करें
-                    </button>
-                    <button class="action-btn reject-btn" onclick="rejectRequest()">
-                        <i class="fas fa-times"></i> रिजेक्ट करें
-                    </button>
-                </div>
+        
+        <div class="user-list">
+            <h2><i class="fas fa-users"></i> Current Users</h2>
+            <div id="user-list-container">
+                <p>Loading users...</p>
             </div>
         </div>
     </div>
     
     <script>
-        // फायरबेस कॉन्फिगरेशन
-        const firebaseConfig = {
-            apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
-            authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
-            databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
-            projectId: "rajasthan-gk-quiz-41cc5",
-            storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
-            messagingSenderId: "876482514501",
-            appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
-            measurementId: "G-VB140B6NCW"
+        // GitHub API configuration
+        const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN'; // अपना GitHub token यहाँ डालें
+        const GITHUB_USERNAME = 'YOUR_USERNAME'; // अपना GitHub username यहाँ डालें
+        const GITHUB_REPO = 'quiz-access-control'; // अपना repository name यहाँ डालें
+        const GITHUB_FILE = 'access.json'; // फाइल का नाम
+
+        // पेज लोड होने पर यूजर लिस्ट लोड करें
+        window.onload = function() {
+            loadUsers();
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // एडमिन सेटिंग्स
-        const ADMIN_PASSWORD = "admin123"; // इसे बदलकर अपना पासवर्ड सेट करें
-        let currentFilter = 'all';
-        let currentRequest = null;
-
-        // एडमिन लॉगिन फंक्शन
-        function adminLogin() {
-            const password = document.getElementById('admin-password').value;
+        // यूजर ऐड करने का फंक्शन
+        async function addUser() {
+            const email = document.getElementById('user-email').value.trim();
+            const duration = parseInt(document.getElementById('access-duration').value);
+            const messageDiv = document.getElementById('message');
             
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('admin-login').style.display = 'none';
-                document.getElementById('admin-dashboard').style.display = 'flex';
-                loadDashboard();
-            } else {
-                alert('गलत पासवर्ड! कृपया फिर से कोशिश करें।');
+            if (!email) {
+                showMessage('Please enter a valid email address', 'error');
+                return;
             }
-        }
-
-        // एडमिन लॉगआउट फंक्शन
-        function adminLogout() {
-            document.getElementById('admin-dashboard').style.display = 'none';
-            document.getElementById('admin-login').style.display = 'block';
-            document.getElementById('admin-password').value = '';
-        }
-
-        // डैशबोर्ड लोड करने का फंक्शन
-        async function loadDashboard() {
+            
             try {
-                // स्टैटिस्टिक्स लोड करें
-                const paymentsRef = database.ref('payments');
-                const snapshot = await paymentsRef.once('value');
-                const payments = snapshot.val() || {};
-                
-                let total = 0;
-                let pending = 0;
-                let approved = 0;
-                let rejected = 0;
-                
-                for (let key in payments) {
-                    total++;
-                    switch(payments[key].status) {
-                        case 'pending':
-                            pending++;
-                            break;
-                        case 'approved':
-                            approved++;
-                            break;
-                        case 'rejected':
-                            rejected++;
-                            break;
+                // पहले मौजूदा फाइल को लाएं
+                const fileResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
+                });
+                
+                if (!fileResponse.ok) {
+                    throw new Error(`GitHub API error: ${fileResponse.status}`);
                 }
                 
-                document.getElementById('total-requests').textContent = total;
-                document.getElementById('pending-requests').textContent = pending;
-                document.getElementById('approved-requests').textContent = approved;
-                document.getElementById('rejected-requests').textContent = rejected;
+                const fileData = await fileResponse.json();
+                const content = JSON.parse(atob(fileData.content));
                 
-                // रिक्वेस्ट लोड करें
-                loadRequests();
+                // अब यूजर को अपडेट या ऐड करें
+                const now = new Date();
+                const expiry = new Date();
+                expiry.setDate(now.getDate() + duration);
+                
+                // चेक करें कि यूजर पहले से मौजूद है या नहीं
+                const existingUserIndex = content.users.findIndex(user => user.email === email);
+                
+                if (existingUserIndex !== -1) {
+                    // मौजूदा यूजर को अपडेट करें
+                    content.users[existingUserIndex] = {
+                        email: email,
+                        approved_at: now.toISOString(),
+                        expiry: expiry.toISOString()
+                    };
+                } else {
+                    // नया यूजर ऐड करें
+                    content.users.push({
+                        email: email,
+                        approved_at: now.toISOString(),
+                        expiry: expiry.toISOString()
+                    });
+                }
+                
+                // अपडेटेड कंटेंट के साथ फाइल को अपडेट करें
+                const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Add/update access for ${email}`,
+                        content: btoa(JSON.stringify(content, null, 2)),
+                        sha: fileData.sha
+                    })
+                });
+                
+                if (!updateResponse.ok) {
+                    throw new Error(`GitHub update error: ${updateResponse.status}`);
+                }
+                
+                showMessage('User access added/updated successfully!', 'success');
+                document.getElementById('user-email').value = '';
+                loadUsers(); // यूजर लिस्ट रीफ्रेश करें
                 
             } catch (error) {
-                console.error('Dashboard load error:', error);
-                alert('डैशबोर्ड लोड करने में त्रुटि!');
+                console.error('Error:', error);
+                showMessage(`Error: ${error.message}`, 'error');
             }
         }
 
-        // रिक्वेस्ट लोड करने का फंक्शन
-        async function loadRequests() {
+        // यूजर लिस्ट लोड करने का फंक्शन
+        async function loadUsers() {
+            const userListContainer = document.getElementById('user-list-container');
+            const pendingUsersContainer = document.getElementById('pending-users-container');
+            
             try {
-                const paymentsRef = database.ref('payments');
-                const snapshot = await paymentsRef.once('value');
-                const payments = snapshot.val() || {};
+                // GitHub से एक्सेस डेटा लाएं
+                const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${GITHUB_FILE}`);
+                const data = await response.json();
                 
-                const requestsList = document.getElementById('requests-list');
-                requestsList.innerHTML = '';
+                if (!data.users || !Array.isArray(data.users)) {
+                    userListContainer.innerHTML = '<p>No users found</p>';
+                    pendingUsersContainer.innerHTML = '<p>No pending users</p>';
+                    updateStats(0, 0, 0);
+                    return;
+                }
                 
-                let hasRequests = false;
+                const now = new Date();
+                let html = '';
+                let pendingHtml = '';
+                let activeCount = 0;
+                let pendingCount = 0;
                 
-                for (let key in payments) {
-                    const request = payments[key];
+                // यूजर्स को expiry date के अनुसार सॉर्ट करें (नए सबसे पहले)
+                const sortedUsers = [...data.users].sort((a, b) => new Date(b.expiry) - new Date(a.expiry));
+                
+                sortedUsers.forEach(user => {
+                    const expiryDate = new Date(user.expiry);
+                    const isExpired = now > expiryDate;
                     
-                    // फिल्टर चेक करें
-                    if (currentFilter !== 'all' && request.status !== currentFilter) {
-                        continue;
+                    if (!isExpired) {
+                        activeCount++;
                     }
                     
-                    hasRequests = true;
-                    
-                    const requestCard = document.createElement('div');
-                    requestCard.className = 'request-card';
-                    requestCard.innerHTML = `
-                        <div class="request-header">
-                            <span class="request-id">#${key.substring(0, 8)}</span>
-                            <span class="request-status status-${request.status}">${getStatusText(request.status)}</span>
-                        </div>
-                        <div class="request-details">
-                            <div class="detail-item">
-                                <span class="detail-label">ईमेल</span>
-                                <span class="detail-value">${request.user_id}</span>
+                    html += `
+                        <div class="user-item">
+                            <div class="user-info">
+                                <div class="user-email">${user.email}</div>
+                                <div class="user-date">Expires: ${expiryDate.toLocaleDateString()} ${expiryDate.toLocaleTimeString()}</div>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">मोबाइल</span>
-                                <span class="detail-value">${request.mobile_number}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">राशि</span>
-                                <span class="detail-value">₹${request.amount}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">ट्रांजैक्शन ID</span>
-                                <span class="detail-value">${request.transaction_id}</span>
-                            </div>
-                        </div>
-                        <div class="request-actions">
-                            <button class="action-btn view-btn" onclick="viewRequest('${key}')">
-                                <i class="fas fa-eye"></i> देखें
-                            </button>
-                            ${request.status === 'pending' ? `
-                                <button class="action-btn approve-btn" onclick="quickApprove('${key}')">
-                                    <i class="fas fa-check"></i> अप्रूव
+                            <div>
+                                <span class="user-status ${isExpired ? 'status-expired' : 'status-active'}">
+                                    ${isExpired ? 'Expired' : 'Active'}
+                                </span>
+                                <button class="delete-btn" onclick="deleteUser('${user.email}')">
+                                    <i class="fas fa-trash"></i>
                                 </button>
-                                <button class="action-btn reject-btn" onclick="quickReject('${key}')">
-                                    <i class="fas fa-times"></i> रिजेक्ट
-                                </button>
-                            ` : ''}
+                            </div>
                         </div>
                     `;
-                    
-                    requestsList.appendChild(requestCard);
-                }
+                });
                 
-                if (!hasRequests) {
-                    requestsList.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>कोई रिक्वेस्ट नहीं मिली</p>
-                        </div>
-                    `;
-                }
-                
-            } catch (error) {
-                console.error('Requests load error:', error);
-                alert('रिक्वेस्ट लोड करने में त्रुटि!');
-            }
-        }
-
-        // स्टेटस टेक्स्ट प्राप्त करने का फंक्शन
-        function getStatusText(status) {
-            switch(status) {
-                case 'pending': return 'पेंडिंग';
-                case 'approved': return 'अप्रूव्ड';
-                case 'rejected': return 'रिजेक्टेड';
-                default: return status;
-            }
-        }
-
-        // फिल्टर फंक्शन
-        function filterRequests(filter) {
-            currentFilter = filter;
-            
-            // टैब्स अपडेट करें
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // रिक्वेस्ट रीलोड करें
-            loadRequests();
-        }
-
-        // रिक्वेस्ट देखने का फंक्शन
-        async function viewRequest(requestId) {
-            try {
-                const paymentRef = database.ref('payments/' + requestId);
-                const snapshot = await paymentRef.once('value');
-                const request = snapshot.val();
-                
-                if (request) {
-                    currentRequest = requestId;
-                    
-                    const detailsContent = document.getElementById('request-details-content');
-                    detailsContent.innerHTML = `
-                        <div class="request-details">
-                            <div class="detail-item">
-                                <span class="detail-label">रिक्वेस्ट ID</span>
-                                <span class="detail-value">#${requestId.substring(0, 8)}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">ईमेल</span>
-                                <span class="detail-value">${request.user_id}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">मोबाइल</span>
-                                <span class="detail-value">${request.mobile_number}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">राशि</span>
-                                <span class="detail-value">₹${request.amount}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">ट्रांजैक्शन ID</span>
-                                <span class="detail-value">${request.transaction_id}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">स्टेटस</span>
-                                <span class="detail-value">${getStatusText(request.status)}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">टाइमस्टैम्प</span>
-                                <span class="detail-value">${new Date(request.timestamp).toLocaleString()}</span>
-                            </div>
-                            ${request.payment_note ? `
-                                <div class="detail-item" style="grid-column: 1 / -1;">
-                                    <span class="detail-label">नोट</span>
-                                    <span class="detail-value">${request.payment_note}</span>
+                // पेंडिंग यूजर्स (अभी तक अप्रूव नहीं हुए)
+                if (data.pending && Array.isArray(data.pending)) {
+                    data.pending.forEach(user => {
+                        pendingCount++;
+                        
+                        pendingHtml += `
+                            <div class="pending-item">
+                                <div class="pending-info">
+                                    <div class="pending-details">
+                                        <div class="pending-email">${user.email}</div>
+                                        <div class="pending-date">Requested: ${new Date(user.timestamp).toLocaleDateString()} ${new Date(user.timestamp).toLocaleTimeString()}</div>
+                                    </div>
                                 </div>
-                            ` : ''}
-                            ${request.status === 'approved' && request.approved_at ? `
-                                <div class="detail-item">
-                                    <span class="detail-label">अप्रूव्ड टाइम</span>
-                                    <span class="detail-value">${new Date(request.approved_at).toLocaleString()}</span>
+                                <div class="actions">
+                                    <button class="approve-btn" onclick="approveUser('${user.email}')">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                    <button class="delete-btn" onclick="deletePendingUser('${user.email}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
-                            ` : ''}
-                            ${request.status === 'rejected' && request.rejected_at ? `
-                                <div class="detail-item">
-                                    <span class="detail-label">रिजेक्टेड टाइम</span>
-                                    <span class="detail-value">${new Date(request.rejected_at).toLocaleString()}</span>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `;
-                    
-                    // एक्शन बटन अपडेट करें
-                    const actionsDiv = document.querySelector('#request-modal .request-actions');
-                    if (request.status === 'pending') {
-                        actionsDiv.innerHTML = `
-                            <button class="action-btn approve-btn" onclick="approveRequest()">
-                                <i class="fas fa-check"></i> अप्रूव करें
-                            </button>
-                            <button class="action-btn reject-btn" onclick="rejectRequest()">
-                                <i class="fas fa-times"></i> रिजेक्ट करें
-                            </button>
+                            </div>
                         `;
-                    } else {
-                        actionsDiv.innerHTML = '';
+                    });
+                }
+                
+                userListContainer.innerHTML = html || '<p>No users found</p>';
+                pendingUsersContainer.innerHTML = pendingHtml || '<p>No pending users</p>';
+                
+                // स्टैट्स अपडेट करें
+                updateStats(data.users.length, activeCount, pendingCount);
+                
+            } catch (error) {
+                console.error('Error loading users:', error);
+                userListContainer.innerHTML = `<p class="error">Error loading users: ${error.message}</p>`;
+                pendingUsersContainer.innerHTML = `<p class="error">Error loading pending users: ${error.message}</p>`;
+            }
+        }
+
+        // यूजर डिलीट करने का फंक्शन
+        async function deleteUser(email) {
+            if (!confirm(`Are you sure you want to delete access for ${email}?`)) {
+                return;
+            }
+            
+            try {
+                // पहले मौजूदा फाइल को लाएं
+                const fileResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (!fileResponse.ok) {
+                    throw new Error(`GitHub API error: ${fileResponse.status}`);
+                }
+                
+                const fileData = await fileResponse.json();
+                const content = JSON.parse(atob(fileData.content));
+                
+                // यूजर को ढूंढें और डिलीट करें
+                const userIndex = content.users.findIndex(user => user.email === email);
+                
+                if (userIndex !== -1) {
+                    content.users.splice(userIndex, 1);
+                    
+                    // अपडेटेड कंटेंट के साथ फाइल को अपडेट करें
+                    const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Delete access for ${email}`,
+                            content: btoa(JSON.stringify(content, null, 2)),
+                            sha: fileData.sha
+                        })
+                    });
+                    
+                    if (!updateResponse.ok) {
+                        throw new Error(`GitHub update error: ${updateResponse.status}`);
                     }
                     
-                    // मॉडल दिखाएं
-                    document.getElementById('request-modal').style.display = 'flex';
+                    showMessage(`Access for ${email} has been removed`, 'success');
+                    loadUsers(); // यूजर लिस्ट रीफ्रेश करें
+                } else {
+                    showMessage(`User ${email} not found`, 'error');
                 }
                 
             } catch (error) {
-                console.error('View request error:', error);
-                alert('रिक्वेस्ट देखने में त्रुटि!');
+                console.error('Error:', error);
+                showMessage(`Error: ${error.message}`, 'error');
             }
         }
 
-        // रिक्वेस्ट मॉडल बंद करने का फंक्शन
-        function closeRequestModal() {
-            document.getElementById('request-modal').style.display = 'none';
-            currentRequest = null;
-        }
-
-        // त्वरित अप्रूवल फंक्शन
-        async function quickApprove(requestId) {
-            if (confirm('क्या आप इस रिक्वेस्ट को अप्रूव करना चाहते हैं?')) {
-                await approveRequestInternal(requestId);
+        // पेंडिंग यूजर डिलीट करने का फंक्शन
+        async function deletePendingUser(email) {
+            if (!confirm(`Are you sure you want to delete pending request for ${email}?`)) {
+                return;
             }
-        }
-
-        // त्वरित रिजेक्शन फंक्शन
-        async function quickReject(requestId) {
-            if (confirm('क्या आप इस रिक्वेस्ट को रिजेक्ट करना चाहते हैं?')) {
-                await rejectRequestInternal(requestId);
-            }
-        }
-
-        // अप्रूवल फंक्शन
-        async function approveRequest() {
-            if (currentRequest) {
-                await approveRequestInternal(currentRequest);
-                closeRequestModal();
-            }
-        }
-
-        // अप्रूवल इंटरनल फंक्शन
-        async function approveRequestInternal(requestId) {
+            
             try {
-                const paymentRef = database.ref('payments/' + requestId);
-                await paymentRef.update({
-                    status: 'approved',
-                    approved_at: new Date().toISOString()
+                // पहले मौजूदा फाइल को लाएं
+                const fileResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
                 });
                 
-                // यूजर सेशन अपडेट करें
-                const snapshot = await paymentRef.once('value');
-                const request = snapshot.val();
-                const userSessionRef = database.ref('user_session/' + request.user_id);
-                await userSessionRef.update({
-                    status: 'approved',
-                    approved_at: new Date().toISOString()
-                });
+                if (!fileResponse.ok) {
+                    throw new Error(`GitHub API error: ${fileResponse.status}`);
+                }
                 
-                alert('रिक्वेस्ट सफलतापूर्वक अप्रूव की गई!');
-                loadDashboard();
+                const fileData = await fileResponse.json();
+                const content = JSON.parse(atob(fileData.content));
+                
+                // पेंडिंग यूजर को ढूंढें और डिलीट करें
+                if (content.pending && Array.isArray(content.pending)) {
+                    const pendingIndex = content.pending.findIndex(user => user.email === email);
+                    
+                    if (pendingIndex !== -1) {
+                        content.pending.splice(pendingIndex, 1);
+                        
+                        // अपडेटेड कंटेंट के साथ फाइल को अपडेट करें
+                        const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${GITHUB_TOKEN}`,
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: `Delete pending request for ${email}`,
+                                content: btoa(JSON.stringify(content, null, 2)),
+                                sha: fileData.sha
+                            })
+                        });
+                        
+                        if (!updateResponse.ok) {
+                            throw new Error(`GitHub update error: ${updateResponse.status}`);
+                        }
+                        
+                        showMessage(`Pending request for ${email} has been removed`, 'success');
+                        loadUsers(); // यूजर लिस्ट रीफ्रेश करें
+                    } else {
+                        showMessage(`Pending request for ${email} not found`, 'error');
+                    }
+                } else {
+                    showMessage(`No pending requests found`, 'error');
+                }
                 
             } catch (error) {
-                console.error('Approve request error:', error);
-                alert('अप्रूव करने में त्रुटि!');
+                console.error('Error:', error);
+                showMessage(`Error: ${error.message}`, 'error');
             }
         }
 
-        // रिजेक्शन फंक्शन
-        async function rejectRequest() {
-            if (currentRequest) {
-                await rejectRequestInternal(currentRequest);
-                closeRequestModal();
-            }
-        }
-
-        // रिजेक्शन इंटरनल फंक्शन
-        async function rejectRequestInternal(requestId) {
+        // पेंडिंग यूजर अप्रूव करने का फंक्शन
+        async function approveUser(email) {
+            const duration = 30; // डिफॉल्ट 30 दिन
+            
             try {
-                const paymentRef = database.ref('payments/' + requestId);
-                await paymentRef.update({
-                    status: 'rejected',
-                    rejected_at: new Date().toISOString()
+                // पहले मौजूदा फाइल को लाएं
+                const fileResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
                 });
                 
-                // यूजर सेशन अपडेट करें
-                const snapshot = await paymentRef.once('value');
-                const request = snapshot.val();
-                const userSessionRef = database.ref('user_session/' + request.user_id);
-                await userSessionRef.update({
-                    status: 'rejected',
-                    rejected_at: new Date().toISOString()
+                if (!fileResponse.ok) {
+                    throw new Error(`GitHub API error: ${fileResponse.status}`);
+                }
+                
+                const fileData = await fileResponse.json();
+                const content = JSON.parse(atob(fileData.content));
+                
+                // अब यूजर को अपडेट या ऐड करें
+                const now = new Date();
+                const expiry = new Date();
+                expiry.setDate(now.getDate() + duration);
+                
+                // यूजर को users ऐरे में ऐड करें
+                content.users.push({
+                    email: email,
+                    approved_at: now.toISOString(),
+                    expiry: expiry.toISOString()
                 });
                 
-                alert('रिक्वेस्ट सफलतापूर्वक रिजेक्ट की गई!');
-                loadDashboard();
+                // पेंडिंग यूजर को हटाएं
+                if (content.pending && Array.isArray(content.pending)) {
+                    const pendingIndex = content.pending.findIndex(user => user.email === email);
+                    
+                    if (pendingIndex !== -1) {
+                        content.pending.splice(pendingIndex, 1);
+                    }
+                }
+                
+                // अपडेटेड कंटेंट के साथ फाइल को अपडेट करें
+                const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Approve access for ${email}`,
+                        content: btoa(JSON.stringify(content, null, 2)),
+                        sha: fileData.sha
+                    })
+                });
+                
+                if (!updateResponse.ok) {
+                    throw new Error(`GitHub update error: ${updateResponse.status}`);
+                }
+                
+                showMessage(`Access for ${email} has been approved!`, 'success');
+                loadUsers(); // यूजर लिस्ट रीफ्रेश करें
                 
             } catch (error) {
-                console.error('Reject request error:', error);
-                alert('रिजेक्ट करने में त्रुटि!');
+                console.error('Error:', error);
+                showMessage(`Error: ${error.message}`, 'error');
             }
         }
 
-        // पेज लोड होने पर चेक करें
-        document.addEventListener('DOMContentLoaded', function() {
-            // यूजर को यूजर पेज पर रीडायरेक्ट करें अगर वो एडमिन नहीं है
-            const isAdminPage = window.location.pathname.includes('admin');
-            if (!isAdminPage) {
-                // यूजर पेज का कोड यहाँ रखें
-                window.location.href = 'index.html';
-            }
-        });
+        // स्टैट्स अपडेट करने का फंक्शन
+        function updateStats(total, active, pending) {
+            document.getElementById('total-users').textContent = total;
+            document.getElementById('active-users').textContent = active;
+            document.getElementById('pending-users-count').textContent = pending;
+        }
 
-        // एंटर की पर लॉगिन
-        document.getElementById('admin-password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                adminLogin();
-            }
-        });
+        // मैसेज दिखाने का फंक्शन
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = type;
+            
+            // 5 सेकंड बाद मैसेज छिपाएं
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 5000);
+        }
     </script>
 </body>
 </html>
