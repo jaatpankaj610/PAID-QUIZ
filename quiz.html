@@ -790,6 +790,29 @@
             50% { transform: translateY(-15px); opacity: 1; }
         }
 
+        .access-info {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .access-days {
+            background: var(--paid-gradient);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
         @media (min-width: 601px) {
             .header { 
                 padding: 20px; 
@@ -926,6 +949,10 @@
                         <div class="paid-badge">प्रीमियम संस्करण</div>
                         <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> धन्यवाद!</h2>
                         <p>आपका भुगतान सफलतापूर्वक प्राप्त हो गया है। अब आप हमारे प्रीमियम राजस्थान सामान्य ज्ञान क्विज़ का आनंद ले सकते हैं।</p>
+                        <div class="access-info">
+                            <span>आपकी एक्सेस:</span>
+                            <span class="access-days" id="access-days">लोड हो रहा है...</span>
+                        </div>
                         <ul class="features">
                             <li><i class="fas fa-check-circle"></i> 100+ एक्सक्लूसिव सवाल</li>
                             <li><i class="fas fa-check-circle"></i> तुरंत परिणाम</li>
@@ -975,10 +1002,15 @@
     </div>
 
     <script>
+        // GitHub रेपो URL
+        const GITHUB_REPO_URL = 'https://jaatpankaj610.github.io/PAID-QUIZ/';
+        
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
         let quizStarted = false;
+        let userId = null;
+        let userData = null;
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
         const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
@@ -992,14 +1024,96 @@
         }
         document.addEventListener('click', unlockAudio);
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeQuiz();
+        // लोकल स्टोरेज से यूजर सेशन प्राप्त करने के लिए फ़ंक्शन
+        function getUserSession() {
+            try {
+                return JSON.parse(localStorage.getItem('userSession') || '{}');
+            } catch (error) {
+                console.error('Error getting user session:', error);
+                return {};
+            }
+        }
+
+        // यूजर की स्थिति की जांच करने के लिए फ़ंक्शन
+        async function checkUserAccess() {
+            const userSession = getUserSession();
+            
+            if (!userSession.userId) {
+                return false;
+            }
+            
+            try {
+                // GitHub से अप्रूव्ड यूजर्स की सूची प्राप्त करें
+                const response = await fetch(GITHUB_REPO_URL + 'approved-users.json');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch approved users');
+                }
+                
+                const approvedUsers = await response.json();
+                
+                // जांचें कि क्या यूजर अप्रूव्ड है
+                const isApproved = approvedUsers.some(user => 
+                    user.email.toLowerCase() === userSession.userId.toLowerCase() && 
+                    user.transaction_id === userSession.transactionId
+                );
+                
+                if (isApproved) {
+                    // एक्सपायरी तिथि की जांच करें
+                    const approvedAt = new Date(userSession.timestamp);
+                    const expiryDate = new Date(approvedAt);
+                    expiryDate.setDate(approvedAt.getDate() + 30);
+                    const now = new Date();
+                    
+                    return now < expiryDate;
+                }
+                
+                return false;
+            } catch (error) {
+                console.error('Error checking user access:', error);
+                return false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // यूजर की एक्सेस की जांच करें
+            const hasAccess = await checkUserAccess();
+            
+            if (!hasAccess) {
+                // यूजर की एक्सेस नहीं है, इंडेक्स पेज पर रीडायरेक्ट करें
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // यूजर सेशन डेटा प्राप्त करें
+            const userSession = getUserSession();
+            userId = userSession.userId;
+            
+            // एक्सेस जानकारी अपडेट करें
+            updateAccessInfo(userSession.timestamp);
+            
+            // क्विज़ प्रश्न लोड करें
+            loadQuestions();
         });
 
-        function initializeQuiz() {
-            // Initial network check when page loads
-            checkNetworkStatus();
-            console.log('DOM loaded, initializing paid quiz');
+        // एक्सेस जानकारी अपडेट करें
+        function updateAccessInfo(timestamp) {
+            const accessDaysElement = document.getElementById('access-days');
+            if (accessDaysElement) {
+                const approvedAt = new Date(timestamp);
+                const expiryDate = new Date(approvedAt);
+                expiryDate.setDate(approvedAt.getDate() + 30);
+                const now = new Date();
+                
+                const diffTime = expiryDate - now;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays > 0) {
+                    accessDaysElement.textContent = `${diffDays} दिन शेष`;
+                } else {
+                    accessDaysElement.textContent = 'आज समाप्त';
+                    accessDaysElement.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+                }
+            }
         }
 
         function checkNetworkStatus() {
@@ -1039,7 +1153,7 @@
             }
             
             try {
-                const repoUrl = 'https://raw.githubusercontent.com/jaatpankaj610/PAID-QUIZ/main/questions.json';
+                const repoUrl = GITHUB_REPO_URL + 'questions.json';
                 console.log('Attempting to load questions from:', repoUrl);
                 
                 const response = await fetch(repoUrl, {
