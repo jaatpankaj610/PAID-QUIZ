@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* All existing CSS remains unchanged */
         :root {
             --primary: #2563eb;
             --secondary: #7c3aed;
@@ -368,7 +367,7 @@
             font-weight: 900;
             margin-left: auto;
             font-size: 18px;
-            color: #ffffff";
+            color: #ffffff;
         }
         
         .options li.incorrect { 
@@ -413,7 +412,7 @@
             border-radius: 10px;
             line-height: 1.4;
             word-wrap: break-word;
-            overflow-wrap: break-word";
+            overflow-wrap: break-word;
             width: 100%;
         }
         
@@ -458,7 +457,7 @@
             margin: 15px 0; 
             border: 1px solid rgba(0,0,0,0.05);
             word-wrap: break-word;
-            overflow-wrap: break-word";
+            overflow-wrap: break-word;
             width: 100%;
         }
         
@@ -495,7 +494,7 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             word-wrap: break-word;
-            overflow-wrap: break-word";
+            overflow-wrap: break-word;
             width: 100%;
         }
         
@@ -575,7 +574,7 @@
             color: var(--dark);
             margin-bottom: 10px;
             word-wrap: break-word;
-            overflow-wrap: break-word";
+            overflow-wrap: break-word;
         }
 
         .retry-btn {
@@ -621,7 +620,7 @@
             justify-content: center;
             gap: 8px;
             word-wrap: break-word;
-            overflow-wrap: break-word";
+            overflow-wrap: break-word;
         }
 
         .score-details {
@@ -634,7 +633,7 @@
             border-radius: 10px;
             line-height: 1.5;
             word-wrap: break-word;
-            overflow-wrap: break-word";
+            overflow-wrap: break-word;
             width: 100%;
         }
 
@@ -698,7 +697,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* New styles for offline professional image with animation */
         .offline-image-container {
             width: 180px;
             height: 180px;
@@ -939,7 +937,7 @@
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
-                    <div id="quiz-section" class="quiz-section">
+                    <div id="quiz-section" class="quiz-section" style="display: none;">
                         <div class="question-container">
                             <div class="question" id="question-text">प्रश्न लोड हो रहा है...</div>
                             <div class="progress-bar">
@@ -953,13 +951,9 @@
                             <div id="result" class="result"></div>
                             <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
                             <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
-                            <button class="restart-btn" onclick="restartQuiz()">
-                                <span>क्विज़ पुनः शुरू करें</span>
-                                <i class="fas fa-redo"></i>
-                            </button>
                         </div>
                     </div>
-                    <div id="score-section" class="score-section">
+                    <div id="score-section" class="score-section" style="display: none;">
                         <div class="score-circle" id="final-score-circle">0/0</div>
                         <h2><i class="fas fa-trophy" style="color: #f59e0b;"></i> क्विज़ समाप्त!</h2>
                         <div class="score-details" id="score-details"></div>
@@ -986,9 +980,9 @@
         let score = 0;
         let quizStarted = false;
 
-        // Initialize sound effects
-        const correctSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1998/1998.wav'); // Enthusiastic sound
-        const incorrectSound = new Audio('https://assets.mixkit.co/active_storage/sfx/916/916.wav'); // Soft error sound
+        // Initialize sound effects - MIT App Inventor Assets के लिए paths
+        const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
+        const incorrectSound = new Audio('file:///android_asset/incorrect.mp3'); // गलत जवाब का sound (assets में upload करें)
 
         // Ensure audio plays after user interaction
         function unlockAudio() {
@@ -1021,13 +1015,11 @@
             }
             
             if (!navigator.onLine) {
-                // User is offline, show offline section
                 offlineSection.style.display = 'block';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'none';
                 console.log('User is offline, showing offline section');
             } else {
-                // User is online, show online content
                 offlineSection.style.display = 'none';
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
@@ -1047,7 +1039,6 @@
             }
             
             try {
-                // यहाँ अपने GitHub रिपॉजिटरी का URL डालें
                 const repoUrl = 'https://raw.githubusercontent.com/jaatpankaj610/PAID-QUIZ/main/questions.json';
                 console.log('Attempting to load questions from:', repoUrl);
                 
@@ -1068,7 +1059,6 @@
                     throw new Error('No questions found or invalid data format');
                 }
                 
-                // Validate each question and convert to our format
                 questions = [];
                 for (let i = 0; i < data.questions.length; i++) {
                     const q = data.questions[i];
@@ -1076,13 +1066,11 @@
                         throw new Error(`Invalid question at index ${i}: ${JSON.stringify(q)}`);
                     }
                     
-                    // Find the index of the correct answer
                     const correctIndex = q.options.findIndex(option => option === q.correctAnswer);
                     if (correctIndex === -1) {
                         throw new Error(`Correct answer "${q.correctAnswer}" not found in options for question at index ${i}`);
                     }
                     
-                    // Convert to our format
                     questions.push({
                         question: q.question,
                         options: q.options,
@@ -1095,7 +1083,6 @@
             } catch (error) {
                 console.error('Failed to load questions:', error);
                 
-                // विस्तृत त्रुटि संदेश दिखाएं
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'error-message';
                 errorMessage.innerHTML = `
@@ -1108,7 +1095,6 @@
                 
                 const errorContainer = document.querySelector('.error-container');
                 if (errorContainer) {
-                    // पुराने संदेश को हटाएं और नया जोड़ें
                     const oldMessage = errorContainer.querySelector('.error-message');
                     if (oldMessage) {
                         oldMessage.parentNode.removeChild(oldMessage);
@@ -1128,11 +1114,9 @@
                 return;
             }
             
-            // Prevent multiple clicks
             if (quizStarted) return;
             quizStarted = true;
             
-            // Show loading state
             const welcomeSection = document.getElementById('welcome-section');
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
@@ -1142,12 +1126,10 @@
                 quizSection.style.display = 'block';
                 scoreSection.style.display = 'none';
                 
-                // Reset quiz state
                 currentQuestionIndex = 0;
                 score = 0;
                 updateScore();
                 
-                // Load questions if not already loaded
                 if (questions.length === 0) {
                     loadQuestions().then(() => {
                         if (questions.length > 0) {
@@ -1331,13 +1313,14 @@
             quizStarted = false;
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
-            if (quizSection && scoreSection) {
+            const welcomeSection = document.getElementById('welcome-section');
+            if (quizSection && scoreSection && welcomeSection) {
                 scoreSection.style.display = 'none';
-                quizSection.style.display = 'block';
+                quizSection.style.display = 'none';
+                welcomeSection.style.display = 'block';
                 currentQuestionIndex = 0;
                 score = 0;
                 updateScore();
-                showQuestion();
             }
         }
 
