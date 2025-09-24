@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "email": "user1@example.com",
+      "approved_at": "2023-11-01T00:00:00Z",
+      "expiry": "2023-12-01T00:00:00Z"
+    }
+  ],
+  "pending": [
+    {
+      "email": "pending@example.com",
+      "timestamp": "2023-11-05T00:00:00Z",
+      "transaction_id": "TXN123456"
+    }
+  ]
+}
