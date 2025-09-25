@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -790,6 +792,56 @@
             50% { transform: translateY(-15px); opacity: 1; }
         }
 
+        .access-denied {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            height: 100%;
+        }
+
+        .access-denied-icon {
+            font-size: 60px;
+            color: var(--danger);
+            margin-bottom: 20px;
+        }
+
+        .access-denied h2 {
+            font-size: 22px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .access-denied p {
+            font-size: 16px;
+            color: var(--dark);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .payment-btn {
+            background: var(--paid-gradient);
+            color: var(--light);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .payment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 20px; 
@@ -887,6 +939,19 @@
             .offline-icon {
                 font-size: 90px;
             }
+            .access-denied-icon {
+                font-size: 80px;
+            }
+            .access-denied h2 {
+                font-size: 26px;
+            }
+            .access-denied p {
+                font-size: 18px;
+            }
+            .payment-btn {
+                padding: 14px 24px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -900,6 +965,16 @@
         </div>
         <div class="scrollable-content">
             <div class="content">
+                <div id="access-denied" class="access-denied" style="display: none;">
+                    <i class="fas fa-lock access-denied-icon"></i>
+                    <h2>प्रीमियम एक्सेस आवश्यक</h2>
+                    <p>इस क्विज़ तक पहुंचने के लिए आपको प्रीमियम सदस्यता खरीदनी होगी। कृपया भुगतान करें और अपना एक्सेस प्राप्त करें।</p>
+                    <button class="payment-btn" onclick="redirectToPayment()">
+                        <i class="fas fa-credit-card"></i>
+                        <span>भुगतान करें</span>
+                    </button>
+                </div>
+
                 <div id="offline-section" class="offline-section" style="display: none;">
                     <div class="offline-image-container">
                         <div class="offline-image">
@@ -916,12 +991,14 @@
                     <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
                     <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
                 </div>
+
                 <div id="error-section" class="error-section" style="display: none;">
                     <div class="custom-design">⚠️</div>
                     <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें</p>
                     <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
                 </div>
-                <div id="online-content">
+
+                <div id="online-content" style="display: none;">
                     <div class="welcome-section" id="welcome-section">
                         <div class="paid-badge">प्रीमियम संस्करण</div>
                         <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> धन्यवाद!</h2>
@@ -937,6 +1014,7 @@
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
+
                     <div id="quiz-section" class="quiz-section" style="display: none;">
                         <div class="question-container">
                             <div class="question" id="question-text">प्रश्न लोड हो रहा है...</div>
@@ -953,6 +1031,7 @@
                             <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
                         </div>
                     </div>
+
                     <div id="score-section" class="score-section" style="display: none;">
                         <div class="score-circle" id="final-score-circle">0/0</div>
                         <h2><i class="fas fa-trophy" style="color: #f59e0b;"></i> क्विज़ समाप्त!</h2>
@@ -966,6 +1045,7 @@
             </div>
         </div>
     </div>
+
     <div id="error-overlay" class="error-overlay">
         <div class="error-container">
             <div class="error-image">❌</div>
@@ -979,10 +1059,24 @@
         let currentQuestionIndex = 0;
         let score = 0;
         let quizStarted = false;
+        let userApproved = false;
+        let userId = '';
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
         const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
         const incorrectSound = new Audio('file:///android_asset/incorrect.mp3'); // गलत जवाब का sound (assets में upload करें)
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+            authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+            databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+            projectId: "rajasthan-gk-quiz-41cc5",
+            storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
+            messagingSenderId: "876482514501",
+            appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+            measurementId: "G-VB140B6NCW"
+        };
 
         // Ensure audio plays after user interaction
         function unlockAudio() {
@@ -996,10 +1090,125 @@
             initializeQuiz();
         });
 
-        function initializeQuiz() {
+        async function initializeQuiz() {
+            // First check if user is approved via local storage
+            const localStorageData = checkLocalStorageForPremiumAccess();
+            
+            if (localStorageData) {
+                userApproved = true;
+                userId = localStorageData.userId;
+                document.getElementById('online-content').style.display = 'block';
+                console.log('User approved via local storage');
+            } else {
+                // If not in local storage, check Firebase
+                const params = new URLSearchParams(window.location.search);
+                const userEmail = params.get('user_id');
+                
+                if (userEmail) {
+                    userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+                    await checkFirebaseForApproval(userId);
+                } else {
+                    // No user ID provided, show access denied
+                    showAccessDenied();
+                }
+            }
+            
             // Initial network check when page loads
             checkNetworkStatus();
-            console.log('DOM loaded, initializing paid quiz');
+        }
+
+        // Function to check if user data exists in local storage and is valid
+        function checkLocalStorageForPremiumAccess() {
+            const userData = localStorage.getItem('premiumUser');
+            if (!userData) return false;
+            
+            try {
+                const parsedData = JSON.parse(userData);
+                const expiryDate = new Date(parsedData.expiryDate);
+                const now = new Date();
+                
+                if (now < expiryDate) {
+                    return parsedData;
+                } else {
+                    // Remove expired data
+                    localStorage.removeItem('premiumUser');
+                    return false;
+                }
+            } catch (e) {
+                localStorage.removeItem('premiumUser');
+                return false;
+            }
+        }
+
+        // Function to check Firebase for user approval
+        async function checkFirebaseForApproval(userId) {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            
+            try {
+                const database = firebase.database();
+                const paymentsRef = database.ref('payments');
+                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
+                const payments = snapshot.val();
+                let foundApprovedPayment = null;
+
+                if (payments) {
+                    for (let key in payments) {
+                        if (payments[key].status === 'approved' && payments[key].approved_at) {
+                            foundApprovedPayment = payments[key];
+                            break;
+                        }
+                    }
+                }
+
+                if (foundApprovedPayment) {
+                    const approvalDate = new Date(foundApprovedPayment.approved_at);
+                    const expiryDate = new Date(approvalDate);
+                    expiryDate.setDate(approvalDate.getDate() + 30);
+                    const now = new Date();
+
+                    if (now < expiryDate) {
+                        // Save user data to local storage for 30 days
+                        saveUserDataToLocalStorage(userId, foundApprovedPayment.mobile_number, expiryDate);
+                        userApproved = true;
+                        document.getElementById('online-content').style.display = 'block';
+                        console.log('User approved via Firebase');
+                    } else {
+                        showAccessDenied();
+                    }
+                } else {
+                    showAccessDenied();
+                }
+            } catch (error) {
+                console.error("Firebase approval check error:", error);
+                showErrorOverlay();
+            }
+        }
+
+        // Function to save user data to local storage
+        function saveUserDataToLocalStorage(userId, mobileNumber, expiryDate) {
+            const userData = {
+                userId: userId,
+                mobileNumber: mobileNumber,
+                expiryDate: expiryDate.toISOString(),
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('premiumUser', JSON.stringify(userData));
+        }
+
+        // Function to show access denied message
+        function showAccessDenied() {
+            document.getElementById('access-denied').style.display = 'flex';
+            document.getElementById('online-content').style.display = 'none';
+            document.getElementById('offline-section').style.display = 'none';
+            document.getElementById('error-section').style.display = 'none';
+            userApproved = false;
+        }
+
+        // Function to redirect to payment page
+        function redirectToPayment() {
+            window.location.href = 'payment.html?user_id=' + userId;
         }
 
         function checkNetworkStatus() {
@@ -1017,13 +1226,21 @@
             if (!navigator.onLine) {
                 offlineSection.style.display = 'block';
                 errorSection.style.display = 'none';
-                onlineContent.style.display = 'none';
+                if (userApproved) {
+                    onlineContent.style.display = 'none';
+                } else {
+                    document.getElementById('access-denied').style.display = 'none';
+                }
                 console.log('User is offline, showing offline section');
             } else {
                 offlineSection.style.display = 'none';
                 errorSection.style.display = 'none';
-                onlineContent.style.display = 'block';
-                console.log('User is online, showing online content');
+                if (userApproved) {
+                    onlineContent.style.display = 'block';
+                } else {
+                    document.getElementById('access-denied').style.display = 'flex';
+                }
+                console.log('User is online, showing appropriate content');
             }
         }
 
@@ -1108,6 +1325,11 @@
         }
 
         function startQuiz() {
+            if (!userApproved) {
+                showAccessDenied();
+                return;
+            }
+            
             if (!navigator.onLine) {
                 document.getElementById('offline-section').style.display = 'block';
                 document.getElementById('online-content').style.display = 'none';
@@ -1339,7 +1561,7 @@
                 errorOverlay.style.display = 'none';
                 document.body.style.overflow = 'hidden';
                 checkNetworkStatus();
-                if (navigator.onLine) {
+                if (navigator.onLine && userApproved) {
                     loadQuestions().then(() => {
                         if (questions.length > 0) {
                             startQuiz();
@@ -1361,6 +1583,7 @@
             if (!navigator.onLine) {
                 document.getElementById('offline-section').style.display = 'block';
                 document.getElementById('online-content').style.display = 'none';
+                document.getElementById('access-denied').style.display = 'none';
             }
         });
 
