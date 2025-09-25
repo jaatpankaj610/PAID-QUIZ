@@ -2,1511 +2,660 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>राजस्थान GK पेड क्विज़</title>
+    <title>राजस्थान GK क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
     <style>
         :root {
-            --primary: #2563eb;
-            --secondary: #7c3aed;
-            --accent: #ec4899;
-            --success: #047857;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --light: #ffffff;
-            --dark: #000000;
-            --gray: #000000;
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+            --light: #f8f9fa;
+            --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --premium-gradient: linear-gradient(135deg, #f59e0b, #ef4444);
-            --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            --button-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --paid-color: #f59e0b;
-            --paid-gradient: linear-gradient(135deg, #f59e0b, #d97706);
         }
-        
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; 
-            font-weight: 600;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            transition: all 0.3s ease;
         }
-        
-        body { 
-            background: linear-gradient(135deg, #f0f9ff, #e9d5ff);
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 0; 
-            overflow: hidden; 
-            position: fixed; 
-            width: 100vw; 
-            height: 100vh; 
-            top: 0; 
-            left: 0; 
-            touch-action: none;
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            touch-action: pan-y;
+            -webkit-tap-highlight-color: transparent;
         }
-        
-        .container { 
-            width: 100vw; 
-            height: 100vh;
-            background: var(--light); 
-            border-radius: 0; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
+
+        body {
+            background: var(--gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-width: 100vw;
             position: fixed;
             top: 0;
             left: 0;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            overscroll-behavior: none;
         }
-        
-        .scrollable-content { 
-            flex: 1; 
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            background: var(--light);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
             overflow: hidden;
-            -webkit-overflow-scrolling: none;
-            scrollbar-width: none;
         }
-        
-        .scrollable-content::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .header { 
-            background: var(--paid-gradient); 
-            padding: 15px; 
-            text-align: center; 
-            color: var(--light); 
-            position: relative; 
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        
-        .header::before {
-            content: "";
-            position: absolute;
+
+        .header {
+            background: var(--gradient);
+            color: var(--light);
+            padding: 16px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-            z-index: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .header h1 { 
-            font-size: 24px; 
-            font-weight: 800; 
-            margin-bottom: 8px; 
-            color: var(--light);
-            letter-spacing: -0.5px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .header p { 
-            font-size: 14px; 
+
+        .header h1 {
+            font-size: 20px;
             font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 0.2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
-        
-        .content { 
-            padding: 10px; 
-            padding-bottom: 80px; 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            max-width: 100%;
-        }
-        
-        .welcome-section { 
-            background: var(--light); 
-            border-radius: 16px; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            box-shadow: var(--card-shadow); 
-            text-align: center; 
-            border: 1px solid rgba(0,0,0,0.05);
-            animation: fadeInUp 0.6s ease-out;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: 100%;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .welcome-section h2 { 
-            font-size: 20px; 
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .welcome-section p { 
-            font-size: 14px; 
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .paid-badge {
-            display: inline-block;
-            background: var(--paid-gradient);
-            color: white;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 20px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(245, 158, 11, 0.3);
-        }
-        
-        .features { 
-            list-style: none; 
-            margin-bottom: 15px;
-        }
-        
-        .features li { 
-            margin-bottom: 8px; 
-            display: flex; 
-            align-items: center; 
-            font-size: 14px; 
-            font-weight: 700;
-            color: var(--dark);
-            background: rgba(241, 245, 249, 0.7);
-            padding: 10px 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            animation: fadeIn 0.5s ease-out;
-            animation-fill-mode: both;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .features li:nth-child(1) { animation-delay: 0.1s; }
-        .features li:nth-child(2) { animation-delay: 0.2s; }
-        .features li:nth-child(3) { animation-delay: 0.3s; }
-        .features li:nth-child(4) { animation-delay: 0.4s; }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .features li i { 
-            margin-right: 10px; 
-            color: var(--paid-color); 
-            font-size: 16px;
-            background: rgba(245, 158, 11, 0.1);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        
-        .start-btn { 
-            background: var(--paid-gradient); 
-            color: var(--light); 
-            border: none; 
-            border-radius: 12px; 
-            padding: 12px 18px; 
-            font-size: 15px; 
-            font-weight: 700;
-            cursor: pointer; 
-            width: 100%; 
-            transition: all 0.3s ease; 
-            box-shadow: var(--button-shadow);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .start-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-        
-        .quiz-section { 
-            display: none; 
-            background: var(--light); 
-            border-radius: 16px; 
-            padding: 10px; 
-            margin-bottom: 15px; 
-            box-shadow: var(--card-shadow); 
-            border: 1px solid rgba(0,0,0,0.05);
-            position: relative;
-            animation: fadeInUp 0.5s ease-out;
+
+        .quiz-container {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 100%;
-        }
-        
-        .question-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-        
-        .question { 
-            font-size: 16px; 
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 10px;
-            background: rgba(241, 245, 249, 0.7);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            line-height: 1.5;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            border-left: 4px solid var(--paid-color);
-            width: 100%;
-        }
-        
-        .options { 
-            list-style: none;
-            flex: 1;
+            padding: 72px 16px 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        
-        .options li { 
-            background: linear-gradient(135deg, #0d9488, #4b5563); 
-            padding: 14px 18px; 
-            margin-bottom: 10px; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            font-size: 16px; 
-            font-weight: 700;
-            color: #ffffff;
-            border: 2px solid #0d9488;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            line-height: 1.4;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+
+        .quiz-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .question-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question-card h2 {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #f1f5f9;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .option.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+            box-shadow: 0 4px 8px rgba(0, 184, 148, 0.2);
+            font-weight: 600;
+        }
+
+        .option.incorrect {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            box-shadow: 0 4px 8px rgba(214, 48, 49, 0.2);
+            font-weight: 600;
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: #e0c3fc;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            gap: 10px;
+        }
+
+        .controls button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            position: relative;
-            width: 100%;
-            animation: popIn 0.5s ease-out forwards;
+            justify-content: center;
+            gap: 8px;
         }
-        
-        @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.9) translateY(15px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+
+        .next-btn {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 0, 224, 0.2);
         }
-        
-        .options li:hover { 
-            background: linear-gradient(135deg, #14b8a6, #6b7280);
-            border: 2px solid #14b8a6;
-            transform: scale(1.03);
-            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
+
+        .next-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
         }
-        
-        .options li.correct { 
-            background: linear-gradient(135deg, #10b981, #047857);
-            border: 2px solid #10b981;
-            color: #ffffff;
-            font-weight: 800;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
-            animation: pop3D 0.4s ease-out forwards;
+
+        .next-btn:disabled {
+            background: #ddd;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
-        
-        .options li.correct::after {
-            content: "\f00c";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            margin-left: auto;
-            font-size: 18px;
-            color: #ffffff;
-        }
-        
-        .options li.incorrect { 
-            background: linear-gradient(135deg, #f87171, #ef4444); 
-            border: 2px solid #f87171;
-            color: #ffffff;
-            font-weight: 800;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-            animation: pop3D 0.4s ease-out forwards;
-        }
-        
-        .options li.incorrect::after {
-            content: "\f00d";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            margin-left: auto;
-            font-size: 18px;
-        }
-        
-        @keyframes pop3D {
-            0% {
-                transform: perspective(600px) rotateX(0deg) scale(1);
-                box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            }
-            50% {
-                transform: perspective(600px) rotateX(10deg) scale(1.05);
-                box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-            }
-            100% {
-                transform: perspective(600px) rotateX(0deg) scale(1);
-                box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            }
-        }
-        
-        .result { 
-            margin-top: 10px; 
-            font-size: 14px; 
-            font-weight: 700;
-            text-align: center; 
-            display: none;
-            padding: 12px;
-            border-radius: 10px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
-        }
-        
-        .result.success { 
-            color: var(--success);
-            background: rgba(4, 120, 87, 0.1);
-            border: 1px solid rgba(4, 120, 87, 0.2);
-        }
-        
-        .result.error { 
-            color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-        
-        .next-btn { 
-            background: var(--paid-gradient); 
-            color: var(--light); 
-            border: none; 
-            border-radius: 12px; 
-            padding: 12px; 
-            font-size: 15px; 
-            font-weight: 700;
-            cursor: pointer; 
-            width: 100%; 
-            margin-top: 10px; 
-            display: none; 
-            box-shadow: var(--button-shadow);
-        }
-        
-        .next-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-        
-        .offline-section, .error-section { 
-            text-align: center; 
-            padding: 15px; 
-            background: var(--light); 
-            border-radius: 16px; 
-            box-shadow: var(--card-shadow); 
-            margin: 15px 0; 
-            border: 1px solid rgba(0,0,0,0.05);
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
-        }
-        
-        .custom-design { 
-            width: 120px; 
-            height: 120px; 
-            margin: 0 auto 10px; 
-            border-radius: 16px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            color: var(--light); 
-            font-size: 18px; 
-            font-weight: 700; 
-            text-align: center; 
-            line-height: 1.3;
-        }
-        
-        .offline-section .custom-design { 
-            background: var(--gray); 
-        }
-        
-        .error-section .custom-design { 
-            background: var(--danger); 
-        }
-        
-        .offline-message, .error-message { 
-            font-size: 14px; 
-            font-weight: 700;
-            color: var(--dark);
-            background: rgba(241, 245, 249, 0.7);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
-        }
-        
-        .progress-bar {
-            height: 5px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 3px;
-            margin: 10px 0;
-            overflow: hidden;
-            width: 100%;
-        }
-        
-        .progress {
-            height: 100%;
-            background: var(--paid-gradient);
-            border-radius: 3px;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .score-display {
-            margin: 10px 0;
-            background: var(--light);
-            color: var(--dark);
-            font-size: 13px;
-            font-weight: 700;
-            padding: 8px 10px;
-            border-radius: 25px;
-            box-shadow: var(--button-shadow);
-            display: none;
-            border: 1px solid rgba(0,0,0,0.08);
+
+        .feedback-message {
             text-align: center;
-            width: 100%;
-        }
-        
-        .error-overlay {
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 16px;
             display: none;
+        }
+
+        .feedback-message.correct {
+            color: var(--success);
+        }
+
+        .feedback-message.incorrect {
+            color: var(--danger);
+        }
+
+        .score-card {
+            display: none;
+            text-align: center;
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .score-card p {
+            font-size: 18px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .score-card .final-score {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--success);
+            margin: 16px 0;
+        }
+
+        .score-card .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .score-card .buttons button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .score-card .buttons .restart-btn {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 0, 224, 0.2);
+        }
+
+        .score-card .buttons .home-btn {
+            background: #e0e0e0;
+            color: var(--dark);
+        }
+
+        .offline-section, .access-denied-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 3000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
+            background: linear-gradient(135deg, #636e72, #b2bec3);
+            color: white;
+            z-index: 1000;
+            gap: 20px;
         }
 
-        .error-container {
-            background: var(--light);
-            padding: 15px;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            text-align: center;
-            max-width: 90%;
-            width: 100%;
-            max-width: 280px;
+        .access-denied-section {
+            background: linear-gradient(135deg, #ff7675, #d63031);
         }
-
-        .error-image {
-            width: 100px;
-            height: 100px;
-            background: var(--danger);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: var(--light);
-            font-size: 36px;
-        }
-
-        .error-message {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 10px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .retry-btn {
-            background: var(--paid-gradient);
-            color: var(--light);
-            border: none;
-            border-radius: 12px;
-            padding: 10px 18px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: var(--button-shadow);
-        }
-
-        .retry-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-
-        .score-section {
-            display: none;
-            background: var(--light);
-            border-radius: 16px;
-            padding: 15px;
-            margin: 15px 0;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-            text-align: center;
-            animation: fadeInUp 0.6s ease-out;
-            flex: 1;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .score-section h2 {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .score-details {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 15px;
-            background: rgba(241, 245, 249, 0.7);
-            padding: 12px;
-            border-radius: 10px;
-            line-height: 1.5;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
-        }
-
-        .score-circle {
-            width: 100px;
-            height: 100px;
-            background: var(--paid-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: var(--light);
-            font-size: 24px;
-            font-weight: 800;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .restart-btn {
-            background: var(--paid-gradient);
-            color: var(--light);
-            border: none;
-            border-radius: 12px;
-            padding: 12px 18px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: var(--button-shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        
+        .custom-design {
+            width: 200px;
             height: 200px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .access-message {
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .access-denied-section button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-top: 10px;
+        }
+
+        .processing-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #fff;
+            color: var(--dark);
+            z-index: 1000;
+            gap: 20px;
         }
 
         .spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid rgba(245, 158, 11, 0.2);
-            border-top: 5px solid var(--paid-color);
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1.5s linear infinite;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .offline-image-container {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 20px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .processing-message {
+            font-size: 18px;
+            color: #555;
+            font-weight: 500;
         }
 
-        .offline-image {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4b5563, #1f2937);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s infinite ease-in-out;
+        @media (max-width: 480px) {
+            .header { padding: 12px 8px; }
+            .header h1 { font-size: 18px; }
+            .quiz-container { padding: 64px 12px 12px; }
+            .question-card { padding: 16px; gap: 16px; }
+            .question-card h2 { font-size: 16px; }
+            .option { padding: 10px; font-size: 14px; }
+            .controls button { font-size: 13px; }
+            .score-card h2 { font-size: 20px; }
+            .score-card p { font-size: 16px; }
+            .score-card .final-score { font-size: 40px; }
+            .score-card .buttons button { font-size: 14px; }
+            .access-message { font-size: 16px; }
+            .custom-design { width: 180px; height: 180px; }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
-            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
-        }
-
-        .offline-image::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 70%
-            );
-            animation: shine 3s infinite linear;
-        }
-
-        @keyframes shine {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .offline-icon {
-            font-size: 70px;
-            color: #ffffff;
-            position: relative;
-            z-index: 2;
-            animation: float 3s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .offline-waves {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 10px;
-        }
-
-        .wave {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7);
-            animation: wave 1.5s infinite ease-in-out;
-        }
-
-        .wave:nth-child(2) { animation-delay: 0.2s; }
-        .wave:nth-child(3) { animation-delay: 0.4s; }
-        .wave:nth-child(4) { animation-delay: 0.6s; }
-        .wave:nth-child(5) { animation-delay: 0.8s; }
-
-        @keyframes wave {
-            0%, 100% { transform: translateY(0); opacity: 0.7; }
-            50% { transform: translateY(-15px); opacity: 1; }
-        }
-
-        .access-info {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 15px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .access-days {
-            background: var(--paid-gradient);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-        
-        @media (min-width: 601px) {
-            .header { 
-                padding: 20px; 
-            }
-            .header h1 { 
-                font-size: 28px; 
-                margin-bottom: 10px; 
-            }
-            .header p { 
-                font-size: 16px; 
-            }
-            .content { 
-                padding: 15px; 
-                padding-bottom: 90px; 
-            }
-            .welcome-section { 
-                padding: 20px; 
-                margin-bottom: 20px; 
-            }
-            .welcome-section h2 { 
-                font-size: 24px; 
-                margin-bottom: 12px;
-            }
-            .welcome-section p { 
-                font-size: 16px; 
-            }
-            .features li { 
-                font-size: 15px; 
-                margin-bottom: 10px;
-                padding: 12px 14px;
-            }
-            .features li i { 
-                font-size: 18px; 
-                width: 32px;
-                height: 32px;
-            }
-            .start-btn, .restart-btn { 
-                padding: 14px 20px; 
-                font-size: 16px; 
-            }
-            .quiz-section { 
-                padding: 15px; 
-                margin-bottom: 20px; 
-            }
-            .question { 
-                font-size: 18px; 
-                margin-bottom: 12px;
-                padding: 14px;
-            }
-            .options li { 
-                padding: 16px 20px; 
-                margin-bottom: 12px;
-                font-size: 17px;
-            }
-            .result { 
-                margin-top: 12px; 
-                font-size: 16px; 
-                padding: 14px;
-            }
-            .next-btn { 
-                padding: 14px; 
-                font-size: 16px; 
-                margin-top: 12px;
-            }
-            .offline-section, .error-section, .score-section { 
-                padding: 20px; 
-                margin: 20px 0; 
-            }
-            .custom-design { 
-                width: 140px; 
-                height: 140px; 
-                font-size: 20px;
-            }
-            .offline-message, .error-message, .score-details { 
-                font-size: 16px; 
-                padding: 14px;
-            }
-            .progress-bar {
-                height: 6px;
-                margin: 12px 0;
-            }
-            .score-display {
-                font-size: 14px;
-                padding: 8px 12px;
-            }
-            .score-circle {
-                width: 120px;
-                height: 120px;
-                font-size: 28px;
-            }
-            .offline-image-container {
-                width: 220px;
-                height: 220px;
-            }
-            .offline-icon {
-                font-size: 90px;
-            }
+        @media (min-width: 768px) {
+            .header { padding: 20px 16px; }
+            .header h1 { font-size: 22px; }
+            .quiz-container { padding: 80px 20px 20px; }
+            .question-card { padding: 32px; gap: 24px; }
+            .question-card h2 { font-size: 20px; }
+            .option { padding: 16px; font-size: 18px; }
+            .controls button { font-size: 16px; }
+            .score-card h2 { font-size: 28px; }
+            .score-card p { font-size: 20px; }
+            .score-card .final-score { font-size: 56px; }
+            .score-card .buttons button { font-size: 16px; }
+            .access-message { font-size: 20px; }
+            .custom-design { width: 220px; height: 220px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="processing-screen" class="processing-screen">
+        <div class="spinner"></div>
+        <p class="processing-message">एक्सेस की जाँच की जा रही है...</p>
+    </div>
+    <div id="offline-section" class="offline-section" style="display: none;">
+        <div class="custom-design">
+            <img src="offline-professional.png" alt="ऑफलाइन एरर" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+        </div>
+        <p class="access-message">कृपया इंटरनेट कनेक्शन चेक करें।</p>
+    </div>
+    <div id="access-denied-section" class="access-denied-section" style="display: none;">
+        <div class="custom-design">
+            <img src="error-professional.png" alt="एक्सेस डिनाइड" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+        </div>
+        <p class="access-message" id="access-denied-message">आपकी प्रीमियम सदस्यता समाप्त हो गई है या अप्रूव नहीं हुई है।</p>
+        <button onclick="goToPayment()">प्रीमियम खरीदें</button>
+    </div>
+    <div class="container" id="quiz-page" style="display: none;">
         <div class="header">
-            <div class="header-content">
-                <h1>राजस्थान GK पेड क्विज़</h1>
-                <p>प्रीमियम क्विज़ अनुभव का आनंद लें</p>
-            </div>
+            <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
         </div>
-        <div class="scrollable-content">
-            <div class="content">
-                <div id="offline-section" class="offline-section" style="display: none;">
-                    <div class="offline-image-container">
-                        <div class="offline-image">
-                            <i class="fas fa-wifi-slash offline-icon"></i>
-                            <div class="offline-waves">
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
-                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
+        <div class="quiz-container">
+            <div id="quiz-section">
                 </div>
-                <div id="error-section" class="error-section" style="display: none;">
-                    <div class="custom-design">⚠️</div>
-                    <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें</p>
-                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
-                </div>
-                <div id="online-content">
-                    <div class="welcome-section" id="welcome-section">
-                        <div class="paid-badge">प्रीमियम संस्करण</div>
-                        <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> धन्यवाद!</h2>
-                        <p>आपका भुगतान सफलतापूर्वक प्राप्त हो गया है। अब आप हमारे प्रीमियम राजस्थान सामान्य ज्ञान क्विज़ का आनंद ले सकते हैं।</p>
-                        <div class="access-info">
-                            <span>आपकी एक्सेस:</span>
-                            <span class="access-days" id="access-days">लोड हो रहा है...</span>
-                        </div>
-                        <ul class="features">
-                            <li><i class="fas fa-check-circle"></i> 100+ एक्सक्लूसिव सवाल</li>
-                            <li><i class="fas fa-check-circle"></i> तुरंत परिणाम</li>
-                            <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
-                            <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
-                        </ul>
-                        <button class="start-btn" onclick="startQuiz()">
-                            <span>क्विज़ शुरू करें</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                    <div id="quiz-section" class="quiz-section" style="display: none;">
-                        <div class="question-container">
-                            <div class="question" id="question-text">प्रश्न लोड हो रहा है...</div>
-                            <div class="progress-bar">
-                                <div class="progress" id="progress-bar"></div>
-                            </div>
-                            <ul class="options" id="options-list">
-                                <div class="loading-container">
-                                    <div class="spinner"></div>
-                                </div>
-                            </ul>
-                            <div id="result" class="result"></div>
-                            <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
-                            <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
-                        </div>
-                    </div>
-                    <div id="score-section" class="score-section" style="display: none;">
-                        <div class="score-circle" id="final-score-circle">0/0</div>
-                        <h2><i class="fas fa-trophy" style="color: #f59e0b;"></i> क्विज़ समाप्त!</h2>
-                        <div class="score-details" id="score-details"></div>
-                        <button class="restart-btn" onclick="restartQuiz()">
-                            <span>क्विज़ पुनः शुरू करें</span>
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
+            <div class="score-card" id="score-card" style="display: none;">
+                <h2>क्विज़ समाप्त!</h2>
+                <p>आपका स्कोर है:</p>
+                <div class="final-score" id="final-score">0/0</div>
+                <div class="buttons">
+                    <button class="restart-btn" onclick="restartQuiz()"><i class="fas fa-redo"></i> पुनः प्रयास करें</button>
+                    <button class="home-btn" onclick="goToHome()"><i class="fas fa-home"></i> होम पेज</button>
                 </div>
             </div>
         </div>
     </div>
-    <div id="error-overlay" class="error-overlay">
-        <div class="error-container">
-            <div class="error-image">❌</div>
-            <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें!</p>
-            <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
-        </div>
-    </div>
-
     <script>
-        // GitHub रेपो URL
-        const GITHUB_REPO_URL = 'https://jaatpankaj610.github.io/PAID-QUIZ/';
-        
-        let questions = [];
+        // अपना Google Apps Script URL यहाँ पेस्ट करें
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyG_xPgoVpvJ8WucAStOD1ZiIKVUAnUeqJlRWr2GXslxIxrYBMQlTKQUtcSnA4AwRTUTw/exec';
+        const questions = [
+            {
+                question: "राजस्थान का राज्य पक्षी कौन है?",
+                options: ["मोर", "गोडावण", "कबूतर", "चिड़िया"],
+                answer: "गोडावण"
+            },
+            {
+                question: "राजस्थान की राजधानी क्या है?",
+                options: ["जोधपुर", "उदयपुर", "जयपुर", "कोटा"],
+                answer: "जयपुर"
+            },
+            {
+                question: "राजस्थान का 'राज्य वृक्ष' कौन सा है?",
+                options: ["खेजड़ी", "आम", "पीपल", "बरगद"],
+                answer: "खेजड़ी"
+            },
+            {
+                question: "राजस्थान का 'राज्य पशु' कौन सा है?",
+                options: ["शेर", "ऊंट", "बाघ", "चिंकारा"],
+                answer: "चिंकारा"
+            },
+            {
+                question: "राजस्थान में कुल कितने जिले हैं?",
+                options: ["33", "35", "50", "45"],
+                answer: "50"
+            },
+            {
+                question: "राजस्थान का 'सिंह द्वार' किसे कहा जाता है?",
+                options: ["जयपुर", "अलवर", "भरतपुर", "जोधपुर"],
+                answer: "अलवर"
+            },
+            {
+                question: "राजस्थान में 'हवा महल' कहाँ स्थित है?",
+                options: ["उदयपुर", "जयपुर", "जोधपुर", "बीकानेर"],
+                answer: "जयपुर"
+            },
+            {
+                question: "राजस्थान का 'राज्य पुष्प' कौन सा है?",
+                options: ["गुलाब", "कमल", "रोहिड़ा", "सूर्यमुखी"],
+                answer: "रोहिड़ा"
+            },
+            {
+                question: "राजस्थान में 'जयगढ़ किला' कहाँ स्थित है?",
+                options: ["जयपुर", "अजमेर", "कोटा", "चित्तौड़गढ़"],
+                answer: "जयपुर"
+            },
+            {
+                question: "राजस्थान में 'रणथंभौर राष्ट्रीय उद्यान' कहाँ स्थित है?",
+                options: ["सवाई माधोपुर", "जयपुर", "कोटा", "जोधपुर"],
+                answer: "सवाई माधोपुर"
+            }
+        ];
+
         let currentQuestionIndex = 0;
         let score = 0;
-        let quizStarted = false;
-        let userId = null;
-        let userData = null;
 
-        // Initialize sound effects - MIT App Inventor Assets के लिए paths
-        const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
-        const incorrectSound = new Audio('file:///android_asset/incorrect.mp3'); // गलत जवाब का sound (assets में upload करें)
-
-        // Ensure audio plays after user interaction
-        function unlockAudio() {
-            correctSound.load();
-            incorrectSound.load();
-            document.removeEventListener('click', unlockAudio);
-        }
-        document.addEventListener('click', unlockAudio);
-
-        // यूजर की स्थिति की जांच करने के लिए फ़ंक्शन
-        async function checkUserAccess() {
-            // URL से यूजर ID प्राप्त करें
-            const urlParams = new URLSearchParams(window.location.search);
-            const userId = urlParams.get('user_id');
-            
-            if (!userId) {
-                return false;
-            }
-            
-            try {
-                // GitHub से अप्रूव्ड यूजर्स की सूची प्राप्त करें
-                const response = await fetch(GITHUB_REPO_URL + 'approved-users.json');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch approved users');
-                }
-                
-                const approvedUsers = await response.json();
-                
-                // जांचें कि क्या यूजर अप्रूव्ड है
-                const isApproved = approvedUsers.some(user => 
-                    user.email.toLowerCase() === userId.toLowerCase()
-                );
-                
-                if (isApproved) {
-                    // एक्सपायरी तिथि की जांच करें
-                    const approvedUser = approvedUsers.find(user => 
-                        user.email.toLowerCase() === userId.toLowerCase()
-                    );
-                    
-                    if (approvedUser && approvedUser.expiry_date) {
-                        const expiryDate = new Date(approvedUser.expiry_date);
-                        const now = new Date();
-                        
-                        return now < expiryDate;
-                    }
-                    
-                    return true; // अगर एक्सपायरी तिथि नहीं है, तो सिर्फ अप्रूवल चेक करें
-                }
-                
-                return false;
-            } catch (error) {
-                console.error('Error checking user access:', error);
-                return false;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            // यूजर की एक्सेस की जांच करें
-            const hasAccess = await checkUserAccess();
-            
-            if (!hasAccess) {
-                // यूजर की एक्सेस नहीं है, इंडेक्स पेज पर रीडायरेक्ट करें
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            // URL से यूजर ID प्राप्त करें
-            const urlParams = new URLSearchParams(window.location.search);
-            userId = urlParams.get('user_id');
-            
-            // एक्सेस जानकारी अपडेट करें
-            updateAccessInfo();
-            
-            // क्विज़ प्रश्न लोड करें
-            loadQuestions();
+        document.addEventListener('DOMContentLoaded', () => {
+            checkPremiumAccess();
         });
 
-        // एक्सेस जानकारी अपडेट करें
-        async function updateAccessInfo() {
-            const accessDaysElement = document.getElementById('access-days');
-            if (accessDaysElement && userId) {
-                try {
-                    // GitHub से अप्रूव्ड यूजर्स की सूची प्राप्त करें
-                    const response = await fetch(GITHUB_REPO_URL + 'approved-users.json');
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch approved users');
-                    }
-                    
-                    const approvedUsers = await response.json();
-                    
-                    // यूजर खोजें
-                    const approvedUser = approvedUsers.find(user => 
-                        user.email.toLowerCase() === userId.toLowerCase()
-                    );
-                    
-                    if (approvedUser && approvedUser.expiry_date) {
-                        const expiryDate = new Date(approvedUser.expiry_date);
-                        const now = new Date();
-                        
-                        const diffTime = expiryDate - now;
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        
-                        if (diffDays > 0) {
-                            accessDaysElement.textContent = `${diffDays} दिन शेष`;
-                        } else {
-                            accessDaysElement.textContent = 'आज समाप्त';
-                            accessDaysElement.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
-                        }
-                    } else {
-                        accessDaysElement.textContent = 'असीमित एक्सेस';
-                    }
-                } catch (error) {
-                    console.error('Error updating access info:', error);
-                    accessDaysElement.textContent = 'एक्सेस जानकारी अनुपलब्ध';
-                }
-            }
-        }
+        async function checkPremiumAccess() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user_id');
 
-        function checkNetworkStatus() {
-            const offlineSection = document.getElementById('offline-section');
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
-            const errorOverlay = document.getElementById('error-overlay');
-            
-            if (!offlineSection || !errorSection || !onlineContent || !errorOverlay) {
-                console.error('Network status elements not found for paid quiz');
-                showErrorOverlay();
+            if (!userId) {
+                document.getElementById('processing-screen').style.display = 'none';
+                document.getElementById('access-denied-section').style.display = 'flex';
+                document.getElementById('access-denied-message').textContent = 'प्रीमियम क्विज़ तक पहुँचने के लिए एक मान्य ईमेल ID आवश्यक है।';
                 return;
             }
-            
+
             if (!navigator.onLine) {
-                offlineSection.style.display = 'block';
-                errorSection.style.display = 'none';
-                onlineContent.style.display = 'none';
-                console.log('User is offline, showing offline section');
-            } else {
-                offlineSection.style.display = 'none';
-                errorSection.style.display = 'none';
-                onlineContent.style.display = 'block';
-                console.log('User is online, showing online content');
-            }
-        }
-
-        async function loadQuestions() {
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
-            const errorOverlay = document.getElementById('error-overlay');
-            
-            if (!errorSection || !onlineContent || !errorOverlay) {
-                console.error('Error/Online sections not found for paid quiz');
-                showErrorOverlay();
+                document.getElementById('processing-screen').style.display = 'none';
+                document.getElementById('offline-section').style.display = 'flex';
                 return;
             }
-            
+
+            document.getElementById('processing-screen').style.display = 'flex';
+
+            const formData = new FormData();
+            formData.append('action', 'checkStatus');
+            formData.append('user_id', userId);
+
             try {
-                const repoUrl = GITHUB_REPO_URL + 'questions.json';
-                console.log('Attempting to load questions from:', repoUrl);
-                
-                const response = await fetch(repoUrl, {
-                    method: 'GET',
-                    mode: 'cors',
-                    cache: 'no-store',
-                    credentials: 'omit'
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData,
                 });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
-                }
-                
                 const data = await response.json();
+
+                document.getElementById('processing-screen').style.display = 'none';
                 
-                if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
-                    throw new Error('No questions found or invalid data format');
-                }
-                
-                questions = [];
-                for (let i = 0; i < data.questions.length; i++) {
-                    const q = data.questions[i];
-                    if (!q.question || !q.options || !Array.isArray(q.options) || q.options.length < 4 || !q.correctAnswer) {
-                        throw new Error(`Invalid question at index ${i}: ${JSON.stringify(q)}`);
+                if (data.status === 'approved') {
+                    document.getElementById('quiz-page').style.display = 'flex';
+                    loadQuestion();
+                } else {
+                    document.getElementById('access-denied-section').style.display = 'flex';
+                    if (data.status === 'pending') {
+                        document.getElementById('access-denied-message').textContent = 'आपकी प्रीमियम सदस्यता अभी भी पेंडिंग है। कृपया कुछ देर बाद पुनः प्रयास करें।';
+                    } else if (data.status === 'rejected') {
+                        document.getElementById('access-denied-message').textContent = 'आपकी प्रीमियम सदस्यता को अस्वीकार कर दिया गया है।';
+                    } else {
+                        document.getElementById('access-denied-message').textContent = 'आपकी प्रीमियम सदस्यता समाप्त हो गई है या अप्रूव नहीं हुई है।';
                     }
-                    
-                    const correctIndex = q.options.findIndex(option => option === q.correctAnswer);
-                    if (correctIndex === -1) {
-                        throw new Error(`Correct answer "${q.correctAnswer}" not found in options for question at index ${i}`);
-                    }
-                    
-                    questions.push({
-                        question: q.question,
-                        options: q.options,
-                        correct: correctIndex
-                    });
                 }
-                
-                console.log('Successfully loaded and converted', questions.length, 'questions');
-                
             } catch (error) {
-                console.error('Failed to load questions:', error);
-                
-                const errorMessage = document.createElement('div');
-                errorMessage.className = 'error-message';
-                errorMessage.innerHTML = `
-                    <strong>त्रुटि:</strong> ${error.message}<br><br>
-                    <strong>समाधान:</strong><br>
-                    1. अपने GitHub रिपॉजिटरी URL की जांच करें<br>
-                    2. questions.json फ़ाइल की संरचना की जांच करें<br>
-                    3. इंटरनेट कनेक्शन की जांच करें
-                `;
-                
-                const errorContainer = document.querySelector('.error-container');
-                if (errorContainer) {
-                    const oldMessage = errorContainer.querySelector('.error-message');
-                    if (oldMessage) {
-                        oldMessage.parentNode.removeChild(oldMessage);
-                    }
-                    errorContainer.insertBefore(errorMessage, errorContainer.firstChild);
-                }
-                
-                showErrorOverlay();
-                if ('vibrate' in navigator) navigator.vibrate(200);
+                document.getElementById('processing-screen').style.display = 'none';
+                document.getElementById('access-denied-section').style.display = 'flex';
+                document.getElementById('access-denied-message').textContent = 'एक्सेस चेक करने में त्रुटि। कृपया इंटरनेट कनेक्शन की जाँच करें।';
             }
         }
 
-        function startQuiz() {
-            if (!navigator.onLine) {
-                document.getElementById('offline-section').style.display = 'block';
-                document.getElementById('online-content').style.display = 'none';
+        function loadQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const quizSection = document.getElementById('quiz-section');
+                quizSection.innerHTML = '';
+                const q = questions[currentQuestionIndex];
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.innerHTML = `
+                    <h2>${currentQuestionIndex + 1}. ${q.question}</h2>
+                    <ul class="options-list" id="options-list">
+                        ${q.options.map((option, index) => `
+                            <li class="option" data-option="${option}">${option}</li>
+                        `).join('')}
+                    </ul>
+                    <p class="feedback-message" style="display: none;"></p>
+                    <div class="controls">
+                        <button class="next-btn" id="next-btn" disabled><i class="fas fa-arrow-right"></i> अगला सवाल</button>
+                    </div>
+                `;
+                quizSection.appendChild(questionCard);
+                questionCard.style.display = 'flex';
+                const optionsList = document.getElementById('options-list');
+                optionsList.addEventListener('click', handleOptionClick);
+                document.getElementById('next-btn').addEventListener('click', nextQuestion);
+            } else {
+                showScore();
+            }
+        }
+
+        function handleOptionClick(event) {
+            const selectedOption = event.target.closest('.option');
+            if (!selectedOption || document.querySelector('.option.correct, .option.incorrect')) {
                 return;
             }
-            
-            if (quizStarted) return;
-            quizStarted = true;
-            
-            const welcomeSection = document.getElementById('welcome-section');
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            
-            if (welcomeSection && quizSection && scoreSection) {
-                welcomeSection.style.display = 'none';
-                quizSection.style.display = 'block';
-                scoreSection.style.display = 'none';
-                
-                currentQuestionIndex = 0;
-                score = 0;
-                updateScore();
-                
-                if (questions.length === 0) {
-                    loadQuestions().then(() => {
-                        if (questions.length > 0) {
-                            showQuestion();
-                        } else {
-                            showErrorOverlay();
-                        }
-                    }).catch(() => {
-                        showErrorOverlay();
-                    });
-                } else {
-                    showQuestion();
-                }
-            } else {
-                console.error('Quiz sections not found for paid quiz');
-                showErrorOverlay();
-            }
-        }
-
-        function updateScore() {
-            const scoreDisplay = document.getElementById('score-display');
-            const scoreValue = document.getElementById('score-value');
-            if (scoreDisplay && scoreValue) {
-                scoreValue.textContent = score;
-                scoreDisplay.style.display = 'block';
-            }
-        }
-
-        function updateProgressBar() {
-            const progressBar = document.getElementById('progress-bar');
-            if (progressBar) {
-                const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-                progressBar.style.width = `${progress}%`;
-            }
-        }
-
-        function showQuestion() {
-            const questionText = document.getElementById('question-text');
-            const optionsList = document.getElementById('options-list');
-            const result = document.getElementById('result');
+            const q = questions[currentQuestionIndex];
+            const feedbackMessage = document.querySelector('.feedback-message');
+            const options = document.querySelectorAll('.option');
             const nextBtn = document.getElementById('next-btn');
             
-            if (!questionText || !optionsList || !result || !nextBtn) {
-                console.error('Paid quiz elements not found');
-                showErrorOverlay();
-                return;
-            }
+            options.forEach(option => option.classList.add('selected'));
             
-            if (currentQuestionIndex >= questions.length) {
-                showFinalScore();
-                return;
-            }
-            
-            const question = questions[currentQuestionIndex];
-            if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 4) {
-                console.error('Invalid question data for paid quiz:', question);
-                showErrorOverlay();
-                return;
-            }
-            
-            questionText.textContent = question.question;
-            optionsList.innerHTML = '';
-            result.style.display = 'none';
-            nextBtn.style.display = 'none';
-            updateProgressBar();
-            
-            question.options.forEach((option, index) => {
-                const li = document.createElement('li');
-                li.textContent = option || 'विकल्प गायब';
-                li.style.opacity = '0';
-                li.style.transform = 'scale(0.9) translateY(15px)';
-                li.onclick = () => checkAnswer(index);
-                optionsList.appendChild(li);
-                
-                setTimeout(() => {
-                    li.style.transition = 'all 0.5s ease';
-                    li.style.opacity = '1';
-                    li.style.transform = 'scale(1) translateY(0)';
-                }, index * 100);
-            });
-        }
-
-        function triggerConfetti() {
-            confetti({
-                particleCount: 200,
-                spread: 90,
-                origin: { y: 0.4 },
-                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'],
-                shapes: ['square', 'circle', 'star'],
-                ticks: 300,
-                gravity: 0.8,
-                scalar: 1.2
-            });
-            setTimeout(() => {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00'],
-                    shapes: ['square', 'circle'],
-                    ticks: 200
-                });
-            }, 200);
-        }
-
-        function checkAnswer(selectedIndex) {
-            const question = questions[currentQuestionIndex];
-            const options = document.querySelectorAll('#options-list li');
-            const result = document.getElementById('result');
-            
-            if (!result || !options.length) {
-                console.error('Result or options not found for paid quiz');
-                showErrorOverlay();
-                return;
-            }
-            
-            options.forEach((option, index) => {
-                option.onclick = null;
-                if (index === question.correct) option.classList.add('correct');
-                if (index === selectedIndex && selectedIndex !== question.correct) option.classList.add('incorrect');
-            });
-            
-            if (selectedIndex === question.correct) {
+            if (selectedOption.dataset.option === q.answer) {
+                selectedOption.classList.add('correct');
+                feedbackMessage.textContent = 'सही जवाब!';
+                feedbackMessage.className = 'feedback-message correct';
                 score++;
-                updateScore();
-                result.textContent = 'सही जवाब!';
-                result.className = 'result success';
-                triggerConfetti();
-                try {
-                    correctSound.play().catch(e => console.error('Correct sound failed:', e));
-                } catch (e) {
-                    console.error('Correct sound error:', e);
-                }
             } else {
-                result.textContent = `गलत जवाब! सही: ${question.options[question.correct]}`;
-                result.className = 'result error';
-                try {
-                    incorrectSound.play().catch(e => console.error('Incorrect sound failed:', e));
-                } catch (e) {
-                    console.error('Incorrect sound error:', e);
+                selectedOption.classList.add('incorrect');
+                const correctOption = Array.from(options).find(opt => opt.dataset.option === q.answer);
+                if (correctOption) {
+                    correctOption.classList.add('correct');
                 }
+                feedbackMessage.textContent = 'गलत जवाब। सही उत्तर है: ' + q.answer;
+                feedbackMessage.className = 'feedback-message incorrect';
             }
             
-            result.style.display = 'block';
-            
-            if ('vibrate' in navigator) navigator.vibrate(200);
-            
-            setTimeout(() => {
-                currentQuestionIndex++;
-                showQuestion();
-            }, 1500);
+            feedbackMessage.style.display = 'block';
+            nextBtn.disabled = false;
         }
 
-        function showFinalScore() {
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            const finalScoreCircle = document.getElementById('final-score-circle');
-            const scoreDetails = document.getElementById('score-details');
-            
-            if (!quizSection || !scoreSection || !finalScoreCircle || !scoreDetails) {
-                console.error('Score section elements not found');
-                showErrorOverlay();
-                return;
-            }
-            
-            quizSection.style.display = 'none';
-            scoreSection.style.display = 'flex';
-            
-            finalScoreCircle.textContent = `${score}/${questions.length}`;
-            const percentage = ((score / questions.length) * 100).toFixed(2);
-            scoreDetails.innerHTML = `
-                आपका स्कोर: ${score}/${questions.length}<br>
-                प्रतिशत: ${percentage}%<br>
-                सही जवाब: ${score}<br>
-                गलत जवाब: ${questions.length - score}<br>
-                समय: ${new Date().toLocaleTimeString()}
-            `;
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        function showScore() {
+            document.getElementById('quiz-section').style.display = 'none';
+            const scoreCard = document.getElementById('score-card');
+            const finalScore = document.getElementById('final-score');
+            finalScore.textContent = `${score}/${questions.length}`;
+            scoreCard.style.display = 'block';
         }
 
         function restartQuiz() {
-            quizStarted = false;
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            const welcomeSection = document.getElementById('welcome-section');
-            if (quizSection && scoreSection && welcomeSection) {
-                scoreSection.style.display = 'none';
-                quizSection.style.display = 'none';
-                welcomeSection.style.display = 'block';
-                currentQuestionIndex = 0;
-                score = 0;
-                updateScore();
-            }
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('score-card').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            loadQuestion();
         }
 
-        function showErrorOverlay() {
-            const errorOverlay = document.getElementById('error-overlay');
-            if (errorOverlay) {
-                errorOverlay.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
+        function goToPayment() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user_id');
+            const paymentUrl = `index.html?user_id=${encodeURIComponent(userId)}`;
+            window.location.href = paymentUrl;
         }
 
-        function retry() {
-            quizStarted = false;
-            const errorOverlay = document.getElementById('error-overlay');
-            if (errorOverlay) {
-                errorOverlay.style.display = 'none';
-                document.body.style.overflow = 'hidden';
-                checkNetworkStatus();
-                if (navigator.onLine) {
-                    loadQuestions().then(() => {
-                        if (questions.length > 0) {
-                            startQuiz();
-                        }
-                    });
-                }
-            }
+        function goToHome() {
+            window.location.href = 'file:///android_asset/home.html';
         }
 
-        // Check network status when page becomes visible again
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                checkNetworkStatus();
-            }
-        });
-
-        // Handle page load when offline
-        window.addEventListener('load', () => {
-            if (!navigator.onLine) {
-                document.getElementById('offline-section').style.display = 'block';
-                document.getElementById('online-content').style.display = 'none';
-            }
-        });
-
-        window.onerror = function(message) {
-            console.error('Global error for paid quiz:', message);
-            showErrorOverlay();
-            return true;
+        window.onpopstate = function() {
+            window.location.href = 'file:///android_asset/home.html';
         };
-
-        window.addEventListener('online', checkNetworkStatus);
-        window.addEventListener('offline', checkNetworkStatus);
+        window.history.pushState(null, null, window.location.href);
     </script>
 </body>
 </html>
