@@ -946,46 +946,6 @@
             }
         }
         
-        // यूजर की स्थिति की जांच करने के लिए फ़ंक्शन
-        async function checkUserAccess() {
-            const userSession = getUserSession();
-            
-            if (!userSession.userId) {
-                return false;
-            }
-            
-            try {
-                // GitHub से अप्रूव्ड यूजर्स की सूची प्राप्त करें
-                const response = await fetch(GITHUB_REPO_URL + 'approved-users.json');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch approved users');
-                }
-                
-                const approvedUsers = await response.json();
-                
-                // जांचें कि क्या यूजर अप्रूव्ड है
-                const isApproved = approvedUsers.some(user => 
-                    user.email.toLowerCase() === userSession.userId.toLowerCase() && 
-                    user.transaction_id === userSession.transactionId
-                );
-                
-                if (isApproved) {
-                    // एक्सपायरी तिथि की जांच करें
-                    const approvedAt = new Date(userSession.timestamp);
-                    const expiryDate = new Date(approvedAt);
-                    expiryDate.setDate(approvedAt.getDate() + 30);
-                    const now = new Date();
-                    
-                    return now < expiryDate;
-                }
-                
-                return false;
-            } catch (error) {
-                console.error('Error checking user access:', error);
-                return false;
-            }
-        }
-        
         (function() {
             if (!navigator.onLine) {
                 document.addEventListener('DOMContentLoaded', function() {
@@ -997,16 +957,7 @@
             }
         })();
         
-        document.addEventListener('DOMContentLoaded', async function() {
-            // यूजर की एक्सेस की जांच करें
-            const hasAccess = await checkUserAccess();
-            
-            if (hasAccess) {
-                // यूजर की एक्सेस है, क्विज़ पेज पर रीडायरेक्ट करें
-                window.location.href = 'quiz.html?user_id=' + getUserSession().userId;
-                return;
-            }
-            
+        document.addEventListener('DOMContentLoaded', function() {
             // फॉर्म सबमिट इवेंट मजबूती से बाइंड
             const paymentForm = document.getElementById('payment-form');
             if (paymentForm) {
