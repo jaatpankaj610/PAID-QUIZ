@@ -2,692 +2,443 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>राजस्थान GK पेड क्विज़</title>
+    <meta name="theme-color" content="#4a00e0">
+    <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
     <style>
         :root {
-            --primary: #2563eb;
-            --secondary: #7c3aed;
-            --accent: #ec4899;
-            --success: #047857;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --light: #ffffff;
-            --dark: #000000;
-            --gray: #000000;
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+            --light: #f8f9fa;
+            --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --premium-gradient: linear-gradient(135deg, #f59e0b, #ef4444);
-            --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            --button-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --paid-color: #f59e0b;
-            --paid-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+            --offline-gradient: linear-gradient(135deg, #636e72, #b2bec3);
+            --error-gradient: linear-gradient(135deg, #ff7675, #d63031);
         }
-        
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; 
-            font-weight: 600;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans Devanagari', sans-serif;
         }
-        
-        body { 
-            background: linear-gradient(135deg, #f0f9ff, #e9d5ff);
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 0; 
-            overflow: hidden; 
-            position: fixed; 
-            width: 100vw; 
-            height: 100vh; 
-            top: 0; 
-            left: 0; 
-            touch-action: none;
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            touch-action: pan-y;
+            -webkit-tap-highlight-color: transparent;
         }
-        
-        .container { 
-            width: 100vw; 
+
+        body {
+            background: linear-gradient(120deg, #e0c3fc, #8ec5fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-width: 100vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            overscroll-behavior: none;
+        }
+
+        .container {
+            width: 100%;
             height: 100vh;
-            background: var(--light); 
-            border-radius: 0; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
+            background: var(--light);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             position: fixed;
             top: 0;
             left: 0;
         }
-        
-        .scrollable-content { 
-            flex: 1; 
-            overflow: hidden;
-            -webkit-overflow-scrolling: none;
+
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        
-        .header { 
-            background: var(--paid-gradient); 
-            padding: 15px; 
-            text-align: center; 
-            color: var(--light); 
-            position: relative; 
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        
-        .header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-            z-index: 0;
-        }
-        
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .header h1 { 
-            font-size: 24px; 
-            font-weight: 800; 
-            margin-bottom: 8px; 
-            color: var(--light);
-            letter-spacing: -0.5px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .header p { 
-            font-size: 14px; 
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 0.2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .content { 
-            padding: 10px; 
-            padding-bottom: 80px; 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            max-width: 100%;
-        }
-        
-        .welcome-section { 
-            background: var(--light); 
-            border-radius: 16px; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            box-shadow: var(--card-shadow); 
-            text-align: center; 
-            border: 1px solid rgba(0,0,0,0.05);
-            animation: fadeInUp 0.6s ease-out;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: 100%;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .welcome-section h2 { 
-            font-size: 20px; 
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .welcome-section p { 
-            font-size: 14px; 
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .paid-badge {
-            display: inline-block;
-            background: var(--paid-gradient);
-            color: white;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 20px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(245, 158, 11, 0.3);
-        }
-        
-        .features { 
-            list-style: none; 
-            margin-bottom: 15px;
-        }
-        
-        .features li { 
-            margin-bottom: 8px; 
-            display: flex; 
-            align-items: center; 
-            font-size: 14px; 
-            font-weight: 700;
-            color: var(--dark);
-            background: rgba(241, 245, 249, 0.7);
-            padding: 10px 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            animation: fadeIn 0.5s ease-out;
-            animation-fill-mode: both;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        .features li:nth-child(1) { animation-delay: 0.1s; }
-        .features li:nth-child(2) { animation-delay: 0.2s; }
-        .features li:nth-child(3) { animation-delay: 0.3s; }
-        .features li:nth-child(4) { animation-delay: 0.4s; }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .features li i { 
-            margin-right: 10px; 
-            color: var(--paid-color); 
-            font-size: 16px;
-            background: rgba(245, 158, 11, 0.1);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        
-        .start-btn { 
-            background: var(--paid-gradient); 
-            color: var(--light); 
-            border: none; 
-            border-radius: 12px; 
-            padding: 12px 18px; 
-            font-size: 15px; 
-            font-weight: 700;
-            cursor: pointer; 
-            width: 100%; 
-            transition: all 0.3s ease; 
-            box-shadow: var(--button-shadow);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .start-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-        
-        .quiz-section { 
-            display: none; 
-            background: var(--light); 
-            border-radius: 16px; 
-            padding: 10px; 
-            margin-bottom: 15px; 
-            box-shadow: var(--card-shadow); 
-            border: 1px solid rgba(0,0,0,0.05);
-            position: relative;
-            animation: fadeInUp 0.5s ease-out;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 100%;
-        }
-        
-        .question-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-        
-        .question { 
-            font-size: 16px; 
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 10px;
-            background: rgba(241, 245, 249, 0.7);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            line-height: 1.5;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            border-left: 4px solid var(--paid-color);
-            width: 100%;
-        }
-        
-        .options { 
-            list-style: none;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 100%;
-        }
-        
-        .options li { 
-            background: linear-gradient(135deg, #0d9488, #4b5563); 
-            padding: 14px 18px; 
-            margin-bottom: 10px; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            font-size: 16px; 
-            font-weight: 700;
-            color: #ffffff;
-            border: 2px solid #0d9488;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            line-height: 1.4;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            display: flex;
-            align-items: center;
-            position: relative;
-            width: 100%;
-            animation: popIn 0.5s ease-out forwards;
-        }
-        
-        @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.9) translateY(15px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-        
-        .options li:hover { 
-            background: linear-gradient(135deg, #14b8a6, #6b7280);
-            border: 2px solid #14b8a6;
-            transform: scale(1.03);
-            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
-        }
-        
-        .options li.correct { 
-            background: linear-gradient(135deg, #10b981, #047857);
-            border: 2px solid #10b981;
-            color: #ffffff;
-            font-weight: 800;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
-            animation: pop3D 0.4s ease-out forwards;
-        }
-        
-        .options li.correct::after {
-            content: "\f00c";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            margin-left: auto;
-            font-size: 18px;
-            color: #ffffff;
-        }
-        
-        .options li.incorrect { 
-            background: linear-gradient(135deg, #f87171, #ef4444); 
-            border: 2px solid #f87171;
-            color: #ffffff;
-            font-weight: 800;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-            animation: pop3D 0.4s ease-out forwards;
-        }
-        
-        .options li.incorrect::after {
-            content: "\f00d";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            margin-left: auto;
-            font-size: 18px;
-        }
-        
-        @keyframes pop3D {
-            0% {
-                transform: perspective(600px) rotateX(0deg) scale(1);
-                box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            }
-            50% {
-                transform: perspective(600px) rotateX(10deg) scale(1.05);
-                box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-            }
-            100% {
-                transform: perspective(600px) rotateX(0deg) scale(1);
-                box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            }
-        }
-        
-        .result { 
-            margin-top: 10px; 
-            font-size: 14px; 
-            font-weight: 700;
-            text-align: center; 
+
+        .scrollable-content::-webkit-scrollbar {
             display: none;
-            padding: 12px;
-            border-radius: 10px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
         }
-        
-        .result.success { 
-            color: var(--success);
-            background: rgba(4, 120, 87, 0.1);
-            border: 1px solid rgba(4, 120, 87, 0.2);
-        }
-        
-        .result.error { 
-            color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-        
-        .next-btn { 
-            background: var(--paid-gradient); 
-            color: var(--light); 
-            border: none; 
-            border-radius: 12px; 
-            padding: 12px; 
-            font-size: 15px; 
-            font-weight: 700;
-            cursor: pointer; 
-            width: 100%; 
-            margin-top: 10px; 
-            display: none; 
-            box-shadow: var(--button-shadow);
-        }
-        
-        .next-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-        
-        .offline-section, .error-section { 
-            text-align: center; 
-            padding: 15px; 
-            background: var(--light); 
-            border-radius: 16px; 
-            box-shadow: var(--card-shadow); 
-            margin: 15px 0; 
-            border: 1px solid rgba(0,0,0,0.05);
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
-        }
-        
-        .custom-design { 
-            width: 120px; 
-            height: 120px; 
-            margin: 0 auto 10px; 
-            border-radius: 16px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            color: var(--light); 
-            font-size: 18px; 
-            font-weight: 700; 
-            text-align: center; 
-            line-height: 1.3;
-        }
-        
-        .offline-section .custom-design { 
-            background: var(--gray); 
-        }
-        
-        .error-section .custom-design { 
-            background: var(--danger); 
-        }
-        
-        .offline-message, .error-message { 
-            font-size: 14px; 
-            font-weight: 700;
-            color: var(--dark);
-            background: rgba(241, 245, 249, 0.7);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
-        }
-        
-        .progress-bar {
-            height: 5px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 3px;
-            margin: 10px 0;
-            overflow: hidden;
-            width: 100%;
-        }
-        
-        .progress {
-            height: 100%;
-            background: var(--paid-gradient);
-            border-radius: 3px;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .score-display {
-            margin: 10px 0;
-            background: var(--light);
-            color: var(--dark);
-            font-size: 13px;
-            font-weight: 700;
-            padding: 8px 10px;
-            border-radius: 25px;
-            box-shadow: var(--button-shadow);
-            display: none;
-            border: 1px solid rgba(0,0,0,0.08);
+
+        .header {
+            background: var(--gradient);
+            padding: 16px 12px;
             text-align: center;
-            width: 100%;
-        }
-        
-        .error-overlay {
-            display: none;
+            color: var(--light);
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 3000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .error-container {
-            background: var(--light);
-            padding: 15px;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            text-align: center;
-            max-width: 90%;
             width: 100%;
-            max-width: 280px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .error-image {
-            width: 100px;
-            height: 100px;
-            background: var(--danger);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: var(--light);
-            font-size: 36px;
-        }
-
-        .error-message {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 10px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .retry-btn {
-            background: var(--paid-gradient);
-            color: var(--light);
-            border: none;
-            border-radius: 12px;
-            padding: 10px 18px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: var(--button-shadow);
-        }
-
-        .retry-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-
-        .score-section {
-            display: none;
-            background: var(--light);
-            border-radius: 16px;
-            padding: 15px;
-            margin: 15px 0;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-            text-align: center;
-            animation: fadeInUp 0.6s ease-out;
-            flex: 1;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .score-section h2 {
+        .header h1 {
             font-size: 20px;
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            max-width: calc(100vw - 24px);
         }
 
-        .score-details {
-            font-size: 14px;
+        .header p {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.9;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: calc(100vw - 24px);
+        }
+
+        .content {
+            padding: 72px 12px 80px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .payment-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-info h2 {
+            font-size: 18px;
             font-weight: 600;
             color: var(--dark);
-            margin-bottom: 15px;
-            background: rgba(241, 245, 249, 0.7);
-            padding: 12px;
-            border-radius: 10px;
-            line-height: 1.5;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            width: 100%;
-        }
-
-        .score-circle {
-            width: 100px;
-            height: 100px;
-            background: var(--paid-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: var(--light);
-            font-size: 24px;
-            font-weight: 800;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .restart-btn {
-            background: var(--paid-gradient);
-            color: var(--light);
-            border: none;
-            border-radius: 12px;
-            padding: 12px 18px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: var(--button-shadow);
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        .price-tag {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 12px 0;
+            text-align: center;
         }
 
-        .loading-container {
+        .price-period {
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 16px;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--dark);
+            font-weight: 500;
+            padding: 8px;
+            background: rgba(241, 245, 249, 0.7);
+            border-radius: 8px;
+        }
+
+        .features li i {
+            margin-right: 10px;
+            color: var(--success);
+            font-size: 16px;
+            background: rgba(0, 184, 148, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+        }
+
+        .form-group .error-text {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        #form-error {
+            color: var(--danger);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .qr-section {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .qr-code {
+            width: 160px;
+            height: 160px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ddd;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .upi-id {
+            background: rgba(74, 0, 224, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 12px 0;
+            font-weight: 600;
+            color: var(--primary);
+            word-break: break-all;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .instructions {
+            text-align: left;
+            margin: 12px 0;
+            font-size: 14px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions li i {
+            color: var(--success);
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            background: var(--gradient);
+            color: var(--light);
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 0, 224, 0.2);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(0, 184, 148, 0.2);
+        }
+
+        .status-message.pending {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(253, 203, 110, 0.2);
+        }
+
+        .status-message.error {
+            background: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(214, 48, 49, 0.2);
+        }
+
+        .clear-btn, .check-btn {
+            background: var(--dark);
+            color: var(--light);
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .clear-btn:hover, .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #2d3436, #636e72);
+        }
+
+        .offline-section, .error-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #4a6fa5, #6989b9);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 200px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .processing-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .processing-screen .app-logo-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .processing-screen .processing-message {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
         }
 
         .spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid rgba(245, 158, 11, 0.2);
-            border-top: 5px solid var(--paid-color);
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -697,334 +448,495 @@
             100% { transform: rotate(360deg); }
         }
 
-        .offline-image-container {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 20px;
-            position: relative;
+        .custom-design {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite ease-in-out;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        .offline-image {
+        .custom-design img {
             width: 100%;
             height: 100%;
+            object-fit: cover;
             border-radius: 50%;
-            background: linear-gradient(135deg, #4b5563, #1f2937);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s infinite ease-in-out;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
-            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .offline-image::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 70%
-            );
-            animation: shine 3s infinite linear;
+        .offline-section .custom-design {
+            background: linear-gradient(135deg, #4a6fa5, #6989b9);
         }
 
-        @keyframes shine {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .error-section .custom-design {
+            background: var(--error-gradient);
         }
 
-        .offline-icon {
-            font-size: 70px;
-            color: #ffffff;
+        .offline-message, .error-message {
+            font-size: 18px;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            max-width: 90%;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes zoomInOut {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .error-section .custom-design {
+            animation: zoomInOut 2s infinite ease-in-out;
+        }
+
+        .checkbox-container {
             position: relative;
-            z-index: 2;
-            animation: float 3s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .offline-waves {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 10px;
-        }
-
-        .wave {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7);
-            animation: wave 1.5s infinite ease-in-out;
-        }
-
-        .wave:nth-child(2) { animation-delay: 0.2s; }
-        .wave:nth-child(3) { animation-delay: 0.4s; }
-        .wave:nth-child(4) { animation-delay: 0.6s; }
-        .wave:nth-child(5) { animation-delay: 0.8s; }
-
-        @keyframes wave {
-            0%, 100% { transform: translateY(0); opacity: 0.7; }
-            50% { transform: translateY(-15px); opacity: 1; }
-        }
-
-        .access-info {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            border-radius: 10px;
             padding: 10px;
-            margin-top: 15px;
-            font-size: 14px;
-            font-weight: 700;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background: rgba(74, 0, 224, 0.05);
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        .checkbox-container:hover {
+            background: rgba(74, 0, 224, 0.1);
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+        }
+
+        .checkbox-hint {
+            font-size: 12px;
             color: var(--dark);
+            margin-top: 6px;
+            font-weight: 500;
+            display: block;
+        }
+
+        .checkbox-container label {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 8px;
+            position: relative;
         }
 
-        .access-days {
-            background: var(--paid-gradient);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-container .tooltip {
+            display: none;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: var(--light);
+            padding: 6px 12px;
+            border-radius: 4px;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .checkbox-container:hover .tooltip {
+            display: block;
         }
         
-        @media (min-width: 601px) {
-            .header { 
-                padding: 20px; 
-            }
-            .header h1 { 
-                font-size: 28px; 
-                margin-bottom: 10px; 
-            }
-            .header p { 
-                font-size: 16px; 
-            }
-            .content { 
-                padding: 15px; 
-                padding-bottom: 90px; 
-            }
-            .welcome-section { 
-                padding: 20px; 
-                margin-bottom: 20px; 
-            }
-            .welcome-section h2 { 
-                font-size: 24px; 
-                margin-bottom: 12px;
-            }
-            .welcome-section p { 
-                font-size: 16px; 
-            }
-            .features li { 
-                font-size: 15px; 
-                margin-bottom: 10px;
-                padding: 12px 14px;
-            }
-            .features li i { 
-                font-size: 18px; 
-                width: 32px;
-                height: 32px;
-            }
-            .start-btn, .restart-btn { 
-                padding: 14px 20px; 
-                font-size: 16px; 
-            }
-            .quiz-section { 
-                padding: 15px; 
-                margin-bottom: 20px; 
-            }
-            .question { 
-                font-size: 18px; 
-                margin-bottom: 12px;
-                padding: 14px;
-            }
-            .options li { 
-                padding: 16px 20px; 
-                margin-bottom: 12px;
-                font-size: 17px;
-            }
-            .result { 
-                margin-top: 12px; 
-                font-size: 16px; 
-                padding: 14px;
-            }
-            .next-btn { 
-                padding: 14px; 
-                font-size: 16px; 
-                margin-top: 12px;
-            }
-            .offline-section, .error-section, .score-section { 
-                padding: 20px; 
-                margin: 20px 0; 
-            }
-            .custom-design { 
-                width: 140px; 
-                height: 140px; 
-                font-size: 20px;
-            }
-            .offline-message, .error-message, .score-details { 
-                font-size: 16px; 
-                padding: 14px;
-            }
-            .progress-bar {
-                height: 6px;
-                margin: 12px 0;
-            }
-            .score-display {
-                font-size: 14px;
-                padding: 8px 12px;
-            }
-            .score-circle {
-                width: 120px;
-                height: 120px;
-                font-size: 28px;
-            }
-            .offline-image-container {
-                width: 220px;
-                height: 220px;
-            }
-            .offline-icon {
-                font-size: 90px;
-            }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding-top: 60px;
+            animation: fadeInModal 0.3s ease-in-out;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            position: relative;
+            text-align: center;
+            transform: translateY(0);
+            animation: slideInUp 0.4s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-btn:hover, .close-btn:focus {
+            color: #000;
+        }
+
+        .modal-header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px 10px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .modal-body p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .next-steps {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid var(--primary);
+            text-align: left;
+        }
+
+        .next-steps p {
+            margin: 0 0 10px 0;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--dark);
+        }
+
+        .modal-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 0, 224, 0.2);
+        }
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            background: var(--secondary);
+        }
+
+        .modal-instruction {
+            font-size: 12px !important;
+            color: #777 !important;
+            margin-top: 8px !important;
+        }
+        
+        @media (max-width: 480px) {
+            .header { padding: 12px 8px; }
+            .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
+            .header p { font-size: 11px; max-width: calc(100vw - 20px); }
+            .content { padding: 64px 8px 72px; gap: 12px; }
+            .payment-info { padding: 12px; }
+            .payment-info h2 { font-size: 16px; }
+            .price-tag { font-size: 28px; }
+            .price-period { font-size: 13px; }
+            .features li { font-size: 13px; padding: 6px; }
+            .features li i { font-size: 14px; width: 20px; height: 20px; }
+            .form-group label { font-size: 13px; }
+            .form-group input, .form-group textarea { padding: 8px; font-size: 13px; }
+            .form-group .error-text { font-size: 11px; }
+            #form-error { font-size: 13px; }
+            .qr-section { padding: 12px; margin: 12px 0; }
+            .qr-code { width: 140px; height: 140px; }
+            .upi-id { font-size: 13px; padding: 8px; }
+            .instructions { font-size: 13px; }
+            .instructions li { margin-bottom: 6px; }
+            .instructions li i { font-size: 14px; }
+            .submit-btn, .clear-btn, .check-btn { padding: 10px 20px; font-size: 13px; }
+            .status-message { font-size: 13px; padding: 10px; }
+            .custom-design { width: 180px; height: 180px; }
+            .offline-message, .error-message { font-size: 16px; }
+            .checkbox-container { padding: 8px; }
+            .checkbox-hint { font-size: 11px; }
+            .processing-screen .app-logo-name { font-size: 20px; }
+            .processing-screen .processing-message { font-size: 16px; }
+        }
+
+        @media (min-width: 768px) {
+            .header { padding: 20px 16px; }
+            .header h1 { font-size: 22px; }
+            .header p { font-size: 14px; }
+            .content { padding: 80px 16px 88px; gap: 20px; }
+            .payment-info { padding: 20px; }
+            .payment-info h2 { font-size: 20px; }
+            .price-tag { font-size: 36px; }
+            .price-period { font-size: 16px; }
+            .features li { font-size: 15px; padding: 10px; }
+            .features li i { font-size: 18px; width: 28px; height: 28px; }
+            .form-group label { font-size: 15px; }
+            .form-group input, .form-group textarea { padding: 12px; font-size: 15px; }
+            .form-group .error-text { font-size: 13px; }
+            #form-error { font-size: 15px; }
+            .qr-section { padding: 20px; margin: 20px 0; }
+            .qr-code { width: 180px; height: 180px; }
+            .upi-id { font-size: 15px; padding: 12px; }
+            .instructions { font-size: 15px; }
+            .instructions li { margin-bottom: 10px; }
+            .instructions li i { font-size: 18px; }
+            .submit-btn, .clear-btn, .check-btn { padding: 14px 28px; font-size: 15px; }
+            .status-message { font-size: 15px; padding: 14px; }
+            .custom-design { width: 220px; height: 220px; }
+            .offline-message, .error-message { font-size: 20px; }
+            .checkbox-container { padding: 12px; }
+            .checkbox-hint { font-size: 13px; }
+            .processing-screen .app-logo-name { font-size: 28px; }
+            .processing-screen .processing-message { font-size: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="header-content">
-                <h1>राजस्थान GK पेड क्विज़</h1>
-                <p>प्रीमियम क्विज़ अनुभव का आनंद लें</p>
-            </div>
+    <div id="offline-section" class="offline-section" style="display: none;">
+        <div class="custom-design">
+            <img src="offline-professional.png" alt="ऑफलाइन एरर" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
         </div>
-        <div class="scrollable-content">
-            <div class="content">
-                <div id="offline-section" class="offline-section" style="display: none;">
-                    <div class="offline-image-container">
-                        <div class="offline-image">
-                            <i class="fas fa-wifi-slash offline-icon"></i>
-                            <div class="offline-waves">
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
-                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
-                </div>
-                <div id="error-section" class="error-section" style="display: none;">
-                    <div class="custom-design">⚠️</div>
-                    <p class="error-message">कुछ गड़बड़ हुई, पुनः प्रयास करें</p>
-                    <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
-                </div>
-                <div id="online-content">
-                    <div class="welcome-section" id="welcome-section">
-                        <div class="paid-badge">प्रीमियम संस्करण</div>
-                        <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> धन्यवाद!</h2>
-                        <p>आपका भुगतान सफलतापूर्वक प्राप्त हो गया है। अब आप हमारे प्रीमियम राजस्थान सामान्य ज्ञान क्विज़ का आनंद ले सकते हैं।</p>
-                        <div class="access-info">
-                            <span>आपकी एक्सेस:</span>
-                            <span class="access-days" id="access-days">लोड हो रहा है...</span>
-                        </div>
-                        <ul class="features">
-                            <li><i class="fas fa-check-circle"></i> 100+ एक्सक्लूसिव सवाल</li>
-                            <li><i class="fas fa-check-circle"></i> तुरंत परिणाम</li>
-                            <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
-                            <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
-                        </ul>
-                        <button class="start-btn" onclick="startQuiz()">
-                            <span>क्विज़ शुरू करें</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                    <div id="quiz-section" class="quiz-section" style="display: none;">
-                        <div class="question-container">
-                            <div class="question" id="question-text">प्रश्न लोड हो रहा है...</div>
-                            <div class="progress-bar">
-                                <div class="progress" id="progress-bar"></div>
-                            </div>
-                            <ul class="options" id="options-list">
-                                <div class="loading-container">
-                                    <div class="spinner"></div>
-                                </div>
-                            </ul>
-                            <div id="result" class="result"></div>
-                            <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
-                            <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
-                        </div>
-                    </div>
-                    <div id="score-section" class="score-section" style="display: none;">
-                        <div class="score-circle" id="final-score-circle">0/0</div>
-                        <h2><i class="fas fa-trophy" style="color: #f59e0b;"></i> क्विज़ समाप्त!</h2>
-                        <div class="score-details" id="score-details"></div>
-                        <button class="restart-btn" onclick="restartQuiz()">
-                            <span>क्विज़ पुनः शुरू करें</span>
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <p class="offline-message">कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।</p>
     </div>
-    <div id="error-overlay" class="error-overlay">
-        <div class="error-container">
-            <div class="error-image">❌</div>
-            <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें!</p>
-            <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
+    
+    <div id="error-section" class="error-section" style="display: none;">
+        <div class="custom-design">
+            <img src="error-professional.png" alt="एरर" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
         </div>
+        <p class="error-message" id="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
     </div>
 
+    <div class="container">
+        <div id="processing-screen" class="processing-screen">
+            <img src="rajasthan-gk-quiz-logo.png" alt="App Logo" style="width: 80px; height: 80px; margin-bottom: 20px;">
+            <div class="app-logo-name"><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</div>
+            <div class="processing-message">आपकी पेमेंट रिक्वेस्ट प्रोसेस हो रही है...</div>
+            <div class="spinner"></div>
+            <div class="processing-message" style="margin-top: 20px;">कुछ ही सेकंड्स में...</div>
+        </div>
+        
+        <div class="header">
+            <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
+            <p>मात्र ₹49 में 30 दिन की प्रीमियम एक्सेस अनलॉक करें!</p>
+        </div>
+        
+        <div class="scrollable-content">
+            <div class="content">
+                <div id="online-content">
+                    <div class="payment-info">
+                        <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
+                        <div class="price-tag">₹49</div>
+                        <div class="price-period">30 दिन की असीमित क्विज़ एक्सेस</div>
+                        
+                        <ul class="features">
+                            <li><i class="fas fa-check-circle"></i> 100+ विशेषज्ञ द्वारा तैयार GK सवाल</li>
+                            <li><i class="fas fa-check-circle"></i> दैनिक क्विज़ और प्रैक्टिस टेस्ट</li>
+                            <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग और प्रोग्रेस रिपोर्ट</li>
+                            <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड कंटेंट</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="qr-section">
+                        <h3>आसान UPI पेमेंट</h3>
+                        <div class="qr-code">
+                            <img src="qrcode.png" alt="UPI QR Code" onerror="this.style.display='none'; document.getElementById('error-section').style.display='flex'; document.getElementById('online-content').style.display='none'; document.getElementById('error-message').textContent='QR कोड लोड करने में त्रुटि। कृपया UPI ID का उपयोग करें।';">
+                        </div>
+                        <div class="upi-id">
+                            <i class="fas fa-copy"></i>
+                            9057650616@amazon.pay
+                        </div>
+                        <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
+                        <ol class="instructions">
+                            <li><i class="fas fa-qrcode"></i> QR कोड को अपने UPI ऐप से स्कैन करें।</li>
+                            <li><i class="fas fa-money-bill"></i> ₹49 का पेमेंट करें।</li>
+                            <li><i class="fas fa-receipt"></i> UPI ट्रांजैक्शन ID फॉर्म में डालें।</li>
+                            <li><i class="fas fa-check-square"></i> "पेमेंट करने के बाद इस बॉक्स को टिक करें" चेकबॉक्स टिक करें।</li>
+                        </ol>
+                    </div>
+                    
+                    <form id="payment-form">
+                        <div id="form-error" class="error-text"></div>
+                        <div class="form-group">
+                            <label for="user_id">अपना ईमेल ID दर्ज करें</label>
+                            <input type="text" id="user_id" name="user_id" placeholder="उदाहरण: example@gmail.com" required>
+                            <div id="user_id_error" class="error-text"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
+                            <input type="text" id="mobile_number" name="mobile_number" placeholder="उदाहरण: 76652XXXXX" required>
+                            <div id="mobile_number_error" class="error-text"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
+                            <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
+                            <div id="transaction_id_error" class="error-text"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="amount">पेमेंट राशि</label>
+                            <input type="text" id="amount" name="amount" placeholder="49" value="49" required>
+                            <div id="amount_error" class="error-text"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-container">
+                                <label for="payment_made">
+                                    <input type="checkbox" id="payment_made" name="payment_made">
+                                    पेमेंट करने के बाद इस बॉक्स को टिक करें
+                                    <span class="checkbox-hint">पेमेंट रिक्वेस्ट भेजने के लिए QR कोड स्कैन करें और यहाँ टिक करें।</span>
+                                </label>
+                            </div>
+                            <div id="payment_made_error" class="error-text"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="payment_note">कोई अतिरिक्त जानकारी (वैकल्पिक)</label>
+                            <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">पेमेंट रिक्वेस्ट भेजें</button>
+                        <button type="button" class="check-btn" onclick="checkPaymentStatus()">पेमेंट स्टेटस चेक करें</button>
+                        <button type="button" class="clear-btn" onclick="clearLocalStorageData()">पेमेंट डेटा रीसेट करें</button>
+                    </form>
+                    
+                    <div id="status-message" class="status-message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h2>पेमेंट रिक्वेस्ट सफल!</h2>
+            </div>
+            <div class="modal-body">
+                <p>आपकी पेमेंट रिक्वेस्ट हमें मिल गई है। आपका प्रीमियम अकाउंट 24 घंटे के भीतर एक्टिवेट हो जाएगा।</p>
+                <div class="next-steps">
+                    <p><b>अगला स्टेप:</b></p>
+                    <button class="modal-btn" onclick="checkStatusAndRedirect()">
+                        <i class="fas fa-sync-alt"></i> पेमेंट स्टेटस चेक करें
+                    </button>
+                    <p class="modal-instruction">पेमेंट अप्रूव होने पर यह बटन आपको सीधे क्विज़ पेज पर ले जाएगा।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // GitHub रेपो URL
         const GITHUB_REPO_URL = 'https://jaatpankaj610.github.io/PAID-QUIZ/';
         
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let quizStarted = false;
-        let userId = null;
-        let userData = null;
-
-        // Initialize sound effects - MIT App Inventor Assets के लिए paths
-        const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
-        const incorrectSound = new Audio('file:///android_asset/incorrect.mp3'); // गलत जवाब का sound (assets में upload करें)
-
-        // Ensure audio plays after user interaction
-        function unlockAudio() {
-            correctSound.load();
-            incorrectSound.load();
-            document.removeEventListener('click', unlockAudio);
+        // लोकल स्टोरेज में डेटा सेव करने के लिए फ़ंक्शन
+        function savePaymentData(userData) {
+            try {
+                // पहले से मौजूद डेटा प्राप्त करें
+                let paymentsData = JSON.parse(localStorage.getItem('paymentsData') || '[]');
+                
+                // नया पेमेंट डेटा जोड़ें
+                paymentsData.push({
+                    ...userData,
+                    id: Date.now().toString(), // यूनीक ID
+                    timestamp: new Date().toISOString()
+                });
+                
+                // लोकल स्टोरेज में सेव करें
+                localStorage.setItem('paymentsData', JSON.stringify(paymentsData));
+                
+                // यूजर सेशन डेटा सेव करें
+                localStorage.setItem('userSession', JSON.stringify({
+                    userId: userData.user_id,
+                    transactionId: userData.transaction_id,
+                    timestamp: new Date().toISOString()
+                }));
+                
+                return true;
+            } catch (error) {
+                console.error('Error saving payment data:', error);
+                return false;
+            }
         }
-        document.addEventListener('click', unlockAudio);
-
-        // लोकल स्टोरेज से यूजर सेशन प्राप्त करने के लिए फ़ंक्शन
+        
+        // लोकल स्टोरेज से डेटा प्राप्त करने के लिए फ़ंक्शन
+        function getPaymentData() {
+            try {
+                return JSON.parse(localStorage.getItem('paymentsData') || '[]');
+            } catch (error) {
+                console.error('Error getting payment data:', error);
+                return [];
+            }
+        }
+        
+        // यूजर सेशन डेटा प्राप्त करने के लिए फ़ंक्शन
         function getUserSession() {
             try {
                 return JSON.parse(localStorage.getItem('userSession') || '{}');
@@ -1033,16 +945,162 @@
                 return {};
             }
         }
-
-        // यूजर की स्थिति की जांच करने के लिए फ़ंक्शन
-        async function checkUserAccess() {
-            const userSession = getUserSession();
-            
-            if (!userSession.userId) {
-                return false;
+        
+        (function() {
+            if (!navigator.onLine) {
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('offline-section').style.display = 'flex';
+                    document.getElementById('online-content').style.display = 'none';
+                    document.getElementById('processing-screen').style.display = 'none';
+                    document.getElementById('error-section').style.display = 'none';
+                });
             }
+        })();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // फॉर्म सबमिट इवेंट मजबूती से बाइंड
+            const paymentForm = document.getElementById('payment-form');
+            if (paymentForm) {
+                paymentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    console.log("Form submit event triggered"); // डिबग
+                    submitPayment();
+                });
+            } else {
+                console.error("Payment form not found in DOM"); // डिबग
+            }
+        });
+        
+        function showProcessingScreen() {
+            document.getElementById('online-content').style.display = 'none';
+            document.getElementById('processing-screen').style.display = 'flex';
+        }
+
+        function hideProcessingScreen() {
+            document.getElementById('online-content').style.display = 'block';
+            document.getElementById('processing-screen').style.display = 'none';
+        }
+
+        function checkNetworkStatus() {
+            const offlineSection = document.getElementById('offline-section');
+            const onlineContent = document.getElementById('online-content');
+            const errorSection = document.getElementById('error-section');
+            
+            if (!navigator.onLine) {
+                offlineSection.style.display = 'flex';
+                onlineContent.style.display = 'none';
+                document.getElementById('processing-screen').style.display = 'none';
+                errorSection.style.display = 'none';
+            } else {
+                offlineSection.style.display = 'none';
+                onlineContent.style.display = 'block'; 
+                errorSection.style.display = 'none';
+            }
+        }
+
+        async function submitPayment() {
+            console.log("submitPayment function called"); // डिबग
+            const statusMessage = document.getElementById('status-message');
+
+            // नेटवर्क चेक
+            if (!navigator.onLine) {
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।';
+                statusMessage.style.display = 'block';
+                console.log("Offline detected"); // डिबग
+                return;
+            }
+
+            // वैलिडेशन चेक
+            const isValid = validateForm();
+            console.log("Form validation result:", isValid); // डिबग
+            if (!isValid) {
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'कृपया फॉर्म में सभी जरूरी जानकारी सही भरें।';
+                statusMessage.style.display = 'block';
+                return;
+            }
+
+            showProcessingScreen();
+            console.log("Processing screen shown"); // डिबग
+
+            const userId = document.getElementById('user_id').value.trim();
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const paymentNote = document.getElementById('payment_note').value.trim();
+            
+            console.log("Data to submit:", { userId, mobileNumber, transactionId, amount, paymentNote }); // डिबग
+
+            try {
+                console.log("Attempting to save payment data locally"); // डिबग
+                
+                const userData = {
+                    user_id: userId,
+                    mobile_number: mobileNumber,
+                    transaction_id: transactionId,
+                    amount: amount,
+                    payment_note: paymentNote,
+                    status: 'pending'
+                };
+
+                // लोकल स्टोरेज में डेटा सेव करें
+                const saved = savePaymentData(userData);
+                
+                if (!saved) {
+                    throw new Error('Failed to save payment data');
+                }
+                
+                console.log("Payment data saved to local storage"); // डिबग
+
+                hideProcessingScreen();
+                console.log("Processing screen hidden, showing success modal"); // डिबग
+                showSuccessModal(transactionId);
+                
+            } catch (error) {
+                console.error("Error:", error.message); // डिबग
+                hideProcessingScreen();
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'पेमेंट रिक्वेस्ट भेजने में समस्या हुई। कृपया दोबारा कोशिश करें।';
+                statusMessage.style.display = 'block';
+            }
+        }
+
+        async function checkPaymentStatus() {
+            const userIdInput = document.getElementById('user_id');
+            const statusMessage = document.getElementById('status-message');
+            const processingScreen = document.getElementById('processing-screen');
+            
+            const userId = userIdInput.value.trim();
+
+            if (!userId) {
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'कृपया अपना ईमेल ID दर्ज करें!';
+                statusMessage.style.display = 'block';
+                return;
+            }
+
+            showProcessingScreen();
             
             try {
+                // यूजर सेशन डेटा प्राप्त करें
+                const userSession = getUserSession();
+                
+                let transactionIdToCheck = '';
+                
+                if (userSession && userSession.transactionId) {
+                    transactionIdToCheck = userSession.transactionId;
+                } else {
+                    transactionIdToCheck = document.getElementById('transaction_id').value.trim();
+                    if (!transactionIdToCheck) {
+                        hideProcessingScreen();
+                        statusMessage.className = 'status-message error';
+                        statusMessage.textContent = 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।';
+                        statusMessage.style.display = 'block';
+                        return;
+                    }
+                }
+
                 // GitHub से अप्रूव्ड यूजर्स की सूची प्राप्त करें
                 const response = await fetch(GITHUB_REPO_URL + 'approved-users.json');
                 if (!response.ok) {
@@ -1053,439 +1111,177 @@
                 
                 // जांचें कि क्या यूजर अप्रूव्ड है
                 const isApproved = approvedUsers.some(user => 
-                    user.email.toLowerCase() === userSession.userId.toLowerCase() && 
-                    user.transaction_id === userSession.transactionId
+                    user.email.toLowerCase() === userId.toLowerCase() && 
+                    user.transaction_id === transactionIdToCheck
                 );
-                
+
+                hideProcessingScreen();
+
                 if (isApproved) {
-                    // एक्सपायरी तिथि की जांच करें
-                    const approvedAt = new Date(userSession.timestamp);
-                    const expiryDate = new Date(approvedAt);
-                    expiryDate.setDate(approvedAt.getDate() + 30);
-                    const now = new Date();
-                    
-                    return now < expiryDate;
-                }
-                
-                return false;
-            } catch (error) {
-                console.error('Error checking user access:', error);
-                return false;
-            }
-        }
+                    statusMessage.className = 'status-message success';
+                    statusMessage.textContent = 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।';
+                    statusMessage.style.display = 'block';
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            // यूजर की एक्सेस की जांच करें
-            const hasAccess = await checkUserAccess();
-            
-            if (!hasAccess) {
-                // यूजर की एक्सेस नहीं है, इंडेक्स पेज पर रीडायरेक्ट करें
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            // यूजर सेशन डेटा प्राप्त करें
-            const userSession = getUserSession();
-            userId = userSession.userId;
-            
-            // एक्सेस जानकारी अपडेट करें
-            updateAccessInfo(userSession.timestamp);
-            
-            // क्विज़ प्रश्न लोड करें
-            loadQuestions();
-        });
+                    setTimeout(() => {
+                        window.location.href = 'quiz.html?user_id=' + userId;
+                    }, 5000);
 
-        // एक्सेस जानकारी अपडेट करें
-        function updateAccessInfo(timestamp) {
-            const accessDaysElement = document.getElementById('access-days');
-            if (accessDaysElement) {
-                const approvedAt = new Date(timestamp);
-                const expiryDate = new Date(approvedAt);
-                expiryDate.setDate(approvedAt.getDate() + 30);
-                const now = new Date();
-                
-                const diffTime = expiryDate - now;
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
-                if (diffDays > 0) {
-                    accessDaysElement.textContent = `${diffDays} दिन शेष`;
                 } else {
-                    accessDaysElement.textContent = 'आज समाप्त';
-                    accessDaysElement.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+                    statusMessage.className = 'status-message pending';
+                    statusMessage.textContent = 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।';
+                    statusMessage.style.display = 'block';
                 }
+            } catch (error) {
+                hideProcessingScreen();
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि। कृपया दोबारा कोशिश करें।';
+                statusMessage.style.display = 'block';
+                console.error('Error:', error);
             }
         }
 
-        function checkNetworkStatus() {
-            const offlineSection = document.getElementById('offline-section');
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
-            const errorOverlay = document.getElementById('error-overlay');
-            
-            if (!offlineSection || !errorSection || !onlineContent || !errorOverlay) {
-                console.error('Network status elements not found for paid quiz');
-                showErrorOverlay();
-                return;
+        function validateForm() {
+            let isValid = true;
+            const userId = document.getElementById('user_id').value.trim();
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const paymentMade = document.getElementById('payment_made').checked;
+
+            document.getElementById('form-error').style.display = 'none';
+            document.getElementById('user_id_error').style.display = 'none';
+            document.getElementById('mobile_number_error').style.display = 'none';
+            document.getElementById('transaction_id_error').style.display = 'none';
+            document.getElementById('amount_error').style.display = 'none';
+            document.getElementById('payment_made_error').style.display = 'none';
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!userId) {
+                document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
+                document.getElementById('user_id_error').style.display = 'block';
+                isValid = false;
+            } else if (!emailRegex.test(userId)) {
+                document.getElementById('user_id_error').textContent = 'कृपया सही ईमेल फॉर्मेट दर्ज करें!';
+                document.getElementById('user_id_error').style.display = 'block';
+                isValid = false;
             }
-            
-            if (!navigator.onLine) {
-                offlineSection.style.display = 'block';
-                errorSection.style.display = 'none';
-                onlineContent.style.display = 'none';
-                console.log('User is offline, showing offline section');
-            } else {
-                offlineSection.style.display = 'none';
-                errorSection.style.display = 'none';
-                onlineContent.style.display = 'block';
-                console.log('User is online, showing online content');
+
+            const mobileRegex = /^\d{10}$/;
+            if (!mobileNumber) {
+                document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
+                document.getElementById('mobile_number_error').style.display = 'block';
+                isValid = false;
+            } else if (!mobileRegex.test(mobileNumber)) {
+                document.getElementById('mobile_number_error').textContent = 'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!';
+                document.getElementById('mobile_number_error').style.display = 'block';
+                isValid = false;
             }
+
+            if (!transactionId) {
+                document.getElementById('transaction_id_error').textContent = 'कृपया UPI ट्रांजैक्शन ID दर्ज करें!';
+                document.getElementById('transaction_id_error').style.display = 'block';
+                isValid = false;
+            }
+
+            const parsedAmount = parseFloat(amount);
+            if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
+                document.getElementById('amount_error').textContent = 'कृपया सही राशि दर्ज करें!';
+                document.getElementById('amount_error').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!paymentMade) {
+                document.getElementById('payment_made_error').textContent = 'कृपया पेमेंट करने के बाद इस बॉक्स को टिक करें!';
+                document.getElementById('payment_made_error').style.display = 'block';
+                isValid = false;
+            }
+
+            if ('vibrate' in navigator && !isValid) {
+                navigator.vibrate(200);
+            }
+
+            return isValid;
         }
 
-        async function loadQuestions() {
-            const errorSection = document.getElementById('error-section');
-            const onlineContent = document.getElementById('online-content');
-            const errorOverlay = document.getElementById('error-overlay');
-            
-            if (!errorSection || !onlineContent || !errorOverlay) {
-                console.error('Error/Online sections not found for paid quiz');
-                showErrorOverlay();
+        function clearLocalStorageData() {
+            const userId = document.getElementById('user_id').value.trim();
+            if (!userId) {
+                alert('कृपया ईमेल ID दर्ज करें!');
                 return;
             }
-            
             try {
-                const repoUrl = GITHUB_REPO_URL + 'questions.json';
-                console.log('Attempting to load questions from:', repoUrl);
-                
-                const response = await fetch(repoUrl, {
-                    method: 'GET',
-                    mode: 'cors',
-                    cache: 'no-store',
-                    credentials: 'omit'
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                
-                if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
-                    throw new Error('No questions found or invalid data format');
-                }
-                
-                questions = [];
-                for (let i = 0; i < data.questions.length; i++) {
-                    const q = data.questions[i];
-                    if (!q.question || !q.options || !Array.isArray(q.options) || q.options.length < 4 || !q.correctAnswer) {
-                        throw new Error(`Invalid question at index ${i}: ${JSON.stringify(q)}`);
-                    }
-                    
-                    const correctIndex = q.options.findIndex(option => option === q.correctAnswer);
-                    if (correctIndex === -1) {
-                        throw new Error(`Correct answer "${q.correctAnswer}" not found in options for question at index ${i}`);
-                    }
-                    
-                    questions.push({
-                        question: q.question,
-                        options: q.options,
-                        correct: correctIndex
-                    });
-                }
-                
-                console.log('Successfully loaded and converted', questions.length, 'questions');
-                
+                // पेमेंट डेटा साफ़ करें
+                localStorage.removeItem('paymentsData');
+                localStorage.removeItem('userSession');
+                alert('आपका पेमेंट डेटा रीसेट हो गया है।');
+                document.getElementById('payment-form').reset();
             } catch (error) {
-                console.error('Failed to load questions:', error);
-                
-                const errorMessage = document.createElement('div');
-                errorMessage.className = 'error-message';
-                errorMessage.innerHTML = `
-                    <strong>त्रुटि:</strong> ${error.message}<br><br>
-                    <strong>समाधान:</strong><br>
-                    1. अपने GitHub रिपॉजिटरी URL की जांच करें<br>
-                    2. questions.json फ़ाइल की संरचना की जांच करें<br>
-                    3. इंटरनेट कनेक्शन की जांच करें
-                `;
-                
-                const errorContainer = document.querySelector('.error-container');
-                if (errorContainer) {
-                    const oldMessage = errorContainer.querySelector('.error-message');
-                    if (oldMessage) {
-                        oldMessage.parentNode.removeChild(oldMessage);
-                    }
-                    errorContainer.insertBefore(errorMessage, errorContainer.firstChild);
-                }
-                
-                showErrorOverlay();
-                if ('vibrate' in navigator) navigator.vibrate(200);
+                alert('डेटा रीसेट करने में समस्या हुई। कृपया इंटरनेट चेक करें और दोबारा कोशिश करें।');
             }
         }
-
-        function startQuiz() {
-            if (!navigator.onLine) {
-                document.getElementById('offline-section').style.display = 'block';
-                document.getElementById('online-content').style.display = 'none';
-                return;
-            }
-            
-            if (quizStarted) return;
-            quizStarted = true;
-            
-            const welcomeSection = document.getElementById('welcome-section');
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            
-            if (welcomeSection && quizSection && scoreSection) {
-                welcomeSection.style.display = 'none';
-                quizSection.style.display = 'block';
-                scoreSection.style.display = 'none';
-                
-                currentQuestionIndex = 0;
-                score = 0;
-                updateScore();
-                
-                if (questions.length === 0) {
-                    loadQuestions().then(() => {
-                        if (questions.length > 0) {
-                            showQuestion();
-                        } else {
-                            showErrorOverlay();
-                        }
-                    }).catch(() => {
-                        showErrorOverlay();
-                    });
-                } else {
-                    showQuestion();
-                }
-            } else {
-                console.error('Quiz sections not found for paid quiz');
-                showErrorOverlay();
-            }
+        
+        function showSuccessModal(transactionId) {
+            document.getElementById('success-modal').style.display = 'flex';
+            document.getElementById('online-content').style.display = 'none';
         }
 
-        function updateScore() {
-            const scoreDisplay = document.getElementById('score-display');
-            const scoreValue = document.getElementById('score-value');
-            if (scoreDisplay && scoreValue) {
-                scoreValue.textContent = score;
-                scoreDisplay.style.display = 'block';
-            }
+        function closeModal() {
+            document.getElementById('success-modal').style.display = 'none';
+            document.getElementById('online-content').style.display = 'block';
         }
 
-        function updateProgressBar() {
-            const progressBar = document.getElementById('progress-bar');
-            if (progressBar) {
-                const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-                progressBar.style.width = `${progress}%`;
-            }
+        function checkStatusAndRedirect() {
+            closeModal();
+            checkPaymentStatus();
         }
-
-        function showQuestion() {
-            const questionText = document.getElementById('question-text');
-            const optionsList = document.getElementById('options-list');
-            const result = document.getElementById('result');
-            const nextBtn = document.getElementById('next-btn');
-            
-            if (!questionText || !optionsList || !result || !nextBtn) {
-                console.error('Paid quiz elements not found');
-                showErrorOverlay();
-                return;
-            }
-            
-            if (currentQuestionIndex >= questions.length) {
-                showFinalScore();
-                return;
-            }
-            
-            const question = questions[currentQuestionIndex];
-            if (!question || !question.question || !question.options || !Array.isArray(question.options) || question.options.length < 4) {
-                console.error('Invalid question data for paid quiz:', question);
-                showErrorOverlay();
-                return;
-            }
-            
-            questionText.textContent = question.question;
-            optionsList.innerHTML = '';
-            result.style.display = 'none';
-            nextBtn.style.display = 'none';
-            updateProgressBar();
-            
-            question.options.forEach((option, index) => {
-                const li = document.createElement('li');
-                li.textContent = option || 'विकल्प गायब';
-                li.style.opacity = '0';
-                li.style.transform = 'scale(0.9) translateY(15px)';
-                li.onclick = () => checkAnswer(index);
-                optionsList.appendChild(li);
-                
-                setTimeout(() => {
-                    li.style.transition = 'all 0.5s ease';
-                    li.style.opacity = '1';
-                    li.style.transform = 'scale(1) translateY(0)';
-                }, index * 100);
+        
+        function handleImageError() {
+            checkNetworkStatus();
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            checkNetworkStatus();
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', handleImageError);
             });
-        }
-
-        function triggerConfetti() {
-            confetti({
-                particleCount: 200,
-                spread: 90,
-                origin: { y: 0.4 },
-                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'],
-                shapes: ['square', 'circle', 'star'],
-                ticks: 300,
-                gravity: 0.8,
-                scalar: 1.2
-            });
-            setTimeout(() => {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00'],
-                    shapes: ['square', 'circle'],
-                    ticks: 200
-                });
-            }, 200);
-        }
-
-        function checkAnswer(selectedIndex) {
-            const question = questions[currentQuestionIndex];
-            const options = document.querySelectorAll('#options-list li');
-            const result = document.getElementById('result');
-            
-            if (!result || !options.length) {
-                console.error('Result or options not found for paid quiz');
-                showErrorOverlay();
-                return;
-            }
-            
-            options.forEach((option, index) => {
-                option.onclick = null;
-                if (index === question.correct) option.classList.add('correct');
-                if (index === selectedIndex && selectedIndex !== question.correct) option.classList.add('incorrect');
-            });
-            
-            if (selectedIndex === question.correct) {
-                score++;
-                updateScore();
-                result.textContent = 'सही जवाब!';
-                result.className = 'result success';
-                triggerConfetti();
-                try {
-                    correctSound.play().catch(e => console.error('Correct sound failed:', e));
-                } catch (e) {
-                    console.error('Correct sound error:', e);
-                }
-            } else {
-                result.textContent = `गलत जवाब! सही: ${question.options[question.correct]}`;
-                result.className = 'result error';
-                try {
-                    incorrectSound.play().catch(e => console.error('Incorrect sound failed:', e));
-                } catch (e) {
-                    console.error('Incorrect sound error:', e);
-                }
-            }
-            
-            result.style.display = 'block';
-            
-            if ('vibrate' in navigator) navigator.vibrate(200);
-            
-            setTimeout(() => {
-                currentQuestionIndex++;
-                showQuestion();
-            }, 1500);
-        }
-
-        function showFinalScore() {
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            const finalScoreCircle = document.getElementById('final-score-circle');
-            const scoreDetails = document.getElementById('score-details');
-            
-            if (!quizSection || !scoreSection || !finalScoreCircle || !scoreDetails) {
-                console.error('Score section elements not found');
-                showErrorOverlay();
-                return;
-            }
-            
-            quizSection.style.display = 'none';
-            scoreSection.style.display = 'flex';
-            
-            finalScoreCircle.textContent = `${score}/${questions.length}`;
-            const percentage = ((score / questions.length) * 100).toFixed(2);
-            scoreDetails.innerHTML = `
-                आपका स्कोर: ${score}/${questions.length}<br>
-                प्रतिशत: ${percentage}%<br>
-                सही जवाब: ${score}<br>
-                गलत जवाब: ${questions.length - score}<br>
-                समय: ${new Date().toLocaleTimeString()}
-            `;
-        }
-
-        function restartQuiz() {
-            quizStarted = false;
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            const welcomeSection = document.getElementById('welcome-section');
-            if (quizSection && scoreSection && welcomeSection) {
-                scoreSection.style.display = 'none';
-                quizSection.style.display = 'none';
-                welcomeSection.style.display = 'block';
-                currentQuestionIndex = 0;
-                score = 0;
-                updateScore();
-            }
-        }
-
-        function showErrorOverlay() {
-            const errorOverlay = document.getElementById('error-overlay');
-            if (errorOverlay) {
-                errorOverlay.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function retry() {
-            quizStarted = false;
-            const errorOverlay = document.getElementById('error-overlay');
-            if (errorOverlay) {
-                errorOverlay.style.display = 'none';
-                document.body.style.overflow = 'hidden';
-                checkNetworkStatus();
-                if (navigator.onLine) {
-                    loadQuestions().then(() => {
-                        if (questions.length > 0) {
-                            startQuiz();
-                        }
-                    });
-                }
-            }
-        }
-
-        // Check network status when page becomes visible again
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                checkNetworkStatus();
-            }
         });
-
-        // Handle page load when offline
+        
         window.addEventListener('load', () => {
-            if (!navigator.onLine) {
-                document.getElementById('offline-section').style.display = 'block';
-                document.getElementById('online-content').style.display = 'none';
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('user_id')) {
+                document.getElementById('user_id').value = params.get('user_id');
             }
+            checkNetworkStatus();
         });
-
-        window.onerror = function(message) {
-            console.error('Global error for paid quiz:', message);
-            showErrorOverlay();
-            return true;
-        };
 
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
+
+        document.querySelector('.upi-id').addEventListener('click', () => {
+            const upiId = '9057650616@amazon.pay';
+            navigator.clipboard.writeText(upiId).then(() => {
+                alert('UPI ID कॉपी हो गई है!');
+            }).catch(err => {
+                console.error('Failed to copy UPI ID: ', err);
+            });
+        });
+
+        // बैक प्रेस हैंडलिंग - डायरेक्ट होम पर जाए
+        window.onpopstate = function() {
+            window.location.href = 'file:///android_asset/home.html';
+            if (window.AppInventor) {
+                window.AppInventor.loadUrl('file:///android_asset/home.html');
+            }
+        };
+        // बैक बटन को ओवरराइड और सेटअप
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = window.onpopstate || function() {
+            window.location.href = 'file:///android_asset/home.html';
+            if (window.AppInventor) {
+                window.AppInventor.loadUrl('file:///android_asset/home.html');
+            }
+        };
     </script>
 </body>
 </html>
