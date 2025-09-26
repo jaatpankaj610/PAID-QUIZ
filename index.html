@@ -771,6 +771,20 @@
             }
         }
     </style>
+    <script>
+        // सर्विस वर्कर रजिस्टर करें
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
 </head>
 <body>
     <div class="header">
