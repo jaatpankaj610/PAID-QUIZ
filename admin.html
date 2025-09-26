@@ -2,14 +2,8 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="theme-color" content="#4a00e0">
-    <title>राजस्थान GK क्विज़ - एडमिन पैनल</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>एडमिन पैनल - राजस्थान GK क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
     <style>
@@ -22,8 +16,6 @@
             --light: #f8f9fa;
             --dark: #2d3436;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --offline-gradient: linear-gradient(135deg, #636e72, #b2bec3);
-            --error-gradient: linear-gradient(135deg, #ff7675, #d63031);
         }
 
         * {
@@ -33,836 +25,697 @@
             font-family: 'Noto Sans Devanagari', sans-serif;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            touch-action: pan-y;
-            -webkit-tap-highlight-color: transparent;
-        }
-
         body {
             background: linear-gradient(120deg, #e0c3fc, #8ec5fc);
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            min-width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            overscroll-behavior: none;
+            padding: 20px;
         }
 
         .container {
-            width: 100%;
-            height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
             background: var(--light);
+            border-radius: 15px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
-
-        .scrollable-content {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .scrollable-content::-webkit-scrollbar {
-            display: none;
         }
 
         .header {
             background: var(--gradient);
-            padding: 16px 12px;
+            padding: 20px;
             text-align: center;
             color: var(--light);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: calc(100vw - 24px);
-        }
-
-        .header p {
-            font-size: 12px;
-            font-weight: 500;
-            opacity: 0.9;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: calc(100vw - 24px);
+            font-size: 24px;
+            margin-bottom: 10px;
         }
 
         .content {
-            padding: 72px 12px 80px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            padding: 20px;
         }
 
-        .admin-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .admin-header {
+        .admin-actions {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .admin-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .admin-stats {
-            display: flex;
-            gap: 12px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .stat-card {
-            background: rgba(74, 0, 224, 0.1);
-            border-radius: 8px;
-            padding: 12px;
-            flex: 1;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--dark);
-            margin-top: 4px;
-        }
-
-        .filter-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            border-bottom: 1px solid #e9ecef;
-            padding-bottom: 8px;
-        }
-
-        .filter-tab {
-            background: transparent;
+        .admin-actions button {
+            background: var(--gradient);
+            color: var(--light);
             border: none;
-            padding: 8px 16px;
+            border-radius: 30px;
+            padding: 10px 20px;
             font-size: 14px;
             font-weight: 600;
-            color: #555;
             cursor: pointer;
-            border-radius: 20px;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-tab.active {
-            background: var(--primary);
+        .admin-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 0, 224, 0.2);
+        }
+
+        .payments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .payments-table th, .payments-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .payments-table th {
+            background: var(--gradient);
             color: white;
-        }
-
-        .filter-tab:hover:not(.active) {
-            background: rgba(74, 0, 224, 0.1);
-        }
-
-        .requests-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .request-card {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .request-card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .request-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .request-user {
             font-weight: 600;
-            color: var(--dark);
-            font-size: 16px;
         }
 
-        .request-status {
-            padding: 4px 8px;
-            border-radius: 12px;
+        .payments-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .payments-table tr:hover {
+            background: rgba(74, 0, 224, 0.05);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
         }
 
-        .request-status.pending {
+        .status-badge.pending {
             background: rgba(253, 203, 110, 0.2);
             color: var(--warning);
         }
 
-        .request-status.approved {
+        .status-badge.approved {
             background: rgba(0, 184, 148, 0.2);
             color: var(--success);
         }
 
-        .request-status.rejected {
+        .status-badge.rejected {
             background: rgba(214, 48, 49, 0.2);
             color: var(--danger);
         }
 
-        .request-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .request-detail {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .request-detail-label {
-            font-size: 12px;
-            color: #555;
-        }
-
-        .request-detail-value {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .request-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .request-action {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .request-action.approve {
-            background: rgba(0, 184, 148, 0.1);
-            color: var(--success);
-        }
-
-        .request-action.approve:hover {
-            background: rgba(0, 184, 148, 0.2);
-        }
-
-        .request-action.reject {
-            background: rgba(214, 48, 49, 0.1);
-            color: var(--danger);
-        }
-
-        .request-action.reject:hover {
-            background: rgba(214, 48, 49, 0.2);
-        }
-
-        .request-action.view {
-            background: rgba(74, 0, 224, 0.1);
-            color: var(--primary);
-        }
-
-        .request-action.view:hover {
-            background: rgba(74, 0, 224, 0.2);
-        }
-
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .empty-state-icon {
-            font-size: 48px;
-            color: #ccc;
-            margin-bottom: 16px;
-        }
-
-        .empty-state-text {
-            font-size: 16px;
-            color: #555;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            padding-top: 60px;
-        }
-
-        .modal-content {
-            background: #fff;
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .close-btn {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close-btn:hover, .close-btn:focus {
-            color: #000;
-        }
-
-        .modal-header {
-            background: var(--gradient);
-            color: white;
-            padding: 15px;
-            margin: -20px -20px 20px -20px;
-            border-radius: 12px 12px 0 0;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-        }
-
-        .modal-footer {
+        .action-buttons {
             display: flex;
             gap: 10px;
-            justify-content: flex-end;
         }
 
-        .modal-btn {
-            padding: 8px 16px;
+        .action-buttons button {
+            padding: 6px 12px;
             border: none;
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 5px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .modal-btn.primary {
+        .approve-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .approve-btn:hover {
+            background: #00a085;
+        }
+
+        .reject-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        .reject-btn:hover {
+            background: #c0392b;
+        }
+
+        .view-btn {
             background: var(--primary);
             color: white;
         }
 
-        .modal-btn.primary:hover {
-            background: var(--secondary);
+        .view-btn:hover {
+            background: #3a0bc2;
         }
 
-        .modal-btn.secondary {
-            background: #e9ecef;
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #777;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .payment-details {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-details-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .payment-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .payment-details-header h2 {
+            font-size: 20px;
             color: var(--dark);
         }
 
-        .modal-btn.secondary:hover {
-            background: #dee2e6;
-        }
-
-        .refresh-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--gradient);
-            color: white;
+        .close-details {
+            background: none;
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s ease;
+            color: #777;
         }
 
-        .refresh-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(74, 0, 224, 0.3);
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
         }
 
-        .refresh-btn:active {
-            transform: scale(0.95);
-        }
-
-        .logout-btn {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            padding: 8px 16px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
+        .detail-label {
             font-weight: 600;
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 150px;
+            color: var(--dark);
         }
 
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(214, 48, 49, 0.3);
+        .detail-value {
+            flex: 1;
         }
 
-        @media (max-width: 480px) {
-            .header { padding: 12px 8px; }
-            .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
-            .header p { font-size: 11px; max-width: calc(100vw - 20px); }
-            .content { padding: 64px 8px 72px; gap: 12px; }
-            .admin-panel { padding: 12px; }
-            .admin-title { font-size: 16px; }
-            .admin-stats { gap: 8px; margin-bottom: 16px; }
-            .stat-card { padding: 10px; }
-            .stat-number { font-size: 20px; }
-            .stat-label { font-size: 11px; }
-            .filter-tabs { gap: 6px; margin-bottom: 12px; }
-            .filter-tab { padding: 6px 12px; font-size: 12px; }
-            .request-card { padding: 10px; }
-            .request-user { font-size: 14px; }
-            .request-status { font-size: 11px; padding: 3px 6px; }
-            .request-details { gap: 6px; margin-bottom: 10px; }
-            .request-detail-label { font-size: 11px; }
-            .request-detail-value { font-size: 12px; }
-            .request-actions { gap: 6px; }
-            .request-action { padding: 6px; font-size: 12px; }
-            .empty-state { padding: 30px 15px; }
-            .empty-state-icon { font-size: 40px; }
-            .empty-state-text { font-size: 14px; }
-            .modal-content { width: 95%; padding: 15px; }
-            .modal-header { padding: 12px; margin: -15px -15px 15px -15px; font-size: 16px; }
-            .modal-btn { padding: 6px 12px; font-size: 12px; }
-            .refresh-btn { width: 48px; height: 48px; font-size: 18px; bottom: 16px; right: 16px; }
-            .logout-btn { top: 60px; right: 16px; padding: 6px 12px; font-size: 12px; }
+        .status-approved {
+            color: var(--success);
+            font-weight: 600;
         }
 
-        @media (min-width: 768px) {
-            .header { padding: 20px 16px; }
-            .header h1 { font-size: 22px; }
-            .header p { font-size: 14px; }
-            .content { padding: 80px 16px 88px; gap: 20px; }
-            .admin-panel { padding: 20px; }
-            .admin-title { font-size: 20px; }
-            .admin-stats { gap: 16px; margin-bottom: 24px; }
-            .stat-card { padding: 16px; }
-            .stat-number { font-size: 28px; }
-            .stat-label { font-size: 14px; }
-            .filter-tabs { gap: 10px; margin-bottom: 20px; }
-            .filter-tab { padding: 10px 20px; font-size: 16px; }
-            .request-card { padding: 16px; }
-            .request-user { font-size: 18px; }
-            .request-status { font-size: 14px; padding: 6px 12px; }
-            .request-details { gap: 12px; margin-bottom: 16px; }
-            .request-detail-label { font-size: 14px; }
-            .request-detail-value { font-size: 16px; }
-            .request-actions { gap: 12px; }
-            .request-action { padding: 10px; font-size: 16px; }
-            .empty-state { padding: 50px 30px; }
-            .empty-state-icon { font-size: 56px; }
-            .empty-state-text { font-size: 18px; }
-            .modal-content { max-width: 500px; padding: 25px; }
-            .modal-header { padding: 18px; margin: -25px -25px 25px -25px; font-size: 20px; }
-            .modal-btn { padding: 10px 20px; font-size: 16px; }
-            .refresh-btn { width: 64px; height: 64px; font-size: 24px; bottom: 24px; right: 24px; }
-            .logout-btn { top: 80px; right: 24px; padding: 10px 20px; font-size: 16px; }
+        .status-rejected {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .status-pending {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .payments-table {
+                font-size: 14px;
+            }
+            
+            .payments-table th, .payments-table td {
+                padding: 8px 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-user-shield"></i> एडमिन पैनल</h1>
-            <p>प्रीमियम क्विज़ एक्सेस रिक्वेस्ट मैनेज करें</p>
+            <h1><i class="fas fa-crown"></i> एडमिन पैनल - राजस्थान GK क्विज़</h1>
+            <p>पेमेंट रिक्वेस्ट मैनेज करें</p>
         </div>
         
-        <div class="scrollable-content">
-            <div class="content">
-                <div class="admin-panel">
-                    <div class="admin-header">
-                        <div class="admin-title">रिक्वेस्ट मैनेजमेंट</div>
-                    </div>
-                    
-                    <div class="admin-stats">
-                        <div class="stat-card">
-                            <div class="stat-number" id="pending-count">0</div>
-                            <div class="stat-label">पेंडिंग</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="approved-count">0</div>
-                            <div class="stat-label">अप्रूव्ड</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="rejected-count">0</div>
-                            <div class="stat-label">रिजेक्टेड</div>
-                        </div>
-                    </div>
-                    
-                    <div class="filter-tabs">
-                        <button class="filter-tab active" onclick="filterRequests('all')">सभी</button>
-                        <button class="filter-tab" onclick="filterRequests('pending')">पेंडिंग</button>
-                        <button class="filter-tab" onclick="filterRequests('approved')">अप्रूव्ड</button>
-                        <button class="filter-tab" onclick="filterRequests('rejected')">रिजेक्टेड</button>
-                    </div>
-                    
-                    <div class="requests-container" id="requests-container">
-                        <div class="empty-state">
-                            <i class="fas fa-inbox empty-state-icon"></i>
-                            <div class="empty-state-text">कोई रिक्वेस्ट नहीं मिली</div>
-                        </div>
-                    </div>
+        <div class="content">
+            <div class="admin-actions">
+                <button onclick="refreshPayments()"><i class="fas fa-sync-alt"></i> रीफ्रेश</button>
+                <button onclick="exportData()"><i class="fas fa-download"></i> एक्सपोर्ट डेटा</button>
+                <button onclick="clearAllPayments()"><i class="fas fa-trash-alt"></i> सभी पेमेंट्स क्लियर करें</button>
+            </div>
+            
+            <div class="filter-container">
+                <div class="filter-group">
+                    <label for="status-filter">स्टेटस फिल्टर</label>
+                    <select id="status-filter" onchange="filterPayments()">
+                        <option value="all">सभी</option>
+                        <option value="pending">पेंडिंग</option>
+                        <option value="approved">अप्रूव्ड</option>
+                        <option value="rejected">रिजेक्टेड</option>
+                    </select>
                 </div>
+                
+                <div class="filter-group">
+                    <label for="search-filter">खोजें (ईमेल/ट्रांजैक्शन ID)</label>
+                    <input type="text" id="search-filter" placeholder="खोजें..." oninput="filterPayments()">
+                </div>
+            </div>
+            
+            <div id="payments-container">
+                <!-- पेमेंट्स टेबल यहां डायनामिक रूप से जोड़ी जाएगी -->
             </div>
         </div>
     </div>
     
-    <button class="refresh-btn" onclick="loadRequests()">
-        <i class="fas fa-sync-alt"></i>
-    </button>
-    
-    <button class="logout-btn" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i> लॉग आउट
-    </button>
-    
-    <div id="confirm-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div class="modal-header" id="modal-title">कार्रवाई की पुष्टि करें</div>
-            <div class="modal-body" id="modal-body">
-                क्या आप वाकई इस रिक्वेस्ट को अप्रूव करना चाहते हैं?
+    <div id="payment-details" class="payment-details">
+        <div class="payment-details-content">
+            <div class="payment-details-header">
+                <h2>पेमेंट डिटेल्स</h2>
+                <button class="close-details" onclick="closePaymentDetails()">&times;</button>
             </div>
-            <div class="modal-footer">
-                <button class="modal-btn secondary" onclick="closeModal()">रद्द करें</button>
-                <button class="modal-btn primary" id="modal-confirm-btn" onclick="confirmAction()">पुष्टि करें</button>
+            <div id="payment-details-body">
+                <!-- पेमेंट डिटेल्स यहां डायनामिक रूप से जोड़ी जाएगी -->
             </div>
         </div>
     </div>
     
     <script>
-        // GitHub रेपो URL
-        const GITHUB_REPO_URL = 'https://jaatpankaj610.github.io/PAID-QUIZ/';
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPayments();
+        });
         
-        // एडमिन लॉगिन स्टेटस (डेमो के लिए सरल)
-        const ADMIN_PASSWORD = 'admin123';
-        
-        // वर्तमान फ़िल्टर
-        let currentFilter = 'all';
-        
-        // एक्शन कॉन्फ़िगरेशन
-        let actionConfig = {
-            type: '',
-            requestId: '',
-            userId: '',
-            transactionId: ''
-        };
-        
-        // लोकल स्टोरेज से डेटा प्राप्त करने के लिए फ़ंक्शन
-        function getPaymentData() {
-            try {
-                return JSON.parse(localStorage.getItem('paymentsData') || '[]');
-            } catch (error) {
-                console.error('Error getting payment data:', error);
-                return [];
-            }
-        }
-        
-        // लोकल स्टोरेज में डेटा सेव करने के लिए फ़ंक्शन
-        function savePaymentData(data) {
-            try {
-                localStorage.setItem('paymentsData', JSON.stringify(data));
-                return true;
-            } catch (error) {
-                console.error('Error saving payment data:', error);
-                return false;
-            }
-        }
-        
-        // एडमिन लॉगिन चेक करने के लिए फ़ंक्शन
-        function checkAdminLogin() {
-            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+        function loadPayments() {
+            const paymentsContainer = document.getElementById('payments-container');
             
-            if (isLoggedIn !== 'true') {
-                const password = prompt('एडमिन पासवर्ड दर्ज करें:');
-                
-                if (password === ADMIN_PASSWORD) {
-                    localStorage.setItem('adminLoggedIn', 'true');
-                    return true;
-                } else {
-                    alert('गलत पासवर्ड!');
-                    window.location.href = 'index.html';
-                    return false;
-                }
-            }
+            // लोकल स्टोरेज से पेमेंट्स लोड करें
+            const payments = JSON.parse(localStorage.getItem('payments')) || [];
             
-            return true;
-        }
-        
-        // लॉगआउट करने के लिए फ़ंक्शन
-        function logout() {
-            localStorage.removeItem('adminLoggedIn');
-            window.location.href = 'index.html';
-        }
-        
-        // रिक्वेस्ट लोड करने के लिए फ़ंक्शन
-        function loadRequests() {
-            const requests = getPaymentData();
-            
-            // स्टैट्स अपडेट करें
-            const pendingCount = requests.filter(r => r.status === 'pending').length;
-            const approvedCount = requests.filter(r => r.status === 'approved').length;
-            const rejectedCount = requests.filter(r => r.status === 'rejected').length;
-            
-            document.getElementById('pending-count').textContent = pendingCount;
-            document.getElementById('approved-count').textContent = approvedCount;
-            document.getElementById('rejected-count').textContent = rejectedCount;
-            
-            // रिक्वेस्ट फ़िल्टर करें
-            const filteredRequests = currentFilter === 'all' 
-                ? requests 
-                : requests.filter(r => r.status === currentFilter);
-            
-            const container = document.getElementById('requests-container');
-            
-            if (filteredRequests.length === 0) {
-                container.innerHTML = `
+            if (payments.length === 0) {
+                paymentsContainer.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-inbox empty-state-icon"></i>
-                        <div class="empty-state-text">कोई रिक्वेस्ट नहीं मिली</div>
+                        <i class="fas fa-inbox"></i>
+                        <h3>कोई पेमेंट रिक्वेस्ट नहीं मिली</h3>
+                        <p>अभी तक कोई भी पेमेंट रिक्वेस्ट सबमिट नहीं की गई है।</p>
                     </div>
                 `;
                 return;
             }
             
-            container.innerHTML = '';
+            // पेमेंट्स टेबल बनाएं
+            let tableHTML = `
+                <table class="payments-table">
+                    <thead>
+                        <tr>
+                            <th>ईमेल ID</th>
+                            <th>मोबाइल नंबर</th>
+                            <th>ट्रांजैक्शन ID</th>
+                            <th>राशि</th>
+                            <th>तारीख</th>
+                            <th>स्टेटस</th>
+                            <th>कार्रवाई</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
             
-            filteredRequests.forEach(request => {
-                const card = document.createElement('div');
-                card.className = 'request-card';
+            // पेमेंट्स को तारीख के अनुसार सॉर्ट करें (नवीनतम पहले)
+            payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            payments.forEach((payment, index) => {
+                const date = new Date(payment.timestamp);
+                const formattedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
                 
-                const statusClass = request.status || 'pending';
-                const statusText = {
-                    'pending': 'पेंडिंग',
-                    'approved': 'अप्रूव्ड',
-                    'rejected': 'रिजेक्टेड'
-                }[statusClass] || 'पेंडिंग';
-                
-                card.innerHTML = `
-                    <div class="request-header">
-                        <div class="request-user">${request.user_id}</div>
-                        <div class="request-status ${statusClass}">${statusText}</div>
-                    </div>
-                    <div class="request-details">
-                        <div class="request-detail">
-                            <div class="request-detail-label">मोबाइल नंबर</div>
-                            <div class="request-detail-value">${request.mobile_number}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">राशि</div>
-                            <div class="request-detail-value">₹${request.amount}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">ट्रांजैक्शन ID</div>
-                            <div class="request-detail-value">${request.transaction_id}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">दिनांक</div>
-                            <div class="request-detail-value">${new Date(request.timestamp).toLocaleDateString()}</div>
-                        </div>
-                    </div>
-                    <div class="request-actions">
-                        ${request.status === 'pending' ? `
-                            <button class="request-action approve" onclick="showActionModal('approve', '${request.id}', '${request.user_id}', '${request.transaction_id}')">
-                                <i class="fas fa-check"></i> अप्रूव
-                            </button>
-                            <button class="request-action reject" onclick="showActionModal('reject', '${request.id}', '${request.user_id}', '${request.transaction_id}')">
-                                <i class="fas fa-times"></i> रिजेक्ट
-                            </button>
-                        ` : ''}
-                        <button class="request-action view" onclick="viewRequest('${request.id}')">
-                            <i class="fas fa-eye"></i> विवरण
-                        </button>
-                    </div>
+                tableHTML += `
+                    <tr>
+                        <td>${payment.user_id}</td>
+                        <td>${payment.mobile_number}</td>
+                        <td>${payment.transaction_id}</td>
+                        <td>₹${payment.amount}</td>
+                        <td>${formattedDate}</td>
+                        <td><span class="status-badge ${payment.status}">${getStatusText(payment.status)}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="view-btn" onclick="viewPaymentDetails(${index})"><i class="fas fa-eye"></i></button>
+                                ${payment.status === 'pending' ? `
+                                    <button class="approve-btn" onclick="approvePayment(${index})"><i class="fas fa-check"></i></button>
+                                    <button class="reject-btn" onclick="rejectPayment(${index})"><i class="fas fa-times"></i></button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
                 `;
-                
-                container.appendChild(card);
-            });
-        }
-        
-        // रिक्वेस्ट फ़िल्टर करने के लिए फ़ंक्शन
-        function filterRequests(filter) {
-            currentFilter = filter;
-            
-            // टैब अपडेट करें
-            const tabs = document.querySelectorAll('.filter-tab');
-            tabs.forEach(tab => {
-                tab.classList.remove('active');
             });
             
-            event.target.classList.add('active');
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
             
-            // रिक्वेस्ट रीलोड करें
-            loadRequests();
+            paymentsContainer.innerHTML = tableHTML;
         }
         
-        // एक्शन मोडल दिखाने के लिए फ़ंक्शन
-        function showActionModal(type, requestId, userId, transactionId) {
-            actionConfig = {
-                type,
-                requestId,
-                userId,
-                transactionId
-            };
-            
-            const modal = document.getElementById('confirm-modal');
-            const title = document.getElementById('modal-title');
-            const body = document.getElementById('modal-body');
-            const confirmBtn = document.getElementById('modal-confirm-btn');
-            
-            if (type === 'approve') {
-                title.textContent = 'अप्रूवल की पुष्टि करें';
-                body.textContent = `क्या आप वाकई ${userId} की रिक्वेस्ट को अप्रूव करना चाहते हैं?`;
-                confirmBtn.textContent = 'अप्रूव करें';
-            } else {
-                title.textContent = 'रिजेक्शन की पुष्टि करें';
-                body.textContent = `क्या आप वाकई ${userId} की रिक्वेस्ट को रिजेक्ट करना चाहते हैं?`;
-                confirmBtn.textContent = 'रिजेक्ट करें';
+        function getStatusText(status) {
+            switch(status) {
+                case 'pending': return 'पेंडिंग';
+                case 'approved': return 'अप्रूव्ड';
+                case 'rejected': return 'रिजेक्टेड';
+                default: return status;
             }
-            
-            modal.style.display = 'block';
         }
         
-        // मोडल बंद करने के लिए फ़ंक्शन
-        function closeModal() {
-            document.getElementById('confirm-modal').style.display = 'none';
-        }
-        
-        // एक्शन की पुष्टि करने के लिए फ़ंक्शन
-        function confirmAction() {
-            const { type, requestId, userId, transactionId } = actionConfig;
+        function approvePayment(index) {
+            const payments = JSON.parse(localStorage.getItem('payments')) || [];
             
-            // रिक्वेस्ट अपडेट करें
-            const requests = getPaymentData();
-            const requestIndex = requests.findIndex(r => r.id === requestId);
-            
-            if (requestIndex !== -1) {
-                requests[requestIndex].status = type;
-                savePaymentData(requests);
+            if (payments[index]) {
+                payments[index].status = 'approved';
+                payments[index].approved_at = new Date().toISOString();
                 
-                // अगर अप्रूव्ड है, तो approved-users.json अपडेट करें (डेमो में यह संभव नहीं है)
-                if (type === 'approved') {
-                    alert('रिक्वेस्ट अप्रूव कर दी गई है। यूजर को अब क्विज़ तक पहुँच मिलेगी।');
-                    
-                    // यहां आपको अपने GitHub रेपो में approved-users.json फ़ाइल में यूजर जोड़ना होगा
-                    // उदाहरण के लिए:
-                    // {
-                    //   "email": "${userId}",
-                    //   "transaction_id": "${transactionId}",
-                    //   "approved_at": "${new Date().toISOString()}",
-                    //   "expiry_date": "${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()}"
-                    // }
-                } else {
-                    alert('रिक्वेस्ट रिजेक्ट कर दी गई है।');
+                localStorage.setItem('payments', JSON.stringify(payments));
+                
+                // यूजर के लिए प्रीमियम एक्सेस सेव करें
+                savePremiumAccessToLocalStorage(payments[index].user_id, payments[index].approved_at);
+                
+                alert('पेमेंट अप्रूव कर दी गई है!');
+                loadPayments();
+            }
+        }
+        
+        function rejectPayment(index) {
+            const payments = JSON.parse(localStorage.getItem('payments')) || [];
+            
+            if (payments[index]) {
+                payments[index].status = 'rejected';
+                payments[index].rejected_at = new Date().toISOString();
+                
+                localStorage.setItem('payments', JSON.stringify(payments));
+                
+                alert('पेमेंट रिजेक्ट कर दी गई है!');
+                loadPayments();
+            }
+        }
+        
+        function viewPaymentDetails(index) {
+            const payments = JSON.parse(localStorage.getItem('payments')) || [];
+            
+            if (payments[index]) {
+                const payment = payments[index];
+                const paymentDetailsBody = document.getElementById('payment-details-body');
+                
+                const createdDate = new Date(payment.timestamp);
+                const formattedCreatedDate = createdDate.toLocaleDateString('hi-IN') + ' ' + createdDate.toLocaleTimeString('hi-IN');
+                
+                let approvedDate = '';
+                if (payment.approved_at) {
+                    const date = new Date(payment.approved_at);
+                    approvedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
                 }
                 
-                closeModal();
-                loadRequests();
+                let rejectedDate = '';
+                if (payment.rejected_at) {
+                    const date = new Date(payment.rejected_at);
+                    rejectedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
+                }
+                
+                paymentDetailsBody.innerHTML = `
+                    <div class="detail-row">
+                        <div class="detail-label">ईमेल ID:</div>
+                        <div class="detail-value">${payment.user_id}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">मोबाइल नंबर:</div>
+                        <div class="detail-value">${payment.mobile_number}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">ट्रांजैक्शन ID:</div>
+                        <div class="detail-value">${payment.transaction_id}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">राशि:</div>
+                        <div class="detail-value">₹${payment.amount}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">नोट:</div>
+                        <div class="detail-value">${payment.payment_note || 'कोई नोट नहीं'}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">सबमिट तारीख:</div>
+                        <div class="detail-value">${formattedCreatedDate}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">स्टेटस:</div>
+                        <div class="detail-value status-${payment.status}">${getStatusText(payment.status)}</div>
+                    </div>
+                    ${approvedDate ? `
+                        <div class="detail-row">
+                            <div class="detail-label">अप्रूवल तारीख:</div>
+                            <div class="detail-value">${approvedDate}</div>
+                        </div>
+                    ` : ''}
+                    ${rejectedDate ? `
+                        <div class="detail-row">
+                            <div class="detail-label">रिजेक्शन तारीख:</div>
+                            <div class="detail-value">${rejectedDate}</div>
+                        </div>
+                    ` : ''}
+                `;
+                
+                document.getElementById('payment-details').style.display = 'flex';
             }
         }
         
-        // रिक्वेस्ट विवरण देखने के लिए फ़ंक्शन
-        function viewRequest(requestId) {
-            const requests = getPaymentData();
-            const request = requests.find(r => r.id === requestId);
+        function closePaymentDetails() {
+            document.getElementById('payment-details').style.display = 'none';
+        }
+        
+        function savePremiumAccessToLocalStorage(userId, approvedAt) {
+            const expiryDate = new Date(approvedAt);
+            expiryDate.setDate(expiryDate.getDate() + 30);
+            const accessData = {
+                userId: userId,
+                approvedAt: approvedAt,
+                expiresAt: expiryDate.toISOString()
+            };
+            localStorage.setItem('premiumAccess', JSON.stringify(accessData));
+        }
+        
+        function refreshPayments() {
+            loadPayments();
+        }
+        
+        function exportData() {
+            const payments = JSON.parse(localStorage.getItem('payments')) || [];
             
-            if (request) {
-                alert(`ईमेल: ${request.user_id}\nमोबाइल: ${request.mobile_number}\nट्रांजैक्शन ID: ${request.transaction_id}\nराशि: ₹${request.amount}\nस्टेटस: ${request.status}\nनोट्स: ${request.payment_note || 'कोई नोट नहीं'}`);
+            if (payments.length === 0) {
+                alert('एक्सपोर्ट करने के लिए कोई डेटा नहीं है!');
+                return;
+            }
+            
+            // CSV डेटा बनाएं
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "ईमेल ID,मोबाइल नंबर,ट्रांजैक्शन ID,राशि,नोट,तारीख,स्टेटस\n";
+            
+            payments.forEach(payment => {
+                const date = new Date(payment.timestamp);
+                const formattedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
+                
+                csvContent += `${payment.user_id},${payment.mobile_number},${payment.transaction_id},${payment.amount},"${payment.payment_note || ''}",${formattedDate},${payment.status}\n`;
+            });
+            
+            // CSV डाउनलोड करें
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "payments_data.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function clearAllPayments() {
+            if (confirm('क्या आप वाकई सभी पेमेंट डेटा हटाना चाहते हैं? यह क्रिया अपरिवर्तनीय है।')) {
+                localStorage.removeItem('payments');
+                alert('सभी पेमेंट डेटा हटा दिया गया है!');
+                loadPayments();
             }
         }
         
-        // पेज लोड होने पर एडमिन लॉगिन चेक करें और रिक्वेस्ट लोड करें
-        document.addEventListener('DOMContentLoaded', function() {
-            if (checkAdminLogin()) {
-                loadRequests();
+        function filterPayments() {
+            const statusFilter = document.getElementById('status-filter').value;
+            const searchFilter = document.getElementById('search-filter').value.toLowerCase();
+            
+            const payments = JSON.parse(localStorage.getItem('payments')) || [];
+            
+            let filteredPayments = payments;
+            
+            // स्टेटस फिल्टर लागू करें
+            if (statusFilter !== 'all') {
+                filteredPayments = filteredPayments.filter(payment => payment.status === statusFilter);
             }
-        });
-        
-        // मोडल के बाहर क्लिक करने पर मोडल बंद करें
-        window.onclick = function(event) {
-            const modal = document.getElementById('confirm-modal');
-            if (event.target === modal) {
-                closeModal();
+            
+            // सर्च फिल्टर लागू करें
+            if (searchFilter) {
+                filteredPayments = filteredPayments.filter(payment => 
+                    payment.user_id.toLowerCase().includes(searchFilter) || 
+                    payment.transaction_id.toLowerCase().includes(searchFilter)
+                );
             }
+            
+            const paymentsContainer = document.getElementById('payments-container');
+            
+            if (filteredPayments.length === 0) {
+                paymentsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>कोई परिणाम नहीं मिला</h3>
+                        <p>आपके द्वारा निर्दिष्ट मानदंडों के अनुसार कोई पेमेंट रिक्वेस्ट नहीं मिली।</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // फिल्टर्ड पेमेंट्स टेबल बनाएं
+            let tableHTML = `
+                <table class="payments-table">
+                    <thead>
+                        <tr>
+                            <th>ईमेल ID</th>
+                            <th>मोबाइल नंबर</th>
+                            <th>ट्रांजैक्शन ID</th>
+                            <th>राशि</th>
+                            <th>तारीख</th>
+                            <th>स्टेटस</th>
+                            <th>कार्रवाई</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            // पेमेंट्स को तारीख के अनुसार सॉर्ट करें (नवीनतम पहले)
+            filteredPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            filteredPayments.forEach((payment) => {
+                const date = new Date(payment.timestamp);
+                const formattedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
+                
+                const originalIndex = payments.findIndex(p => 
+                    p.user_id === payment.user_id && 
+                    p.transaction_id === payment.transaction_id && 
+                    p.timestamp === payment.timestamp
+                );
+                
+                tableHTML += `
+                    <tr>
+                        <td>${payment.user_id}</td>
+                        <td>${payment.mobile_number}</td>
+                        <td>${payment.transaction_id}</td>
+                        <td>₹${payment.amount}</td>
+                        <td>${formattedDate}</td>
+                        <td><span class="status-badge ${payment.status}">${getStatusText(payment.status)}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="view-btn" onclick="viewPaymentDetails(${originalIndex})"><i class="fas fa-eye"></i></button>
+                                ${payment.status === 'pending' ? `
+                                    <button class="approve-btn" onclick="approvePayment(${originalIndex})"><i class="fas fa-check"></i></button>
+                                    <button class="reject-btn" onclick="rejectPayment(${originalIndex})"><i class="fas fa-times"></i></button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            paymentsContainer.innerHTML = tableHTML;
         }
     </script>
 </body>
