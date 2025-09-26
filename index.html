@@ -921,6 +921,49 @@
             firebase.initializeApp(firebaseConfig);
             const database = firebase.database();
 
+            // Function to check if user has valid premium access in local storage
+            function checkLocalStorageForPremiumAccess() {
+                const userData = localStorage.getItem('premiumUser');
+                if (!userData) return null;
+                
+                try {
+                    const parsedData = JSON.parse(userData);
+                    const expiryDate = new Date(parsedData.expiryDate);
+                    const now = new Date();
+                    
+                    if (now < expiryDate) {
+                        return parsedData;
+                    } else {
+                        // Remove expired data
+                        localStorage.removeItem('premiumUser');
+                        return null;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('premiumUser');
+                    return null;
+                }
+            }
+
+            // Function to save user data to local storage
+            function saveUserDataToLocalStorage(userId, mobileNumber, expiryDate) {
+                const userData = {
+                    userId: userId,
+                    mobileNumber: mobileNumber,
+                    expiryDate: expiryDate.toISOString(),
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('premiumUser', JSON.stringify(userData));
+            }
+
+            // First check if user has valid access in local storage
+            const localStorageData = checkLocalStorageForPremiumAccess();
+            if (localStorageData) {
+                // If user has valid access, redirect to quiz page
+                window.location.href = 'quiz.html?user_id=' + localStorageData.userId;
+                return;
+            }
+
+            // If not in local storage, check Firebase
             async function checkPremiumAccess() {
                 const params = new URLSearchParams(window.location.search);
                 const userEmail = params.get('user_id');
@@ -955,6 +998,9 @@
                         const now = new Date();
 
                         if (now < expiryDate) {
+                            // Save user data to local storage for 30 days
+                            saveUserDataToLocalStorage(userId, foundApprovedPayment.mobile_number, expiryDate);
+                            // Redirect to quiz page
                             window.location.href = 'quiz.html?user_id=' + userId;
                             return;
                         }
@@ -1140,6 +1186,24 @@
 
                 if (foundPayment) {
                     if (foundPayment.status === 'approved') {
+                        // Save user data to local storage for 30 days
+                        const approvalDate = new Date(foundPayment.approved_at);
+                        const expiryDate = new Date(approvalDate);
+                        expiryDate.setDate(approvalDate.getDate() + 30);
+                        
+                        // Function to save user data to local storage
+                        function saveUserDataToLocalStorage(userId, mobileNumber, expiryDate) {
+                            const userData = {
+                                userId: userId,
+                                mobileNumber: mobileNumber,
+                                expiryDate: expiryDate.toISOString(),
+                                timestamp: new Date().toISOString()
+                            };
+                            localStorage.setItem('premiumUser', JSON.stringify(userData));
+                        }
+                        
+                        saveUserDataToLocalStorage(userId, foundPayment.mobile_number, expiryDate);
+                        
                         statusMessage.className = 'status-message success';
                         statusMessage.textContent = 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।';
                         statusMessage.style.display = 'block';
@@ -1243,6 +1307,20 @@
             try {
                 const userDataRef = firebase.database().ref('user_session/' + userId);
                 await userDataRef.remove();
+                
+                // Also clear local storage for this user
+                const localStorageData = localStorage.getItem('premiumUser');
+                if (localStorageData) {
+                    try {
+                        const parsedData = JSON.parse(localStorageData);
+                        if (parsedData.userId === userId) {
+                            localStorage.removeItem('premiumUser');
+                        }
+                    } catch (e) {
+                        console.error('Error parsing local storage data:', e);
+                    }
+                }
+                
                 alert('आपका पेमेंट डेटा रीसेट हो गया है।');
                 document.getElementById('payment-form').reset();
             } catch (error) {
