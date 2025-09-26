@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ऑफ़लाइन - राजस्थान GK क्विज़</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
+    <style>
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --danger: #d63031;
+            --light: #f8f9fa;
+            --dark: #2d3436;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 500px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 40px 30px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .offline-icon {
+            font-size: 80px;
+            color: var(--danger);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .retry-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.25);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .wifi-animation {
+            position: relative;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .wifi-animation .wifi-circle {
+            position: absolute;
+            border: 4px solid var(--danger);
+            border-radius: 50%;
+            opacity: 0;
+            animation: wifi-wave 1.5s infinite;
+        }
+
+        .wifi-animation .wifi-circle:nth-child(1) {
+            width: 30px;
+            height: 30px;
+            top: 25px;
+            left: 25px;
+            animation-delay: 0s;
+        }
+
+        .wifi-animation .wifi-circle:nth-child(2) {
+            width: 50px;
+            height: 50px;
+            top: 15px;
+            left: 15px;
+            animation-delay: 0.2s;
+        }
+
+        .wifi-animation .wifi-circle:nth-child(3) {
+            width: 70px;
+            height: 70px;
+            top: 5px;
+            left: 5px;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes wifi-wave {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="wifi-animation">
+            <div class="wifi-circle"></div>
+            <div class="wifi-circle"></div>
+            <div class="wifi-circle"></div>
+        </div>
+        <h1>आप ऑफ़लाइन हैं</h1>
+        <p>कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।</p>
+        <button class="retry-btn" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt"></i> पुनः प्रयास करें
+        </button>
+    </div>
+    <div class="footer">
+        <p>&copy; 2023 राजस्थान GK क्विज़ | <a href="/">होम पेज पर जाएं</a></p>
+    </div>
+</body>
+</html>
