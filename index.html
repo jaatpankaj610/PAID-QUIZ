@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
     <style>
         :root {
             --primary: #4a00e0;
@@ -27,7 +27,7 @@
         }
 
         body {
-            background: #f5f7fa; /* सिंपल सॉलिड बैकग्राउंड */
+            background: #f5f7fa;
             min-height: 100vh;
             padding: 0;
             display: flex;
@@ -36,7 +36,7 @@
             position: relative;
         }
 
-        /* फिक्स्ड हेडर */
+        /* प्रोफेशनल हेडर */
         .header {
             background: var(--gradient);
             padding: 20px;
@@ -47,21 +47,21 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
         }
 
         .header h1 {
             font-size: clamp(22px, 5vw, 28px);
             margin-bottom: 5px;
-            font-weight: 700;
+            font-weight: 800;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .header p {
             font-size: clamp(14px, 3vw, 18px);
             opacity: 0.95;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* मुख्य कंटेंट एरिया */
@@ -73,15 +73,33 @@
             max-width: 900px;
             margin-left: auto;
             margin-right: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* कस्टम स्क्रॉलबार */
+        .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
         }
 
         .container {
             width: 100%;
             background: var(--light);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
         .content {
@@ -90,10 +108,10 @@
         }
 
         .payment-info {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 25px;
             position: relative;
             overflow: hidden;
@@ -107,7 +125,7 @@
             width: 100px;
             height: 100px;
             background: var(--gradient);
-            opacity: 0.1;
+            opacity: 0.08;
             border-radius: 0 0 0 100%;
         }
 
@@ -118,18 +136,17 @@
             color: var(--dark);
             position: relative;
             z-index: 1;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .price-tag {
             font-size: clamp(32px, 7vw, 48px);
-            font-weight: 800;
+            font-weight: 900;
             color: var(--secondary);
             margin: 15px 0;
             text-align: center;
             position: relative;
             z-index: 1;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .price-period {
@@ -156,16 +173,17 @@
             font-size: clamp(16px, 3vw, 18px);
             color: var(--dark);
             padding: 15px;
-            background: rgba(241, 245, 249, 0.8);
+            background: #f8f9fa;
             border-radius: 12px;
             transition: all 0.3s ease;
             font-weight: 500;
+            border-left: 4px solid var(--primary);
         }
 
         .features li:hover {
             transform: translateX(5px);
-            background: rgba(241, 245, 249, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background: #f0f2f5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
 
         .features li i {
@@ -176,25 +194,25 @@
         }
 
         .qr-section {
-            background: var(--light);
+            background: #ffffff;
             border-radius: 15px;
             padding: 25px;
             margin: 25px 0;
             text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         .qr-section h3 {
             font-size: clamp(18px, 4vw, 22px);
             margin-bottom: 20px;
             color: var(--dark);
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .qr-code {
             width: 200px;
             height: 200px;
-            background: #f5f5f5;
+            background: #f8f9fa;
             border-radius: 12px;
             margin: 0 auto 20px;
             display: flex;
@@ -202,7 +220,7 @@
             justify-content: center;
             border: 1px dashed #ddd;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
 
         .qr-code img {
@@ -213,7 +231,7 @@
         }
 
         .upi-id {
-            background: rgba(74, 0, 224, 0.1);
+            background: rgba(74, 0, 224, 0.08);
             border-radius: 12px;
             padding: 18px;
             margin: 20px 0;
@@ -230,9 +248,9 @@
         }
 
         .upi-id:hover {
-            background: rgba(74, 0, 224, 0.2);
+            background: rgba(74, 0, 224, 0.12);
             transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(74, 0, 224, 0.25);
+            box-shadow: 0 6px 12px rgba(74, 0, 224, 0.15);
         }
 
         .instructions {
@@ -247,14 +265,16 @@
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            padding: 10px;
+            padding: 12px;
             border-radius: 10px;
             transition: all 0.3s ease;
             font-weight: 500;
+            background: #f8f9fa;
+            border-left: 4px solid var(--success);
         }
 
         .instructions li:hover {
-            background: rgba(241, 245, 249, 0.7);
+            background: #f0f2f5;
         }
 
         .instructions li i {
@@ -309,7 +329,7 @@
             text-align: center;
             display: none;
             padding: 12px;
-            background: rgba(214, 48, 49, 0.1);
+            background: rgba(214, 48, 49, 0.08);
             border-radius: 10px;
         }
 
@@ -324,8 +344,8 @@
         }
 
         .checkbox-container:hover {
-            background: rgba(74, 0, 224, 0.1);
-            box-shadow: 0 0 0 4px rgba(74, 0, 224, 0.1);
+            background: rgba(74, 0, 224, 0.08);
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
         }
 
         .checkbox-hint {
@@ -366,7 +386,7 @@
             width: 100%;
             margin-bottom: 18px;
             transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
@@ -390,7 +410,7 @@
 
         .submit-btn:hover, .check-btn:hover, .clear-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.3);
+            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.25);
         }
 
         .status-message {
@@ -404,21 +424,21 @@
         }
 
         .status-message.success {
-            background: rgba(0, 184, 148, 0.1);
+            background: rgba(0, 184, 148, 0.08);
             color: var(--success);
-            border: 1px solid rgba(0, 184, 148, 0.2);
+            border: 1px solid rgba(0, 184, 148, 0.15);
         }
 
         .status-message.pending {
-            background: rgba(253, 203, 110, 0.1);
+            background: rgba(253, 203, 110, 0.08);
             color: var(--warning);
-            border: 1px solid rgba(253, 203, 110, 0.2);
+            border: 1px solid rgba(253, 203, 110, 0.15);
         }
 
         .status-message.error {
-            background: rgba(214, 48, 49, 0.1);
+            background: rgba(214, 48, 49, 0.08);
             color: var(--danger);
-            border: 1px solid rgba(214, 48, 49, 0.2);
+            border: 1px solid rgba(214, 48, 49, 0.15);
         }
 
         .processing-screen {
@@ -479,9 +499,9 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             padding-top: 60px;
         }
 
@@ -489,10 +509,10 @@
             background: #fff;
             margin: 10% auto;
             padding: 25px;
-            border-radius: 20px;
+            border-radius: 15px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             position: relative;
             text-align: center;
         }
@@ -515,7 +535,7 @@
             color: white;
             padding: 25px 15px;
             margin: -25px -25px 25px -25px;
-            border-radius: 20px 20px 0 0;
+            border-radius: 15px 15px 0 0;
             display: flex;
             flex-direction: column;
             align-items: center;
