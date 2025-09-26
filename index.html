@@ -908,7 +908,9 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             // पहले लोकल स्टोरेज चेक करें
-            checkLocalStorageAccess();
+            if (checkLocalStorageAccess()) {
+                return; // अगर लोकल स्टोरेज में वैलिड एक्सेस है तो आगे बढ़ने की जरूरत नहीं
+            }
             
             const firebaseConfig = {
                 apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
