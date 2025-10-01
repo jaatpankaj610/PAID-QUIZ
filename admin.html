@@ -469,82 +469,62 @@
             font-size: 10px;
         }
 
-        /* Firebase कॉन्फिगरेशन फॉर्म */
-        .firebase-config {
+        /* स्टैटिस्टिक्स कार्ड */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
             background: white;
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .firebase-config h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-
-        .config-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
 
-        .form-group {
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
         }
 
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: var(--dark);
+        .stat-icon.total {
+            background: rgba(74, 0, 224, 0.1);
+            color: var(--primary);
         }
 
-        .form-group input {
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
+        .stat-icon.pending {
+            background: rgba(253, 203, 110, 0.2);
+            color: var(--warning);
         }
 
-        .save-config-btn {
-            grid-column: span 2;
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .save-config-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(74, 0, 224, 0.2);
-        }
-
-        .config-success {
-            grid-column: span 2;
+        .stat-icon.approved {
             background: rgba(0, 184, 148, 0.2);
             color: var(--success);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
         }
 
-        @media (max-width: 768px) {
-            .config-form {
-                grid-template-columns: 1fr;
-            }
-            
-            .save-config-btn, .config-success {
-                grid-column: span 1;
-            }
+        .stat-icon.rejected {
+            background: rgba(214, 48, 49, 0.2);
+            color: var(--danger);
+        }
+
+        .stat-info h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            font-size: 14px;
+            color: #777;
         }
     </style>
 </head>
@@ -562,43 +542,42 @@
         </div>
         
         <div class="content">
-            <!-- Firebase कॉन्फिगरेशन फॉर्म -->
-            <div id="firebase-config" class="firebase-config">
-                <h2><i class="fas fa-cog"></i> Firebase कॉन्फिगरेशन</h2>
-                <div class="config-form">
-                    <div class="form-group">
-                        <label for="apiKey">API Key</label>
-                        <input type="text" id="apiKey" placeholder="Firebase API Key">
+            <!-- स्टैटिस्टिक्स कार्ड -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-list"></i>
                     </div>
-                    <div class="form-group">
-                        <label for="authDomain">Auth Domain</label>
-                        <input type="text" id="authDomain" placeholder="project-id.firebaseapp.com">
+                    <div class="stat-info">
+                        <h3 id="total-count">0</h3>
+                        <p>कुल रिक्वेस्ट्स</p>
                     </div>
-                    <div class="form-group">
-                        <label for="databaseURL">Database URL</label>
-                        <input type="text" id="databaseURL" placeholder="https://project-id-default-rtdb.firebaseio.com">
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <div class="form-group">
-                        <label for="projectId">Project ID</label>
-                        <input type="text" id="projectId" placeholder="Firebase Project ID">
+                    <div class="stat-info">
+                        <h3 id="pending-count">0</h3>
+                        <p>पेंडिंग</p>
                     </div>
-                    <div class="form-group">
-                        <label for="storageBucket">Storage Bucket</label>
-                        <input type="text" id="storageBucket" placeholder="project-id.appspot.com">
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon approved">
+                        <i class="fas fa-check-circle"></i>
                     </div>
-                    <div class="form-group">
-                        <label for="messagingSenderId">Messaging Sender ID</label>
-                        <input type="text" id="messagingSenderId" placeholder="123456789012">
+                    <div class="stat-info">
+                        <h3 id="approved-count">0</h3>
+                        <p>अप्रूव्ड</p>
                     </div>
-                    <div class="form-group">
-                        <label for="appId">App ID</label>
-                        <input type="text" id="appId" placeholder="Firebase App ID">
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon rejected">
+                        <i class="fas fa-times-circle"></i>
                     </div>
-                    <button class="save-config-btn" onclick="saveFirebaseConfig()">
-                        <i class="fas fa-save"></i> कॉन्फिगरेशन सेव करें
-                    </button>
-                    <div id="config-success" class="config-success">
-                        <i class="fas fa-check-circle"></i> कॉन्फिगरेशन सफलतापूर्वक सेव हो गया!
+                    <div class="stat-info">
+                        <h3 id="rejected-count">0</h3>
+                        <p>रिजेक्टेड</p>
                     </div>
                 </div>
             </div>
@@ -660,125 +639,38 @@
     </div>
     
     <script>
+        // Firebase कॉन्फिगरेशन
+        const firebaseConfig = {
+            apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+            authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+            databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+            projectId: "rajasthan-gk-quiz-41cc5",
+            storageBucket: "rajasthan-gk-quiz-41cc5.firebasestorage.app",
+            messagingSenderId: "876482514501",
+            appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+            measurementId: "G-VB140B6NCW"
+        };
+
+        // Firebase इनिशियलाइज़ करें
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         // ग्लोबल वेरिएबल्स
         let autoRefreshInterval = null;
         let isAutoRefreshEnabled = false;
         let payments = [];
         let paymentsRef = null;
-        let database = null;
-        let firebaseConfigured = false;
 
         document.addEventListener('DOMContentLoaded', function() {
-            // लोकल स्टोरेज से Firebase कॉन्फिगरेशन लोड करें
-            loadFirebaseConfigFromStorage();
+            // Firebase से डेटा लोड करें
+            loadPaymentsFromFirebase();
             
-            // अगर कॉन्फिगरेशन पहले से सेव है, तो Firebase इनिशियलाइज़ करें
-            if (isFirebaseConfigured()) {
-                initializeFirebase();
-            } else {
-                // लोडिंग स्पिनर हटाएं और कॉन्फिगरेशन फॉर्म दिखाएं
-                document.getElementById('payments-container').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-cog"></i>
-                        <h3>Firebase कॉन्फिगरेशन की आवश्यकता</h3>
-                        <p>कृपया ऊपर दिए गए फॉर्म में अपनी Firebase कॉन्फिगरेशन जानकारी दर्ज करें।</p>
-                    </div>
-                `;
-            }
+            // रियल-टाइम लिसनर सेट करें
+            setupRealtimeListener();
+            
+            // कनेक्शन स्टेटस मॉनिटर करें
+            monitorConnectionStatus();
         });
-
-        function isFirebaseConfigured() {
-            const config = localStorage.getItem('firebaseConfig');
-            return config && config !== '{}';
-        }
-
-        function loadFirebaseConfigFromStorage() {
-            const config = localStorage.getItem('firebaseConfig');
-            if (config) {
-                try {
-                    const firebaseConfig = JSON.parse(config);
-                    
-                    // फॉर्म फील्ड्स को भरें
-                    document.getElementById('apiKey').value = firebaseConfig.apiKey || '';
-                    document.getElementById('authDomain').value = firebaseConfig.authDomain || '';
-                    document.getElementById('databaseURL').value = firebaseConfig.databaseURL || '';
-                    document.getElementById('projectId').value = firebaseConfig.projectId || '';
-                    document.getElementById('storageBucket').value = firebaseConfig.storageBucket || '';
-                    document.getElementById('messagingSenderId').value = firebaseConfig.messagingSenderId || '';
-                    document.getElementById('appId').value = firebaseConfig.appId || '';
-                    
-                    return true;
-                } catch (e) {
-                    console.error("Firebase कॉन्फिगरेशन लोड करने में त्रुटि:", e);
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        function saveFirebaseConfig() {
-            // फॉर्म से वैल्यूज़ प्राप्त करें
-            const firebaseConfig = {
-                apiKey: document.getElementById('apiKey').value,
-                authDomain: document.getElementById('authDomain').value,
-                databaseURL: document.getElementById('databaseURL').value,
-                projectId: document.getElementById('projectId').value,
-                storageBucket: document.getElementById('storageBucket').value,
-                messagingSenderId: document.getElementById('messagingSenderId').value,
-                appId: document.getElementById('appId').value
-            };
-            
-            // वैलिडेशन
-            if (!firebaseConfig.apiKey || !firebaseConfig.authDomain || !firebaseConfig.databaseURL || 
-                !firebaseConfig.projectId || !firebaseConfig.storageBucket || 
-                !firebaseConfig.messagingSenderId || !firebaseConfig.appId) {
-                showNotification('कृपया सभी फील्ड्स भरें!', 'error');
-                return;
-            }
-            
-            // लोकल स्टोरेज में सेव करें
-            localStorage.setItem('firebaseConfig', JSON.stringify(firebaseConfig));
-            
-            // सक्सेस मैसेज दिखाएं
-            document.getElementById('config-success').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('config-success').style.display = 'none';
-            }, 3000);
-            
-            // Firebase इनिशियलाइज़ करें
-            initializeFirebase();
-            
-            showNotification('Firebase कॉन्फिगरेशन सफलतापूर्वक सेव हो गया!', 'success');
-        }
-
-        function initializeFirebase() {
-            try {
-                // Firebase कॉन्फिगरेशन प्राप्त करें
-                const config = localStorage.getItem('firebaseConfig');
-                const firebaseConfig = JSON.parse(config);
-                
-                // Firebase इनिशियलाइज़ करें
-                firebase.initializeApp(firebaseConfig);
-                database = firebase.database();
-                
-                // Firebase से डेटा लोड करें
-                loadPaymentsFromFirebase();
-                
-                // रियल-टाइम लिसनर सेट करें
-                setupRealtimeListener();
-                
-                // कनेक्शन स्टेटस मॉनिटर करें
-                monitorConnectionStatus();
-                
-                // कॉन्फिगरेशन फॉर्म छिपाएं
-                document.getElementById('firebase-config').style.display = 'none';
-                
-                firebaseConfigured = true;
-            } catch (error) {
-                console.error("Firebase इनिशियलाइज़ेशन में त्रुटि:", error);
-                showNotification('Firebase इनिशियलाइज़ करने में त्रुटि! कृपया कॉन्फिगरेशन जांचें।', 'error');
-            }
-        }
 
         function setupRealtimeListener() {
             paymentsRef = database.ref('payments');
@@ -798,12 +690,14 @@
                     
                     // यूजर इंटरफेस अपडेट करें
                     updatePaymentsUI();
+                    updateStats();
                     
                     // नई पेमेंट्स के लिए चेक करें
                     checkForNewPayments();
                 } else {
                     payments = [];
                     updatePaymentsUI();
+                    updateStats();
                 }
             }, (error) => {
                 console.error("Firebase से डेटा लोड करने में त्रुटि:", error);
@@ -849,9 +743,11 @@
                     
                     // यूजर इंटरफेस अपडेट करें
                     updatePaymentsUI();
+                    updateStats();
                 } else {
                     payments = [];
                     updatePaymentsUI();
+                    updateStats();
                 }
             }, (error) => {
                 console.error("Firebase से डेटा लोड करने में त्रुटि:", error);
@@ -869,11 +765,25 @@
             if (localPayments.length > 0) {
                 payments = localPayments;
                 updatePaymentsUI();
+                updateStats();
                 showNotification('इंटरनेट कनेक्शन नहीं है। लोकल डेटा दिखाया जा रहा है।', 'info');
             } else {
                 payments = [];
                 updatePaymentsUI();
+                updateStats();
             }
+        }
+
+        function updateStats() {
+            const totalCount = document.getElementById('total-count');
+            const pendingCount = document.getElementById('pending-count');
+            const approvedCount = document.getElementById('approved-count');
+            const rejectedCount = document.getElementById('rejected-count');
+            
+            totalCount.textContent = payments.length;
+            pendingCount.textContent = payments.filter(p => p.status === 'pending').length;
+            approvedCount.textContent = payments.filter(p => p.status === 'approved').length;
+            rejectedCount.textContent = payments.filter(p => p.status === 'rejected').length;
         }
 
         function updatePaymentsUI() {
@@ -1096,11 +1006,6 @@
         }
         
         function refreshPayments() {
-            if (!firebaseConfigured) {
-                showNotification('कृपया पहले Firebase कॉन्फिगर करें!', 'error');
-                return;
-            }
-            
             loadPaymentsFromFirebase();
             showNotification('पेमेंट्स रिफ्रेश किए गए!', 'info');
         }
@@ -1135,11 +1040,6 @@
         }
         
         function clearAllPayments() {
-            if (!firebaseConfigured) {
-                showNotification('कृपया पहले Firebase कॉन्फिगर करें!', 'error');
-                return;
-            }
-            
             if (confirm('क्या आप वाकई सभी पेमेंट डेटा हटाना चाहते हैं? यह क्रिया अपरिवर्तनीय है।')) {
                 // Firebase से सभी पेमेंट्स हटाएं
                 database.ref('payments').remove().then(() => {
@@ -1244,11 +1144,6 @@
         
         // नया फंक्शन - ऑटो रिफ्रेश टॉगल करें
         function toggleAutoRefresh() {
-            if (!firebaseConfigured) {
-                showNotification('कृपया पहले Firebase कॉन्फिगर करें!', 'error');
-                return;
-            }
-            
             isAutoRefreshEnabled = !isAutoRefreshEnabled;
             const autoRefreshText = document.getElementById('auto-refresh-text');
             const autoRefreshIndicator = document.getElementById('auto-refresh-indicator');
