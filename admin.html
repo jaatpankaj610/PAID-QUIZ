@@ -571,99 +571,6 @@
             cursor: pointer;
             z-index: 100;
         }
-
-        /* यूजर हिस्ट्री टैब */
-        .user-history-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .user-history-tab {
-            padding: 10px 15px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #777;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .user-history-tab.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .user-history-tab:hover {
-            color: var(--primary);
-        }
-
-        .user-history-content {
-            display: none;
-        }
-
-        .user-history-content.active {
-            display: block;
-        }
-
-        .user-payment-item {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--primary);
-        }
-
-        .user-payment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .user-payment-date {
-            font-size: 14px;
-            color: #777;
-        }
-
-        .user-payment-status {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 20px;
-        }
-
-        .user-payment-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .user-payment-detail {
-            font-size: 14px;
-            color: var(--dark);
-        }
-
-        .user-payment-detail strong {
-            color: #555;
-        }
-
-        .user-payment-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .user-payment-actions button {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
     </style>
 </head>
 <body>
@@ -734,6 +641,8 @@
                 <button onclick="toggleAutoRefresh()"><i class="fas fa-clock"></i> <span id="auto-refresh-text">ऑटो रिफ्रेश चालू करें</span></button>
                 <button onclick="exportData()"><i class="fas fa-download"></i> एक्सपोर्ट डेटा</button>
                 <button onclick="clearAllPayments()"><i class="fas fa-trash-alt"></i> सभी पेमेंट्स क्लियर करें</button>
+                <button onclick="testFirebaseConnection()"><i class="fas fa-plug"></i> कनेक्शन टेस्ट</button>
+                <button onclick="addTestPayment()"><i class="fas fa-plus"></i> टेस्ट पेमेंट</button>
             </div>
             
             <div class="filter-container">
@@ -798,15 +707,12 @@
             measurementId: "G-VB140B6NCW"
         };
 
-        // Firebase इनिशियलाइज़ करें
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
         // ग्लोबल वेरिएबल्स
         let autoRefreshInterval = null;
         let isAutoRefreshEnabled = false;
         let payments = [];
         let paymentsRef = null;
+        let database = null;
         let debugMode = false;
 
         // डिबग लॉग फंक्शन
@@ -1021,60 +927,55 @@
                 return;
             }
             
-            // यूजर्स को ग्रुप करें
-            const usersGrouped = {};
+            // पेमेंट्स टेबल बनाएं
+            let tableHTML = `
+                <table class="payments-table">
+                    <thead>
+                        <tr>
+                            <th>ईमेल ID</th>
+                            <th>मोबाइल नंबर</th>
+                            <th>ट्रांजैक्शन ID</th>
+                            <th>राशि</th>
+                            <th>तारीख</th>
+                            <th>स्टेटस</th>
+                            <th>कार्रवाई</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
             
-            payments.forEach(payment => {
-                if (!usersGrouped[payment.user_id]) {
-                    usersGrouped[payment.user_id] = [];
-                }
-                usersGrouped[payment.user_id].push(payment);
-            });
-            
-            // यूजर्स के लिए HTML बनाएं
-            let usersHTML = '';
-            
-            Object.keys(usersGrouped).forEach(userId => {
-                const userPayments = usersGrouped[userId];
-                // सबसे हाल की पेमेंट ढूंढें
-                const latestPayment = userPayments.reduce((latest, payment) => {
-                    return new Date(payment.timestamp) > new Date(latest.timestamp) ? payment : latest;
-                });
-                
-                // यूजर की सभी पेमेंट्स को तारीख के अनुसार सॉर्ट करें (नवीनतम पहले)
-                userPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                const date = new Date(latestPayment.timestamp);
+            payments.forEach((payment, index) => {
+                const date = new Date(payment.timestamp);
                 const formattedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
                 
-                usersHTML += `
-                    <div class="user-payment-item">
-                        <div class="user-payment-header">
-                            <div class="user-payment-date">${formattedDate}</div>
-                            <div class="user-payment-status status-badge ${latestPayment.status}">${getStatusText(latestPayment.status)}</div>
-                        </div>
-                        <div class="user-payment-details">
-                            <div class="user-payment-detail"><strong>ईमेल ID:</strong> ${latestPayment.user_id}</div>
-                            <div class="user-payment-detail"><strong>मोबाइल नंबर:</strong> ${latestPayment.mobile_number}</div>
-                            <div class="user-payment-detail"><strong>ट्रांजैक्शन ID:</strong> ${latestPayment.transaction_id}</div>
-                            <div class="user-payment-detail"><strong>राशि:</strong> ₹${latestPayment.amount}</div>
-                        </div>
-                        <div class="user-payment-actions">
-                            <button class="view-btn" onclick="viewUserPaymentHistory('${userId}')"><i class="fas fa-history"></i> इतिहास देखें</button>
-                            ${latestPayment.status === 'pending' ? `
-                                <button class="approve-btn" onclick="approvePayment('${userId}', '${latestPayment.id}')"><i class="fas fa-check"></i> अप्रूव करें</button>
-                                <button class="reject-btn" onclick="rejectPayment('${userId}', '${latestPayment.id}')"><i class="fas fa-times"></i> रिजेक्ट करें</button>
-                            ` : ''}
-                        </div>
-                        <div id="user-history-${userId}" style="display: none; margin-top: 15px;">
-                            <!-- यूजर का पेमेंट इतिहास यहां दिखाया जाएगा -->
-                        </div>
-                    </div>
+                tableHTML += `
+                    <tr>
+                        <td>${payment.user_id}</td>
+                        <td>${payment.mobile_number}</td>
+                        <td>${payment.transaction_id}</td>
+                        <td>₹${payment.amount}</td>
+                        <td>${formattedDate}</td>
+                        <td><span class="status-badge ${payment.status}">${getStatusText(payment.status)}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="view-btn" onclick="viewPaymentDetails(${index})"><i class="fas fa-eye"></i></button>
+                                ${payment.status === 'pending' ? `
+                                    <button class="approve-btn" onclick="approvePayment(${index})"><i class="fas fa-check"></i></button>
+                                    <button class="reject-btn" onclick="rejectPayment(${index})"><i class="fas fa-times"></i></button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
                 `;
             });
             
-            paymentsContainer.innerHTML = usersHTML;
-            debugLog(`यूजर इंटरफेस अपडेट किया गया: ${Object.keys(usersGrouped).length} यूजर्स`);
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            paymentsContainer.innerHTML = tableHTML;
+            debugLog(`यूजर इंटरफेस अपडेट किया गया: ${payments.length} पेमेंट्स`);
         }
         
         function getStatusText(status) {
@@ -1086,79 +987,45 @@
             }
         }
         
-        function approvePayment(userId, paymentId) {
-            debugLog(`पेमेंट अप्रूव करने का प्रयास: ${paymentId}`);
-            
-            // Firebase में स्टेटस अपडेट करें
-            database.ref('payments/' + paymentId).update({
-                status: 'approved',
-                approved_at: new Date().toISOString()
-            }).then(() => {
-                debugLog(`पेमेंट अप्रूव हो गई: ${paymentId}`);
+        function approvePayment(index) {
+            if (payments[index]) {
+                const paymentId = payments[index].id;
+                debugLog(`पेमेंट अप्रूव करने का प्रयास: ${paymentId}`);
                 
-                // यूजर के लिए प्रीमियम एक्सेस सेव करें
-                savePremiumAccessToFirebase(userId, new Date().toISOString());
-                
-                showNotification('पेमेंट अप्रूव कर दी गई है!', 'success');
-            }).catch((error) => {
-                debugLog(`पेमेंट अप्रूव करने में त्रुटि: ${error.message}`);
-                showNotification('पेमेंट अप्रूव करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
-            });
-        }
-        
-        function rejectPayment(userId, paymentId) {
-            debugLog(`पेमेंट रिजेक्ट करने का प्रयास: ${paymentId}`);
-            
-            // Firebase में स्टेटस अपडेट करें
-            database.ref('payments/' + paymentId).update({
-                status: 'rejected',
-                rejected_at: new Date().toISOString()
-            }).then(() => {
-                debugLog(`पेमेंट रिजेक्ट हो गई: ${paymentId}`);
-                showNotification('पेमेंट रिजेक्ट कर दी गई है!', 'error');
-            }).catch((error) => {
-                debugLog(`पेमेंट रिजेक्ट करने में त्रुटि: ${error.message}`);
-                showNotification('पेमेंट रिजेक्ट करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
-            });
-        }
-        
-        function viewUserPaymentHistory(userId) {
-            const historyContainer = document.getElementById(`user-history-${userId}`);
-            
-            if (historyContainer.style.display === 'none') {
-                // यूजर की सभी पेमेंट्स ढूंढें
-                const userPayments = payments.filter(payment => payment.user_id === userId);
-                
-                // पेमेंट्स को तारीख के अनुसार सॉर्ट करें (नवीनतम पहले)
-                userPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                // इतिहास HTML बनाएं
-                let historyHTML = '<h4>पेमेंट इतिहास</h4>';
-                
-                userPayments.forEach(payment => {
-                    const date = new Date(payment.timestamp);
-                    const formattedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
+                // Firebase में स्टेटस अपडेट करें
+                database.ref('payments/' + paymentId).update({
+                    status: 'approved',
+                    approved_at: new Date().toISOString()
+                }).then(() => {
+                    debugLog(`पेमेंट अप्रूव हो गई: ${paymentId}`);
                     
-                    historyHTML += `
-                        <div style="background: #f8f9fa; padding: 10px; margin-bottom: 10px; border-radius: 5px; border-left: 3px solid var(--primary);">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span>${formattedDate}</span>
-                                <span class="status-badge ${payment.status}">${getStatusText(payment.status)}</span>
-                            </div>
-                            <div style="font-size: 14px;">
-                                <div><strong>ट्रांजैक्शन ID:</strong> ${payment.transaction_id}</div>
-                                <div><strong>राशि:</strong> ₹${payment.amount}</div>
-                                ${payment.approved_at ? `<div><strong>अप्रूवल तारीख:</strong> ${new Date(payment.approved_at).toLocaleDateString('hi-IN')}</div>` : ''}
-                                ${payment.rejected_at ? `<div><strong>रिजेक्शन तारीख:</strong> ${new Date(payment.rejected_at).toLocaleDateString('hi-IN')}</div>` : ''}
-                            </div>
-                        </div>
-                    `;
+                    // यूजर के लिए प्रीमियम एक्सेस सेव करें
+                    savePremiumAccessToFirebase(payments[index].user_id, new Date().toISOString());
+                    
+                    showNotification('पेमेंट अप्रूव कर दी गई है!', 'success');
+                }).catch((error) => {
+                    debugLog(`पेमेंट अप्रूव करने में त्रुटि: ${error.message}`);
+                    showNotification('पेमेंट अप्रूव करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
                 });
+            }
+        }
+        
+        function rejectPayment(index) {
+            if (payments[index]) {
+                const paymentId = payments[index].id;
+                debugLog(`पेमेंट रिजेक्ट करने का प्रयास: ${paymentId}`);
                 
-                historyContainer.innerHTML = historyHTML;
-                historyContainer.style.display = 'block';
-            } else {
-                historyContainer.style.display = 'none';
+                // Firebase में स्टेटस अपडेट करें
+                database.ref('payments/' + paymentId).update({
+                    status: 'rejected',
+                    rejected_at: new Date().toISOString()
+                }).then(() => {
+                    debugLog(`पेमेंट रिजेक्ट हो गई: ${paymentId}`);
+                    showNotification('पेमेंट रिजेक्ट कर दी गई है!', 'error');
+                }).catch((error) => {
+                    debugLog(`पेमेंट रिजेक्ट करने में त्रुटि: ${error.message}`);
+                    showNotification('पेमेंट रिजेक्ट करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
+                });
             }
         }
         
@@ -1361,60 +1228,60 @@
                 return;
             }
             
-            // यूजर्स को ग्रुप करें
-            const usersGrouped = {};
+            // फिल्टर्ड पेमेंट्स टेबल बनाएं
+            let tableHTML = `
+                <table class="payments-table">
+                    <thead>
+                        <tr>
+                            <th>ईमेल ID</th>
+                            <th>मोबाइल नंबर</th>
+                            <th>ट्रांजैक्शन ID</th>
+                            <th>राशि</th>
+                            <th>तारीख</th>
+                            <th>स्टेटस</th>
+                            <th>कार्रवाई</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
             
-            filteredPayments.forEach(payment => {
-                if (!usersGrouped[payment.user_id]) {
-                    usersGrouped[payment.user_id] = [];
-                }
-                usersGrouped[payment.user_id].push(payment);
-            });
+            // पेमेंट्स को तारीख के अनुसार सॉर्ट करें (नवीनतम पहले)
+            filteredPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             
-            // यूजर्स के लिए HTML बनाएं
-            let usersHTML = '';
-            
-            Object.keys(usersGrouped).forEach(userId => {
-                const userPayments = usersGrouped[userId];
-                // सबसे हाल की पेमेंट ढूंढें
-                const latestPayment = userPayments.reduce((latest, payment) => {
-                    return new Date(payment.timestamp) > new Date(latest.timestamp) ? payment : latest;
-                });
-                
-                // यूजर की सभी पेमेंट्स को तारीख के अनुसार सॉर्ट करें (नवीनतम पहले)
-                userPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                const date = new Date(latestPayment.timestamp);
+            filteredPayments.forEach((payment) => {
+                const date = new Date(payment.timestamp);
                 const formattedDate = date.toLocaleDateString('hi-IN') + ' ' + date.toLocaleTimeString('hi-IN');
                 
-                usersHTML += `
-                    <div class="user-payment-item">
-                        <div class="user-payment-header">
-                            <div class="user-payment-date">${formattedDate}</div>
-                            <div class="user-payment-status status-badge ${latestPayment.status}">${getStatusText(latestPayment.status)}</div>
-                        </div>
-                        <div class="user-payment-details">
-                            <div class="user-payment-detail"><strong>ईमेल ID:</strong> ${latestPayment.user_id}</div>
-                            <div class="user-payment-detail"><strong>मोबाइल नंबर:</strong> ${latestPayment.mobile_number}</div>
-                            <div class="user-payment-detail"><strong>ट्रांजैक्शन ID:</strong> ${latestPayment.transaction_id}</div>
-                            <div class="user-payment-detail"><strong>राशि:</strong> ₹${latestPayment.amount}</div>
-                        </div>
-                        <div class="user-payment-actions">
-                            <button class="view-btn" onclick="viewUserPaymentHistory('${userId}')"><i class="fas fa-history"></i> इतिहास देखें</button>
-                            ${latestPayment.status === 'pending' ? `
-                                <button class="approve-btn" onclick="approvePayment('${userId}', '${latestPayment.id}')"><i class="fas fa-check"></i> अप्रूव करें</button>
-                                <button class="reject-btn" onclick="rejectPayment('${userId}', '${latestPayment.id}')"><i class="fas fa-times"></i> रिजेक्ट करें</button>
-                            ` : ''}
-                        </div>
-                        <div id="user-history-${userId}" style="display: none; margin-top: 15px;">
-                            <!-- यूजर का पेमेंट इतिहास यहां दिखाया जाएगा -->
-                        </div>
-                    </div>
+                const originalIndex = payments.findIndex(p => p.id === payment.id);
+                
+                tableHTML += `
+                    <tr>
+                        <td>${payment.user_id}</td>
+                        <td>${payment.mobile_number}</td>
+                        <td>${payment.transaction_id}</td>
+                        <td>₹${payment.amount}</td>
+                        <td>${formattedDate}</td>
+                        <td><span class="status-badge ${payment.status}">${getStatusText(payment.status)}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="view-btn" onclick="viewPaymentDetails(${originalIndex})"><i class="fas fa-eye"></i></button>
+                                ${payment.status === 'pending' ? `
+                                    <button class="approve-btn" onclick="approvePayment(${originalIndex})"><i class="fas fa-check"></i></button>
+                                    <button class="reject-btn" onclick="rejectPayment(${originalIndex})"><i class="fas fa-times"></i></button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
                 `;
             });
             
-            paymentsContainer.innerHTML = usersHTML;
-            debugLog(`फिल्टर्ड पेमेंट्स दिखाए गए: ${Object.keys(usersGrouped).length} यूजर्स`);
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            paymentsContainer.innerHTML = tableHTML;
+            debugLog(`फिल्टर्ड पेमेंट्स दिखाए गए: ${filteredPayments.length}`);
         }
         
         // नया फंक्शन - ऑटो रिफ्रेश टॉगल करें
@@ -1487,6 +1354,71 @@
             }, 3000);
             
             debugLog(`नोटिफिकेशन दिखाया गया: ${message} (${type})`);
+        }
+        
+        // नया फंक्शन - Firebase कनेक्शन टेस्ट करें
+        function testFirebaseConnection() {
+            debugLog("Firebase कनेक्शन टेस्ट करने का प्रयास");
+            
+            try {
+                // एक सरल टेस्ट डेटा लिखें और पढ़ें
+                const testRef = database.ref('test');
+                
+                testRef.set({
+                    timestamp: new Date().toISOString(),
+                    message: "कनेक्शन टेस्ट"
+                }).then(() => {
+                    debugLog("टेस्ट डेटा लिखा गया");
+                    
+                    return testRef.once('value');
+                }).then((snapshot) => {
+                    const testData = snapshot.val();
+                    debugLog(`टेस्ट डेटा पढ़ा गया: ${JSON.stringify(testData)}`);
+                    
+                    if (testData && testData.message === "कनेक्शन टेस्ट") {
+                        showNotification('Firebase कनेक्शन सफल है!', 'success');
+                        
+                        // टेस्ट डेटा हटाएं
+                        testRef.remove();
+                    } else {
+                        showNotification('Firebase कनेक्शन टेस्ट विफल!', 'error');
+                    }
+                }).catch((error) => {
+                    debugLog(`Firebase कनेक्शन टेस्ट त्रुटि: ${error.message}`);
+                    showNotification(`Firebase कनेक्शन टेस्ट त्रुटि: ${error.message}`, 'error');
+                });
+            } catch (error) {
+                debugLog(`Firebase कनेक्शन टेस्ट फंक्शन त्रुटि: ${error.message}`);
+                showNotification(`Firebase कनेक्शन टेस्ट फंक्शन त्रुटि: ${error.message}`, 'error');
+            }
+        }
+        
+        // नया फंक्शन - टेस्ट पेमेंट जोड़ें
+        function addTestPayment() {
+            debugLog("टेस्ट पेमेंट जोड़ने का प्रयास");
+            
+            try {
+                const testPayment = {
+                    user_id: "test@example.com",
+                    mobile_number: "9876543210",
+                    transaction_id: "TEST" + Math.floor(Math.random() * 1000000),
+                    amount: "99",
+                    payment_note: "यह एक टेस्ट पेमेंट है",
+                    timestamp: new Date().toISOString(),
+                    status: "pending"
+                };
+                
+                paymentsRef.push(testPayment).then((ref) => {
+                    debugLog(`टेस्ट पेमेंट जोड़ा गया: ${ref.key}`);
+                    showNotification('टेस्ट पेमेंट सफलतापूर्वक जोड़ा गया!', 'success');
+                }).catch((error) => {
+                    debugLog(`टेस्ट पेमेंट जोड़ने में त्रुटि: ${error.message}`);
+                    showNotification(`टेस्ट पेमेंट जोड़ने में त्रुटि: ${error.message}`, 'error');
+                });
+            } catch (error) {
+                debugLog(`टेस्ट पेमेंट फंक्शन त्रुटि: ${error.message}`);
+                showNotification(`टेस्ट पेमेंट फंक्शन त्रुटि: ${error.message}`, 'error');
+            }
         }
     </script>
 </body>
