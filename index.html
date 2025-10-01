@@ -6,6 +6,8 @@
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     <style>
         :root {
             --primary: #4a00e0;
@@ -770,6 +772,35 @@
                 transform: scale(40, 40);
             }
         }
+
+        /* कनेक्शन स्टेटस */
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 100;
+        }
+
+        .connection-status.connected {
+            background: rgba(0, 184, 148, 0.2);
+            color: var(--success);
+        }
+
+        .connection-status.disconnected {
+            background: rgba(214, 48, 49, 0.2);
+            color: var(--danger);
+        }
+
+        .connection-status i {
+            font-size: 10px;
+        }
     </style>
     <script>
         // सर्विस वर्कर रजिस्टर करें
@@ -787,6 +818,12 @@
     </script>
 </head>
 <body>
+    <!-- कनेक्शन स्टेटस -->
+    <div id="connection-status" class="connection-status disconnected">
+        <i class="fas fa-circle"></i>
+        <span>डिस्कनेक्टेड</span>
+    </div>
+
     <div class="header">
         <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
         <p>मात्र ₹49 में 30 दिन की प्रीमियम एक्सेस अनलॉक करें!</p>
@@ -907,7 +944,29 @@
     </div>
     
     <script>
+        // Firebase कॉन्फिगरेशन
+        const firebaseConfig = {
+            apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+            authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+            databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+            projectId: "rajasthan-gk-quiz-41cc5",
+            storageBucket: "rajasthan-gk-quiz-41cc5.firebasestorage.app",
+            messagingSenderId: "876482514501",
+            appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+            measurementId: "G-VB140B6NCW"
+        };
+
+        // Firebase इनिशियलाइज़ करें
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ग्लोबल वेरिएबल्स
+        let isConnected = false;
+
         document.addEventListener('DOMContentLoaded', function() {
+            // कनेक्शन स्टेटस मॉनिटर करें
+            monitorConnectionStatus();
+            
             // पहले लोकल स्टोरेज चेक करें
             if (checkLocalStorageAccess()) {
                 return; // अगर लोकल स्टोरेज में वैलिड एक्सेस है तो आगे बढ़ने की जरूरत नहीं
@@ -922,6 +981,24 @@
                 });
             }
         });
+
+        // कनेक्शन स्टेटस मॉनिटर करें
+        function monitorConnectionStatus() {
+            const connectionStatus = document.getElementById('connection-status');
+            
+            // कनेक्टेड स्टेटस
+            database.ref('.info/connected').on('value', (snapshot) => {
+                if (snapshot.val() === true) {
+                    connectionStatus.className = 'connection-status connected';
+                    connectionStatus.innerHTML = '<i class="fas fa-circle"></i><span>कनेक्टेड</span>';
+                    isConnected = true;
+                } else {
+                    connectionStatus.className = 'connection-status disconnected';
+                    connectionStatus.innerHTML = '<i class="fas fa-circle"></i><span>डिस्कनेक्टेड</span>';
+                    isConnected = false;
+                }
+            });
+        }
         
         // लोकल स्टोरेज से एक्सेस चेक करने का फ़ंक्शन
         function checkLocalStorageAccess() {
@@ -981,18 +1058,47 @@
             const amount = document.getElementById('amount').value.trim();
             const paymentNote = document.getElementById('payment_note').value.trim();
 
-            try {
-                // पेमेंट डेटा लोकल स्टोरेज में सेव करें
-                const paymentData = {
-                    user_id: userId,
-                    mobile_number: mobileNumber,
-                    transaction_id: transactionId,
-                    amount: amount,
-                    payment_note: paymentNote,
-                    status: 'pending',
-                    timestamp: new Date().toISOString()
-                };
+            // पेमेंट डेटा ऑब्जेक्ट बनाएं
+            const paymentData = {
+                user_id: userId,
+                mobile_number: mobileNumber,
+                transaction_id: transactionId,
+                amount: amount,
+                payment_note: paymentNote,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
 
+            // Firebase में पेमेंट रिक्वेस्ट सेव करें
+            if (isConnected) {
+                // Firebase का उपयोग करें
+                database.ref('payments').push(paymentData)
+                    .then(() => {
+                        // यूजर सेशन डेटा सेव करें
+                        const userData = {
+                            transactionId: transactionId,
+                            timestamp: new Date().toISOString()
+                        };
+                        localStorage.setItem('user_session_' + userId, JSON.stringify(userData));
+
+                        hideProcessingScreen();
+                        showSuccessModal(transactionId);
+                    })
+                    .catch((error) => {
+                        console.error("Firebase त्रुटि:", error);
+                        
+                        // Firebase विफल होने पर लोकल स्टोरेज का उपयोग करें
+                        saveToLocalStorage(paymentData, userId, transactionId);
+                    });
+            } else {
+                // इंटरनेट कनेक्शन नहीं है, लोकल स्टोरेज का उपयोग करें
+                saveToLocalStorage(paymentData, userId, transactionId);
+            }
+        }
+
+        // लोकल स्टोरेज में सेव करने का फंक्शन
+        function saveToLocalStorage(paymentData, userId, transactionId) {
+            try {
                 // लोकल स्टोरेज से पेमेंट्स लोड करें
                 let payments = JSON.parse(localStorage.getItem('payments')) || [];
                 
@@ -1013,7 +1119,7 @@
                 showSuccessModal(transactionId);
                 
             } catch (error) {
-                console.error("Error:", error);
+                console.error("लोकल स्टोरेज त्रुटि:", error);
                 hideProcessingScreen();
                 statusMessage.className = 'status-message error';
                 statusMessage.textContent = 'पेमेंट रिक्वेस्ट भेजने में समस्या हुई। कृपया दोबारा कोशिश करें।';
@@ -1036,25 +1142,59 @@
 
             showProcessingScreen();
             
-            try {
-                // यूजर सेशन डेटा लोड करें
-                const userData = JSON.parse(localStorage.getItem('user_session_' + userId));
-                
-                let transactionIdToCheck = '';
-                
-                if (userData && userData.transactionId) {
-                    transactionIdToCheck = userData.transactionId;
-                } else {
-                    transactionIdToCheck = document.getElementById('transaction_id').value.trim();
-                    if (!transactionIdToCheck) {
-                        hideProcessingScreen();
-                        statusMessage.className = 'status-message error';
-                        statusMessage.textContent = 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।';
-                        statusMessage.style.display = 'block';
-                        return;
-                    }
+            // पहले लोकल स्टोरेज चेक करें
+            const userData = JSON.parse(localStorage.getItem('user_session_' + userId));
+            
+            let transactionIdToCheck = '';
+            
+            if (userData && userData.transactionId) {
+                transactionIdToCheck = userData.transactionId;
+            } else {
+                transactionIdToCheck = document.getElementById('transaction_id').value.trim();
+                if (!transactionIdToCheck) {
+                    hideProcessingScreen();
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।';
+                    statusMessage.style.display = 'block';
+                    return;
                 }
+            }
 
+            // Firebase से डेटा चेक करें
+            if (isConnected) {
+                database.ref('payments').orderByChild('user_id').equalTo(userId).once('value')
+                    .then((snapshot) => {
+                        const payments = snapshot.val();
+                        let foundPayment = null;
+
+                        if (payments) {
+                            for (let key in payments) {
+                                if (payments[key].transaction_id === transactionIdToCheck) {
+                                    foundPayment = payments[key];
+                                    foundPayment.id = key;
+                                    break;
+                                }
+                            }
+                        }
+
+                        hideProcessingScreen();
+                        processPaymentStatus(foundPayment, userId);
+                    })
+                    .catch((error) => {
+                        console.error("Firebase त्रुटि:", error);
+                        
+                        // Firebase विफल होने पर लोकल स्टोरेज से चेक करें
+                        checkFromLocalStorage(userId, transactionIdToCheck);
+                    });
+            } else {
+                // इंटरनेट कनेक्शन नहीं है, लोकल स्टोरेज से चेक करें
+                checkFromLocalStorage(userId, transactionIdToCheck);
+            }
+        }
+
+        // लोकल स्टोरेज से चेक करने का फंक्शन
+        function checkFromLocalStorage(userId, transactionIdToCheck) {
+            try {
                 // लोकल स्टोरेज से पेमेंट्स लोड करें
                 const payments = JSON.parse(localStorage.getItem('payments')) || [];
                 let foundPayment = null;
@@ -1069,40 +1209,46 @@
                 }
 
                 hideProcessingScreen();
-
-                if (foundPayment) {
-                    if (foundPayment.status === 'approved') {
-                        // लोकल स्टोरेज में सेव करें
-                        savePremiumAccessToLocalStorage(userId, foundPayment.approved_at);
-                        
-                        statusMessage.className = 'status-message success';
-                        statusMessage.textContent = 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।';
-                        statusMessage.style.display = 'block';
-
-                        setTimeout(() => {
-                            window.location.href = 'quiz.html?user_id=' + userId;
-                        }, 5000);
-
-                    } else if (foundPayment.status === 'pending') {
-                        statusMessage.className = 'status-message pending';
-                        statusMessage.textContent = 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।';
-                        statusMessage.style.display = 'block';
-                    } else if (foundPayment.status === 'rejected') {
-                        statusMessage.className = 'status-message error';
-                        statusMessage.textContent = 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।';
-                        statusMessage.style.display = 'block';
-                    }
-                } else {
-                    statusMessage.className = 'status-message error';
-                    statusMessage.textContent = 'इस ईमेल ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।';
-                    statusMessage.style.display = 'block';
-                }
+                processPaymentStatus(foundPayment, userId);
             } catch (error) {
                 hideProcessingScreen();
                 statusMessage.className = 'status-message error';
                 statusMessage.textContent = 'पेमेंट स्टेटस चेक करने में त्रुटि। कृपया दोबारा कोशिश करें।';
                 statusMessage.style.display = 'block';
                 console.error('Error:', error);
+            }
+        }
+
+        // पेमेंट स्टेटस प्रोसेस करने का फंक्शन
+        function processPaymentStatus(foundPayment, userId) {
+            const statusMessage = document.getElementById('status-message');
+            
+            if (foundPayment) {
+                if (foundPayment.status === 'approved') {
+                    // लोकल स्टोरेज में सेव करें
+                    savePremiumAccessToLocalStorage(userId, foundPayment.approved_at);
+                    
+                    statusMessage.className = 'status-message success';
+                    statusMessage.textContent = 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।';
+                    statusMessage.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = 'quiz.html?user_id=' + userId;
+                    }, 5000);
+
+                } else if (foundPayment.status === 'pending') {
+                    statusMessage.className = 'status-message pending';
+                    statusMessage.textContent = 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।';
+                    statusMessage.style.display = 'block';
+                } else if (foundPayment.status === 'rejected') {
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।';
+                    statusMessage.style.display = 'block';
+                }
+            } else {
+                statusMessage.className = 'status-message error';
+                statusMessage.textContent = 'इस ईमेल ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।';
+                statusMessage.style.display = 'block';
             }
         }
 
