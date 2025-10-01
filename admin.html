@@ -526,6 +526,51 @@
             font-size: 14px;
             color: #777;
         }
+
+        /* डिबग पैनल */
+        .debug-panel {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            max-width: 300px;
+            font-size: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1002;
+            display: none;
+        }
+
+        .debug-panel.show {
+            display: block;
+        }
+
+        .debug-panel h4 {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .debug-log {
+            margin-bottom: 3px;
+            word-break: break-all;
+        }
+
+        .debug-toggle {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
@@ -533,6 +578,15 @@
     <div id="connection-status" class="connection-status disconnected">
         <i class="fas fa-circle"></i>
         <span>डिस्कनेक्टेड</span>
+    </div>
+
+    <!-- डिबग टॉगल बटन -->
+    <button class="debug-toggle" onclick="toggleDebugPanel()">डिबग</button>
+
+    <!-- डिबग पैनल -->
+    <div id="debug-panel" class="debug-panel">
+        <h4>डिबग लॉग</h4>
+        <div id="debug-logs"></div>
     </div>
 
     <div class="container">
@@ -587,6 +641,8 @@
                 <button onclick="toggleAutoRefresh()"><i class="fas fa-clock"></i> <span id="auto-refresh-text">ऑटो रिफ्रेश चालू करें</span></button>
                 <button onclick="exportData()"><i class="fas fa-download"></i> एक्सपोर्ट डेटा</button>
                 <button onclick="clearAllPayments()"><i class="fas fa-trash-alt"></i> सभी पेमेंट्स क्लियर करें</button>
+                <button onclick="testFirebaseConnection()"><i class="fas fa-plug"></i> कनेक्शन टेस्ट</button>
+                <button onclick="addTestPayment()"><i class="fas fa-plus"></i> टेस्ट पेमेंट</button>
             </div>
             
             <div class="filter-container">
@@ -651,111 +707,178 @@
             measurementId: "G-VB140B6NCW"
         };
 
-        // Firebase इनिशियलाइज़ करें
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
         // ग्लोबल वेरिएबल्स
         let autoRefreshInterval = null;
         let isAutoRefreshEnabled = false;
         let payments = [];
         let paymentsRef = null;
+        let database = null;
+        let debugMode = false;
+
+        // डिबग लॉग फंक्शन
+        function debugLog(message) {
+            if (debugMode) {
+                const debugLogs = document.getElementById('debug-logs');
+                const logEntry = document.createElement('div');
+                logEntry.className = 'debug-log';
+                logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                debugLogs.appendChild(logEntry);
+                debugLogs.scrollTop = debugLogs.scrollHeight;
+                
+                // कंसोल में भी लॉग करें
+                console.log(message);
+            }
+        }
+
+        // डिबग पैनल टॉगल करें
+        function toggleDebugPanel() {
+            debugMode = !debugMode;
+            const debugPanel = document.getElementById('debug-panel');
+            if (debugMode) {
+                debugPanel.classList.add('show');
+                debugLog("डिबग मोड चालू किया गया");
+            } else {
+                debugPanel.classList.remove('show');
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Firebase से डेटा लोड करें
-            loadPaymentsFromFirebase();
+            debugLog("पेज लोड हो गया");
             
-            // रियल-टाइम लिसनर सेट करें
-            setupRealtimeListener();
-            
-            // कनेक्शन स्टेटस मॉनिटर करें
-            monitorConnectionStatus();
+            try {
+                // Firebase इनिशियलाइज़ करें
+                firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                debugLog("Firebase इनिशियलाइज़ हो गया");
+                
+                // Firebase से डेटा लोड करें
+                loadPaymentsFromFirebase();
+                
+                // रियल-टाइम लिसनर सेट करें
+                setupRealtimeListener();
+                
+                // कनेक्शन स्टेटस मॉनिटर करें
+                monitorConnectionStatus();
+            } catch (error) {
+                debugLog(`Firebase इनिशियलाइज़ेशन त्रुटि: ${error.message}`);
+                showNotification('Firebase इनिशियलाइज़ करने में त्रुटि! कृपया कॉन्फिगरेशन जांचें।', 'error');
+            }
         });
 
         function setupRealtimeListener() {
-            paymentsRef = database.ref('payments');
-            
-            // रियल-टाइम अपडेट्स के लिए लिसनर
-            paymentsRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    // ऑब्जेक्ट को ऐरे में बदलें
-                    payments = Object.keys(data).map(key => ({
-                        id: key,
-                        ...data[key]
-                    }));
-                    
-                    // नवीनतम पहले सॉर्ट करें
-                    payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    
-                    // यूजर इंटरफेस अपडेट करें
-                    updatePaymentsUI();
-                    updateStats();
-                    
-                    // नई पेमेंट्स के लिए चेक करें
-                    checkForNewPayments();
-                } else {
-                    payments = [];
-                    updatePaymentsUI();
-                    updateStats();
-                }
-            }, (error) => {
-                console.error("Firebase से डेटा लोड करने में त्रुटि:", error);
-                showNotification('डेटा लोड करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
-            });
+            try {
+                paymentsRef = database.ref('payments');
+                debugLog("पेमेंट्स रेफरेंस बनाया गया");
+                
+                // रियल-टाइम अपडेट्स के लिए लिसनर
+                paymentsRef.on('value', (snapshot) => {
+                    debugLog("डेटा अपडेट प्राप्त हुआ");
+                    const data = snapshot.val();
+                    if (data) {
+                        debugLog(`डेटा मिला: ${Object.keys(data).length} पेमेंट्स`);
+                        
+                        // ऑब्जेक्ट को ऐरे में बदलें
+                        payments = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        }));
+                        
+                        // नवीनतम पहले सॉर्ट करें
+                        payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                        
+                        // यूजर इंटरफेस अपडेट करें
+                        updatePaymentsUI();
+                        updateStats();
+                        
+                        // नई पेमेंट्स के लिए चेक करें
+                        checkForNewPayments();
+                    } else {
+                        debugLog("कोई डेटा नहीं मिला");
+                        payments = [];
+                        updatePaymentsUI();
+                        updateStats();
+                    }
+                }, (error) => {
+                    debugLog(`डेटा लोड करने में त्रुटि: ${error.message}`);
+                    showNotification('डेटा लोड करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
+                });
+            } catch (error) {
+                debugLog(`रियल-टाइम लिसनर सेटअप त्रुटि: ${error.message}`);
+                showNotification('रियल-टाइम लिसनर सेटअप में त्रुटि!', 'error');
+            }
         }
 
         function monitorConnectionStatus() {
-            const connectionStatus = document.getElementById('connection-status');
-            
-            // कनेक्टेड स्टेटस
-            database.ref('.info/connected').on('value', (snapshot) => {
-                if (snapshot.val() === true) {
-                    connectionStatus.className = 'connection-status connected';
-                    connectionStatus.innerHTML = '<i class="fas fa-circle"></i><span>कनेक्टेड</span>';
-                } else {
-                    connectionStatus.className = 'connection-status disconnected';
-                    connectionStatus.innerHTML = '<i class="fas fa-circle"></i><span>डिस्कनेक्टेड</span>';
-                }
-            });
+            try {
+                const connectionStatus = document.getElementById('connection-status');
+                
+                // कनेक्टेड स्टेटस
+                database.ref('.info/connected').on('value', (snapshot) => {
+                    if (snapshot.val() === true) {
+                        connectionStatus.className = 'connection-status connected';
+                        connectionStatus.innerHTML = '<i class="fas fa-circle"></i><span>कनेक्टेड</span>';
+                        debugLog("Firebase से कनेक्टेड");
+                    } else {
+                        connectionStatus.className = 'connection-status disconnected';
+                        connectionStatus.innerHTML = '<i class="fas fa-circle"></i><span>डिस्कनेक्टेड</span>';
+                        debugLog("Firebase से डिस्कनेक्टेड");
+                    }
+                });
+            } catch (error) {
+                debugLog(`कनेक्शन स्टेटस मॉनिटर त्रुटि: ${error.message}`);
+            }
         }
 
         function loadPaymentsFromFirebase() {
-            // लोडिंग स्पिनर दिखाएं
-            document.getElementById('payments-container').innerHTML = `
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                </div>
-            `;
-            
-            // Firebase से पेमेंट्स लोड करें
-            paymentsRef.once('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    // ऑब्जेक्ट को ऐरे में बदलें
-                    payments = Object.keys(data).map(key => ({
-                        id: key,
-                        ...data[key]
-                    }));
+            try {
+                // लोडिंग स्पिनर दिखाएं
+                document.getElementById('payments-container').innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                `;
+                
+                debugLog("Firebase से पेमेंट्स लोड करने का प्रयास");
+                
+                // Firebase से पेमेंट्स लोड करें
+                paymentsRef.once('value', (snapshot) => {
+                    debugLog("Firebase से पेमेंट्स लोड हो गए");
+                    const data = snapshot.val();
+                    if (data) {
+                        debugLog(`डेटा मिला: ${Object.keys(data).length} पेमेंट्स`);
+                        
+                        // ऑब्जेक्ट को ऐरे में बदलें
+                        payments = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        }));
+                        
+                        // नवीनतम पहले सॉर्ट करें
+                        payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                        
+                        // यूजर इंटरफेस अपडेट करें
+                        updatePaymentsUI();
+                        updateStats();
+                    } else {
+                        debugLog("कोई डेटा नहीं मिला");
+                        payments = [];
+                        updatePaymentsUI();
+                        updateStats();
+                    }
+                }, (error) => {
+                    debugLog(`Firebase से डेटा लोड करने में त्रुटि: ${error.message}`);
+                    showNotification('डेटा लोड करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
                     
-                    // नवीनतम पहले सॉर्ट करें
-                    payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    
-                    // यूजर इंटरफेस अपडेट करें
-                    updatePaymentsUI();
-                    updateStats();
-                } else {
-                    payments = [];
-                    updatePaymentsUI();
-                    updateStats();
-                }
-            }, (error) => {
-                console.error("Firebase से डेटा लोड करने में त्रुटि:", error);
-                showNotification('डेटा लोड करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
+                    // लोकल स्टोरेज से डेटा लोड करने का प्रयास करें
+                    loadPaymentsFromLocalStorage();
+                });
+            } catch (error) {
+                debugLog(`Firebase लोड फंक्शन त्रुटि: ${error.message}`);
+                showNotification('Firebase लोड फंक्शन में त्रुटि!', 'error');
                 
                 // लोकल स्टोरेज से डेटा लोड करने का प्रयास करें
                 loadPaymentsFromLocalStorage();
-            });
+            }
         }
 
         function loadPaymentsFromLocalStorage() {
@@ -767,10 +890,12 @@
                 updatePaymentsUI();
                 updateStats();
                 showNotification('इंटरनेट कनेक्शन नहीं है। लोकल डेटा दिखाया जा रहा है।', 'info');
+                debugLog("लोकल स्टोरेज से डेटा लोड किया गया");
             } else {
                 payments = [];
                 updatePaymentsUI();
                 updateStats();
+                debugLog("लोकल स्टोरेज में कोई डेटा नहीं है");
             }
         }
 
@@ -784,6 +909,8 @@
             pendingCount.textContent = payments.filter(p => p.status === 'pending').length;
             approvedCount.textContent = payments.filter(p => p.status === 'approved').length;
             rejectedCount.textContent = payments.filter(p => p.status === 'rejected').length;
+            
+            debugLog(`स्टैटिस्टिक्स अपडेट: कुल=${payments.length}, पेंडिंग=${pendingCount.textContent}, अप्रूव्ड=${approvedCount.textContent}, रिजेक्टेड=${rejectedCount.textContent}`);
         }
 
         function updatePaymentsUI() {
@@ -848,6 +975,7 @@
             `;
             
             paymentsContainer.innerHTML = tableHTML;
+            debugLog(`यूजर इंटरफेस अपडेट किया गया: ${payments.length} पेमेंट्स`);
         }
         
         function getStatusText(status) {
@@ -862,18 +990,21 @@
         function approvePayment(index) {
             if (payments[index]) {
                 const paymentId = payments[index].id;
+                debugLog(`पेमेंट अप्रूव करने का प्रयास: ${paymentId}`);
                 
                 // Firebase में स्टेटस अपडेट करें
                 database.ref('payments/' + paymentId).update({
                     status: 'approved',
                     approved_at: new Date().toISOString()
                 }).then(() => {
+                    debugLog(`पेमेंट अप्रूव हो गई: ${paymentId}`);
+                    
                     // यूजर के लिए प्रीमियम एक्सेस सेव करें
                     savePremiumAccessToFirebase(payments[index].user_id, new Date().toISOString());
                     
                     showNotification('पेमेंट अप्रूव कर दी गई है!', 'success');
                 }).catch((error) => {
-                    console.error("पेमेंट अप्रूव करने में त्रुटि:", error);
+                    debugLog(`पेमेंट अप्रूव करने में त्रुटि: ${error.message}`);
                     showNotification('पेमेंट अप्रूव करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
                 });
             }
@@ -882,15 +1013,17 @@
         function rejectPayment(index) {
             if (payments[index]) {
                 const paymentId = payments[index].id;
+                debugLog(`पेमेंट रिजेक्ट करने का प्रयास: ${paymentId}`);
                 
                 // Firebase में स्टेटस अपडेट करें
                 database.ref('payments/' + paymentId).update({
                     status: 'rejected',
                     rejected_at: new Date().toISOString()
                 }).then(() => {
+                    debugLog(`पेमेंट रिजेक्ट हो गई: ${paymentId}`);
                     showNotification('पेमेंट रिजेक्ट कर दी गई है!', 'error');
                 }).catch((error) => {
-                    console.error("पेमेंट रिजेक्ट करने में त्रुटि:", error);
+                    debugLog(`पेमेंट रिजेक्ट करने में त्रुटि: ${error.message}`);
                     showNotification('पेमेंट रिजेक्ट करने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
                 });
             }
@@ -972,15 +1105,17 @@
             const expiryDate = new Date(approvedAt);
             expiryDate.setDate(expiryDate.getDate() + 30);
             
+            debugLog(`प्रीमियम एक्सेस सेव करने का प्रयास: ${userId}`);
+            
             // Firebase में प्रीमियम एक्सेस सेव करें
             database.ref('premiumAccess/' + userId).set({
                 userId: userId,
                 approvedAt: approvedAt,
                 expiresAt: expiryDate.toISOString()
             }).then(() => {
-                console.log("प्रीमियम एक्सेस Firebase में सेव हो गया");
+                debugLog(`प्रीमियम एक्सेस सेव हो गया: ${userId}`);
             }).catch((error) => {
-                console.error("प्रीमियम एक्सेस सेव करने में त्रुटि:", error);
+                debugLog(`प्रीमियम एक्सेस सेव करने में त्रुटि: ${error.message}`);
                 
                 // लोकल स्टोरेज में भी सेव करें (बैकअप के रूप में)
                 savePremiumAccessToLocalStorage(userId, approvedAt);
@@ -1003,9 +1138,11 @@
             
             // अपडेटेड डेटा सेव करें
             localStorage.setItem('premiumAccessData', JSON.stringify(premiumAccessData));
+            debugLog(`प्रीमियम एक्सेस लोकल स्टोरेज में सेव हो गया: ${userId}`);
         }
         
         function refreshPayments() {
+            debugLog("पेमेंट्स रिफ्रेश करने का प्रयास");
             loadPaymentsFromFirebase();
             showNotification('पेमेंट्स रिफ्रेश किए गए!', 'info');
         }
@@ -1037,15 +1174,19 @@
             document.body.removeChild(link);
             
             showNotification('डेटा एक्सपोर्ट किया गया!', 'success');
+            debugLog("डेटा एक्सपोर्ट किया गया");
         }
         
         function clearAllPayments() {
             if (confirm('क्या आप वाकई सभी पेमेंट डेटा हटाना चाहते हैं? यह क्रिया अपरिवर्तनीय है।')) {
+                debugLog("सभी पेमेंट्स हटाने का प्रयास");
+                
                 // Firebase से सभी पेमेंट्स हटाएं
                 database.ref('payments').remove().then(() => {
+                    debugLog("सभी पेमेंट्स हटा दिए गए");
                     showNotification('सभी पेमेंट डेटा हटा दिया गया है!', 'info');
                 }).catch((error) => {
-                    console.error("पेमेंट डेटा हटाने में त्रुटि:", error);
+                    debugLog(`पेमेंट डेटा हटाने में त्रुटि: ${error.message}`);
                     showNotification('पेमेंट डेटा हटाने में त्रुटि! इंटरनेट कनेक्शन चेक करें।', 'error');
                     
                     // लोकल स्टोरेज से भी हटाने का प्रयास करें
@@ -1140,6 +1281,7 @@
             `;
             
             paymentsContainer.innerHTML = tableHTML;
+            debugLog(`फिल्टर्ड पेमेंट्स दिखाए गए: ${filteredPayments.length}`);
         }
         
         // नया फंक्शन - ऑटो रिफ्रेश टॉगल करें
@@ -1158,6 +1300,7 @@
                 }, 10000);
                 
                 showNotification('ऑटो रिफ्रेश चालू कर दिया गया है!', 'success');
+                debugLog("ऑटो रिफ्रेश चालू किया गया");
             } else {
                 autoRefreshText.textContent = 'ऑटो रिफ्रेश चालू करें';
                 autoRefreshIndicator.style.display = 'none';
@@ -1166,6 +1309,7 @@
                 clearInterval(autoRefreshInterval);
                 
                 showNotification('ऑटो रिफ्रेश बंद कर दिया गया है!', 'info');
+                debugLog("ऑटो रिफ्रेश बंद किया गया");
             }
         }
         
@@ -1175,6 +1319,7 @@
             
             if (pendingPayments.length > 0) {
                 showNotification(`${pendingPayments.length} नई पेमेंट रिक्वेस्ट्स मिली हैं!`, 'info');
+                debugLog(`${pendingPayments.length} नई पेमेंट रिक्वेस्ट्स मिली हैं`);
             }
         }
         
@@ -1207,6 +1352,73 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
+            
+            debugLog(`नोटिफिकेशन दिखाया गया: ${message} (${type})`);
+        }
+        
+        // नया फंक्शन - Firebase कनेक्शन टेस्ट करें
+        function testFirebaseConnection() {
+            debugLog("Firebase कनेक्शन टेस्ट करने का प्रयास");
+            
+            try {
+                // एक सरल टेस्ट डेटा लिखें और पढ़ें
+                const testRef = database.ref('test');
+                
+                testRef.set({
+                    timestamp: new Date().toISOString(),
+                    message: "कनेक्शन टेस्ट"
+                }).then(() => {
+                    debugLog("टेस्ट डेटा लिखा गया");
+                    
+                    return testRef.once('value');
+                }).then((snapshot) => {
+                    const testData = snapshot.val();
+                    debugLog(`टेस्ट डेटा पढ़ा गया: ${JSON.stringify(testData)}`);
+                    
+                    if (testData && testData.message === "कनेक्शन टेस्ट") {
+                        showNotification('Firebase कनेक्शन सफल है!', 'success');
+                        
+                        // टेस्ट डेटा हटाएं
+                        testRef.remove();
+                    } else {
+                        showNotification('Firebase कनेक्शन टेस्ट विफल!', 'error');
+                    }
+                }).catch((error) => {
+                    debugLog(`Firebase कनेक्शन टेस्ट त्रुटि: ${error.message}`);
+                    showNotification(`Firebase कनेक्शन टेस्ट त्रुटि: ${error.message}`, 'error');
+                });
+            } catch (error) {
+                debugLog(`Firebase कनेक्शन टेस्ट फंक्शन त्रुटि: ${error.message}`);
+                showNotification(`Firebase कनेक्शन टेस्ट फंक्शन त्रुटि: ${error.message}`, 'error');
+            }
+        }
+        
+        // नया फंक्शन - टेस्ट पेमेंट जोड़ें
+        function addTestPayment() {
+            debugLog("टेस्ट पेमेंट जोड़ने का प्रयास");
+            
+            try {
+                const testPayment = {
+                    user_id: "test@example.com",
+                    mobile_number: "9876543210",
+                    transaction_id: "TEST" + Math.floor(Math.random() * 1000000),
+                    amount: "99",
+                    payment_note: "यह एक टेस्ट पेमेंट है",
+                    timestamp: new Date().toISOString(),
+                    status: "pending"
+                };
+                
+                paymentsRef.push(testPayment).then((ref) => {
+                    debugLog(`टेस्ट पेमेंट जोड़ा गया: ${ref.key}`);
+                    showNotification('टेस्ट पेमेंट सफलतापूर्वक जोड़ा गया!', 'success');
+                }).catch((error) => {
+                    debugLog(`टेस्ट पेमेंट जोड़ने में त्रुटि: ${error.message}`);
+                    showNotification(`टेस्ट पेमेंट जोड़ने में त्रुटि: ${error.message}`, 'error');
+                });
+            } catch (error) {
+                debugLog(`टेस्ट पेमेंट फंक्शन त्रुटि: ${error.message}`);
+                showNotification(`टेस्ट पेमेंट फंक्शन त्रुटि: ${error.message}`, 'error');
+            }
         }
     </script>
 </body>
