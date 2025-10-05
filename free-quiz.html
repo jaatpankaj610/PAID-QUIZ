@@ -1213,6 +1213,101 @@
             font-weight: 700;
         }
 
+        /* Custom Notification Styles */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 320px;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.success {
+            background: var(--success);
+            color: white;
+        }
+
+        .notification-icon.info {
+            background: var(--primary);
+            color: white;
+        }
+
+        .notification-icon.warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .notification-close:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 18px; 
@@ -1520,6 +1615,22 @@
         <source src="wrong.ogg" type="audio/ogg">
     </audio>
 
+    <!-- Custom Notification -->
+    <div id="notification-overlay" class="notification-overlay">
+        <div class="notification" id="notification">
+            <div class="notification-icon" id="notification-icon">
+                <i class="fas fa-info"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-title" id="notification-title">सूचना</div>
+                <div class="notification-message" id="notification-message">संदेश</div>
+            </div>
+            <div class="notification-close" onclick="hideNotification()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Firebase configuration
         const firebaseConfig = {
@@ -1625,7 +1736,7 @@
             const enteredName = nameInput.value.trim();
             
             if (enteredName.length < 2) {
-                alert('कृपया कम से कम 2 अक्षरों का नाम दर्ज करें');
+                showNotification('warning', 'चेतावनी', 'कृपया कम से कम 2 अक्षरों का नाम दर्ज करें');
                 return;
             }
             
@@ -1969,9 +2080,9 @@
             
             if (userScore) {
                 const percentage = ((userScore.score / userScore.totalQuestions) * 100).toFixed(1);
-                alert(`आपका स्कोर: ${userScore.score}/${userScore.totalQuestions} (${percentage}%)`);
+                showNotification('success', 'आपका स्कोर', `${userScore.score}/${userScore.totalQuestions} (${percentage}%)`);
             } else {
-                alert('आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
+                showNotification('info', 'सूचना', 'आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
             }
         }
 
@@ -1988,10 +2099,54 @@
             const userRank = scores.findIndex(s => s.userId === userId) + 1;
             
             if (userRank > 0) {
-                alert(`आपकी रैंक: ${userRank}`);
+                showNotification('info', 'आपकी रैंक', `आपकी रैंक: ${userRank}`);
             } else {
-                alert('आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
+                showNotification('info', 'सूचना', 'आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
             }
+        }
+
+        function showNotification(type, title, message) {
+            const notificationOverlay = document.getElementById('notification-overlay');
+            const notification = document.getElementById('notification');
+            const notificationIcon = document.getElementById('notification-icon');
+            const notificationTitle = document.getElementById('notification-title');
+            const notificationMessage = document.getElementById('notification-message');
+            
+            // Set icon based on type
+            if (type === 'success') {
+                notificationIcon.className = 'notification-icon success';
+                notificationIcon.innerHTML = '<i class="fas fa-check"></i>';
+            } else if (type === 'warning') {
+                notificationIcon.className = 'notification-icon warning';
+                notificationIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            } else {
+                notificationIcon.className = 'notification-icon info';
+                notificationIcon.innerHTML = '<i class="fas fa-info"></i>';
+            }
+            
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
+            
+            // Show notification
+            notificationOverlay.style.display = 'flex';
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                hideNotification();
+            }, 3000);
+        }
+
+        function hideNotification() {
+            const notificationOverlay = document.getElementById('notification-overlay');
+            const notification = document.getElementById('notification');
+            
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notificationOverlay.style.display = 'none';
+            }, 300);
         }
 
         function showLeaderboardTab(tab) {
