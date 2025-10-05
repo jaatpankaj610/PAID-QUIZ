@@ -903,6 +903,7 @@
             border-radius: 20px;
         }
 
+        /* Enhanced User Rank Section */
         .current-user-rank {
             background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
             border-radius: 15px;
@@ -912,13 +913,28 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .current-user-rank::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            z-index: 0;
         }
 
         .current-user-info {
             display: flex;
             align-items: center;
             gap: 12px;
+            position: relative;
+            z-index: 1;
         }
 
         .current-user-avatar {
@@ -932,6 +948,7 @@
             color: white;
             font-weight: 700;
             font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .current-user-details h3 {
@@ -958,6 +975,57 @@
             justify-content: center;
             font-weight: 700;
             font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Divider between user rank and champions list */
+        .leaderboard-divider {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            gap: 10px;
+        }
+
+        .leaderboard-divider-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+            border-radius: 2px;
+        }
+
+        .leaderboard-divider-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray);
+            padding: 0 10px;
+            white-space: nowrap;
+        }
+
+        /* Champions List Section */
+        .champions-section {
+            margin-top: 10px;
+        }
+
+        .champions-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+
+        .champions-header i {
+            color: #facc15;
+            font-size: 18px;
+        }
+
+        .champions-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
         }
 
         .leaderboard-list {
@@ -1004,21 +1072,25 @@
         .rank-1 {
             background: linear-gradient(135deg, #FFD700, #FFA500);
             color: white;
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
         }
 
         .rank-2 {
             background: linear-gradient(135deg, #C0C0C0, #808080);
             color: white;
+            box-shadow: 0 4px 8px rgba(192, 192, 192, 0.3);
         }
 
         .rank-3 {
             background: linear-gradient(135deg, #CD7F32, #8B4513);
             color: white;
+            box-shadow: 0 4px 8px rgba(205, 127, 50, 0.3);
         }
 
         .rank-other {
             background: var(--gradient);
             color: white;
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
         }
 
         .leaderboard-user {
@@ -1039,6 +1111,7 @@
             color: white;
             font-weight: 600;
             font-size: 14px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
         .leaderboard-details {
@@ -1523,6 +1596,21 @@
                             </div>
                         </div>
                         <div class="current-user-rank-badge" id="current-user-rank-badge">-</div>
+                    </div>
+                    
+                    <!-- Divider between user rank and champions list -->
+                    <div class="leaderboard-divider" id="leaderboard-divider" style="display: none;">
+                        <div class="leaderboard-divider-line"></div>
+                        <div class="leaderboard-divider-text">आज के चैंपियन</div>
+                        <div class="leaderboard-divider-line"></div>
+                    </div>
+                    
+                    <!-- Champions List Section -->
+                    <div class="champions-section" id="champions-section" style="display: none;">
+                        <div class="champions-header">
+                            <i class="fas fa-crown"></i>
+                            <h3>टॉप प्रदर्शनकर्ता</h3>
+                        </div>
                     </div>
                     
                     <div id="leaderboard-loading" class="loading-spinner" style="display: none;">
@@ -2142,6 +2230,9 @@
         function displayLeaderboard() {
             const leaderboardList = document.getElementById('leaderboard-list');
             const currentUserRank = document.getElementById('current-user-rank');
+            const leaderboardDivider = document.getElementById('leaderboard-divider');
+            const championsSection = document.getElementById('champions-section');
+            
             leaderboardList.innerHTML = '';
             
             let scores = [...todayScores];
@@ -2161,8 +2252,16 @@
                 document.getElementById('current-user-name').textContent = userName;
                 document.getElementById('current-user-score').textContent = `स्कोर: ${scores[currentUserRankValue-1].score}/${scores[currentUserRankValue-1].totalQuestions}`;
                 document.getElementById('current-user-rank-badge').textContent = currentUserRankValue;
+                
+                // Show divider and champions section
+                leaderboardDivider.style.display = 'flex';
+                championsSection.style.display = 'block';
             } else if (currentUserRank) {
                 currentUserRank.style.display = 'none';
+                
+                // Hide divider if user not found
+                leaderboardDivider.style.display = 'none';
+                championsSection.style.display = 'none';
             }
             
             // Display top 50 scores
