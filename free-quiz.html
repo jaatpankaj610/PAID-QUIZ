@@ -903,29 +903,6 @@
             border-radius: 20px;
         }
 
-        .leaderboard-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-            gap: 10px;
-        }
-
-        .leaderboard-tab {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(241, 245, 249, 0.8);
-            color: var(--gray);
-        }
-
-        .leaderboard-tab.active {
-            background: var(--gradient);
-            color: white;
-        }
-
         .current-user-rank {
             background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
             border-radius: 15px;
@@ -1503,7 +1480,7 @@
                     </button>
                     <button class="leaderboard-toggle-btn" onclick="toggleLeaderboard()">
                         <i class="fas fa-trophy"></i>
-                        <span>लीडरबोर्ड देखें</span>
+                        <span>आज के चैंपियन देखें</span>
                     </button>
                     <div class="design-line"></div>
                     <p class="design-text">अपने ज्ञान को आज़माने का सही समय!</p>
@@ -1514,7 +1491,7 @@
                     <div class="leaderboard-header">
                         <div class="leaderboard-title">
                             <i class="fas fa-trophy" style="color: #facc15;"></i>
-                            <h2>लीडरबोर्ड</h2>
+                            <h2>आज के चैंपियन</h2>
                         </div>
                         <div class="leaderboard-date" id="leaderboard-date">आज</div>
                     </div>
@@ -1548,10 +1525,6 @@
                         <div class="current-user-rank-badge" id="current-user-rank-badge">-</div>
                     </div>
                     
-                    <div class="leaderboard-tabs">
-                        <div class="leaderboard-tab active" onclick="showLeaderboardTab('today')">आज के चैंपियन</div>
-                        <div class="leaderboard-tab" onclick="showLeaderboardTab('all-time')">हॉल ऑफ फेम</div>
-                    </div>
                     <div id="leaderboard-loading" class="loading-spinner" style="display: none;">
                         <div class="spinner"></div>
                     </div>
@@ -1655,8 +1628,6 @@
         let userName = '';
         let userId = ''; // Unique ID for each user
         let isFirstTime = true; // Track if it's the user's first time
-        let leaderboardTab = 'today'; // 'today' or 'all-time'
-        let allTimeScores = [];
         let todayScores = [];
         let isLeaderboardLoaded = false;
         let countdownInterval; // For the countdown timer
@@ -2010,28 +1981,8 @@
                 isFirstTime: isFirstTime
             };
             
-            // Check if user already has a score in Firebase
-            database.ref('allTimeScores').orderByChild('userId').equalTo(userId).once('value')
-                .then((snapshot) => {
-                    if (snapshot.exists()) {
-                        // User already has a score, don't update it
-                        console.log('User already has a score in Firebase, not updating');
-                    } else {
-                        // User doesn't have a score, create a new one
-                        database.ref('allTimeScores').push(newScore)
-                            .then(() => {
-                                console.log('Score saved to all-time scores in Firebase');
-                                // Mark user as no longer first time
-                                isFirstTime = false;
-                            })
-                            .catch((error) => {
-                                console.error('Error saving score to Firebase:', error);
-                            });
-                    }
-                    
-                    // Check if user already has a score for today
-                    return database.ref(`todayScores/${dateStr}`).orderByChild('userId').equalTo(userId).once('value');
-                })
+            // Check if user already has a score for today
+            database.ref(`todayScores/${dateStr}`).orderByChild('userId').equalTo(userId).once('value')
                 .then((snapshot) => {
                     if (snapshot.exists()) {
                         // User already has a score for today, don't update it
@@ -2072,8 +2023,8 @@
                 return;
             }
             
-            // Find user's score in the current tab
-            let scores = leaderboardTab === 'today' ? [...todayScores] : [...allTimeScores];
+            // Find user's score in today's scores
+            let scores = [...todayScores];
             scores.sort((a, b) => b.score - a.score);
             
             const userScore = scores.find(s => s.userId === userId);
@@ -2092,8 +2043,8 @@
                 return;
             }
             
-            // Find user's rank in the current tab
-            let scores = leaderboardTab === 'today' ? [...todayScores] : [...allTimeScores];
+            // Find user's rank in today's scores
+            let scores = [...todayScores];
             scores.sort((a, b) => b.score - a.score);
             
             const userRank = scores.findIndex(s => s.userId === userId) + 1;
@@ -2149,24 +2100,6 @@
             }, 300);
         }
 
-        function showLeaderboardTab(tab) {
-            leaderboardTab = tab;
-            
-            // Update active tab
-            const tabs = document.querySelectorAll('.leaderboard-tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update date display
-            const dateDisplay = document.getElementById('leaderboard-date');
-            if (dateDisplay) {
-                dateDisplay.textContent = tab === 'today' ? 'आज' : 'सर्वकालिक';
-            }
-            
-            // Display leaderboard for selected tab
-            displayLeaderboard();
-        }
-
         function loadLeaderboardData() {
             const loadingSpinner = document.getElementById('leaderboard-loading');
             const leaderboardList = document.getElementById('leaderboard-list');
@@ -2193,21 +2126,6 @@
                         });
                     }
                     
-                    // Load all-time scores from Firebase
-                    return database.ref('allTimeScores').once('value');
-                })
-                .then((snapshot) => {
-                    allTimeScores = [];
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        Object.keys(data).forEach(key => {
-                            allTimeScores.push({
-                                id: key,
-                                ...data[key]
-                            });
-                        });
-                    }
-                    
                     // Hide loading spinner
                     loadingSpinner.style.display = 'none';
                     
@@ -2226,7 +2144,7 @@
             const currentUserRank = document.getElementById('current-user-rank');
             leaderboardList.innerHTML = '';
             
-            let scores = leaderboardTab === 'today' ? [...todayScores] : [...allTimeScores];
+            let scores = [...todayScores];
             
             // Sort scores by score (descending)
             scores.sort((a, b) => b.score - a.score);
