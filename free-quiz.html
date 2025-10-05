@@ -1158,6 +1158,61 @@
             display: inline-block;
         }
 
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .user-action-btn {
+            flex: 1;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .user-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-action-btn.secondary {
+            background: var(--premium-gradient);
+        }
+
+        .user-action-btn.secondary:hover {
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .countdown-timer {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray);
+            background: rgba(241, 245, 249, 0.8);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .countdown-timer span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 18px; 
@@ -1369,6 +1424,23 @@
                         <div class="leaderboard-date" id="leaderboard-date">आज</div>
                     </div>
                     
+                    <!-- User Actions -->
+                    <div class="user-actions">
+                        <button class="user-action-btn" onclick="showMyScore()">
+                            <i class="fas fa-chart-line"></i>
+                            <span>मेरा स्कोर</span>
+                        </button>
+                        <button class="user-action-btn secondary" onclick="showMyRank()">
+                            <i class="fas fa-medal"></i>
+                            <span>मेरी रैंक</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="countdown-timer" id="countdown-timer">
+                        अगली रैंकिंग में <span id="countdown-time">24:00:00</span> बचे हैं
+                    </div>
+                    
                     <!-- Current User Rank Display -->
                     <div id="current-user-rank" class="current-user-rank" style="display: none;">
                         <div class="current-user-info">
@@ -1382,8 +1454,8 @@
                     </div>
                     
                     <div class="leaderboard-tabs">
-                        <div class="leaderboard-tab active" onclick="showLeaderboardTab('today')">Today's Champions</div>
-                        <div class="leaderboard-tab" onclick="showLeaderboardTab('all-time')">Hall of Fame</div>
+                        <div class="leaderboard-tab active" onclick="showLeaderboardTab('today')">आज के चैंपियन</div>
+                        <div class="leaderboard-tab" onclick="showLeaderboardTab('all-time')">हॉल ऑफ फेम</div>
                     </div>
                     <div id="leaderboard-loading" class="loading-spinner" style="display: none;">
                         <div class="spinner"></div>
@@ -1476,6 +1548,7 @@
         let allTimeScores = [];
         let todayScores = [];
         let isLeaderboardLoaded = false;
+        let countdownInterval; // For the countdown timer
 
         // Initialize sound effects
         const correctSound = document.getElementById('correct-sound');
@@ -1491,6 +1564,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             initializeQuiz();
             checkUserName();
+            startCountdownTimer();
             if (navigator.onLine) {
                 loadQuestions();
             }
@@ -1881,6 +1955,45 @@
             }
         }
 
+        function showMyScore() {
+            if (!userName || !userId) {
+                checkUserName();
+                return;
+            }
+            
+            // Find user's score in the current tab
+            let scores = leaderboardTab === 'today' ? [...todayScores] : [...allTimeScores];
+            scores.sort((a, b) => b.score - a.score);
+            
+            const userScore = scores.find(s => s.userId === userId);
+            
+            if (userScore) {
+                const percentage = ((userScore.score / userScore.totalQuestions) * 100).toFixed(1);
+                alert(`आपका स्कोर: ${userScore.score}/${userScore.totalQuestions} (${percentage}%)`);
+            } else {
+                alert('आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
+            }
+        }
+
+        function showMyRank() {
+            if (!userName || !userId) {
+                checkUserName();
+                return;
+            }
+            
+            // Find user's rank in the current tab
+            let scores = leaderboardTab === 'today' ? [...todayScores] : [...allTimeScores];
+            scores.sort((a, b) => b.score - a.score);
+            
+            const userRank = scores.findIndex(s => s.userId === userId) + 1;
+            
+            if (userRank > 0) {
+                alert(`आपकी रैंक: ${userRank}`);
+            } else {
+                alert('आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
+            }
+        }
+
         function showLeaderboardTab(tab) {
             leaderboardTab = tab;
             
@@ -2052,6 +2165,41 @@
             // If more than a day
             const days = Math.floor(diff / 86400000);
             return `${days} दिन पहले`;
+        }
+
+        function startCountdownTimer() {
+            // Clear any existing interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            // Update the countdown every second
+            countdownInterval = setInterval(() => {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0);
+                
+                const diff = tomorrow - now;
+                
+                if (diff <= 0) {
+                    // It's midnight, reset the timer
+                    clearInterval(countdownInterval);
+                    startCountdownTimer();
+                    return;
+                }
+                
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                const countdownElement = document.getElementById('countdown-time');
+                if (countdownElement) {
+                    countdownElement.textContent = formattedTime;
+                }
+            }, 1000);
         }
 
         function restartQuiz() {
