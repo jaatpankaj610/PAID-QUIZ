@@ -1153,6 +1153,7 @@
         // Firebase को ग्लोबल स्कोप में इनिशियलाइज़ करें
         let database;
         let firebaseInitialized = false;
+        let paymentStatusListener = null;
 
         // Firebase कॉन्फिगरेशन
         const firebaseConfig = {
@@ -1255,9 +1256,14 @@
                     return;
                 }
                 
+                // पहले से मौजूद लिसनर को हटाएं
+                if (paymentStatusListener) {
+                    paymentStatusListener.off();
+                }
+                
                 const paymentsRef = database.ref('payments');
                 
-                paymentsRef.on('value', (snapshot) => {
+                paymentStatusListener = paymentsRef.on('value', (snapshot) => {
                     const payments = snapshot.val();
                     if (!payments) return;
                     
