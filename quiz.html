@@ -2221,6 +2221,14 @@
                 leaderboardSection.style.display = 'none';
                 leaderboardToggleState = false; // Reset toggle state
             }
+            
+            // Reset quizStarted flag to allow starting quiz from leaderboard
+            quizStarted = false;
+            
+            // Force reload questions to ensure they're available
+            questions = [];
+            
+            // Start the quiz
             startQuiz();
         }
 
@@ -2538,6 +2546,9 @@
             if (quizSection) {
                 quizSection.style.display = 'none'; // Make sure quiz section is hidden
             }
+            
+            // Reset quizStarted flag when going to leaderboard
+            quizStarted = false;
             
             if (leaderboardSection) {
                 leaderboardSection.style.display = 'block';
