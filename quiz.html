@@ -31,6 +31,11 @@
             --button-shadow: 0 4px 12px rgba(0,0,0,0.1);
             --paid-color: #f59e0b;
             --paid-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+            --champion-gradient: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00);
+            --champion-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            --neon-gradient: linear-gradient(135deg, #FF00FF, #00FFFF, #FF00FF);
+            --neon-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 40px rgba(0, 255, 255, 0.5);
+            --premium-text: 'Inter', 'Noto Sans Devanagari', sans-serif;
         }
         
         * { 
@@ -794,7 +799,7 @@
             50% { transform: translateY(-15px); opacity: 1; }
         }
 
-        /* Leaderboard Styles - यहाँ लीडरबोर्ड के लिए स्टाइल जोड़ी गई है */
+        /* Leaderboard Styles */
         .leaderboard-section {
             display: none;
             background: var(--light);
@@ -840,6 +845,7 @@
             border-radius: 20px;
         }
 
+        /* Enhanced User Rank Section */
         .current-user-rank {
             background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
             border-radius: 15px;
@@ -916,6 +922,7 @@
             z-index: 1;
         }
 
+        /* Divider between user rank and champions list */
         .leaderboard-divider {
             display: flex;
             align-items: center;
@@ -938,6 +945,7 @@
             white-space: nowrap;
         }
 
+        /* Champions List Section */
         .champions-section {
             margin-top: 10px;
         }
@@ -1118,6 +1126,7 @@
             box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
         }
 
+        /* Professional Start Quiz Button in Leaderboard */
         .leaderboard-start-btn {
             background: var(--paid-gradient);
             color: white;
@@ -1263,80 +1272,99 @@
             font-weight: 700;
         }
 
-        /* Name Input Modal Styles */
-        .name-modal-overlay {
-            display: none;
+        /* Custom Notification Styles */
+        .notification-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
+            background: rgba(0, 0, 0, 0);
+            z-index: 10000;
+            display: flex;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.3s ease-out;
+            pointer-events: none;
         }
 
-        .name-modal {
+        .notification {
             background: white;
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 20px;
-            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             max-width: 320px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            animation: slideUp 0.4s ease-out;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: auto;
         }
 
-        .name-modal h3 {
-            font-size: 20px;
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.success {
+            background: var(--success);
+            color: white;
+        }
+
+        .notification-icon.info {
+            background: var(--primary);
+            color: white;
+        }
+
+        .notification-icon.warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
 
-        .name-modal p {
+        .notification-message {
             font-size: 14px;
             color: var(--gray);
-            margin-bottom: 20px;
             line-height: 1.4;
         }
 
-        .name-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .name-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .name-submit-btn {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: 600;
+        .notification-close {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
             cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: var(--button-shadow);
+            transition: all 0.2s ease;
         }
 
-        .name-submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        .notification-close:hover {
+            background: rgba(0, 0, 0, 0.2);
         }
 
         /* Premium Rotating Button Styles */
@@ -1518,6 +1546,82 @@
             background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
             color: var(--gray);
             border: 1px solid rgba(107, 114, 128, 0.2);
+        }
+
+        /* Name Input Modal Styles */
+        .name-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .name-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 320px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .name-modal h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .name-modal p {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .name-submit-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: var(--button-shadow);
+        }
+
+        .name-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
         }
 
         @media (min-width: 601px) {
@@ -1702,7 +1806,7 @@
                         </button>
                     </div>
                     
-                    <!-- Leaderboard Section - यहाँ लीडरबोर्ड सेक्शन जोड़ा गया है -->
+                    <!-- Professional Leaderboard Section -->
                     <div id="leaderboard-section" class="leaderboard-section">
                         <div class="leaderboard-header">
                             <div class="leaderboard-title">
@@ -1833,6 +1937,22 @@
             <div class="error-image">❌</div>
             <p class="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें!</p>
             <button class="retry-btn" onclick="retry()">पुनः प्रयास करें</button>
+        </div>
+    </div>
+
+    <!-- Custom Notification -->
+    <div id="notification-overlay" class="notification-overlay">
+        <div class="notification" id="notification">
+            <div class="notification-icon" id="notification-icon">
+                <i class="fas fa-info"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-title" id="notification-title">सूचना</div>
+                <div class="notification-message" id="notification-message">संदेश</div>
+            </div>
+            <div class="notification-close" onclick="hideNotification()">
+                <i class="fas fa-times"></i>
+            </div>
         </div>
     </div>
 
