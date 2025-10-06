@@ -1186,6 +1186,48 @@
         // पेज लोड होते ही Firebase इनिशियलाइज़ करें
         initializeFirebase();
 
+        // यह फंक्शन फॉर्म डेटा को सेव करेगा
+        function saveFormData() {
+            const formData = {
+                user_id: document.getElementById('user_id').value,
+                mobile_number: document.getElementById('mobile_number').value,
+                transaction_id: document.getElementById('transaction_id').value,
+                amount: document.getElementById('amount').value,
+                payment_note: document.getElementById('payment_note').value,
+                payment_made: document.getElementById('payment_made').checked
+            };
+            
+            localStorage.setItem('paymentFormData', JSON.stringify(formData));
+        }
+
+        // यह फंक्शन फॉर्म डेटा को रिस्टोर करेगा
+        function restoreFormData() {
+            const savedFormData = localStorage.getItem('paymentFormData');
+            
+            if (savedFormData) {
+                try {
+                    const formData = JSON.parse(savedFormData);
+                    
+                    document.getElementById('user_id').value = formData.user_id || '';
+                    document.getElementById('mobile_number').value = formData.mobile_number || '';
+                    document.getElementById('transaction_id').value = formData.transaction_id || '';
+                    document.getElementById('amount').value = formData.amount || '49';
+                    document.getElementById('payment_note').value = formData.payment_note || '';
+                    document.getElementById('payment_made').checked = formData.payment_made || false;
+                    
+                    // चेकबॉक्स की स्थिति के आधार पर इसे एनेबल/डिसेबल करें
+                    checkAllFieldsForCheckbox();
+                    
+                    return true;
+                } catch (error) {
+                    console.error("Error restoring form data:", error);
+                    return false;
+                }
+            }
+            
+            return false;
+        }
+
         // यह फंक्शन लोकल स्टोरेज में एक्सेस एक्सपायरी टाइमस्टैम्प सेट करेगा
         function setAccessExpiry(userId, mobileNumber, transactionId, amount, days = 30) {
             const now = new Date();
@@ -1255,6 +1297,9 @@
             if (localStorage.getItem('premiumAccess')) {
                 localStorage.removeItem('premiumAccess');
                 
+                // फॉर्म डेटा को सेव करें
+                saveFormData();
+                
                 // यूजर को पेमेंट पेज पर रीडायरेक्ट करें, लेकिन एक्सपायर्ड फ्लैग के साथ
                 window.location.href = 'index.html?expired=true';
             }
@@ -1310,6 +1355,9 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
+            // फॉर्म डेटा को रिस्टोर करें
+            restoreFormData();
+            
             // चेक करें कि यूजर एक्सपायर्ड होकर आया है या नहीं, लेकिन सिर्फ तभी जब उसके पास पहले एक्सेस था
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('expired') === 'true' && localStorage.getItem('hadPremiumAccess') === 'true') {
@@ -1333,6 +1381,8 @@
                 if (!isAccessValid()) {
                     // सिर्फ तभी रीडायरेक्ट करें जब उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
                     if (localStorage.getItem('hadPremiumAccess') === 'true') {
+                        // फॉर्म डेटा को सेव करें
+                        saveFormData();
                         window.location.href = 'index.html?expired=true';
                     }
                 }
@@ -1343,6 +1393,8 @@
                 if (!isAccessValid()) {
                     // सिर्फ तभी रीडायरेक्ट करें जब उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
                     if (localStorage.getItem('hadPremiumAccess') === 'true') {
+                        // फॉर्म डेटा को सेव करें
+                        saveFormData();
                         window.location.href = 'index.html?expired=true';
                     }
                 }
@@ -1391,80 +1443,6 @@
             // पेमेंट स्टेटस लिसनर सेटअप करें
             setupPaymentStatusListener();
 
-            async function checkPremiumAccess() {
-                // पहले लोकल स्टोरेज जांचें
-                if (checkLocalAccess()) {
-                    return;
-                }
-
-                const params = new URLSearchParams(window.location.search);
-                const userEmail = params.get('user_id');
-
-                if (!userEmail) {
-                    document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('online-content').style.display = 'block';
-                    return;
-                }
-
-                const userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
-
-                try {
-                    if (!firebaseInitialized || !database) {
-                        throw new Error("Firebase not initialized");
-                    }
-                    
-                    const paymentsRef = database.ref('payments');
-                    const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
-                    const payments = snapshot.val();
-                    let foundApprovedPayment = null;
-
-                    if (payments) {
-                        for (let key in payments) {
-                            if (payments[key].status === 'approved') {
-                                foundApprovedPayment = payments[key];
-                                break;
-                            }
-                        }
-                    }
-
-                    if (foundApprovedPayment) {
-                        // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
-                        let approvalDate;
-                        if (foundApprovedPayment.approved_at) {
-                            approvalDate = new Date(foundApprovedPayment.approved_at);
-                        } else {
-                            // अगर approved_at नहीं है, तो timestamp का उपयोग करें
-                            approvalDate = new Date(foundApprovedPayment.timestamp);
-                        }
-                        
-                        // एक्सेस सेट करें जो 30 दिन बाद एक्सपायर हो जाएगी
-                        setAccessExpiry(
-                            foundApprovedPayment.user_id, 
-                            foundApprovedPayment.mobile_number,
-                            foundApprovedPayment.transaction_id,
-                            foundApprovedPayment.amount,
-                            30
-                        );
-                        
-                        window.location.href = 'quiz.html?user_id=' + userId;
-                        return;
-                    }
-                    
-                    // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
-                    document.getElementById('user_id').value = userEmail;
-                    document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('online-content').style.display = 'block';
-
-                } catch (error) {
-                    console.error("Access check error:", error);
-                    document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('online-content').style.display = 'block';
-                }
-            }
-            
-            // इस फंक्शन को कॉल करने से पहले टिप्पणी करें
-            // checkPremiumAccess();
-
             // फॉर्म सबमिट इवेंट मजबूती से बाइंड
             const paymentForm = document.getElementById('payment-form');
             if (paymentForm) {
@@ -1479,6 +1457,19 @@
             
             // इनपुट फील्ड्स पर रीयल-टाइम वैलिडेशन जोड़ें
             setupRealtimeValidation();
+            
+            // इनपुट फील्ड्स पर चेंज इवेंट जोड़ें ताकि डेटा सेव होता रहे
+            const inputFields = document.querySelectorAll('input, textarea');
+            inputFields.forEach(field => {
+                field.addEventListener('input', saveFormData);
+                field.addEventListener('change', saveFormData);
+            });
+        });
+        
+        // फॉर्म रीसेट करने पर फॉर्म डेटा को क्लियर करें
+        document.getElementById('payment-form').addEventListener('reset', function() {
+            localStorage.removeItem('paymentFormData');
+            checkAllFieldsForCheckbox();
         });
         
         function setupRealtimeValidation() {
