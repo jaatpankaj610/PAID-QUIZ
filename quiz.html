@@ -1484,6 +1484,92 @@
             }
         }
 
+        /* User Name Input Section */
+        .name-input-section {
+            display: none;
+            background: var(--light);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeInUp 0.6s ease-out;
+            width: 100%;
+        }
+
+        .name-input-section h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .name-input-container {
+            margin-bottom: 20px;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
+            background: rgba(241, 245, 249, 0.7);
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: var(--paid-color);
+            background: var(--light);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .name-input::placeholder {
+            color: var(--gray);
+            opacity: 0.7;
+        }
+
+        .name-input-error {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .submit-name-btn {
+            background: var(--paid-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-name-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+
+        .submit-name-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 20px; 
@@ -1656,13 +1742,26 @@
                             <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
                             <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
                         </ul>
-                        <button class="start-btn" onclick="startQuiz()">
+                        <button class="start-btn" onclick="showNameInput()">
                             <span>क्विज़ शुरू करें</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
                         <button class="leaderboard-toggle-btn" onclick="toggleLeaderboard()">
                             <i class="fas fa-trophy"></i>
                             <span>आज के चैंपियन देखें</span>
+                        </button>
+                    </div>
+                    
+                    <!-- User Name Input Section -->
+                    <div id="name-input-section" class="name-input-section">
+                        <h2><i class="fas fa-user" style="color: #f59e0b;"></i> अपना नाम दर्ज करें</h2>
+                        <div class="name-input-container">
+                            <input type="text" id="user-name-input" class="name-input" placeholder="अपना नाम यहाँ दर्ज करें" maxlength="20">
+                            <div id="name-input-error" class="name-input-error">कृपया अपना नाम दर्ज करें</div>
+                        </div>
+                        <button class="submit-name-btn" id="submit-name-btn" onclick="submitUserName()">
+                            <span>जारी रखें</span>
+                            <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                     
@@ -1726,7 +1825,7 @@
                         <ul id="leaderboard-list" class="leaderboard-list"></ul>
                         
                         <!-- Professional Start Quiz Button -->
-                        <button class="leaderboard-start-btn" onclick="startQuizFromLeaderboard()">
+                        <button class="leaderboard-start-btn" onclick="showNameInputFromLeaderboard()">
                             <i class="fas fa-play"></i>
                             <span>प्रीमियम क्विज़ शुरू करें</span>
                         </button>
@@ -1826,6 +1925,7 @@
         let isRotating = false; // Track if button is currently rotating
         let notificationTimeout = null; // Track notification timeout
         let quizStarted = false;
+        let nameInputShown = false; // Track if name input has been shown
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
         const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
@@ -1910,6 +2010,98 @@
                 avatar.textContent = userName.charAt(0).toUpperCase();
             }
         }
+
+        // Show name input section
+        function showNameInput() {
+            const welcomeSection = document.getElementById('welcome-section');
+            const nameInputSection = document.getElementById('name-input-section');
+            
+            welcomeSection.style.display = 'none';
+            nameInputSection.style.display = 'block';
+            nameInputShown = true;
+            
+            // Focus on the input field
+            setTimeout(() => {
+                document.getElementById('user-name-input').focus();
+            }, 300);
+        }
+
+        // Show name input from leaderboard
+        function showNameInputFromLeaderboard() {
+            const leaderboardSection = document.getElementById('leaderboard-section');
+            const nameInputSection = document.getElementById('name-input-section');
+            
+            leaderboardSection.style.display = 'none';
+            nameInputSection.style.display = 'block';
+            nameInputShown = true;
+            
+            // Focus on the input field
+            setTimeout(() => {
+                document.getElementById('user-name-input').focus();
+            }, 300);
+        }
+
+        // Submit user name
+        function submitUserName() {
+            const nameInput = document.getElementById('user-name-input');
+            const nameError = document.getElementById('name-input-error');
+            const submitBtn = document.getElementById('submit-name-btn');
+            
+            // Get the entered name
+            const enteredName = nameInput.value.trim();
+            
+            // Validate the name
+            if (!enteredName) {
+                nameError.style.display = 'block';
+                return;
+            }
+            
+            // Hide error message
+            nameError.style.display = 'none';
+            
+            // Disable submit button to prevent multiple submissions
+            submitBtn.disabled = true;
+            
+            // Save the user name
+            userName = enteredName;
+            
+            // Generate a unique ID for the user if not already exists
+            if (!userId) {
+                userId = 'paid_user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('paidQuizUserName', userName);
+            localStorage.setItem('paidQuizUserId', userId);
+            
+            // Update the current user avatar
+            updateCurrentUserAvatar();
+            
+            // Hide name input section and start quiz
+            const nameInputSection = document.getElementById('name-input-section');
+            nameInputSection.style.display = 'none';
+            
+            // Start the quiz
+            startQuiz();
+            
+            // Re-enable submit button after a short delay
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                nameInput.value = ''; // Clear the input for next time
+            }, 500);
+        }
+
+        // Handle Enter key in name input
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('user-name-input');
+            if (nameInput) {
+                nameInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        submitUserName();
+                    }
+                });
+            }
+        });
 
         async function loadQuestions() {
             const errorSection = document.getElementById('error-section');
@@ -2007,12 +2199,14 @@
             quizStarted = true;
             
             const welcomeSection = document.getElementById('welcome-section');
+            const nameInputSection = document.getElementById('name-input-section');
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
             const leaderboardSection = document.getElementById('leaderboard-section');
             
-            if (welcomeSection && quizSection && scoreSection) {
+            if (quizSection && scoreSection) {
                 welcomeSection.style.display = 'none';
+                nameInputSection.style.display = 'none';
                 quizSection.style.display = 'block';
                 scoreSection.style.display = 'none';
                 leaderboardSection.style.display = 'none';
@@ -2049,7 +2243,15 @@
                 leaderboardSection.style.display = 'none';
                 leaderboardToggleState = false; // Reset toggle state
             }
-            startQuiz();
+            
+            // Check if user has entered a name
+            if (!userName || userName === "प्रीमियम उपयोगकर्ता") {
+                // Show name input first
+                showNameInputFromLeaderboard();
+            } else {
+                // User already has a name, start quiz directly
+                startQuiz();
+            }
         }
 
         function updateScore() {
