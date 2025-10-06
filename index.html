@@ -1201,6 +1201,9 @@
                 token: generateSecureToken()
             }));
             
+            // यह फ्लैग सेट करें ताकि हम जान सकें कि उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
+            localStorage.setItem('hadPremiumAccess', 'true');
+            
             // एक्सपायरी चेक करने के लिए एक इवेंट सेट करें
             scheduleExpiryCheck(expiryTime);
         }
@@ -1226,12 +1229,35 @@
             }
         }
 
+        // यह फंक्शन चेक करेगा कि उपयोगकर्ता का प्रीमियम एक्सेस एक्सपायर हुआ है या नहीं
+        function isAccessExpired() {
+            const accessData = localStorage.getItem('premiumAccess');
+            
+            if (!accessData) {
+                return false; // अगर कोई एक्सेस डेटा नहीं है, तो यह एक्सपायर नहीं हुआ है, बस अभी तक खरीदा नहीं गया है
+            }
+            
+            try {
+                const { expiryTime } = JSON.parse(accessData);
+                const currentTime = new Date().getTime();
+                
+                // अगर एक्सपायरी समय बीत चुका है, तो एक्सेस एक्सपायर हुआ है
+                return currentTime >= expiryTime;
+            } catch (error) {
+                console.error("Error checking access expiry:", error);
+                return false;
+            }
+        }
+
         // यह फंक्शन एक्सपायर्ड एक्सेस को क्लियर करेगा
         function clearExpiredAccess() {
-            localStorage.removeItem('premiumAccess');
-            
-            // यूजर को पेमेंट पेज पर रीडायरेक्ट करें
-            window.location.href = 'index.html?expired=true';
+            // सिर्फ तभी क्लियर करें जब एक्सेस डेटा मौजूद हो
+            if (localStorage.getItem('premiumAccess')) {
+                localStorage.removeItem('premiumAccess');
+                
+                // यूजर को पेमेंट पेज पर रीडायरेक्ट करें, लेकिन एक्सपायर्ड फ्लैग के साथ
+                window.location.href = 'index.html?expired=true';
+            }
         }
 
         // यह फंक्शन चेक करेगा कि एक्सेस अभी भी वैध है या नहीं
@@ -1248,6 +1274,7 @@
                 
                 // अगर एक्सपायरी समय बीत चुका है, तो एक्सेस अवैध है
                 if (currentTime >= expiryTime) {
+                    // एक्सेस एक्सपायर होने पर लोकल स्टोरेज क्लियर करें और यूजर को रीडायरेक्ट करें
                     clearExpiredAccess();
                     return false;
                 }
@@ -1256,6 +1283,18 @@
             } catch (error) {
                 console.error("Error checking access validity:", error);
                 return false;
+            }
+        }
+
+        // यह फंक्शन नोटिफिकेशन दिखाने से पहले चेक करेगा कि यह पहले से दिखाया जा चुका है या नहीं
+        function showNotificationOnce(title, message, type = 'info', storageKey) {
+            // चेक करें कि नोटिफिकेशन पहले से दिखाया जा चुका है या नहीं
+            const notificationShown = localStorage.getItem(storageKey);
+            
+            if (!notificationShown) {
+                showNotification(title, message, type);
+                // नोटिफिकेशन दिखाने के बाद इसे लोकल स्टोरेज में मार्क करें
+                localStorage.setItem(storageKey, 'true');
             }
         }
 
@@ -1271,10 +1310,11 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
-            // चेक करें कि यूजर एक्सपायर्ड होकर आया है या नहीं
+            // चेक करें कि यूजर एक्सपायर्ड होकर आया है या नहीं, लेकिन सिर्फ तभी जब उसके पास पहले एक्सेस था
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('expired') === 'true') {
-                showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
+            if (urlParams.get('expired') === 'true' && localStorage.getItem('hadPremiumAccess') === 'true') {
+                // एक्सपायर्ड नोटिफिकेशन केवल एक बार दिखाएं
+                showNotificationOnce('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info', 'expired_notification_shown');
             }
             
             // यह फंक्शन लोकल स्टोरेज से उपयोगकर्ता की एक्सेस जांचें
@@ -1291,14 +1331,20 @@
             // नियमित अंतराल पर एक्सेस वैधता जांचें
             setInterval(function() {
                 if (!isAccessValid()) {
-                    window.location.href = 'index.html?expired=true';
+                    // सिर्फ तभी रीडायरेक्ट करें जब उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
+                    if (localStorage.getItem('hadPremiumAccess') === 'true') {
+                        window.location.href = 'index.html?expired=true';
+                    }
                 }
             }, 5 * 60 * 1000); // हर 5 मिनट जांचें
 
             // ब्राउज़र टैब/विंडो फोकस पाने पर एक्सेस चेक करें
             window.addEventListener('focus', function() {
                 if (!isAccessValid()) {
-                    window.location.href = 'index.html?expired=true';
+                    // सिर्फ तभी रीडायरेक्ट करें जब उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
+                    if (localStorage.getItem('hadPremiumAccess') === 'true') {
+                        window.location.href = 'index.html?expired=true';
+                    }
                 }
             });
 
