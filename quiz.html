@@ -811,8 +811,8 @@
             animation: fadeInUp 0.7s ease-out;
             width: 100%;
             background: linear-gradient(145deg, #ffffff, #fff8e1);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            overflow: hidden;
+            position: relative;
         }
 
         .leaderboard-header {
@@ -822,6 +822,11 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid rgba(245, 158, 11, 0.1);
+            position: sticky;
+            top: 0;
+            background: linear-gradient(145deg, #ffffff, #fff8e1);
+            z-index: 10;
+            border-radius: 16px 16px 0 0;
         }
 
         .leaderboard-title {
@@ -970,11 +975,120 @@
             margin: 0;
         }
 
+        /* Premium Scrolling Container */
+        .leaderboard-scroll-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #ffffff, #fff8e1);
+            box-shadow: inset 0 2px 10px rgba(245, 158, 11, 0.05);
+            margin-bottom: 15px;
+        }
+
+        .leaderboard-scroll-content {
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        /* Custom Scrollbar */
+        .leaderboard-scroll-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .leaderboard-scroll-content::-webkit-scrollbar-track {
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 3px;
+        }
+
+        .leaderboard-scroll-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 3px;
+        }
+
+        .leaderboard-scroll-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+
+        /* Scroll Indicators */
+        .scroll-indicator {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, rgba(255, 248, 225, 0.9), rgba(255, 248, 225, 0));
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .scroll-indicator-top {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(255, 248, 225, 0.9), rgba(255, 248, 225, 0));
+        }
+
+        .scroll-indicator-bottom {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(255, 248, 225, 0.9), rgba(255, 248, 225, 0));
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: absolute;
+            right: 5px;
+            top: 10px;
+            bottom: 10px;
+            width: 4px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 2px;
+            z-index: 5;
+        }
+
+        .scroll-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 2px;
+            transition: height 0.2s ease;
+        }
+
+        /* Pull to Refresh */
+        .pull-to-refresh {
+            position: absolute;
+            top: -60px;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 12px 12px 0 0;
+            transition: transform 0.3s ease;
+            z-index: 6;
+        }
+
+        .pull-to-refresh.active {
+            transform: translateY(60px);
+        }
+
+        .pull-to-refresh-icon {
+            font-size: 24px;
+            color: var(--paid-color);
+            animation: spin 1.5s infinite linear;
+        }
+
+        /* Leaderboard List */
         .leaderboard-list {
             list-style: none;
-            max-height: 400px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            padding: 0;
+            margin: 0;
         }
 
         .leaderboard-item {
@@ -987,6 +1101,9 @@
             box-shadow: 0 3px 6px rgba(245, 158, 11, 0.05);
             transition: all 0.3s ease;
             position: relative;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            animation: fadeInUp 0.5s ease-out forwards;
         }
 
         .leaderboard-item.current-user {
@@ -1735,6 +1852,136 @@
             border: 1px solid rgba(107, 114, 128, 0.2);
         }
 
+        /* Skeleton Loading for Leaderboard */
+        .skeleton-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 248, 225, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 3px 6px rgba(245, 158, 11, 0.05);
+        }
+
+        .skeleton-rank {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 25%, rgba(245, 158, 11, 0.2) 50%, rgba(245, 158, 11, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            margin-right: 15px;
+        }
+
+        .skeleton-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 25%, rgba(245, 158, 11, 0.2) 50%, rgba(245, 158, 11, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            margin-right: 10px;
+        }
+
+        .skeleton-details {
+            flex: 1;
+        }
+
+        .skeleton-name {
+            height: 14px;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 25%, rgba(245, 158, 11, 0.2) 50%, rgba(245, 158, 11, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            width: 80%;
+        }
+
+        .skeleton-time {
+            height: 11px;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 25%, rgba(245, 158, 11, 0.2) 50%, rgba(245, 158, 11, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            width: 60%;
+        }
+
+        .skeleton-score {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .skeleton-value {
+            height: 16px;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 25%, rgba(245, 158, 11, 0.2) 50%, rgba(245, 158, 11, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            width: 40px;
+        }
+
+        .skeleton-percentage {
+            height: 11px;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 25%, rgba(245, 158, 11, 0.2) 50%, rgba(245, 158, 11, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            width: 30px;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Floating Scroll Button */
+        .floating-scroll-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--paid-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .floating-scroll-btn.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .floating-scroll-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Snap Scroll for Mobile */
+        @media (max-width: 600px) {
+            .leaderboard-scroll-content {
+                scroll-snap-type: y mandatory;
+            }
+            
+            .leaderboard-item {
+                scroll-snap-align: start;
+            }
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 20px; 
@@ -1896,6 +2143,9 @@
             .premium-rotating-btn-icon {
                 font-size: 20px;
             }
+            .leaderboard-scroll-container {
+                height: 450px;
+            }
         }
     </style>
 </head>
@@ -2025,10 +2275,35 @@
                             </div>
                         </div>
                         
-                        <div id="leaderboard-loading" class="loading-spinner" style="display: none;">
-                            <div class="spinner"></div>
+                        <!-- Premium Scrolling Container -->
+                        <div class="leaderboard-scroll-container">
+                            <!-- Pull to Refresh -->
+                            <div class="pull-to-refresh" id="pull-to-refresh">
+                                <i class="fas fa-sync-alt pull-to-refresh-icon"></i>
+                            </div>
+                            
+                            <!-- Scroll Indicators -->
+                            <div class="scroll-indicator scroll-indicator-top" id="scroll-indicator-top" style="display: none;"></div>
+                            <div class="scroll-indicator scroll-indicator-bottom" id="scroll-indicator-bottom" style="display: none;"></div>
+                            
+                            <!-- Scroll Progress Bar -->
+                            <div class="scroll-progress">
+                                <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+                            </div>
+                            
+                            <!-- Scroll Content -->
+                            <div class="leaderboard-scroll-content" id="leaderboard-scroll-content">
+                                <div id="leaderboard-loading" class="loading-spinner" style="display: none;">
+                                    <div class="spinner"></div>
+                                </div>
+                                <ul id="leaderboard-list" class="leaderboard-list"></ul>
+                            </div>
+                            
+                            <!-- Floating Scroll Button -->
+                            <div class="floating-scroll-btn" id="floating-scroll-btn" onclick="scrollToTop()">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
                         </div>
-                        <ul id="leaderboard-list" class="leaderboard-list"></ul>
                         
                         <!-- Professional Start Quiz Button -->
                         <button class="leaderboard-start-btn" onclick="startQuizFromLeaderboard()">
@@ -2159,6 +2434,18 @@
         let isRotating = false; // Track if button is currently rotating
         let notificationTimeout = null; // Track notification timeout
         let userAnswered = false; // Track if user has answered the current question
+        
+        // Premium scrolling variables
+        let isPulling = false;
+        let pullStartY = 0;
+        let pullDistance = 0;
+        let scrollContent = null;
+        let scrollContainer = null;
+        let floatingScrollBtn = null;
+        let scrollProgressBar = null;
+        let topScrollIndicator = null;
+        let bottomScrollIndicator = null;
+        let pullToRefresh = null;
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
         const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
@@ -2179,6 +2466,7 @@
             checkAndResetLeaderboard(); // Check if we need to reset the leaderboard
             scheduleMidnightReset(); // Schedule midnight reset
             createParticles(); // Create particles for the premium button
+            initializePremiumScrolling(); // Initialize premium scrolling
             if (navigator.onLine) {
                 loadQuestions();
             }
@@ -2192,6 +2480,192 @@
             // Initial network check when page loads
             checkNetworkStatus();
             console.log('DOM loaded, initializing paid quiz');
+        }
+
+        function initializePremiumScrolling() {
+            // Get scroll elements
+            scrollContent = document.getElementById('leaderboard-scroll-content');
+            scrollContainer = document.querySelector('.leaderboard-scroll-container');
+            floatingScrollBtn = document.getElementById('floating-scroll-btn');
+            scrollProgressBar = document.getElementById('scroll-progress-bar');
+            topScrollIndicator = document.getElementById('scroll-indicator-top');
+            bottomScrollIndicator = document.getElementById('scroll-indicator-bottom');
+            pullToRefresh = document.getElementById('pull-to-refresh');
+            
+            if (!scrollContent || !scrollContainer) return;
+            
+            // Add scroll event listener
+            scrollContent.addEventListener('scroll', handleScroll);
+            
+            // Add touch events for pull to refresh
+            scrollContent.addEventListener('touchstart', handleTouchStart, { passive: true });
+            scrollContent.addEventListener('touchmove', handleTouchMove, { passive: false });
+            scrollContent.addEventListener('touchend', handleTouchEnd);
+            
+            // Add mouse events for desktop
+            scrollContent.addEventListener('mousedown', handleMouseDown);
+            scrollContent.addEventListener('mousemove', handleMouseMove);
+            scrollContent.addEventListener('mouseup', handleMouseUp);
+            scrollContent.addEventListener('mouseleave', handleMouseUp);
+            
+            // Initial check for scroll indicators
+            updateScrollIndicators();
+        }
+
+        function handleScroll() {
+            if (!scrollContent || !scrollContainer) return;
+            
+            // Update scroll progress bar
+            const scrollTop = scrollContent.scrollTop;
+            const scrollHeight = scrollContent.scrollHeight - scrollContent.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            
+            if (scrollProgressBar) {
+                scrollProgressBar.style.height = `${scrollPercent}%`;
+            }
+            
+            // Update scroll indicators
+            updateScrollIndicators();
+            
+            // Show/hide floating scroll button
+            if (floatingScrollBtn) {
+                if (scrollTop > 100) {
+                    floatingScrollBtn.classList.add('visible');
+                } else {
+                    floatingScrollBtn.classList.remove('visible');
+                }
+            }
+        }
+
+        function updateScrollIndicators() {
+            if (!scrollContent || !topScrollIndicator || !bottomScrollIndicator) return;
+            
+            const scrollTop = scrollContent.scrollTop;
+            const scrollHeight = scrollContent.scrollHeight - scrollContent.clientHeight;
+            
+            // Show top indicator if not at top
+            if (scrollTop > 10) {
+                topScrollIndicator.style.display = 'block';
+            } else {
+                topScrollIndicator.style.display = 'none';
+            }
+            
+            // Show bottom indicator if not at bottom
+            if (scrollTop < scrollHeight - 10) {
+                bottomScrollIndicator.style.display = 'block';
+            } else {
+                bottomScrollIndicator.style.display = 'none';
+            }
+        }
+
+        function scrollToTop() {
+            if (!scrollContent) return;
+            
+            scrollContent.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function handleTouchStart(e) {
+            if (!scrollContent || scrollContent.scrollTop > 0) return;
+            
+            isPulling = true;
+            pullStartY = e.touches[0].clientY;
+        }
+
+        function handleTouchMove(e) {
+            if (!isPulling || !pullToRefresh) return;
+            
+            const currentY = e.touches[0].clientY;
+            pullDistance = currentY - pullStartY;
+            
+            // Limit pull distance
+            if (pullDistance < 0) pullDistance = 0;
+            if (pullDistance > 120) pullDistance = 120;
+            
+            // Apply transform to pull indicator
+            pullToRefresh.style.transform = `translateY(${pullDistance}px)`;
+            
+            // Add active class if pulled enough
+            if (pullDistance > 80) {
+                pullToRefresh.classList.add('active');
+            } else {
+                pullToRefresh.classList.remove('active');
+            }
+            
+            // Prevent default scroll behavior when pulling
+            if (pullDistance > 0) {
+                e.preventDefault();
+            }
+        }
+
+        function handleTouchEnd() {
+            if (!isPulling || !pullToRefresh) return;
+            
+            isPulling = false;
+            
+            // Reset pull indicator
+            pullToRefresh.style.transform = 'translateY(0)';
+            
+            // If pulled enough, trigger refresh
+            if (pullDistance > 80) {
+                pullToRefresh.classList.remove('active');
+                refreshLeaderboard();
+            }
+            
+            pullDistance = 0;
+        }
+
+        // Mouse event handlers for desktop
+        function handleMouseDown(e) {
+            if (!scrollContent || scrollContent.scrollTop > 0) return;
+            
+            isPulling = true;
+            pullStartY = e.clientY;
+        }
+
+        function handleMouseMove(e) {
+            if (!isPulling) return;
+            
+            const currentY = e.clientY;
+            pullDistance = currentY - pullStartY;
+            
+            // Limit pull distance
+            if (pullDistance < 0) pullDistance = 0;
+            if (pullDistance > 120) pullDistance = 120;
+            
+            // Apply transform to pull indicator
+            pullToRefresh.style.transform = `translateY(${pullDistance}px)`;
+            
+            // Add active class if pulled enough
+            if (pullDistance > 80) {
+                pullToRefresh.classList.add('active');
+            } else {
+                pullToRefresh.classList.remove('active');
+            }
+        }
+
+        function handleMouseUp() {
+            if (!isPulling || !pullToRefresh) return;
+            
+            isPulling = false;
+            
+            // Reset pull indicator
+            pullToRefresh.style.transform = 'translateY(0)';
+            
+            // If pulled enough, trigger refresh
+            if (pullDistance > 80) {
+                pullToRefresh.classList.remove('active');
+                refreshLeaderboard();
+            }
+            
+            pullDistance = 0;
+        }
+
+        function refreshLeaderboard() {
+            showNotification('info', 'रीफ्रेश हो रहा है', 'लीडरबोर्ड अपडेट हो रहा है...');
+            loadLeaderboardData();
         }
 
         function checkNetworkStatus() {
@@ -2839,6 +3313,9 @@
             loadingSpinner.style.display = 'flex';
             leaderboardList.innerHTML = '';
             
+            // Show skeleton loading
+            showSkeletonLoading();
+            
             // Get current date in YYYY-MM-DD format
             const today = new Date();
             const dateStr = today.toISOString().split('T')[0];
@@ -2882,6 +3359,35 @@
                     // Display leaderboard
                     displayLeaderboard();
                 });
+        }
+
+        function showSkeletonLoading() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            if (!leaderboardList) return;
+            
+            // Clear existing content
+            leaderboardList.innerHTML = '';
+            
+            // Create skeleton items
+            for (let i = 0; i < 5; i++) {
+                const skeletonItem = document.createElement('div');
+                skeletonItem.className = 'skeleton-item';
+                skeletonItem.innerHTML = `
+                    <div class="skeleton-rank"></div>
+                    <div class="leaderboard-user">
+                        <div class="skeleton-avatar"></div>
+                        <div class="skeleton-details">
+                            <div class="skeleton-name"></div>
+                            <div class="skeleton-time"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-score">
+                        <div class="skeleton-value"></div>
+                        <div class="skeleton-percentage"></div>
+                    </div>
+                `;
+                leaderboardList.appendChild(skeletonItem);
+            }
         }
 
         function loadFromLocalStorage(dateStr) {
@@ -2984,6 +3490,13 @@
                 
                 leaderboardList.appendChild(li);
             });
+            
+            // Update scroll indicators after content is loaded
+            if (scrollContent) {
+                setTimeout(() => {
+                    updateScrollIndicators();
+                }, 100);
+            }
         }
 
         function getTimeAgo(timestamp) {
