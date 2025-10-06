@@ -33,8 +33,8 @@
             --paid-gradient: linear-gradient(135deg, #f59e0b, #d97706);
             --champion-gradient: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00);
             --champion-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
-            --neon-gradient: linear-gradient(135deg, #FF00FF, #00FFFF, #FF00FF);
-            --neon-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 40px rgba(0, 255, 255, 0.5);
+            --neon-gradient: linear-gradient(135deg, #FF9500, #FF5E3A, #FF9500);
+            --neon-shadow: 0 0 20px rgba(255, 149, 0, 0.7), 0 0 40px rgba(255, 94, 58, 0.5);
             --premium-text: 'Inter', 'Noto Sans Devanagari', sans-serif;
         }
         
@@ -798,8 +798,8 @@
             0%, 100% { transform: translateY(0); opacity: 0.7; }
             50% { transform: translateY(-15px); opacity: 1; }
         }
-
-        /* Leaderboard Styles */
+        
+        /* Premium Leaderboard Styles */
         .leaderboard-section {
             display: none;
             background: var(--light);
@@ -810,7 +810,7 @@
             border: 1px solid rgba(0,0,0,0.05);
             animation: fadeInUp 0.7s ease-out;
             width: 100%;
-            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            background: linear-gradient(145deg, #ffffff, #fff8e1);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -821,7 +821,7 @@
             justify-content: space-between;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid rgba(0,0,0,0.05);
+            border-bottom: 2px solid rgba(245, 158, 11, 0.1);
         }
 
         .leaderboard-title {
@@ -839,23 +839,23 @@
         .leaderboard-date {
             font-size: 12px;
             font-weight: 600;
-            color: var(--gray);
-            background: rgba(241, 245, 249, 0.8);
+            color: var(--paid-color);
+            background: rgba(245, 158, 11, 0.1);
             padding: 5px 10px;
             border-radius: 20px;
         }
 
         /* Enhanced User Rank Section */
         .current-user-rank {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
             border-radius: 15px;
             padding: 12px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 2px solid rgba(59, 130, 246, 0.3);
+            border: 2px solid rgba(245, 158, 11, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -867,7 +867,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(239, 68, 68, 0.05));
             z-index: 0;
         }
 
@@ -883,14 +883,14 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--gradient);
+            background: var(--paid-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 700;
             font-size: 16px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
         }
 
         .current-user-details h3 {
@@ -902,12 +902,12 @@
 
         .current-user-details p {
             font-size: 12px;
-            color: var(--gray);
+            color: var(--paid-color);
             margin: 0;
         }
 
         .current-user-rank-badge {
-            background: var(--gradient);
+            background: var(--paid-gradient);
             color: white;
             width: 30px;
             height: 30px;
@@ -917,7 +917,7 @@
             justify-content: center;
             font-weight: 700;
             font-size: 14px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
             position: relative;
             z-index: 1;
         }
@@ -933,14 +933,14 @@
         .leaderboard-divider-line {
             flex: 1;
             height: 2px;
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
             border-radius: 2px;
         }
 
         .leaderboard-divider-text {
             font-size: 12px;
             font-weight: 600;
-            color: var(--gray);
+            color: var(--paid-color);
             padding: 0 10px;
             white-space: nowrap;
         }
@@ -982,21 +982,21 @@
             align-items: center;
             padding: 12px;
             margin-bottom: 10px;
-            background: rgba(241, 245, 249, 0.8);
+            background: rgba(255, 248, 225, 0.8);
             border-radius: 12px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.04);
+            box-shadow: 0 3px 6px rgba(245, 158, 11, 0.05);
             transition: all 0.3s ease;
             position: relative;
         }
 
         .leaderboard-item.current-user {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
         .leaderboard-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 12px rgba(245, 158, 11, 0.1);
         }
 
         .leaderboard-rank {
@@ -1030,9 +1030,9 @@
         }
 
         .rank-other {
-            background: var(--gradient);
+            background: var(--paid-gradient);
             color: white;
-            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
         }
 
         .leaderboard-user {
@@ -1046,14 +1046,14 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            background: linear-gradient(135deg, #f59e0b, #d97706);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
             font-size: 14px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 6px rgba(245, 158, 11, 0.2);
         }
 
         .leaderboard-details {
@@ -1068,7 +1068,7 @@
 
         .leaderboard-time {
             font-size: 11px;
-            color: var(--gray);
+            color: var(--paid-color);
             display: flex;
             align-items: center;
             gap: 4px;
@@ -1086,24 +1086,24 @@
 
         .score-value {
             font-weight: 700;
-            color: var(--primary);
+            color: var(--paid-color);
             font-size: 16px;
         }
 
         .score-percentage {
             font-size: 11px;
-            color: var(--gray);
+            color: var(--paid-color);
         }
 
         .leaderboard-empty {
             text-align: center;
             padding: 30px 20px;
-            color: var(--gray);
+            color: var(--paid-color);
             font-weight: 600;
         }
 
         .leaderboard-toggle-btn {
-            background: var(--premium-gradient);
+            background: var(--paid-gradient);
             color: white;
             border: none;
             border-radius: 12px;
@@ -1123,7 +1123,7 @@
 
         .leaderboard-toggle-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
         }
 
         /* Professional Start Quiz Button in Leaderboard */
@@ -1131,7 +1131,7 @@
             background: var(--paid-gradient);
             color: white;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 12px 18px;
             font-size: 15px;
             font-weight: 700;
@@ -1181,7 +1181,7 @@
             height: 40px;
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
-            border-top-color: var(--primary);
+            border-top-color: var(--paid-color);
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -1209,7 +1209,7 @@
 
         .user-action-btn {
             flex: 1;
-            background: var(--gradient);
+            background: var(--paid-gradient);
             color: white;
             border: none;
             border-radius: 12px;
@@ -1244,15 +1244,15 @@
 
         .user-action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
         }
 
         .user-action-btn.secondary {
-            background: var(--premium-gradient);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
         }
 
         .user-action-btn.secondary:hover {
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
         }
 
         .countdown-timer {
@@ -1261,14 +1261,14 @@
             margin-bottom: 10px;
             font-size: 12px;
             font-weight: 600;
-            color: var(--gray);
-            background: rgba(241, 245, 249, 0.8);
+            color: var(--paid-color);
+            background: rgba(245, 158, 11, 0.1);
             padding: 8px;
             border-radius: 12px;
         }
 
         .countdown-timer span {
-            color: var(--primary);
+            color: var(--paid-color);
             font-weight: 700;
         }
 
@@ -1324,7 +1324,7 @@
         }
 
         .notification-icon.info {
-            background: var(--primary);
+            background: var(--paid-color);
             color: white;
         }
 
@@ -1422,9 +1422,9 @@
         }
 
         .premium-rotating-btn-back {
-            background: linear-gradient(135deg, #FF1493, #9400D3);
+            background: linear-gradient(135deg, #FF9500, #FF5E3A);
             transform: rotateY(180deg);
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.7), 0 0 40px rgba(148, 0, 211, 0.5);
+            box-shadow: 0 0 20px rgba(255, 149, 0, 0.7), 0 0 40px rgba(255, 94, 58, 0.5);
         }
 
         .premium-rotating-btn-shine {
@@ -1448,7 +1448,7 @@
             width: 100%;
             height: 100%;
             border-radius: 35px;
-            background: rgba(255, 0, 255, 0.3);
+            background: rgba(255, 149, 0, 0.3);
             transform: scale(0);
             animation: glowPulse 2s infinite;
         }
@@ -1527,13 +1527,13 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
             padding: 2px 6px;
             border-radius: 10px;
             font-size: 10px;
             font-weight: 600;
-            color: var(--primary);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--paid-color);
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
         .time-badge.recent {
@@ -1546,82 +1546,6 @@
             background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
             color: var(--gray);
             border: 1px solid rgba(107, 114, 128, 0.2);
-        }
-
-        /* Name Input Modal Styles */
-        .name-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .name-modal {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            width: 90%;
-            max-width: 320px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        .name-modal h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .name-modal p {
-            font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .name-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .name-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .name-submit-btn {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: var(--button-shadow);
-        }
-
-        .name-submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
         }
 
         @media (min-width: 601px) {
@@ -1720,6 +1644,60 @@
             }
             .offline-icon {
                 font-size: 90px;
+            }
+            .leaderboard-header {
+                padding-bottom: 15px;
+            }
+            .leaderboard-title h2 {
+                font-size: 22px;
+            }
+            .leaderboard-date {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+            .current-user-rank {
+                padding: 15px;
+            }
+            .current-user-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            .current-user-details h3 {
+                font-size: 18px;
+            }
+            .current-user-details p {
+                font-size: 14px;
+            }
+            .current-user-rank-badge {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            .leaderboard-item {
+                padding: 15px;
+            }
+            .leaderboard-rank {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            .leaderboard-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            .leaderboard-name {
+                font-size: 16px;
+            }
+            .leaderboard-time {
+                font-size: 12px;
+            }
+            .score-value {
+                font-size: 18px;
+            }
+            .score-percentage {
+                font-size: 12px;
             }
             .premium-rotating-btn {
                 width: 280px;
@@ -1923,12 +1901,12 @@
     <div class="starburst-container" id="starburst-container"></div>
     
     <!-- Name Input Modal -->
-    <div id="name-modal-overlay" class="name-modal-overlay">
-        <div class="name-modal">
-            <h3>अपना नाम दर्ज करें</h3>
-            <p>कृपया अपना नाम दर्ज करें ताकि हम आपका स्कोर लीडरबोर्ड में सेव कर सकें</p>
-            <input type="text" id="user-name-input" class="name-input" placeholder="आपका नाम" maxlength="20">
-            <button class="name-submit-btn" onclick="saveUserName()">जारी रखें</button>
+    <div id="name-modal-overlay" class="name-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center; animation: fadeIn 0.3s ease-out;">
+        <div class="name-modal" style="background: white; border-radius: 20px; padding: 20px; width: 90%; max-width: 320px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); text-align: center; animation: slideUp 0.4s ease-out;">
+            <h3 style="font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 15px;">अपना नाम दर्ज करें</h3>
+            <p style="font-size: 14px; color: var(--gray); margin-bottom: 20px; line-height: 1.4;">कृपया अपना नाम दर्ज करें ताकि हम आपका स्कोर लीडरबोर्ड में सेव कर सकें</p>
+            <input type="text" id="user-name-input" class="name-input" placeholder="आपका नाम" maxlength="20" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; font-weight: 600; margin-bottom: 20px; transition: all 0.3s ease;">
+            <button class="name-submit-btn" onclick="saveUserName()" style="background: var(--paid-gradient); color: white; border: none; border-radius: 12px; padding: 12px 20px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.3s ease; box-shadow: var(--button-shadow);">जारी रखें</button>
         </div>
     </div>
     
@@ -1984,6 +1962,8 @@
         let todayScores = [];
         let isLeaderboardLoaded = false;
         let countdownInterval; // For the countdown timer
+        let questionHistory = []; // Store history of questions and answers
+        let autoNextTimeout; // Timeout for auto next question
         let quizStarted = false;
         let quizCompleted = false; // Track if the quiz has been completed once
         let lastLeaderboardDate = ''; // Track the last date leaderboard was loaded
@@ -1991,6 +1971,7 @@
         let midnightResetInterval; // For midnight reset
         let isRotating = false; // Track if button is currently rotating
         let notificationTimeout = null; // Track notification timeout
+        let userAnswered = false; // Track if user has answered the current question
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
         const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
@@ -2011,6 +1992,13 @@
             checkAndResetLeaderboard(); // Check if we need to reset the leaderboard
             scheduleMidnightReset(); // Schedule midnight reset
             createParticles(); // Create particles for the premium button
+            if (navigator.onLine) {
+                loadQuestions();
+            }
+            
+            // Add proper event listeners for the user action buttons
+            document.getElementById('my-score-btn').addEventListener('click', showMyScore);
+            document.getElementById('my-rank-btn').addEventListener('click', showMyRank);
         });
 
         function initializeQuiz() {
@@ -2198,13 +2186,14 @@
                 welcomeSection.style.display = 'none';
                 quizSection.style.display = 'block';
                 scoreSection.style.display = 'none';
-                if (leaderboardSection) {
-                    leaderboardSection.style.display = 'none';
-                }
+                leaderboardSection.style.display = 'none';
                 
                 currentQuestionIndex = 0;
                 score = 0;
                 initialScore = 0; // Reset initial score
+                questionHistory = []; // Reset question history
+                quizCompleted = false; // Reset quiz completion flag
+                userAnswered = false; // Reset userAnswered flag
                 updateScore();
                 
                 if (questions.length === 0) {
@@ -2287,6 +2276,14 @@
             nextBtn.style.display = 'none';
             updateProgressBar();
             
+            // Reset the answered flag
+            userAnswered = false;
+            
+            // Clear any existing timeout
+            if (autoNextTimeout) {
+                clearTimeout(autoNextTimeout);
+            }
+            
             question.options.forEach((option, index) => {
                 const li = document.createElement('li');
                 li.textContent = option || 'विकल्प गायब';
@@ -2327,6 +2324,10 @@
         }
 
         function checkAnswer(selectedIndex) {
+            // Prevent multiple answers to the same question
+            if (userAnswered) return;
+            userAnswered = true;
+            
             const question = questions[currentQuestionIndex];
             const options = document.querySelectorAll('#options-list li');
             const result = document.getElementById('result');
@@ -2336,6 +2337,14 @@
                 showErrorOverlay();
                 return;
             }
+            
+            // Store this question in history
+            questionHistory.push({
+                questionIndex: currentQuestionIndex,
+                selectedIndex: selectedIndex,
+                correctAnswer: question.correct,
+                wasCorrect: selectedIndex === question.correct
+            });
             
             options.forEach((option, index) => {
                 option.onclick = null;
@@ -2372,7 +2381,8 @@
             
             if ('vibrate' in navigator) navigator.vibrate(200);
             
-            setTimeout(() => {
+            // Auto move to next question after 1.5 seconds
+            autoNextTimeout = setTimeout(() => {
                 currentQuestionIndex++;
                 showQuestion();
             }, 1500);
@@ -2501,12 +2511,13 @@
             
             if (leaderboardSection.style.display === 'none' || leaderboardSection.style.display === '') {
                 welcomeSection.style.display = 'none';
-                quizSection.style.display = 'none';
+                quizSection.style.display = 'none'; // Make sure quiz section is hidden
                 leaderboardSection.style.display = 'block';
                 loadLeaderboardData();
             } else {
                 leaderboardSection.style.display = 'none';
                 welcomeSection.style.display = 'block';
+                // Don't show quiz section here, only show welcome section
             }
             
             // Reset the toggle state after a short delay
@@ -2525,7 +2536,7 @@
             }
             
             if (quizSection) {
-                quizSection.style.display = 'none';
+                quizSection.style.display = 'none'; // Make sure quiz section is hidden
             }
             
             if (leaderboardSection) {
@@ -2967,6 +2978,9 @@
                 currentQuestionIndex = 0;
                 score = 0;
                 initialScore = 0; // Reset initial score
+                questionHistory = []; // Reset question history
+                quizCompleted = false; // Reset quiz completion flag
+                userAnswered = false; // Reset userAnswered flag
                 updateScore();
             }
         }
@@ -3149,7 +3163,7 @@
 
         // हर 5 मिनट में एक्सेस जांचें
         setInterval(checkUserAccess, 5 * 60 * 1000);
-
+        
         // Premium Button Functions
         function createParticles() {
             const particlesContainer = document.getElementById('particles-container');
@@ -3272,7 +3286,7 @@
 
         function createStarburst(xPercent, yPercent) {
             const container = document.getElementById('starburst-container');
-            const colors = ['#FFD700', '#FF69B4', '#00CED1', '#FF6347', '#7FFF00'];
+            const colors = ['#FFD700', '#FF9500', '#FF5E3A', '#FF9500', '#FFD700'];
             
             // Create multiple particles for each starburst
             for (let i = 0; i < 30; i++) {
