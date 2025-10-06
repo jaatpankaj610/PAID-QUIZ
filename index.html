@@ -819,6 +819,38 @@
             to { transform: translateY(-20px); opacity: 0; }
         }
         
+        /* Error styling for form inputs */
+        .form-group.error input,
+        .form-group.error textarea {
+            border-color: var(--danger);
+            background-color: rgba(214, 48, 49, 0.05);
+        }
+        
+        .form-group.error label {
+            color: var(--danger);
+        }
+        
+        .form-group.error .error-text {
+            display: block;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .checkbox-container.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .checkbox-container.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
         @media (max-width: 480px) {
             .header { padding: 12px 8px; }
             .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
@@ -981,34 +1013,34 @@
                     
                     <form id="payment-form">
                         <div id="form-error" class="error-text"></div>
-                        <div class="form-group">
+                        <div class="form-group" id="user_id_group">
                             <label for="user_id">अपना ईमेल ID दर्ज करें</label>
                             <input type="text" id="user_id" name="user_id" placeholder="उदाहरण: example@gmail.com" required>
                             <div id="user_id_error" class="error-text"></div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="mobile_number_group">
                             <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
                             <input type="text" id="mobile_number" name="mobile_number" placeholder="उदाहरण: 76652XXXXX" required>
                             <div id="mobile_number_error" class="error-text"></div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="transaction_id_group">
                             <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
                             <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
                             <div id="transaction_id_error" class="error-text"></div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="amount_group">
                             <label for="amount">पेमेंट राशि</label>
                             <input type="text" id="amount" name="amount" placeholder="49" value="49" required>
                             <div id="amount_error" class="error-text"></div>
                         </div>
                         
                         <div class="form-group">
-                            <div class="checkbox-container">
+                            <div class="checkbox-container disabled" id="payment_made_container">
                                 <label for="payment_made">
-                                    <input type="checkbox" id="payment_made" name="payment_made">
+                                    <input type="checkbox" id="payment_made" name="payment_made" disabled>
                                     पेमेंट करने के बाद इस बॉक्स को टिक करें
                                     <span class="checkbox-hint">पेमेंट रिक्वेस्ट भेजने के लिए QR कोड स्कैन करें और यहाँ टिक करें।</span>
                                 </label>
@@ -1016,7 +1048,7 @@
                             <div id="payment_made_error" class="error-text"></div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="payment_note_group">
                             <label for="payment_note">कोई अतिरिक्त जानकारी (वैकल्पिक)</label>
                             <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
                         </div>
@@ -1177,7 +1209,134 @@
             } else {
                 console.error("Payment form not found in DOM"); // डिबग
             }
+            
+            // इनपुट फील्ड्स पर रीयल-टाइम वैलिडेशन जोड़ें
+            setupRealtimeValidation();
         });
+        
+        function setupRealtimeValidation() {
+            // ईमेल वैलिडेशन
+            const userIdInput = document.getElementById('user_id');
+            userIdInput.addEventListener('input', function() {
+                validateField('user_id');
+                checkAllFieldsForCheckbox();
+            });
+            
+            // मोबाइल नंबर वैलिडेशन
+            const mobileInput = document.getElementById('mobile_number');
+            mobileInput.addEventListener('input', function() {
+                validateField('mobile_number');
+                checkAllFieldsForCheckbox();
+            });
+            
+            // ट्रांजैक्शन ID वैलिडेशन
+            const transactionInput = document.getElementById('transaction_id');
+            transactionInput.addEventListener('input', function() {
+                validateField('transaction_id');
+                checkAllFieldsForCheckbox();
+            });
+            
+            // राशि वैलिडेशन
+            const amountInput = document.getElementById('amount');
+            amountInput.addEventListener('input', function() {
+                validateField('amount');
+                checkAllFieldsForCheckbox();
+            });
+        }
+        
+        function validateField(fieldName) {
+            const field = document.getElementById(fieldName);
+            const fieldGroup = document.getElementById(fieldName + '_group');
+            const errorElement = document.getElementById(fieldName + '_error');
+            
+            // पहले सभी एरर क्लासेस हटाएं
+            fieldGroup.classList.remove('error');
+            errorElement.style.display = 'none';
+            
+            let isValid = true;
+            let errorMessage = '';
+            
+            switch(fieldName) {
+                case 'user_id':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!field.value.trim()) {
+                        errorMessage = 'कृपया ईमेल ID दर्ज करें!';
+                        isValid = false;
+                    } else if (!emailRegex.test(field.value.trim())) {
+                        errorMessage = 'कृपया सही ईमेल फॉर्मेट दर्ज करें!';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'mobile_number':
+                    const mobileRegex = /^\d{10}$/;
+                    if (!field.value.trim()) {
+                        errorMessage = 'कृपया मोबाइल नंबर दर्ज करें!';
+                        isValid = false;
+                    } else if (!mobileRegex.test(field.value.trim())) {
+                        errorMessage = 'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'transaction_id':
+                    if (!field.value.trim()) {
+                        errorMessage = 'कृपया UPI ट्रांजैक्शन ID दर्ज करें!';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'amount':
+                    const parsedAmount = parseFloat(field.value.trim());
+                    if (!field.value.trim()) {
+                        errorMessage = 'कृपया राशि दर्ज करें!';
+                        isValid = false;
+                    } else if (isNaN(parsedAmount) || parsedAmount <= 0) {
+                        errorMessage = 'कृपया सही राशि दर्ज करें!';
+                        isValid = false;
+                    }
+                    break;
+            }
+            
+            if (!isValid) {
+                fieldGroup.classList.add('error');
+                errorElement.textContent = errorMessage;
+                errorElement.style.display = 'block';
+            }
+            
+            return isValid;
+        }
+        
+        function checkAllFieldsForCheckbox() {
+            const userId = document.getElementById('user_id').value.trim();
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const paymentMadeCheckbox = document.getElementById('payment_made');
+            const paymentMadeContainer = document.getElementById('payment_made_container');
+            
+            // सभी फील्ड्स की जांच करें
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const mobileRegex = /^\d{10}$/;
+            const parsedAmount = parseFloat(amount);
+            
+            const isUserIdValid = userId && emailRegex.test(userId);
+            const isMobileValid = mobileNumber && mobileRegex.test(mobileNumber);
+            const isTransactionValid = transactionId.trim() !== '';
+            const isAmountValid = amount && !isNaN(parsedAmount) && parsedAmount > 0;
+            
+            // अगर सभी फील्ड्स वैलिड हैं, तो चेकबॉक्स को एनेबल करें
+            if (isUserIdValid && isMobileValid && isTransactionValid && isAmountValid) {
+                paymentMadeCheckbox.disabled = false;
+                paymentMadeContainer.classList.remove('disabled');
+                paymentMadeContainer.classList.add('enabled');
+            } else {
+                paymentMadeCheckbox.disabled = true;
+                paymentMadeContainer.classList.remove('enabled');
+                paymentMadeContainer.classList.add('disabled');
+                paymentMadeCheckbox.checked = false;
+            }
+        }
         
         function showProcessingScreen() {
             document.getElementById('online-content').style.display = 'none';
@@ -1339,8 +1498,46 @@
             
             const userId = userIdInput.value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
 
+            // पहले सभी फील्ड्स की जांच करें
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            
             if (!userId) {
                 showNotification('ईमेल आईडी त्रुटि', 'कृपया अपना ईमेल ID दर्ज करें!', 'error');
+                // ईमेल फील्ड को रेड हाइलाइट करें
+                document.getElementById('user_id_group').classList.add('error');
+                document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
+                document.getElementById('user_id_error').style.display = 'block';
+                return;
+            }
+            
+            // अगर अन्य फील्ड्स खाली हैं, तो उन्हें भी रेड हाइलाइट करें
+            let hasEmptyFields = false;
+            
+            if (!mobileNumber) {
+                document.getElementById('mobile_number_group').classList.add('error');
+                document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
+                document.getElementById('mobile_number_error').style.display = 'block';
+                hasEmptyFields = true;
+            }
+            
+            if (!transactionId) {
+                document.getElementById('transaction_id_group').classList.add('error');
+                document.getElementById('transaction_id_error').textContent = 'कृपया ट्रांजैक्शन ID दर्ज करें!';
+                document.getElementById('transaction_id_error').style.display = 'block';
+                hasEmptyFields = true;
+            }
+            
+            if (!amount) {
+                document.getElementById('amount_group').classList.add('error');
+                document.getElementById('amount_error').textContent = 'कृपया राशि दर्ज करें!';
+                document.getElementById('amount_error').style.display = 'block';
+                hasEmptyFields = true;
+            }
+            
+            if (hasEmptyFields) {
+                showNotification('फॉर्म त्रुटि', 'कृपया सभी फील्ड्स को सही ढंग से भरें!', 'error');
                 return;
             }
 
@@ -1422,12 +1619,20 @@
             document.getElementById('amount_error').style.display = 'none';
             document.getElementById('payment_made_error').style.display = 'none';
 
+            // सभी फील्ड ग्रुप्स से एरर क्लास हटाएं
+            document.getElementById('user_id_group').classList.remove('error');
+            document.getElementById('mobile_number_group').classList.remove('error');
+            document.getElementById('transaction_id_group').classList.remove('error');
+            document.getElementById('amount_group').classList.remove('error');
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!userId) {
+                document.getElementById('user_id_group').classList.add('error');
                 document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
                 document.getElementById('user_id_error').style.display = 'block';
                 isValid = false;
             } else if (!emailRegex.test(userId)) {
+                document.getElementById('user_id_group').classList.add('error');
                 document.getElementById('user_id_error').textContent = 'कृपया सही ईमेल फॉर्मेट दर्ज करें!';
                 document.getElementById('user_id_error').style.display = 'block';
                 isValid = false;
@@ -1435,16 +1640,19 @@
 
             const mobileRegex = /^\d{10}$/;
             if (!mobileNumber) {
+                document.getElementById('mobile_number_group').classList.add('error');
                 document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
                 document.getElementById('mobile_number_error').style.display = 'block';
                 isValid = false;
             } else if (!mobileRegex.test(mobileNumber)) {
+                document.getElementById('mobile_number_group').classList.add('error');
                 document.getElementById('mobile_number_error').textContent = 'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!';
                 document.getElementById('mobile_number_error').style.display = 'block';
                 isValid = false;
             }
 
             if (!transactionId) {
+                document.getElementById('transaction_id_group').classList.add('error');
                 document.getElementById('transaction_id_error').textContent = 'कृपया UPI ट्रांजैक्शन ID दर्ज करें!';
                 document.getElementById('transaction_id_error').style.display = 'block';
                 isValid = false;
@@ -1452,6 +1660,7 @@
 
             const parsedAmount = parseFloat(amount);
             if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
+                document.getElementById('amount_group').classList.add('error');
                 document.getElementById('amount_error').textContent = 'कृपया सही राशि दर्ज करें!';
                 document.getElementById('amount_error').style.display = 'block';
                 isValid = false;
@@ -1485,6 +1694,11 @@
                 
                 showNotification('डेटा रीसेट', 'आपका पेमेंट डेटा रीसेट हो गया है।', 'success');
                 document.getElementById('payment-form').reset();
+                
+                // चेकबॉक्स को फिर से डिसेबल करें
+                document.getElementById('payment_made').disabled = true;
+                document.getElementById('payment_made_container').classList.remove('enabled');
+                document.getElementById('payment_made_container').classList.add('disabled');
             } catch (error) {
                 showNotification('डेटा रीसेट त्रुटि', 'डेटा रीसेट करने में समस्या हुई। कृपया इंटरनेट चेक करें और दोबारा कोशिश करें।', 'error');
             }
