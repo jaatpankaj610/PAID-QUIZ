@@ -999,40 +999,226 @@
             box-shadow: 0 6px 12px rgba(245, 158, 11, 0.1);
         }
 
+        /* Premium Leaderboard Rank Styles - Enhanced */
         .leaderboard-rank {
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: 800;
             margin-right: 15px;
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
         }
 
+        /* First rank - Premium Gold */
         .rank-1 {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: white;
-            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, #FFD700, #FFC107, #FFD700);
+            color: #333;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: goldPulse 2s infinite alternate;
+            font-size: 18px;
+            border: 2px solid #FFD700;
         }
 
+        .rank-1::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite linear;
+        }
+
+        /* Second rank - Premium Silver */
         .rank-2 {
-            background: linear-gradient(135deg, #C0C0C0, #808080);
-            color: white;
-            box-shadow: 0 4px 8px rgba(192, 192, 192, 0.3);
+            background: linear-gradient(135deg, #E0E0E0, #BDBDBD, #E0E0E0);
+            color: #333;
+            box-shadow: 0 6px 20px rgba(192, 192, 192, 0.4), 0 0 20px rgba(192, 192, 192, 0.2);
+            animation: silverPulse 2s infinite alternate;
+            font-size: 18px;
+            border: 2px solid #E0E0E0;
         }
 
+        .rank-2::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite linear;
+        }
+
+        /* Third rank - Premium Bronze */
         .rank-3 {
-            background: linear-gradient(135deg, #CD7F32, #8B4513);
-            color: white;
-            box-shadow: 0 4px 8px rgba(205, 127, 50, 0.3);
+            background: linear-gradient(135deg, #CD7F32, #8B4513, #CD7F32);
+            color: #FFF;
+            box-shadow: 0 6px 20px rgba(205, 127, 50, 0.4), 0 0 20px rgba(205, 127, 50, 0.2);
+            animation: bronzePulse 2s infinite alternate;
+            font-size: 18px;
+            border: 2px solid #CD7F32;
         }
 
+        .rank-3::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite linear;
+        }
+
+        /* Other ranks - Premium Yellow */
         .rank-other {
-            background: var(--paid-gradient);
-            color: white;
-            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+            background: linear-gradient(135deg, #FFD700, #FFC107, #FFD700);
+            color: #333;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.2);
+            animation: yellowPulse 2s infinite alternate;
+            font-size: 16px;
+            border: 2px solid #FFD700;
+        }
+
+        .rank-other::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite linear;
+        }
+
+        /* Premium animations for ranks */
+        @keyframes goldPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        @keyframes silverPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 6px 20px rgba(192, 192, 192, 0.4), 0 0 20px rgba(192, 192, 192, 0.2);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(192, 192, 192, 0.5), 0 0 25px rgba(192, 192, 192, 0.3);
+            }
+        }
+
+        @keyframes bronzePulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 6px 20px rgba(205, 127, 50, 0.4), 0 0 20px rgba(205, 127, 50, 0.2);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(205, 127, 50, 0.5), 0 0 25px rgba(205, 127, 50, 0.3);
+            }
+        }
+
+        @keyframes yellowPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.2);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.3);
+            }
+        }
+
+        /* Hover effects for ranks */
+        .leaderboard-rank:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        /* Crown icon for first rank */
+        .rank-1::after {
+            content: "👑";
+            position: absolute;
+            top: -12px;
+            right: -5px;
+            font-size: 14px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-5px);
+            }
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Star icons for second and third rank */
+        .rank-2::after {
+            content: "⭐";
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            font-size: 12px;
+            animation: twinkle 2s infinite;
+        }
+
+        .rank-3::after {
+            content: "⭐";
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            font-size: 12px;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
 
         .leaderboard-user {
@@ -1679,9 +1865,9 @@
                 padding: 15px;
             }
             .leaderboard-rank {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
             }
             .leaderboard-avatar {
                 width: 36px;
