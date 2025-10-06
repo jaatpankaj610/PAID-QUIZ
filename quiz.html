@@ -2034,8 +2034,8 @@
 
         function checkUserName() {
             // Check if user name is already saved in localStorage
-            const savedName = localStorage.getItem('quizUserName');
-            const savedUserId = localStorage.getItem('quizUserId');
+            const savedName = localStorage.getItem('paidQuizUserName');
+            const savedUserId = localStorage.getItem('paidQuizUserId');
             
             if (savedName && savedUserId) {
                 userName = savedName;
@@ -2067,11 +2067,11 @@
             
             userName = enteredName;
             // Generate a unique ID for the user (using timestamp and random number)
-            userId = 'user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+            userId = 'paid_user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
             
             // Save to localStorage
-            localStorage.setItem('quizUserName', userName);
-            localStorage.setItem('quizUserId', userId);
+            localStorage.setItem('paidQuizUserName', userName);
+            localStorage.setItem('paidQuizUserId', userId);
             
             document.getElementById('name-modal-overlay').style.display = 'none';
             updateCurrentUserAvatar();
@@ -2440,14 +2440,14 @@
             };
             
             // Check if user already has a score for today
-            database.ref(`todayScores/${dateStr}`).orderByChild('userId').equalTo(userId).once('value')
+            database.ref(`paidTodayScores/${dateStr}`).orderByChild('userId').equalTo(userId).once('value')
                 .then((snapshot) => {
                     if (snapshot.exists()) {
                         // User already has a score for today, don't update it
                         console.log('User already has a score for today, not updating');
                     } else {
                         // User doesn't have a score for today, create a new one
-                        database.ref(`todayScores/${dateStr}`).push(newScore)
+                        database.ref(`paidTodayScores/${dateStr}`).push(newScore)
                             .then(() => {
                                 console.log('Score saved to today scores in Firebase');
                                 // Also save to localStorage for backup
@@ -2470,7 +2470,7 @@
         function saveToLocalStorage(dateStr, scoreData) {
             try {
                 // Get existing scores from localStorage
-                let localScores = JSON.parse(localStorage.getItem('leaderboardScores') || '{}');
+                let localScores = JSON.parse(localStorage.getItem('paidLeaderboardScores') || '{}');
                 
                 // Initialize date array if it doesn't exist
                 if (!localScores[dateStr]) {
@@ -2491,7 +2491,7 @@
                     localScores[dateStr] = localScores[dateStr].slice(0, 50);
                     
                     // Save back to localStorage
-                    localStorage.setItem('leaderboardScores', JSON.stringify(localScores));
+                    localStorage.setItem('paidLeaderboardScores', JSON.stringify(localScores));
                     
                     console.log('Score saved to localStorage');
                 }
@@ -2646,7 +2646,7 @@
             const dateStr = today.toISOString().split('T')[0];
             
             // Try to load from Firebase first
-            database.ref(`todayScores/${dateStr}`).once('value')
+            database.ref(`paidTodayScores/${dateStr}`).once('value')
                 .then((snapshot) => {
                     todayScores = [];
                     if (snapshot.exists()) {
@@ -2659,7 +2659,7 @@
                         });
                         
                         // Also update localStorage with Firebase data
-                        localStorage.setItem('leaderboardScores', JSON.stringify({
+                        localStorage.setItem('paidLeaderboardScores', JSON.stringify({
                             [dateStr]: todayScores
                         }));
                     } else {
@@ -2688,7 +2688,7 @@
 
         function loadFromLocalStorage(dateStr) {
             try {
-                const localScores = JSON.parse(localStorage.getItem('leaderboardScores') || '{}');
+                const localScores = JSON.parse(localStorage.getItem('paidLeaderboardScores') || '{}');
                 if (localScores[dateStr]) {
                     todayScores = localScores[dateStr];
                     console.log('Loaded scores from localStorage');
@@ -2889,17 +2889,17 @@
             // Clear all leaderboard data from localStorage
             try {
                 // Clear all leaderboard scores
-                localStorage.removeItem('leaderboardScores');
+                localStorage.removeItem('paidLeaderboardScores');
                 
                 // Clear any other related data
-                localStorage.removeItem('lastLeaderboardDate');
-                localStorage.removeItem('cachedLeaderboardData');
+                localStorage.removeItem('paidLastLeaderboardDate');
+                localStorage.removeItem('paidCachedLeaderboardData');
                 
                 // Clear today's scores from todayScores array
                 todayScores = [];
                 
                 // Update the last leaderboard date
-                localStorage.setItem('lastLeaderboardDate', todayStr);
+                localStorage.setItem('paidLastLeaderboardDate', todayStr);
                 
                 console.log('Cleared all leaderboard data from localStorage');
                 
@@ -2920,7 +2920,7 @@
             
             // Also clear Firebase data for today
             try {
-                database.ref(`todayScores/${todayStr}`).remove()
+                database.ref(`paidTodayScores/${todayStr}`).remove()
                     .then(() => {
                         console.log('Cleared today\'s scores from Firebase');
                     })
@@ -2938,7 +2938,7 @@
             const todayStr = today.toISOString().split('T')[0];
             
             // Get the last leaderboard date from localStorage
-            const lastDate = localStorage.getItem('lastLeaderboardDate');
+            const lastDate = localStorage.getItem('paidLastLeaderboardDate');
             
             // If it's a new day, reset the leaderboard
             if (lastDate !== todayStr) {
@@ -2946,10 +2946,10 @@
                 todayScores = [];
                 
                 // Update the last leaderboard date
-                localStorage.setItem('lastLeaderboardDate', todayStr);
+                localStorage.setItem('paidLastLeaderboardDate', todayStr);
                 
                 // Clear any cached leaderboard data
-                localStorage.removeItem('cachedLeaderboardData');
+                localStorage.removeItem('paidCachedLeaderboardData');
                 
                 console.log('Leaderboard reset for new day:', todayStr);
                 
