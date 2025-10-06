@@ -790,6 +790,700 @@
             50% { transform: translateY(-15px); opacity: 1; }
         }
 
+        /* Leaderboard Styles */
+        .leaderboard-section {
+            display: none;
+            background: var(--light);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeInUp 0.6s ease-out;
+            width: 100%;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+        }
+
+        .leaderboard-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .leaderboard-title h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .leaderboard-date {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray);
+            background: rgba(241, 245, 249, 0.7);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .user-action-btn {
+            flex: 1;
+            background: var(--paid-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .user-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+
+        .countdown-timer {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray);
+            background: rgba(241, 245, 249, 0.7);
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .countdown-timer span {
+            color: var(--paid-color);
+            font-weight: 700;
+        }
+
+        .current-user-rank {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .current-user-rank::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            z-index: 0;
+        }
+
+        .current-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .current-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--paid-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .current-user-details h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .current-user-details p {
+            font-size: 12px;
+            color: var(--gray);
+            margin: 0;
+        }
+
+        .current-user-rank-badge {
+            background: var(--paid-gradient);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        .leaderboard-divider {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            gap: 10px;
+        }
+
+        .leaderboard-divider-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
+            border-radius: 2px;
+        }
+
+        .leaderboard-divider-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray);
+            padding: 0 10px;
+            white-space: nowrap;
+        }
+
+        .champions-section {
+            margin-top: 10px;
+        }
+
+        .champions-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+
+        .champions-header i {
+            color: #f59e0b;
+            font-size: 18px;
+        }
+
+        .champions-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(241, 245, 249, 0.7);
+            border-radius: 12px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .leaderboard-item.current-user {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .leaderboard-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .leaderboard-rank {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #C0C0C0, #808080);
+            color: white;
+            box-shadow: 0 4px 8px rgba(192, 192, 192, 0.3);
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: white;
+            box-shadow: 0 4px 8px rgba(205, 127, 50, 0.3);
+        }
+
+        .rank-other {
+            background: var(--paid-gradient);
+            color: white;
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+        }
+
+        .leaderboard-user {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .leaderboard-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-details {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .leaderboard-time {
+            font-size: 11px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .leaderboard-time i {
+            font-size: 10px;
+        }
+
+        .leaderboard-score {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .score-value {
+            font-weight: 700;
+            color: var(--paid-color);
+            font-size: 16px;
+        }
+
+        .score-percentage {
+            font-size: 11px;
+            color: var(--gray);
+        }
+
+        .leaderboard-empty {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .leaderboard-toggle-btn {
+            background: var(--paid-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: var(--button-shadow);
+        }
+
+        .leaderboard-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+
+        .leaderboard-start-btn {
+            background: var(--paid-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .leaderboard-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--paid-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .first-time-badge {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+            display: inline-block;
+        }
+
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--paid-color);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .time-badge.recent {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .time-badge.old {
+            background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
+            color: var(--gray);
+            border: 1px solid rgba(107, 114, 128, 0.2);
+        }
+
+        /* Notification Styles */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 320px;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.success {
+            background: var(--success);
+            color: white;
+        }
+
+        .notification-icon.info {
+            background: var(--paid-color);
+            color: white;
+        }
+
+        .notification-icon.warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .notification-close:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Premium Rotating Button Styles */
+        .premium-rotating-btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            perspective: 1000px;
+        }
+
+        .premium-rotating-btn {
+            position: relative;
+            width: 240px;
+            height: 70px;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            cursor: pointer;
+        }
+
+        .premium-rotating-btn.rotating {
+            animation: rotate360 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes rotate360 {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(180deg);
+            }
+        }
+
+        .premium-rotating-btn-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            backface-visibility: hidden;
+            overflow: hidden;
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .premium-rotating-btn-front {
+            background: var(--paid-gradient);
+            z-index: 2;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .premium-rotating-btn-back {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            transform: rotateY(180deg);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .premium-rotating-btn-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.8s;
+        }
+
+        .premium-rotating-btn:hover .premium-rotating-btn-shine {
+            left: 100%;
+        }
+
+        .premium-rotating-btn-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            background: rgba(245, 158, 11, 0.3);
+            transform: scale(0);
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0% {
+                transform: scale(0);
+                opacity: 0.7;
+            }
+            70% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        .premium-rotating-btn-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .premium-rotating-btn-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        /* Starburst Animation for Leaderboard */
+        .starburst-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            display: none;
+        }
+
+        .starburst {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes starburstAnimation {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+                opacity: 0;
+            }
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 20px; 
@@ -887,6 +1581,16 @@
             .offline-icon {
                 font-size: 90px;
             }
+            .premium-rotating-btn {
+                width: 280px;
+                height: 80px;
+            }
+            .premium-rotating-btn-face {
+                font-size: 18px;
+            }
+            .premium-rotating-btn-icon {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -903,14 +1607,34 @@
                 <div id="offline-section" class="offline-section" style="display: none;">
                     <div class="offline-image-container">
                         <div class="offline-image">
-                            <i class="fas fa-wifi-slash offline-icon"></i>
-                            <div class="offline-waves">
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                                <div class="wave"></div>
-                            </div>
+                            <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="100" cy="100" r="90" fill="#f5f7fa" stroke="#e4e7eb" stroke-width="2"/>
+                                <g id="wifi-signal" transform="translate(100, 100)">
+                                    <path d="M -60 -20 Q 0 -60 60 -20" fill="none" stroke="#d63031" stroke-width="3" stroke-linecap="round" opacity="0.2">
+                                        <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" repeatCount="indefinite"/>
+                                    </path>
+                                    <path d="M -40 0 Q 0 -40 40 0" fill="none" stroke="#d63031" stroke-width="3" stroke-linecap="round" opacity="0.4">
+                                        <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                                    </path>
+                                    <path d="M -20 20 Q 0 -20 20 20" fill="none" stroke="#d63031" stroke-width="3" stroke-linecap="round" opacity="0.6">
+                                        <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" begin="1s" repeatCount="indefinite"/>
+                                    </path>
+                                    <line x1="0" y1="40" x2="0" y2="60" stroke="#d63031" stroke-width="3" stroke-linecap="round">
+                                        <animate attributeName="y2" values="60;50;60" dur="2s" repeatCount="indefinite"/>
+                                    </line>
+                                    <circle cx="0" cy="70" r="5" fill="#d63031">
+                                        <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
+                                    </circle>
+                                </g>
+                                <text x="100" y="150" text-anchor="middle" font-family="Noto Sans Devanagari, sans-serif" font-size="18" font-weight="700" fill="#d63031">
+                                    <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+                                    ऑफलाइन
+                                </text>
+                                <text x="100" y="170" text-anchor="middle" font-family="Noto Sans Devanagari, sans-serif" font-size="12" font-weight="500" fill="#666">
+                                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                                    इंटरनेट कनेक्शन चेक करें
+                                </text>
+                            </svg>
                         </div>
                     </div>
                     <p class="offline-message">इंटरनेट चेक करें और पुनः प्रयास करें</p>
@@ -936,7 +1660,78 @@
                             <span>क्विज़ शुरू करें</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
+                        <button class="leaderboard-toggle-btn" onclick="toggleLeaderboard()">
+                            <i class="fas fa-trophy"></i>
+                            <span>आज के चैंपियन देखें</span>
+                        </button>
                     </div>
+                    
+                    <!-- Leaderboard Section -->
+                    <div id="leaderboard-section" class="leaderboard-section">
+                        <div class="leaderboard-header">
+                            <div class="leaderboard-title">
+                                <i class="fas fa-trophy" style="color: #f59e0b;"></i>
+                                <h2>आज के चैंपियन</h2>
+                            </div>
+                            <div class="leaderboard-date" id="leaderboard-date">आज</div>
+                        </div>
+                        
+                        <!-- User Actions -->
+                        <div class="user-actions">
+                            <button class="user-action-btn" id="my-score-btn" onclick="showMyScore()">
+                                <i class="fas fa-chart-line"></i>
+                                <span>मेरा स्कोर</span>
+                            </button>
+                            <button class="user-action-btn" id="my-rank-btn" onclick="showMyRank()">
+                                <i class="fas fa-medal"></i>
+                                <span>मेरी रैंक</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Countdown Timer -->
+                        <div class="countdown-timer" id="countdown-timer">
+                            अगली रैंकिंग में <span id="countdown-time">24:00:00</span> बचे हैं
+                        </div>
+                        
+                        <!-- Current User Rank Display -->
+                        <div id="current-user-rank" class="current-user-rank" style="display: none;">
+                            <div class="current-user-info">
+                                <div class="current-user-avatar" id="current-user-avatar">U</div>
+                                <div class="current-user-details">
+                                    <h3 id="current-user-name">आपका नाम</h3>
+                                    <p id="current-user-score">स्कोर: 0/0</p>
+                                </div>
+                            </div>
+                            <div class="current-user-rank-badge" id="current-user-rank-badge">-</div>
+                        </div>
+                        
+                        <!-- Divider between user rank and champions list -->
+                        <div class="leaderboard-divider" id="leaderboard-divider" style="display: none;">
+                            <div class="leaderboard-divider-line"></div>
+                            <div class="leaderboard-divider-text">आज के चैंपियन</div>
+                            <div class="leaderboard-divider-line"></div>
+                        </div>
+                        
+                        <!-- Champions List Section -->
+                        <div class="champions-section" id="champions-section" style="display: none;">
+                            <div class="champions-header">
+                                <i class="fas fa-crown"></i>
+                                <h3>टॉप प्रदर्शनकर्ता</h3>
+                            </div>
+                        </div>
+                        
+                        <div id="leaderboard-loading" class="loading-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                        <ul id="leaderboard-list" class="leaderboard-list"></ul>
+                        
+                        <!-- Professional Start Quiz Button -->
+                        <button class="leaderboard-start-btn" onclick="startQuizFromLeaderboard()">
+                            <i class="fas fa-play"></i>
+                            <span>प्रीमियम क्विज़ शुरू करें</span>
+                        </button>
+                    </div>
+                    
                     <div id="quiz-section" class="quiz-section" style="display: none;">
                         <div class="question-container">
                             <div class="question" id="question-text">प्रश्न लोड हो रहा है...</div>
@@ -961,6 +1756,23 @@
                             <span>क्विज़ पुनः शुरू करें</span>
                             <i class="fas fa-redo"></i>
                         </button>
+                        
+                        <!-- Premium Rotating Button -->
+                        <div class="premium-rotating-btn-container">
+                            <div class="premium-rotating-btn" id="premium-rotating-btn" onclick="handlePremiumBtnClick()">
+                                <div class="premium-rotating-btn-face premium-rotating-btn-front">
+                                    <div class="premium-rotating-btn-shine"></div>
+                                    <div class="premium-rotating-btn-glow"></div>
+                                    <div class="premium-rotating-btn-particles" id="particles-container"></div>
+                                    <i class="fas fa-rocket premium-rotating-btn-icon"></i>
+                                    <span style="font-size: 18px; font-weight: 900;">अंतिम रैंकिंग देखें</span>
+                                </div>
+                                <div class="premium-rotating-btn-face premium-rotating-btn-back">
+                                    <i class="fas fa-star premium-rotating-btn-icon"></i>
+                                    <span>विजेता खोजें</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -974,10 +1786,45 @@
         </div>
     </div>
 
+    <!-- Starburst Animation Container -->
+    <div class="starburst-container" id="starburst-container"></div>
+
+    <!-- Custom Notification -->
+    <div id="notification-overlay" class="notification-overlay">
+        <div class="notification" id="notification">
+            <div class="notification-icon" id="notification-icon">
+                <i class="fas fa-info"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-title" id="notification-title">सूचना</div>
+                <div class="notification-message" id="notification-message">संदेश</div>
+            </div>
+            <div class="notification-close" onclick="hideNotification()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+    </div>
+
     <script>
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
+        let initialScore = 0; // Track the initial score for leaderboard
+        let userName = '';
+        let userId = ''; // Unique ID for each user
+        let isFirstTime = true; // Track if it's the user's first time
+        let todayScores = [];
+        let isLeaderboardLoaded = false;
+        let countdownInterval; // For the countdown timer
+        let hasAnswered = false; // Track if user has answered the current question
+        let questionHistory = []; // Store history of questions and answers
+        let autoNextTimeout; // Timeout for auto next question
+        let quizCompleted = false; // Track if the quiz has been completed once
+        let lastLeaderboardDate = ''; // Track the last date leaderboard was loaded
+        let leaderboardToggleState = false; // Track the toggle state to prevent double clicks
+        let midnightResetInterval; // For midnight reset
+        let isRotating = false; // Track if button is currently rotating
+        let notificationTimeout = null; // Track notification timeout
         let quizStarted = false;
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
@@ -994,6 +1841,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initializeQuiz();
+            checkUserName();
+            startCountdownTimer();
+            checkAndResetLeaderboard(); // Check if we need to reset the leaderboard
+            scheduleMidnightReset(); // Schedule midnight reset
+            createParticles(); // Create particles for the premium button
         });
 
         function initializeQuiz() {
@@ -1024,6 +1876,38 @@
                 errorSection.style.display = 'none';
                 onlineContent.style.display = 'block';
                 console.log('User is online, showing online content');
+            }
+        }
+
+        function checkUserName() {
+            // Check if user name is already saved in localStorage
+            const savedName = localStorage.getItem('paidQuizUserName');
+            const savedUserId = localStorage.getItem('paidQuizUserId');
+            
+            if (savedName && savedUserId) {
+                userName = savedName;
+                userId = savedUserId;
+                isFirstTime = false; // User has already played before
+                // Update the current user avatar with first letter of name
+                updateCurrentUserAvatar();
+            } else {
+                // Generate a default name for paid users
+                userName = "प्रीमियम उपयोगकर्ता";
+                // Generate a unique ID for the user (using timestamp and random number)
+                userId = 'paid_user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+                
+                // Save to localStorage
+                localStorage.setItem('paidQuizUserName', userName);
+                localStorage.setItem('paidQuizUserId', userId);
+                
+                updateCurrentUserAvatar();
+            }
+        }
+
+        function updateCurrentUserAvatar() {
+            const avatar = document.getElementById('current-user-avatar');
+            if (avatar && userName) {
+                avatar.textContent = userName.charAt(0).toUpperCase();
             }
         }
 
@@ -1108,6 +1992,11 @@
         }
 
         function startQuiz() {
+            // प्रश्न दिखाने से पहले एक्सेस जांचें
+            if (!checkUserAccess()) {
+                return; // एक्सेस वैध नहीं है, फंक्शन से बाहर निकलें
+            }
+            
             if (!navigator.onLine) {
                 document.getElementById('offline-section').style.display = 'block';
                 document.getElementById('online-content').style.display = 'none';
@@ -1120,14 +2009,19 @@
             const welcomeSection = document.getElementById('welcome-section');
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
+            const leaderboardSection = document.getElementById('leaderboard-section');
             
             if (welcomeSection && quizSection && scoreSection) {
                 welcomeSection.style.display = 'none';
                 quizSection.style.display = 'block';
                 scoreSection.style.display = 'none';
+                leaderboardSection.style.display = 'none';
                 
                 currentQuestionIndex = 0;
                 score = 0;
+                initialScore = 0; // Reset initial score
+                questionHistory = []; // Reset question history
+                quizCompleted = false; // Reset quiz completion flag
                 updateScore();
                 
                 if (questions.length === 0) {
@@ -1149,6 +2043,15 @@
             }
         }
 
+        function startQuizFromLeaderboard() {
+            const leaderboardSection = document.getElementById('leaderboard-section');
+            if (leaderboardSection) {
+                leaderboardSection.style.display = 'none';
+                leaderboardToggleState = false; // Reset toggle state
+            }
+            startQuiz();
+        }
+
         function updateScore() {
             const scoreDisplay = document.getElementById('score-display');
             const scoreValue = document.getElementById('score-value');
@@ -1167,6 +2070,11 @@
         }
 
         function showQuestion() {
+            // प्रश्न दिखाने से पहले एक्सेस जांचें
+            if (!checkUserAccess()) {
+                return; // एक्सेस वैध नहीं है, फंक्शन से बाहर निकलें
+            }
+            
             const questionText = document.getElementById('question-text');
             const optionsList = document.getElementById('options-list');
             const result = document.getElementById('result');
@@ -1195,6 +2103,14 @@
             result.style.display = 'none';
             nextBtn.style.display = 'none';
             updateProgressBar();
+            
+            // Reset the answered flag
+            hasAnswered = false;
+            
+            // Clear any existing timeout
+            if (autoNextTimeout) {
+                clearTimeout(autoNextTimeout);
+            }
             
             question.options.forEach((option, index) => {
                 const li = document.createElement('li');
@@ -1236,6 +2152,10 @@
         }
 
         function checkAnswer(selectedIndex) {
+            // Prevent multiple answers to the same question
+            if (hasAnswered) return;
+            hasAnswered = true;
+            
             const question = questions[currentQuestionIndex];
             const options = document.querySelectorAll('#options-list li');
             const result = document.getElementById('result');
@@ -1246,6 +2166,14 @@
                 return;
             }
             
+            // Store this question in history
+            questionHistory.push({
+                questionIndex: currentQuestionIndex,
+                selectedIndex: selectedIndex,
+                correctAnswer: question.correct,
+                wasCorrect: selectedIndex === question.correct
+            });
+            
             options.forEach((option, index) => {
                 option.onclick = null;
                 if (index === question.correct) option.classList.add('correct');
@@ -1254,6 +2182,10 @@
             
             if (selectedIndex === question.correct) {
                 score++;
+                // Only update initial score if this is the first time completing the quiz
+                if (!quizCompleted) {
+                    initialScore++;
+                }
                 updateScore();
                 result.textContent = 'सही जवाब!';
                 result.className = 'result success';
@@ -1277,7 +2209,8 @@
             
             if ('vibrate' in navigator) navigator.vibrate(200);
             
-            setTimeout(() => {
+            // Auto move to next question after 1.5 seconds
+            autoNextTimeout = setTimeout(() => {
                 currentQuestionIndex++;
                 showQuestion();
             }, 1500);
@@ -1298,6 +2231,9 @@
             quizSection.style.display = 'none';
             scoreSection.style.display = 'flex';
             
+            // Mark quiz as completed
+            quizCompleted = true;
+            
             finalScoreCircle.textContent = `${score}/${questions.length}`;
             const percentage = ((score / questions.length) * 100).toFixed(2);
             scoreDetails.innerHTML = `
@@ -1307,9 +2243,66 @@
                 गलत जवाब: ${questions.length - score}<br>
                 समय: ${new Date().toLocaleTimeString()}
             `;
+            
+            // Save score to localStorage (only the initial score)
+            saveScoreToLocalStorage();
+        }
+
+        function saveScoreToLocalStorage() {
+            if (!userName || !userId) return;
+            
+            // Get current date in YYYY-MM-DD format
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            const timestamp = today.getTime();
+            
+            // Create new score entry with initial score (not current score)
+            const newScore = {
+                name: userName,
+                userId: userId,
+                score: initialScore, // Use initial score instead of current score
+                totalQuestions: questions.length,
+                timestamp: timestamp,
+                date: dateStr,
+                isFirstTime: isFirstTime
+            };
+            
+            // Get existing scores from localStorage
+            let localScores = JSON.parse(localStorage.getItem('paidLeaderboardScores') || '{}');
+            
+            // Initialize date array if it doesn't exist
+            if (!localScores[dateStr]) {
+                localScores[dateStr] = [];
+            }
+            
+            // Check if user already has a score for today
+            const existingScoreIndex = localScores[dateStr].findIndex(s => s.userId === newScore.userId);
+            
+            if (existingScoreIndex === -1) {
+                // Add new score
+                localScores[dateStr].push(newScore);
+                
+                // Sort scores by score (descending)
+                localScores[dateStr].sort((a, b) => b.score - a.score);
+                
+                // Keep only top 50 scores
+                localScores[dateStr] = localScores[dateStr].slice(0, 50);
+                
+                // Save back to localStorage
+                localStorage.setItem('paidLeaderboardScores', JSON.stringify(localScores));
+                
+                console.log('Score saved to localStorage');
+            } else {
+                console.log('User already has a score for today, not updating');
+            }
         }
 
         function restartQuiz() {
+            // क्विज़ रीस्टार्ट करने से पहले एक्सेस जांचें
+            if (!checkUserAccess()) {
+                return; // एक्सेस वैध नहीं है, फंक्शन से बाहर निकलें
+            }
+            
             quizStarted = false;
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
@@ -1320,6 +2313,9 @@
                 welcomeSection.style.display = 'block';
                 currentQuestionIndex = 0;
                 score = 0;
+                initialScore = 0; // Reset initial score
+                questionHistory = []; // Reset question history
+                quizCompleted = false; // Reset quiz completion flag
                 updateScore();
             }
         }
@@ -1353,6 +2349,8 @@
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 checkNetworkStatus();
+                // पेज विजिबल होने पर एक्सेस जांचें
+                checkUserAccess();
             }
         });
 
@@ -1362,6 +2360,8 @@
                 document.getElementById('offline-section').style.display = 'block';
                 document.getElementById('online-content').style.display = 'none';
             }
+            // पेज लोड होने पर तुरंत एक्सेस जांचें
+            checkUserAccess();
         });
 
         window.onerror = function(message) {
@@ -1372,6 +2372,711 @@
 
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
+
+        // उपयोगकर्ता की एक्सेस जांचने का फंक्शन
+        function checkUserAccess() {
+            const accessData = localStorage.getItem('premiumAccess');
+            
+            if (!accessData) {
+                // कोई एक्सेस डेटा नहीं है, उपयोगकर्ता को index.html पर भेजें
+                redirectToPayment();
+                return false;
+            }
+            
+            try {
+                const { userId, expiryDate } = JSON.parse(accessData);
+                const now = new Date();
+                const expiry = new Date(expiryDate);
+                
+                if (now >= expiry) {
+                    // एक्सेस समाप्त हो गई है, localStorage से हटाएं और उपयोगकर्ता को index.html पर भेजें
+                    localStorage.removeItem('premiumAccess');
+                    redirectToPayment();
+                    return false;
+                }
+                
+                // एक्सेस अभी भी वैध है
+                return true;
+            } catch (error) {
+                console.error('Access check error:', error);
+                // डेटा पार्स करने में त्रुटि, उपयोगकर्ता को index.html पर भेजें
+                redirectToPayment();
+                return false;
+            }
+        }
+
+        // उपयोगकर्ता को भुगतान पृष्ठ पर रीडायरेक्ट करने का फंक्शन
+        function redirectToPayment() {
+            // एक सूचना दिखाएं कि एक्सेस समाप्त हो गई है
+            showAccessExpiredNotification();
+            
+            // 3 सेकंड के बाद उपयोगकर्ता को index.html पर रीडायरेक्ट करें
+            setTimeout(() => {
+                if (window.AppInventor) {
+                    // Kodular APK के लिए
+                    window.AppInventor.setWebViewString('index.html');
+                } else {
+                    // वेब ब्राउज़र के लिए
+                    window.location.href = 'index.html';
+                }
+            }, 3000);
+        }
+
+        // एक्सेस समाप्ति सूचना दिखाने का फंक्शन
+        function showAccessExpiredNotification() {
+            // यदि पहले से कोई नोटिफिकेशन कंटेनर नहीं है, तो बनाएं
+            let notificationContainer = document.getElementById('notification-container');
+            if (!notificationContainer) {
+                notificationContainer = document.createElement('div');
+                notificationContainer.id = 'notification-container';
+                notificationContainer.style.position = 'fixed';
+                notificationContainer.style.top = '20px';
+                notificationContainer.style.left = '50%';
+                notificationContainer.style.transform = 'translateX(-50%)';
+                notificationContainer.style.zIndex = '3000';
+                notificationContainer.style.width = '90%';
+                notificationContainer.style.maxWidth = '400px';
+                document.body.appendChild(notificationContainer);
+            }
+            
+            // नोटिफिकेशन एलिमेंट बनाएं
+            const notification = document.createElement('div');
+            notification.style.background = 'white';
+            notification.style.borderRadius = '12px';
+            notification.style.padding = '16px';
+            notification.style.marginBottom = '10px';
+            notification.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+            notification.style.display = 'flex';
+            notification.style.alignItems = 'center';
+            notification.style.gap = '12px';
+            notification.style.animation = 'slideDown 0.3s ease-out';
+            
+            notification.innerHTML = `
+                <div style="font-size: 24px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(214, 48, 49, 0.1); color: #d63031;">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px; color: #2d3436;">
+                        एक्सेस समाप्त
+                    </div>
+                    <div style="font-size: 14px; color: #666;">
+                        आपकी 30 दिन की प्रीमियम एक्सेस समाप्त हो गई है। आपको भुगतान पृष्ठ पर रीडायरेक्ट किया जा रहा है...
+                    </div>
+                </div>
+            `;
+            
+            // नोटिफिकेशन कंटेनर में नोटिफिकेशन जोड़ें
+            notificationContainer.appendChild(notification);
+            
+            // 5 सेकंड बाद नोटिफिकेशन हटाएं
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideUpOut 0.3s ease-out forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notificationContainer.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // CSS एनिमेशन जोड़ें
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { transform: translateY(-100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            
+            @keyframes slideUpOut {
+                from { transform: translateY(0); opacity: 1; }
+                to { transform: translateY(-20px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // हर 5 मिनट में एक्सेस जांचें
+        setInterval(checkUserAccess, 5 * 60 * 1000);
+
+        // Leaderboard Functions
+        function toggleLeaderboard() {
+            // Prevent double clicks
+            if (leaderboardToggleState) return;
+            leaderboardToggleState = true;
+            
+            const leaderboardSection = document.getElementById('leaderboard-section');
+            const welcomeSection = document.getElementById('welcome-section');
+            const quizSection = document.getElementById('quiz-section');
+            
+            if (leaderboardSection.style.display === 'none' || leaderboardSection.style.display === '') {
+                welcomeSection.style.display = 'none';
+                quizSection.style.display = 'none'; // Make sure quiz section is hidden
+                leaderboardSection.style.display = 'block';
+                loadLeaderboardData();
+            } else {
+                leaderboardSection.style.display = 'none';
+                welcomeSection.style.display = 'block';
+                // Don't show quiz section here, only show welcome section
+            }
+            
+            // Reset the toggle state after a short delay
+            setTimeout(() => {
+                leaderboardToggleState = false;
+            }, 500);
+        }
+
+        function goToLeaderboard() {
+            const scoreSection = document.getElementById('score-section');
+            const quizSection = document.getElementById('quiz-section');
+            const leaderboardSection = document.getElementById('leaderboard-section');
+            
+            if (scoreSection) {
+                scoreSection.style.display = 'none';
+            }
+            
+            if (quizSection) {
+                quizSection.style.display = 'none'; // Make sure quiz section is hidden
+            }
+            
+            if (leaderboardSection) {
+                leaderboardSection.style.display = 'block';
+                loadLeaderboardData();
+            }
+        }
+
+        function showMyScore() {
+            if (!userName || !userId) {
+                checkUserName();
+                return;
+            }
+            
+            // Find user's score in today's scores
+            let scores = [...todayScores];
+            scores.sort((a, b) => b.score - a.score);
+            
+            const userScore = scores.find(s => s.userId === userId);
+            
+            if (userScore) {
+                const percentage = ((userScore.score / userScore.totalQuestions) * 100).toFixed(1);
+                showNotification('success', 'आपका स्कोर', `${userScore.score}/${userScore.totalQuestions} (${percentage}%)`);
+            } else {
+                showNotification('info', 'सूचना', 'आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
+            }
+        }
+
+        function showMyRank() {
+            if (!userName || !userId) {
+                checkUserName();
+                return;
+            }
+            
+            // Find user's rank in today's scores
+            let scores = [...todayScores];
+            scores.sort((a, b) => b.score - a.score);
+            
+            const userRank = scores.findIndex(s => s.userId === userId) + 1;
+            
+            if (userRank > 0) {
+                showNotification('info', 'आपकी रैंक', `आपकी रैंक: ${userRank}`);
+            } else {
+                showNotification('info', 'सूचना', 'आपने अभी तक कोई क्विज़ नहीं खेला है। कृपया पहले क्विज़ खेलें।');
+            }
+        }
+
+        function showNotification(type, title, message) {
+            // Clear any existing timeout
+            if (notificationTimeout) {
+                clearTimeout(notificationTimeout);
+            }
+            
+            const notificationOverlay = document.getElementById('notification-overlay');
+            const notification = document.getElementById('notification');
+            const notificationIcon = document.getElementById('notification-icon');
+            const notificationTitle = document.getElementById('notification-title');
+            const notificationMessage = document.getElementById('notification-message');
+            
+            // Set icon based on type
+            if (type === 'success') {
+                notificationIcon.className = 'notification-icon success';
+                notificationIcon.innerHTML = '<i class="fas fa-check"></i>';
+            } else if (type === 'warning') {
+                notificationIcon.className = 'notification-icon warning';
+                notificationIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            } else {
+                notificationIcon.className = 'notification-icon info';
+                notificationIcon.innerHTML = '<i class="fas fa-info"></i>';
+            }
+            
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
+            
+            // Show notification
+            notificationOverlay.style.display = 'flex';
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Auto hide after exactly 3 seconds
+            notificationTimeout = setTimeout(() => {
+                hideNotification();
+            }, 3000);
+        }
+
+        function hideNotification() {
+            const notificationOverlay = document.getElementById('notification-overlay');
+            const notification = document.getElementById('notification');
+            
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notificationOverlay.style.display = 'none';
+            }, 300);
+        }
+
+        function loadLeaderboardData() {
+            const loadingSpinner = document.getElementById('leaderboard-loading');
+            const leaderboardList = document.getElementById('leaderboard-list');
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'flex';
+            leaderboardList.innerHTML = '';
+            
+            // Get current date in YYYY-MM-DD format
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            
+            // Try to load from localStorage
+            loadFromLocalStorage(dateStr);
+            
+            // Hide loading spinner
+            loadingSpinner.style.display = 'none';
+            
+            // Display leaderboard
+            displayLeaderboard();
+        }
+
+        function loadFromLocalStorage(dateStr) {
+            try {
+                const localScores = JSON.parse(localStorage.getItem('paidLeaderboardScores') || '{}');
+                if (localScores[dateStr]) {
+                    todayScores = localScores[dateStr];
+                    console.log('Loaded scores from localStorage');
+                } else {
+                    todayScores = [];
+                    console.log('No scores found in localStorage');
+                }
+            } catch (error) {
+                console.error('Error loading from localStorage:', error);
+                todayScores = [];
+            }
+        }
+
+        function displayLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            const currentUserRank = document.getElementById('current-user-rank');
+            const leaderboardDivider = document.getElementById('leaderboard-divider');
+            const championsSection = document.getElementById('champions-section');
+            
+            leaderboardList.innerHTML = '';
+            
+            let scores = [...todayScores];
+            
+            // Sort scores by score (descending)
+            scores.sort((a, b) => b.score - a.score);
+            
+            // Find current user's rank
+            let currentUserRankValue = -1;
+            if (userId) {
+                currentUserRankValue = scores.findIndex(s => s.userId === userId) + 1;
+            }
+            
+            // Display current user's rank if found
+            if (currentUserRankValue > 0 && currentUserRank) {
+                currentUserRank.style.display = 'flex';
+                document.getElementById('current-user-name').textContent = userName;
+                document.getElementById('current-user-score').textContent = `स्कोर: ${scores[currentUserRankValue-1].score}/${scores[currentUserRankValue-1].totalQuestions}`;
+                document.getElementById('current-user-rank-badge').textContent = currentUserRankValue;
+                
+                // Show divider and champions section
+                leaderboardDivider.style.display = 'flex';
+                championsSection.style.display = 'block';
+            } else if (currentUserRank) {
+                currentUserRank.style.display = 'none';
+                
+                // Hide divider if user not found
+                leaderboardDivider.style.display = 'none';
+                championsSection.style.display = 'none';
+            }
+            
+            // Display top 50 scores
+            const topScores = scores.slice(0, 50);
+            
+            if (topScores.length === 0) {
+                leaderboardList.innerHTML = '<li class="leaderboard-empty">अभी कोई स्कोर नहीं है</li>';
+                return;
+            }
+            
+            topScores.forEach((score, index) => {
+                const li = document.createElement('li');
+                li.className = 'leaderboard-item';
+                
+                // Highlight current user
+                if (score.userId === userId) {
+                    li.classList.add('current-user');
+                }
+                
+                // Determine rank class
+                let rankClass = 'rank-other';
+                if (index === 0) rankClass = 'rank-1';
+                else if (index === 1) rankClass = 'rank-2';
+                else if (index === 2) rankClass = 'rank-3';
+                
+                // Calculate time ago with improved accuracy
+                const timeAgo = getTimeAgo(score.timestamp);
+                const percentage = ((score.score / score.totalQuestions) * 100).toFixed(1);
+                
+                // Add first-time badge if applicable
+                const firstTimeBadge = score.isFirstTime ? '<span class="first-time-badge">First Time</span>' : '';
+                
+                li.innerHTML = `
+                    <div class="leaderboard-rank ${rankClass}">${index + 1}</div>
+                    <div class="leaderboard-user">
+                        <div class="leaderboard-avatar">${score.name.charAt(0).toUpperCase()}</div>
+                        <div class="leaderboard-details">
+                            <div class="leaderboard-name">${score.name}${firstTimeBadge}</div>
+                            <div class="leaderboard-time">${timeAgo}</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-score">
+                        <div class="score-value">${score.score}/${score.totalQuestions}</div>
+                        <div class="score-percentage">${percentage}%</div>
+                    </div>
+                `;
+                
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            
+            // If less than a minute
+            if (diff < 60000) {
+                return '<span class="time-badge recent"><i class="fas fa-clock"></i> अभी अभी</span>';
+            }
+            
+            // If less than an hour
+            if (diff < 3600000) {
+                const minutes = Math.floor(diff / 60000);
+                return `<span class="time-badge recent"><i class="fas fa-clock"></i> ${minutes} मिनट पहले</span>`;
+            }
+            
+            // If less than a day
+            if (diff < 86400000) {
+                const hours = Math.floor(diff / 3600000);
+                return `<span class="time-badge"><i class="fas fa-clock"></i> ${hours} घंटे पहले</span>`;
+            }
+            
+            // If more than a day
+            const days = Math.floor(diff / 86400000);
+            return `<span class="time-badge old"><i class="fas fa-calendar"></i> ${days} दिन पहले</span>`;
+        }
+
+        function startCountdownTimer() {
+            // Clear any existing interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            // Update the countdown every second
+            countdownInterval = setInterval(() => {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0);
+                
+                const diff = tomorrow - now;
+                
+                if (diff <= 0) {
+                    // It's midnight, reset the timer
+                    clearInterval(countdownInterval);
+                    startCountdownTimer();
+                    return;
+                }
+                
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                const countdownElement = document.getElementById('countdown-time');
+                if (countdownElement) {
+                    countdownElement.textContent = formattedTime;
+                }
+                
+                // Check if it's exactly midnight (00:00:00)
+                if (hours === 0 && minutes === 0 && seconds === 0) {
+                    // Reset leaderboard at midnight
+                    resetLeaderboardAtMidnight();
+                }
+            }, 1000);
+        }
+
+        function scheduleMidnightReset() {
+            // Clear any existing interval
+            if (midnightResetInterval) {
+                clearInterval(midnightResetInterval);
+            }
+            
+            // Calculate time until midnight
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeUntilMidnight = tomorrow - now;
+            
+            // Schedule reset at midnight
+            midnightResetInterval = setTimeout(() => {
+                resetLeaderboardAtMidnight();
+                // Schedule next day's reset
+                scheduleMidnightReset();
+            }, timeUntilMidnight);
+            
+            console.log('Midnight reset scheduled in', timeUntilMidnight, 'ms');
+        }
+
+        function resetLeaderboardAtMidnight() {
+            console.log('Resetting leaderboard at midnight');
+            
+            // Get current date in YYYY-MM-DD format
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            
+            // Clear all leaderboard data from localStorage
+            try {
+                // Clear all leaderboard scores
+                localStorage.removeItem('paidLeaderboardScores');
+                
+                // Clear any other related data
+                localStorage.removeItem('lastPaidLeaderboardDate');
+                localStorage.removeItem('cachedPaidLeaderboardData');
+                
+                // Clear today's scores from todayScores array
+                todayScores = [];
+                
+                // Update the last leaderboard date
+                localStorage.setItem('lastPaidLeaderboardDate', todayStr);
+                
+                console.log('Cleared all leaderboard data from localStorage');
+                
+                // If the leaderboard section is visible, reload it
+                const leaderboardSection = document.getElementById('leaderboard-section');
+                if (leaderboardSection && leaderboardSection.style.display === 'block') {
+                    loadLeaderboardData();
+                }
+                
+                // Show notification to user
+                showNotification('success', 'नया दिन', 'लीडरबोर्ड रीसेट हो गया है! आज की नई रैंकिंग शुरू हो गई है।');
+                
+                // Trigger confetti for celebration
+                triggerConfetti();
+            } catch (error) {
+                console.error('Error resetting leaderboard:', error);
+            }
+        }
+
+        function checkAndResetLeaderboard() {
+            // Get current date in YYYY-MM-DD format
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            
+            // Get the last leaderboard date from localStorage
+            const lastDate = localStorage.getItem('lastPaidLeaderboardDate');
+            
+            // If it's a new day, reset the leaderboard
+            if (lastDate !== todayStr) {
+                // Clear todayScores array
+                todayScores = [];
+                
+                // Update the last leaderboard date
+                localStorage.setItem('lastPaidLeaderboardDate', todayStr);
+                
+                // Clear any cached leaderboard data
+                localStorage.removeItem('cachedPaidLeaderboardData');
+                
+                console.log('Leaderboard reset for new day:', todayStr);
+                
+                // If the leaderboard section is visible, reload it
+                const leaderboardSection = document.getElementById('leaderboard-section');
+                if (leaderboardSection && leaderboardSection.style.display === 'block') {
+                    loadLeaderboardData();
+                }
+            }
+        }
+
+        // Premium Button Functions
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles-container');
+            if (!particlesContainer) return;
+            
+            // Create 10 particles
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 2-6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                
+                // Random animation delay
+                const delay = Math.random() * 5;
+                particle.style.animationDelay = `${delay}s`;
+                
+                // Add to container
+                particlesContainer.appendChild(particle);
+                
+                // Animate particle
+                animateParticle(particle);
+            }
+        }
+
+        function animateParticle(particle) {
+            // Random movement parameters
+            const moveX = (Math.random() - 0.5) * 40;
+            const moveY = (Math.random() - 0.5) * 40;
+            const duration = Math.random() * 3 + 2;
+            
+            // Apply animation
+            particle.style.transition = `all ${duration}s ease-in-out`;
+            particle.style.opacity = '0.7';
+            
+            // Start animation after a delay
+            setTimeout(() => {
+                particle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                particle.style.opacity = '0';
+            }, 100);
+            
+            // Reset animation after completion
+            setTimeout(() => {
+                particle.style.transition = 'none';
+                particle.style.transform = 'translate(0, 0)';
+                particle.style.opacity = '0';
+                
+                // Restart animation
+                setTimeout(() => {
+                    animateParticle(particle);
+                }, 100);
+            }, (duration + 1) * 1000);
+        }
+
+        function handlePremiumBtnClick() {
+            // Prevent multiple clicks during rotation
+            if (isRotating) return;
+            isRotating = true;
+            
+            const btn = document.getElementById('premium-rotating-btn');
+            
+            // Add rotating class
+            btn.classList.add('rotating');
+            
+            // Play a sound effect if available
+            try {
+                const sound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
+                sound.play().catch(e => console.log('Sound play failed:', e));
+            } catch (e) {
+                console.log('Sound creation failed:', e);
+            }
+            
+            // After animation completes
+            setTimeout(() => {
+                // Remove rotating class
+                btn.classList.remove('rotating');
+                
+                // Navigate to leaderboard
+                goToLeaderboard();
+                
+                // Reset rotating flag
+                isRotating = false;
+                
+                // Trigger starburst animation instead of confetti
+                triggerStarburst();
+            }, 1200);
+        }
+
+        function triggerStarburst() {
+            const container = document.getElementById('starburst-container');
+            container.innerHTML = '';
+            container.style.display = 'block';
+            
+            // Create multiple starbursts from different positions
+            const positions = [
+                { x: 20, y: 20 },
+                { x: 80, y: 20 },
+                { x: 50, y: 50 },
+                { x: 20, y: 80 },
+                { x: 80, y: 80 }
+            ];
+            
+            positions.forEach(pos => {
+                createStarburst(pos.x, pos.y);
+            });
+            
+            // Hide container after animation completes
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 2000);
+        }
+
+        function createStarburst(xPercent, yPercent) {
+            const container = document.getElementById('starburst-container');
+            const colors = ['#FFD700', '#FF69B4', '#00CED1', '#FF6347', '#7FFF00'];
+            
+            // Create multiple particles for each starburst
+            for (let i = 0; i < 30; i++) {
+                const star = document.createElement('div');
+                star.className = 'starburst';
+                
+                // Random color
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                star.style.background = color;
+                star.style.boxShadow = `0 0 10px 2px ${color}`;
+                
+                // Random size
+                const size = Math.random() * 6 + 2;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Position at the center point
+                star.style.left = `${xPercent}%`;
+                star.style.top = `${yPercent}%`;
+                
+                // Random direction
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                // Set CSS variables for animation
+                star.style.setProperty('--tx', `${tx}px`);
+                star.style.setProperty('--ty', `${ty}px`);
+                
+                // Add animation
+                star.style.animation = 'starburstAnimation 1.5s ease-out forwards';
+                
+                // Add to container
+                container.appendChild(star);
+            }
+        }
     </script>
 </body>
 </html>
