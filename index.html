@@ -851,6 +851,25 @@
             pointer-events: auto;
         }
         
+        /* Security warning styles */
+        .security-warning {
+            background: rgba(253, 203, 110, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .security-warning i {
+            color: var(--warning);
+            font-size: 18px;
+        }
+        
         @media (max-width: 480px) {
             .header { padding: 12px 8px; }
             .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
@@ -885,6 +904,7 @@
             .notification-title { font-size: 14px; }
             .notification-message { font-size: 12px; }
             .notification-icon { font-size: 20px; width: 32px; height: 32px; }
+            .security-warning { font-size: 12px; }
         }
 
         @media (min-width: 768px) {
@@ -916,6 +936,7 @@
             .checkbox-hint { font-size: 13px; }
             .processing-screen .app-logo-name { font-size: 28px; }
             .processing-screen .processing-message { font-size: 20px; }
+            .security-warning { font-size: 14px; }
         }
     </style>
 </head>
@@ -991,6 +1012,11 @@
                             <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग और प्रोग्रेस रिपोर्ट</li>
                             <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड कंटेंट</li>
                         </ul>
+                    </div>
+                    
+                    <div class="security-warning">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>सुरक्षा चेतावनी: केवल वैध पेमेंट के बाद ही एक्सेस मिलेगा। सभी फील्ड्स सही भरना अनिवार्य है।</span>
                     </div>
                     
                     <div class="qr-section">
@@ -1185,6 +1211,7 @@
                         }
                     }
                     
+                    // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
                     document.getElementById('user_id').value = userEmail;
                     document.getElementById('processing-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
@@ -1196,7 +1223,8 @@
                 }
             }
             
-            checkPremiumAccess();
+            // इस फंक्शन को कॉल करने से पहले टिप्पणी करें
+            // checkPremiumAccess();
 
             // फॉर्म सबमिट इवेंट मजबूती से बाइंड
             const paymentForm = document.getElementById('payment-form');
@@ -1566,32 +1594,40 @@
                 }
                 
                 if (latestPayment) {
-                    if (latestPayment.status === 'approved') {
-                        // approved_at फील्ड की जांच करें, अगर नहीं है तो timestamp का उपयोग करें
-                        const approvalDate = latestPayment.approved_at ? 
-                            new Date(latestPayment.approved_at) : 
-                            new Date(latestPayment.timestamp);
+                    // यहाँ अतिरिक्त जांच जोड़ी गई है
+                    if (latestPayment.mobile_number === mobileNumber && 
+                        latestPayment.transaction_id === transactionId && 
+                        latestPayment.amount === amount) {
                         
-                        const expiryDate = new Date(approvalDate);
-                        expiryDate.setDate(approvalDate.getDate() + 30);
-                        
-                        localStorage.setItem('premiumAccess', JSON.stringify({
-                            userId: userId,
-                            expiryDate: expiryDate.toISOString()
-                        }));
-                        
-                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
+                        if (latestPayment.status === 'approved') {
+                            // approved_at फील्ड की जांच करें, अगर नहीं है तो timestamp का उपयोग करें
+                            const approvalDate = latestPayment.approved_at ? 
+                                new Date(latestPayment.approved_at) : 
+                                new Date(latestPayment.timestamp);
+                            
+                            const expiryDate = new Date(approvalDate);
+                            expiryDate.setDate(approvalDate.getDate() + 30);
+                            
+                            localStorage.setItem('premiumAccess', JSON.stringify({
+                                userId: userId,
+                                expiryDate: expiryDate.toISOString()
+                            }));
+                            
+                            showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
 
-                        setTimeout(() => {
-                            window.location.href = 'quiz.html?user_id=' + userId;
-                        }, 5000);
+                            setTimeout(() => {
+                                window.location.href = 'quiz.html?user_id=' + userId;
+                            }, 5000);
 
-                    } else if (latestPayment.status === 'pending') {
-                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।', 'info');
-                    } else if (latestPayment.status === 'rejected') {
-                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।', 'error');
+                        } else if (latestPayment.status === 'pending') {
+                            showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।', 'info');
+                        } else if (latestPayment.status === 'rejected') {
+                            showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।', 'error');
+                        } else {
+                            showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
+                        }
                     } else {
-                        showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
+                        showNotification('पेमेंट स्टेटस', 'आपने जो जानकारी भरी है, वह हमारे रिकॉर्ड से मेल नहीं खाती। कृपया सही जानकारी भरें।', 'error');
                     }
                 } else {
                      showNotification('पेमेंट स्टेटस', 'कोई भी पेमेंट रिकॉर्ड नहीं मिला।', 'error');
