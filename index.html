@@ -851,6 +851,19 @@
             pointer-events: auto;
         }
         
+        .checkbox-container.error {
+            border-color: var(--danger);
+            background-color: rgba(214, 48, 49, 0.05);
+        }
+        
+        .checkbox-container.error label {
+            color: var(--danger);
+        }
+        
+        .checkbox-container.error .checkbox-hint {
+            color: var(--danger);
+        }
+        
         /* Security warning styles */
         .security-warning {
             background: rgba(253, 203, 110, 0.1);
@@ -868,6 +881,32 @@
         .security-warning i {
             color: var(--warning);
             font-size: 18px;
+        }
+        
+        /* Retry button styles */
+        .retry-btn {
+            background: var(--warning);
+            color: var(--dark);
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(253, 203, 110, 0.2);
+            background: var(--warning);
         }
         
         @media (max-width: 480px) {
@@ -891,7 +930,7 @@
             .instructions { font-size: 13px; }
             .instructions li { margin-bottom: 6px; }
             .instructions li i { font-size: 14px; }
-            .submit-btn, .clear-btn, .check-btn { padding: 10px 20px; font-size: 13px; }
+            .submit-btn, .clear-btn, .check-btn, .retry-btn { padding: 10px 20px; font-size: 13px; }
             .status-message { font-size: 13px; padding: 10px; }
             .custom-design { width: 180px; height: 180px; }
             .offline-message, .error-message { font-size: 16px; }
@@ -928,7 +967,7 @@
             .instructions { font-size: 15px; }
             .instructions li { margin-bottom: 10px; }
             .instructions li i { font-size: 18px; }
-            .submit-btn, .clear-btn, .check-btn { padding: 14px 28px; font-size: 15px; }
+            .submit-btn, .clear-btn, .check-btn, .retry-btn { padding: 14px 28px; font-size: 15px; }
             .status-message { font-size: 15px; padding: 14px; }
             .custom-design { width: 220px; height: 220px; }
             .offline-message, .error-message { font-size: 20px; }
@@ -1063,7 +1102,7 @@
                             <div id="amount_error" class="error-text"></div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="payment_made_group">
                             <div class="checkbox-container disabled" id="payment_made_container">
                                 <label for="payment_made">
                                     <input type="checkbox" id="payment_made" name="payment_made" disabled>
@@ -1111,6 +1150,42 @@
     </div>
     
     <script>
+        // Firebase को ग्लोबल स्कोप में इनिशियलाइज़ करें
+        let database;
+        let firebaseInitialized = false;
+
+        // Firebase कॉन्फिगरेशन
+        const firebaseConfig = {
+            apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+            authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+            databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+            projectId: "rajasthan-gk-quiz-41cc5",
+            storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
+            messagingSenderId: "876482514501",
+            appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+            measurementId: "G-VB140B6NCW"
+        };
+
+        // Firebase इनिशियलाइज़ेशन फंक्शन
+        function initializeFirebase() {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                    console.log("Firebase initialized successfully");
+                }
+                database = firebase.database();
+                firebaseInitialized = true;
+                return true;
+            } catch (error) {
+                console.error("Firebase initialization error:", error);
+                firebaseInitialized = false;
+                return false;
+            }
+        }
+
+        // पेज लोड होते ही Firebase इनिशियलाइज़ करें
+        initializeFirebase();
+
         (function() {
             if (!navigator.onLine) {
                 document.addEventListener('DOMContentLoaded', function() {
@@ -1123,20 +1198,6 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
-            const firebaseConfig = {
-                apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
-                authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
-                databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
-                projectId: "rajasthan-gk-quiz-41cc5",
-                storageBucket: "rajasthan-gk-quiz-41cc5.appspot.com",
-                messagingSenderId: "876482514501",
-                appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
-                measurementId: "G-VB140B6NCW"
-            };
-
-            firebase.initializeApp(firebaseConfig);
-            const database = firebase.database();
-
             // लोकल स्टोरेज से उपयोगकर्ता की एक्सेस जांचें
             function checkLocalAccess() {
                 const accessData = localStorage.getItem('premiumAccess');
@@ -1152,10 +1213,83 @@
                     } else {
                         // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                         localStorage.removeItem('premiumAccess');
+                        showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
                     }
                 }
                 return false;
             }
+
+            // यह फंक्शन लोकल स्टोरेज में एक्सेस डेटा सेव करेगा
+            function saveAccessToLocalStorage(userId, expiryDate) {
+                localStorage.setItem('premiumAccess', JSON.stringify({
+                    userId: userId,
+                    expiryDate: expiryDate.toISOString()
+                }));
+            }
+
+            // यह फंक्शन लोकल स्टोरेज में सेव एक्सेस की वैधता जांचेगा
+            function validateLocalAccess() {
+                const accessData = localStorage.getItem('premiumAccess');
+                if (accessData) {
+                    const { userId, expiryDate } = JSON.parse(accessData);
+                    const now = new Date();
+                    const expiry = new Date(expiryDate);
+                    
+                    if (now >= expiry) {
+                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
+                        localStorage.removeItem('premiumAccess');
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            // नियमित अंतराल पर एक्सेस वैधता जांचें
+            setInterval(validateLocalAccess, 60000); // हर मिनट जांचें
+
+            // रियल-टाइम लिसनर सेटअप करें जो Firebase में पेमेंट स्टेटस के बदलावों को ट्रैक करे
+            function setupPaymentStatusListener() {
+                if (!firebaseInitialized || !database) {
+                    console.error("Firebase not initialized for listener setup");
+                    return;
+                }
+                
+                const paymentsRef = database.ref('payments');
+                
+                paymentsRef.on('value', (snapshot) => {
+                    const payments = snapshot.val();
+                    if (!payments) return;
+                    
+                    // सभी पेमेंट्स के लिए जांचें
+                    for (let key in payments) {
+                        const payment = payments[key];
+                        
+                        // अगर स्टेटस 'approved' है
+                        if (payment.status === 'approved') {
+                            const userId = payment.user_id;
+                            
+                            // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                            let approvalDate;
+                            if (payment.approved_at) {
+                                approvalDate = new Date(payment.approved_at);
+                            } else {
+                                // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                                approvalDate = new Date(payment.timestamp);
+                            }
+                            
+                            const expiryDate = new Date(approvalDate);
+                            expiryDate.setDate(approvalDate.getDate() + 30);
+                            
+                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
+                            saveAccessToLocalStorage(userId, expiryDate);
+                        }
+                    }
+                });
+            }
+
+            // पेमेंट स्टेटस लिसनर सेटअप करें
+            setupPaymentStatusListener();
 
             async function checkPremiumAccess() {
                 // पहले लोकल स्टोरेज जांचें
@@ -1175,6 +1309,10 @@
                 const userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
 
                 try {
+                    if (!firebaseInitialized || !database) {
+                        throw new Error("Firebase not initialized");
+                    }
+                    
                     const paymentsRef = database.ref('payments');
                     const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                     const payments = snapshot.val();
@@ -1190,10 +1328,14 @@
                     }
 
                     if (foundApprovedPayment) {
-                        // approved_at फील्ड की जांच करें, अगर नहीं है तो timestamp का उपयोग करें
-                        const approvalDate = foundApprovedPayment.approved_at ? 
-                            new Date(foundApprovedPayment.approved_at) : 
-                            new Date(foundApprovedPayment.timestamp);
+                        // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                        let approvalDate;
+                        if (foundApprovedPayment.approved_at) {
+                            approvalDate = new Date(foundApprovedPayment.approved_at);
+                        } else {
+                            // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                            approvalDate = new Date(foundApprovedPayment.timestamp);
+                        }
                         
                         const expiryDate = new Date(approvalDate);
                         expiryDate.setDate(approvalDate.getDate() + 30);
@@ -1201,10 +1343,7 @@
 
                         if (now < expiryDate) {
                             // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            localStorage.setItem('premiumAccess', JSON.stringify({
-                                userId: userId,
-                                expiryDate: expiryDate.toISOString()
-                            }));
+                            saveAccessToLocalStorage(userId, expiryDate);
                             
                             window.location.href = 'quiz.html?user_id=' + userId;
                             return;
@@ -1270,6 +1409,12 @@
                 validateField('amount');
                 checkAllFieldsForCheckbox();
             });
+            
+            // चेकबॉक्स वैलिडेशन
+            const paymentMadeCheckbox = document.getElementById('payment_made');
+            paymentMadeCheckbox.addEventListener('change', function() {
+                validateCheckbox();
+            });
         }
         
         function validateField(fieldName) {
@@ -1333,6 +1478,25 @@
             }
             
             return isValid;
+        }
+        
+        function validateCheckbox() {
+            const paymentMadeCheckbox = document.getElementById('payment_made');
+            const paymentMadeContainer = document.getElementById('payment_made_container');
+            const paymentMadeError = document.getElementById('payment_made_error');
+            
+            // पहले सभी एरर क्लासेस हटाएं
+            paymentMadeContainer.classList.remove('error');
+            paymentMadeError.style.display = 'none';
+            
+            if (!paymentMadeCheckbox.checked) {
+                paymentMadeContainer.classList.add('error');
+                paymentMadeError.textContent = 'कृपया पेमेंट करने के बाद इस बॉक्स को टिक करें!';
+                paymentMadeError.style.display = 'block';
+                return false;
+            }
+            
+            return true;
         }
         
         function checkAllFieldsForCheckbox() {
@@ -1420,7 +1584,7 @@
                     <i class="fas ${icon}"></i>
                 </div>
                 <div class="notification-content">
-                    <div class="notification-title">Mind_Grid_Premium</div>
+                    <div class="notification-title">${title}</div>
                     <div class="notification-message">${message}</div>
                 </div>
                 <button class="notification-close">
@@ -1453,6 +1617,7 @@
             }, 5000);
         }
 
+        // नया submitPayment फंक्शन जिसमें बेहतर एरर हैंडलिंग है
         async function submitPayment() {
             console.log("submitPayment function called"); // डिबग
             const statusMessage = document.getElementById('status-message');
@@ -1462,6 +1627,16 @@
                 showNotification('इंटरनेट कनेक्शन त्रुटि', 'कृपया इंटरनेट कनेक्शन चेक करें और पुनः प्रयास करें।', 'error');
                 console.log("Offline detected"); // डिबग
                 return;
+            }
+
+            // Firebase इनिशियलाइज़ेशन चेक
+            if (!firebaseInitialized || !database) {
+                console.log("Reinitializing Firebase...");
+                const initSuccess = initializeFirebase();
+                if (!initSuccess) {
+                    showNotification('Firebase त्रुटि', 'Firebase कनेक्शन में समस्या। कृपया पेज रीफ्रेश करें।', 'error');
+                    return;
+                }
             }
 
             // वैलिडेशन चेक
@@ -1485,7 +1660,13 @@
 
             try {
                 console.log("Attempting Firebase write"); // डिबग
-                const paymentsRef = firebase.database().ref('payments');
+                
+                // Firebase कनेक्शन फिर से जांचें
+                if (!firebase.apps.length) {
+                    throw new Error("Firebase not initialized");
+                }
+                
+                const paymentsRef = database.ref('payments');
                 const newPaymentRef = paymentsRef.push();
                 
                 const payload = {
@@ -1501,7 +1682,7 @@
                 await newPaymentRef.set(payload);
                 console.log("Payment data written to Firebase with key:", newPaymentRef.key); // डिबग
 
-                const userDataRef = firebase.database().ref('user_session/' + userId);
+                const userDataRef = database.ref('user_session/' + userId);
                 await userDataRef.set({
                     transactionId: transactionId,
                     firebaseId: newPaymentRef.key,
@@ -1513,10 +1694,52 @@
                 showSuccessModal(transactionId);
                 
             } catch (error) {
-                console.error("Firebase error:", error.message); // डिबग
+                console.error("Firebase error:", error); // डिबग
                 hideProcessingScreen();
-                showNotification('पेमेंट त्रुटि', 'पेमेंट रिक्वेस्ट भेजने में समस्या हुई। कृपया दोबारा कोशिश करें।', 'error');
+                
+                // विस्तृत एरर संदेश दिखाएं
+                let errorMessage = 'पेमेंट रिक्वेस्ट भेजने में समस्या हुई। कृपया दोबारा कोशिश करें।';
+                
+                if (error.code === 'PERMISSION_DENIED') {
+                    errorMessage = 'आपके पास डेटा सेव करने की अनुमति नहीं है। कृपया एडमिन से संपर्क करें।';
+                } else if (error.code === 'NETWORK_ERROR') {
+                    errorMessage = 'नेटवर्क त्रुटि। कृपया इंटरनेट कनेक्शन चेक करें और दोबारा कोशिश करें।';
+                } else if (error.code === 'TIMEOUT') {
+                    errorMessage = 'सर्वर से कनेक्ट करने में समय समाप्त। कृपया कुछ देर बाद दोबारा कोशिश करें।';
+                } else if (error.message) {
+                    errorMessage = `त्रुटि: ${error.message}`;
+                }
+                
+                showNotification('पेमेंट त्रुटि', errorMessage, 'error');
+                
+                // रिट्राई बटन दिखाएं
+                addRetryButton();
             }
+        }
+
+        // रिट्राई बटन जोड़ने का फंक्शन
+        function addRetryButton() {
+            const form = document.getElementById('payment-form');
+            
+            // पहले से मौजूद रिट्राई बटन को हटाएं
+            const existingRetryBtn = document.getElementById('retry-btn');
+            if (existingRetryBtn) {
+                existingRetryBtn.remove();
+            }
+            
+            // नया रिट्राई बटन बनाएं
+            const retryBtn = document.createElement('button');
+            retryBtn.id = 'retry-btn';
+            retryBtn.className = 'retry-btn';
+            retryBtn.type = 'button';
+            retryBtn.innerHTML = '<i class="fas fa-redo"></i> पुनः प्रयास करें';
+            retryBtn.onclick = function() {
+                retryBtn.remove();
+                submitPayment();
+            };
+            
+            // फॉर्म के बाद रिट्राई बटन जोड़ें
+            form.parentNode.insertBefore(retryBtn, form.nextSibling);
         }
 
         // यह अपडेटेड और बेहतर फंक्शन है
@@ -1569,19 +1792,30 @@
                 return;
             }
 
+            // Firebase इनिशियलाइज़ेशन चेक
+            if (!firebaseInitialized || !database) {
+                console.log("Reinitializing Firebase for status check...");
+                const initSuccess = initializeFirebase();
+                if (!initSuccess) {
+                    showNotification('Firebase त्रुटि', 'Firebase कनेक्शन में समस्या। कृपया पेज रीफ्रेश करें।', 'error');
+                    return;
+                }
+            }
+
             showProcessingScreen();
             statusMessage.style.display = 'none'; // पुराने मैसेज को छुपाएं
             
             try {
                 // Firebase से सीधे डेटा लाने की कोशिश करें, user_session पर भरोसा न करें
-                const paymentsRef = firebase.database().ref('payments');
+                const paymentsRef = database.ref('payments');
                 const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                 const payments = snapshot.val();
 
                 hideProcessingScreen();
 
                 if (!payments) {
-                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID से कोई पेमेंट रिक्वेस्ट नहीं मिली। कृपया पहले पेमेंट रिक्वेस्ट भेजें।', 'error');
+                    // यहाँ बदलाव किया गया है - अब हम यह नहीं बताएंगे कि इस ईमेल ID से कोई पेमेंट नहीं मिली
+                    showNotification('पेमेंट स्टेटस', 'आपने अभी तक कोई पेमेंट नहीं की है। कृपया पहले पेमेंट करें।', 'info');
                     return;
                 }
 
@@ -1600,18 +1834,20 @@
                         latestPayment.amount === amount) {
                         
                         if (latestPayment.status === 'approved') {
-                            // approved_at फील्ड की जांच करें, अगर नहीं है तो timestamp का उपयोग करें
-                            const approvalDate = latestPayment.approved_at ? 
-                                new Date(latestPayment.approved_at) : 
-                                new Date(latestPayment.timestamp);
+                            // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                            let approvalDate;
+                            if (latestPayment.approved_at) {
+                                approvalDate = new Date(latestPayment.approved_at);
+                            } else {
+                                // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                                approvalDate = new Date(latestPayment.timestamp);
+                            }
                             
                             const expiryDate = new Date(approvalDate);
                             expiryDate.setDate(approvalDate.getDate() + 30);
                             
-                            localStorage.setItem('premiumAccess', JSON.stringify({
-                                userId: userId,
-                                expiryDate: expiryDate.toISOString()
-                            }));
+                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
+                            saveAccessToLocalStorage(userId, expiryDate);
                             
                             showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
 
@@ -1627,10 +1863,12 @@
                             showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
                         }
                     } else {
-                        showNotification('पेमेंट स्टेटस', 'आपने जो जानकारी भरी है, वह हमारे रिकॉर्ड से मेल नहीं खाती। कृपया सही जानकारी भरें।', 'error');
+                        // यहाँ बदलाव किया गया है - अब हम यह नहीं बताएंगे कि जानकारी मेल नहीं खाती
+                        showNotification('पेमेंट स्टेटस', 'आपने अभी तक कोई पेमेंट नहीं की है। कृपया पहले पेमेंट करें।', 'info');
                     }
                 } else {
-                     showNotification('पेमेंट स्टेटस', 'कोई भी पेमेंट रिकॉर्ड नहीं मिला।', 'error');
+                     // यहाँ भी बदलाव किया गया है
+                     showNotification('पेमेंट स्टेटस', 'आपने अभी तक कोई पेमेंट नहीं की है। कृपया पहले पेमेंट करें।', 'info');
                 }
 
             } catch (error) {
@@ -1655,11 +1893,12 @@
             document.getElementById('amount_error').style.display = 'none';
             document.getElementById('payment_made_error').style.display = 'none';
 
-            // सभी फील्ड ग्रुप्स से एरर क्लास हटाएं
+            // सभी फील्ड ग्रुप्स से एरर क्लासेस हटाएं
             document.getElementById('user_id_group').classList.remove('error');
             document.getElementById('mobile_number_group').classList.remove('error');
             document.getElementById('transaction_id_group').classList.remove('error');
             document.getElementById('amount_group').classList.remove('error');
+            document.getElementById('payment_made_container').classList.remove('error');
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!userId) {
@@ -1702,7 +1941,9 @@
                 isValid = false;
             }
 
+            // चेकबॉक्स की जांच - अनिवार्य बनाया गया है
             if (!paymentMade) {
+                document.getElementById('payment_made_container').classList.add('error');
                 document.getElementById('payment_made_error').textContent = 'कृपया पेमेंट करने के बाद इस बॉक्स को टिक करें!';
                 document.getElementById('payment_made_error').style.display = 'block';
                 isValid = false;
@@ -1721,8 +1962,19 @@
                 showNotification('ईमेल आईडी त्रुटि', 'कृपया ईमेल ID दर्ज करें!', 'error');
                 return;
             }
+
+            // Firebase इनिशियलाइज़ेशन चेक
+            if (!firebaseInitialized || !database) {
+                console.log("Reinitializing Firebase for clear data...");
+                const initSuccess = initializeFirebase();
+                if (!initSuccess) {
+                    showNotification('Firebase त्रुटि', 'Firebase कनेक्शन में समस्या। कृपया पेज रीफ्रेश करें।', 'error');
+                    return;
+                }
+            }
+
             try {
-                const userDataRef = firebase.database().ref('user_session/' + userId);
+                const userDataRef = database.ref('user_session/' + userId);
                 await userDataRef.remove();
                 
                 // लोकल स्टोरेज से भी डेटा हटाएं
@@ -1788,7 +2040,7 @@
             });
         });
 
-        // बैक प्रेस हैंडलिंग - डायरेक्ट होम पर जाए
+        // बैक प्रेस हैंडलिंग - डायरेक्ट होम पेज पर जाए
         window.onpopstate = function() {
             window.location.href = 'file:///android_asset/home.html';
             if (window.AppInventor) {
