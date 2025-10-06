@@ -1269,10 +1269,14 @@
                         if (payment.status === 'approved') {
                             const userId = payment.user_id;
                             
-                            // यहाँ मुख्य बदलाव किया गया है - approved_at फील्ड की जांच करें
-                            const approvalDate = payment.approved_at ? 
-                                new Date(payment.approved_at) : 
-                                new Date(payment.timestamp);
+                            // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                            let approvalDate;
+                            if (payment.approved_at) {
+                                approvalDate = new Date(payment.approved_at);
+                            } else {
+                                // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                                approvalDate = new Date(payment.timestamp);
+                            }
                             
                             const expiryDate = new Date(approvalDate);
                             expiryDate.setDate(approvalDate.getDate() + 30);
@@ -1324,10 +1328,14 @@
                     }
 
                     if (foundApprovedPayment) {
-                        // यहाँ मुख्य बदलाव किया गया है - approved_at फील्ड की जांच करें
-                        const approvalDate = foundApprovedPayment.approved_at ? 
-                            new Date(foundApprovedPayment.approved_at) : 
-                            new Date(foundApprovedPayment.timestamp);
+                        // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                        let approvalDate;
+                        if (foundApprovedPayment.approved_at) {
+                            approvalDate = new Date(foundApprovedPayment.approved_at);
+                        } else {
+                            // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                            approvalDate = new Date(foundApprovedPayment.timestamp);
+                        }
                         
                         const expiryDate = new Date(approvalDate);
                         expiryDate.setDate(approvalDate.getDate() + 30);
@@ -1826,10 +1834,14 @@
                         latestPayment.amount === amount) {
                         
                         if (latestPayment.status === 'approved') {
-                            // यहाँ मुख्य बदलाव किया गया है - approved_at फील्ड की जांच करें
-                            const approvalDate = latestPayment.approved_at ? 
-                                new Date(latestPayment.approved_at) : 
-                                new Date(latestPayment.timestamp);
+                            // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                            let approvalDate;
+                            if (latestPayment.approved_at) {
+                                approvalDate = new Date(latestPayment.approved_at);
+                            } else {
+                                // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                                approvalDate = new Date(latestPayment.timestamp);
+                            }
                             
                             const expiryDate = new Date(approvalDate);
                             expiryDate.setDate(approvalDate.getDate() + 30);
@@ -2028,7 +2040,7 @@
             });
         });
 
-        // बैक प्रेस हैंडलिंग - डायरेक्ट होम पर जाए
+        // बैक प्रेस हैंडलिंग - डायरेक्ट होम पेज पर जाए
         window.onpopstate = function() {
             window.location.href = 'file:///android_asset/home.html';
             if (window.AppInventor) {
