@@ -822,11 +822,6 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid rgba(245, 158, 11, 0.1);
-            position: sticky;
-            top: 0;
-            background: linear-gradient(145deg, #ffffff, #fff8e1);
-            z-index: 10;
-            border-radius: 16px 16px 0 0;
         }
 
         .leaderboard-title {
@@ -975,7 +970,7 @@
             margin: 0;
         }
 
-        /* Premium Scrolling Container */
+        /* Premium Scrolling Container - App-like Experience */
         .leaderboard-scroll-container {
             position: relative;
             height: 400px;
@@ -984,6 +979,7 @@
             background: linear-gradient(145deg, #ffffff, #fff8e1);
             box-shadow: inset 0 2px 10px rgba(245, 158, 11, 0.05);
             margin-bottom: 15px;
+            touch-action: pan-y;
         }
 
         .leaderboard-scroll-content {
@@ -996,69 +992,46 @@
             position: relative;
         }
 
-        /* Custom Scrollbar */
+        /* Custom Scrollbar - App-like */
         .leaderboard-scroll-content::-webkit-scrollbar {
-            width: 6px;
+            width: 3px;
         }
 
         .leaderboard-scroll-content::-webkit-scrollbar-track {
-            background: rgba(245, 158, 11, 0.1);
-            border-radius: 3px;
+            background: transparent;
         }
 
         .leaderboard-scroll-content::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: rgba(245, 158, 11, 0.5);
             border-radius: 3px;
         }
 
         .leaderboard-scroll-content::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #d97706, #b45309);
+            background: rgba(245, 158, 11, 0.7);
         }
 
-        /* Scroll Indicators */
+        /* Scroll Indicators - Subtle */
         .scroll-indicator {
             position: absolute;
             left: 0;
             width: 100%;
-            height: 30px;
-            background: linear-gradient(to bottom, rgba(255, 248, 225, 0.9), rgba(255, 248, 225, 0));
+            height: 20px;
             z-index: 5;
             pointer-events: none;
+            opacity: 0.7;
         }
 
         .scroll-indicator-top {
             top: 0;
-            background: linear-gradient(to bottom, rgba(255, 248, 225, 0.9), rgba(255, 248, 225, 0));
+            background: linear-gradient(to bottom, rgba(255, 248, 225, 0.8), rgba(255, 248, 225, 0));
         }
 
         .scroll-indicator-bottom {
             bottom: 0;
-            background: linear-gradient(to top, rgba(255, 248, 225, 0.9), rgba(255, 248, 225, 0));
+            background: linear-gradient(to top, rgba(255, 248, 225, 0.8), rgba(255, 248, 225, 0));
         }
 
-        /* Scroll Progress Bar */
-        .scroll-progress {
-            position: absolute;
-            right: 5px;
-            top: 10px;
-            bottom: 10px;
-            width: 4px;
-            background: rgba(245, 158, 11, 0.1);
-            border-radius: 2px;
-            z-index: 5;
-        }
-
-        .scroll-progress-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            border-radius: 2px;
-            transition: height 0.2s ease;
-        }
-
-        /* Pull to Refresh */
+        /* Pull to Refresh - App-like */
         .pull-to-refresh {
             position: absolute;
             top: -60px;
@@ -1429,7 +1402,7 @@
             box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
         }
 
-        /* Professional Start Quiz Button in Leaderboard */
+        /* Professional Start Quiz Button in Leaderboard - Fixed */
         .leaderboard-start-btn {
             background: var(--paid-gradient);
             color: white;
@@ -2275,7 +2248,7 @@
                             </div>
                         </div>
                         
-                        <!-- Premium Scrolling Container -->
+                        <!-- Premium Scrolling Container - App-like Experience -->
                         <div class="leaderboard-scroll-container">
                             <!-- Pull to Refresh -->
                             <div class="pull-to-refresh" id="pull-to-refresh">
@@ -2285,11 +2258,6 @@
                             <!-- Scroll Indicators -->
                             <div class="scroll-indicator scroll-indicator-top" id="scroll-indicator-top" style="display: none;"></div>
                             <div class="scroll-indicator scroll-indicator-bottom" id="scroll-indicator-bottom" style="display: none;"></div>
-                            
-                            <!-- Scroll Progress Bar -->
-                            <div class="scroll-progress">
-                                <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
-                            </div>
                             
                             <!-- Scroll Content -->
                             <div class="leaderboard-scroll-content" id="leaderboard-scroll-content">
@@ -2305,7 +2273,7 @@
                             </div>
                         </div>
                         
-                        <!-- Professional Start Quiz Button -->
+                        <!-- Professional Start Quiz Button in Leaderboard - Fixed -->
                         <button class="leaderboard-start-btn" onclick="startQuizFromLeaderboard()">
                             <i class="fas fa-play"></i>
                             <span>प्रीमियम क्विज़ शुरू करें</span>
@@ -2442,7 +2410,6 @@
         let scrollContent = null;
         let scrollContainer = null;
         let floatingScrollBtn = null;
-        let scrollProgressBar = null;
         let topScrollIndicator = null;
         let bottomScrollIndicator = null;
         let pullToRefresh = null;
@@ -2487,7 +2454,6 @@
             scrollContent = document.getElementById('leaderboard-scroll-content');
             scrollContainer = document.querySelector('.leaderboard-scroll-container');
             floatingScrollBtn = document.getElementById('floating-scroll-btn');
-            scrollProgressBar = document.getElementById('scroll-progress-bar');
             topScrollIndicator = document.getElementById('scroll-indicator-top');
             bottomScrollIndicator = document.getElementById('scroll-indicator-bottom');
             pullToRefresh = document.getElementById('pull-to-refresh');
@@ -2515,21 +2481,12 @@
         function handleScroll() {
             if (!scrollContent || !scrollContainer) return;
             
-            // Update scroll progress bar
-            const scrollTop = scrollContent.scrollTop;
-            const scrollHeight = scrollContent.scrollHeight - scrollContent.clientHeight;
-            const scrollPercent = (scrollTop / scrollHeight) * 100;
-            
-            if (scrollProgressBar) {
-                scrollProgressBar.style.height = `${scrollPercent}%`;
-            }
-            
             // Update scroll indicators
             updateScrollIndicators();
             
             // Show/hide floating scroll button
             if (floatingScrollBtn) {
-                if (scrollTop > 100) {
+                if (scrollContent.scrollTop > 100) {
                     floatingScrollBtn.classList.add('visible');
                 } else {
                     floatingScrollBtn.classList.remove('visible');
