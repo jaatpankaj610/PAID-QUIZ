@@ -6,8 +6,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta name="Pragma" content="no-cache">
-    <meta name="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="theme-color" content="#4a00e0">
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -41,13 +41,6 @@
             overflow: hidden;
             touch-action: pan-y;
             -webkit-tap-highlight-color: transparent;
-            /* पेज रिफ्रेश और स्क्रॉल को रोकने के लिए */
-            overscroll-behavior: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
         }
 
         body {
@@ -63,9 +56,7 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
-            /* पेज रिफ्रेश रोकने के लिए */
-            -webkit-pull-to-refresh: no;
-            pull-to-refresh: no;
+            overscroll-behavior: none;
         }
 
         .container {
@@ -79,9 +70,6 @@
             position: fixed;
             top: 0;
             left: 0;
-            /* पेज हिलने से रोकने के लिए */
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
         }
 
         .scrollable-content {
@@ -90,8 +78,6 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             -ms-overflow-style: none;
-            /* स्क्रॉल के दौरान पेज हिलने से रोकने के लिए */
-            -webkit-overflow-scrolling: auto;
         }
 
         .scrollable-content::-webkit-scrollbar {
@@ -923,47 +909,6 @@
             background: var(--warning);
         }
         
-        /* Timer styles */
-        .timer-container {
-            background: rgba(74, 0, 224, 0.1);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            display: none;
-        }
-        
-        .timer-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-        
-        .timer-display {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 8px;
-        }
-        
-        .timer-progress {
-            width: 100%;
-            height: 8px;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .timer-progress-bar {
-            height: 100%;
-            background: var(--gradient);
-            width: 100%;
-            transition: width 1s linear;
-        }
-        
         @media (max-width: 480px) {
             .header { padding: 12px 8px; }
             .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
@@ -999,7 +944,6 @@
             .notification-message { font-size: 12px; }
             .notification-icon { font-size: 20px; width: 32px; height: 32px; }
             .security-warning { font-size: 12px; }
-            .timer-display { font-size: 20px; }
         }
 
         @media (min-width: 768px) {
@@ -1032,7 +976,6 @@
             .processing-screen .app-logo-name { font-size: 28px; }
             .processing-screen .processing-message { font-size: 20px; }
             .security-warning { font-size: 14px; }
-            .timer-display { font-size: 28px; }
         }
     </style>
 </head>
@@ -1133,14 +1076,6 @@
                         </ol>
                     </div>
                     
-                    <div class="timer-container" id="timer-container">
-                        <div class="timer-title">आपकी प्रीमियम एक्सेस की समय सीमा</div>
-                        <div class="timer-display" id="timer-display">30 दिन, 0 घंटे, 0 मिनट, 0 सेकंड</div>
-                        <div class="timer-progress">
-                            <div class="timer-progress-bar" id="timer-progress-bar"></div>
-                        </div>
-                    </div>
-                    
                     <form id="payment-form">
                         <div id="form-error" class="error-text"></div>
                         <div class="form-group" id="user_id_group">
@@ -1218,8 +1153,6 @@
         // Firebase को ग्लोबल स्कोप में इनिशियलाइज़ करें
         let database;
         let firebaseInitialized = false;
-        let timerInterval;
-        let appInitialized = false;
 
         // Firebase कॉन्फिगरेशन
         const firebaseConfig = {
@@ -1232,41 +1165,6 @@
             appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
             measurementId: "G-VB140B6NCW"
         };
-
-        // रिफ्रेश कंट्रोल के लिए फंक्शन
-        function preventRefresh() {
-            // पेज रिफ्रेश रोकने के लिए
-            document.addEventListener('keydown', function(e) {
-                if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82 && e.ctrlKey) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-            
-            // टच डिवाइस पर रिफ्रेश रोकने के लिए
-            document.addEventListener('touchmove', function(e) {
-                if (e.touches.length > 1) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            
-            // पुल टू रिफ्रेश रोकने के लिए
-            let startY = 0;
-            document.addEventListener('touchstart', function(e) {
-                startY = e.touches[0].pageY;
-            });
-            
-            document.addEventListener('touchmove', function(e) {
-                const scrollY = window.scrollY;
-                const touchY = e.touches[0].pageY;
-                const touchDiff = touchY - startY;
-                
-                // अगर उपयोगकर्ता ऊपर की ओर स्क्रॉल कर रहा है और पेज टॉप पर है
-                if (touchDiff > 0 && scrollY === 0) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-        }
 
         // Firebase इनिशियलाइज़ेशन फंक्शन
         function initializeFirebase() {
@@ -1348,9 +1246,6 @@
             // यह फ्लैग सेट करें ताकि हम जान सकें कि उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
             localStorage.setItem('hadPremiumAccess', 'true');
             
-            // टाइमर शुरू करें
-            startTimer(expiryTime);
-            
             // एक्सपायरी चेक करने के लिए एक इवेंट सेट करें
             scheduleExpiryCheck(expiryTime);
         }
@@ -1402,11 +1297,6 @@
             if (localStorage.getItem('premiumAccess')) {
                 localStorage.removeItem('premiumAccess');
                 
-                // टाइमर रोकें
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                }
-                
                 // फॉर्म डेटा को सेव करें
                 saveFormData();
                 
@@ -1453,52 +1343,6 @@
             }
         }
 
-        // टाइमर शुरू करने का फंक्शन
-        function startTimer(expiryTime) {
-            // पहले से चल रहे टाइमर को रोकें
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            
-            // टाइमर कंटेनर दिखाएं
-            document.getElementById('timer-container').style.display = 'block';
-            
-            // टाइमर अपडेट करने का फंक्शन
-            function updateTimer() {
-                const currentTime = new Date().getTime();
-                const timeRemaining = expiryTime - currentTime;
-                
-                if (timeRemaining <= 0) {
-                    // टाइमर समाप्त हो गया है
-                    clearInterval(timerInterval);
-                    document.getElementById('timer-display').textContent = 'एक्सेस समाप्त';
-                    document.getElementById('timer-progress-bar').style.width = '0%';
-                    return;
-                }
-                
-                // दिन, घंटे, मिनट और सेकंड की गणना करें
-                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-                
-                // टाइमर डिस्प्ले अपडेट करें
-                document.getElementById('timer-display').textContent = 
-                    `${days} दिन, ${hours} घंटे, ${minutes} मिनट, ${seconds} सेकंड`;
-                
-                // प्रोग्रेस बार अपडेट करें
-                const totalTime = 30 * 24 * 60 * 60 * 1000; // 30 दिन मिलीसेकंड में
-                const progressPercentage = (timeRemaining / totalTime) * 100;
-                document.getElementById('timer-progress-bar').style.width = `${progressPercentage}%`;
-            }
-            
-            // तुरंत टाइमर अपडेट करें
-            updateTimer();
-            
-            // हर सेकंड टाइमर अपडेट करें
-            timerInterval = setInterval(updateTimer, 1000);
-        }
-
         (function() {
             if (!navigator.onLine) {
                 document.addEventListener('DOMContentLoaded', function() {
@@ -1511,26 +1355,6 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
-            // रिफ्रेश कंट्रोल लागू करें
-            preventRefresh();
-            
-            // ऐप इनिशियलाइज़ेशन फ्लैग चेक करें
-            const appInitializedFlag = localStorage.getItem('appInitialized');
-            const currentSessionId = sessionStorage.getItem('sessionId');
-            
-            // अगर करेंट सेशन ID नहीं है, तो एक नया बनाएं
-            if (!currentSessionId) {
-                const newSessionId = Date.now().toString();
-                sessionStorage.setItem('sessionId', newSessionId);
-                
-                // अगर ऐप पहले इनिशियलाइज़ नहीं हुआ है, तो इनिशियलाइज़ करें
-                if (!appInitializedFlag) {
-                    localStorage.setItem('appInitialized', 'true');
-                    // यहां पर आप वह कोड डाल सकते हैं जो सिर्फ एक बार चलना चाहिए
-                    console.log("App initialized for the first time");
-                }
-            }
-            
             // फॉर्म डेटा को रिस्टोर करें
             restoreFormData();
             
@@ -1545,9 +1369,7 @@
             function checkLocalAccess() {
                 if (isAccessValid()) {
                     const accessData = JSON.parse(localStorage.getItem('premiumAccess'));
-                    // एक्सेस अभी भी वैध है, टाइमर शुरू करें
-                    startTimer(accessData.expiryTime);
-                    // सीधे क्विज़ पेज पर जाएं
+                    // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
                     window.location.href = 'quiz.html?user_id=' + accessData.userId;
                     return true;
                 }
@@ -2246,14 +2068,6 @@
                 
                 // लोकल स्टोरेज से भी डेटा हटाएं
                 localStorage.removeItem('premiumAccess');
-                
-                // टाइमर रोकें
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                }
-                
-                // टाइमर कंटेनर छुपाएं
-                document.getElementById('timer-container').style.display = 'none';
                 
                 showNotification('डेटा रीसेट', 'आपका पेमेंट डेटा रीसेट हो गया है।', 'success');
                 document.getElementById('payment-form').reset();
