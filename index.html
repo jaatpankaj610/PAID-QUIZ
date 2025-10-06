@@ -1153,7 +1153,6 @@
         // Firebase को ग्लोबल स्कोप में इनिशियलाइज़ करें
         let database;
         let firebaseInitialized = false;
-        let paymentStatusListener = null;
 
         // Firebase कॉन्फिगरेशन
         const firebaseConfig = {
@@ -1187,6 +1186,79 @@
         // पेज लोड होते ही Firebase इनिशियलाइज़ करें
         initializeFirebase();
 
+        // यह फंक्शन लोकल स्टोरेज में एक्सेस एक्सपायरी टाइमस्टैम्प सेट करेगा
+        function setAccessExpiry(userId, mobileNumber, transactionId, amount, days = 30) {
+            const now = new Date();
+            const expiryTime = now.getTime() + (days * 24 * 60 * 60 * 1000); // 30 दिन बाद एक्सपायर
+            
+            localStorage.setItem('premiumAccess', JSON.stringify({
+                userId: userId,
+                mobileNumber: mobileNumber,
+                transactionId: transactionId,
+                amount: amount,
+                expiryTime: expiryTime,
+                // एक्स्ट्रा सिक्योरिटी के लिए एक यूनीक टोकन भी सेट करें
+                token: generateSecureToken()
+            }));
+            
+            // एक्सपायरी चेक करने के लिए एक इवेंट सेट करें
+            scheduleExpiryCheck(expiryTime);
+        }
+
+        // यह फंक्शन एक सिक्योर टोकन जेनरेट करेगा
+        function generateSecureToken() {
+            const array = new Uint8Array(16);
+            crypto.getRandomValues(array);
+            return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        }
+
+        // यह फंक्शन एक्सपायरी चेक को शेड्यूल करेगा
+        function scheduleExpiryCheck(expiryTime) {
+            const currentTime = new Date().getTime();
+            const timeUntilExpiry = expiryTime - currentTime;
+            
+            // अगर एक्सपायरी समय भविष्य में है, तो टाइमर सेट करें
+            if (timeUntilExpiry > 0) {
+                setTimeout(() => {
+                    // एक्सपायरी होने पर लोकल स्टोरेज क्लियर करें और यूजर को रीडायरेक्ट करें
+                    clearExpiredAccess();
+                }, timeUntilExpiry);
+            }
+        }
+
+        // यह फंक्शन एक्सपायर्ड एक्सेस को क्लियर करेगा
+        function clearExpiredAccess() {
+            localStorage.removeItem('premiumAccess');
+            
+            // यूजर को पेमेंट पेज पर रीडायरेक्ट करें
+            window.location.href = 'index.html?expired=true';
+        }
+
+        // यह फंक्शन चेक करेगा कि एक्सेस अभी भी वैध है या नहीं
+        function isAccessValid() {
+            const accessData = localStorage.getItem('premiumAccess');
+            
+            if (!accessData) {
+                return false;
+            }
+            
+            try {
+                const { userId, mobileNumber, transactionId, amount, expiryTime, token } = JSON.parse(accessData);
+                const currentTime = new Date().getTime();
+                
+                // अगर एक्सपायरी समय बीत चुका है, तो एक्सेस अवैध है
+                if (currentTime >= expiryTime) {
+                    clearExpiredAccess();
+                    return false;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error("Error checking access validity:", error);
+                return false;
+            }
+        }
+
         (function() {
             if (!navigator.onLine) {
                 document.addEventListener('DOMContentLoaded', function() {
@@ -1199,55 +1271,36 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
-            // लोकल स्टोरेज से उपयोगकर्ता की एक्सेस जांचें
+            // चेक करें कि यूजर एक्सपायर्ड होकर आया है या नहीं
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('expired') === 'true') {
+                showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
+            }
+            
+            // यह फंक्शन लोकल स्टोरेज से उपयोगकर्ता की एक्सेस जांचें
             function checkLocalAccess() {
-                const accessData = localStorage.getItem('premiumAccess');
-                if (accessData) {
-                    const { userId, expiryDate } = JSON.parse(accessData);
-                    const now = new Date();
-                    const expiry = new Date(expiryDate);
-                    
-                    if (now < expiry) {
-                        // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
-                        window.location.href = 'quiz.html?user_id=' + userId;
-                        return true;
-                    } else {
-                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
-                        localStorage.removeItem('premiumAccess');
-                        showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
-                    }
-                }
-                return false;
-            }
-
-            // यह फंक्शन लोकल स्टोरेज में एक्सेस डेटा सेव करेगा
-            function saveAccessToLocalStorage(userId, expiryDate) {
-                localStorage.setItem('premiumAccess', JSON.stringify({
-                    userId: userId,
-                    expiryDate: expiryDate.toISOString()
-                }));
-            }
-
-            // यह फंक्शन लोकल स्टोरेज में सेव एक्सेस की वैधता जांचेगा
-            function validateLocalAccess() {
-                const accessData = localStorage.getItem('premiumAccess');
-                if (accessData) {
-                    const { userId, expiryDate } = JSON.parse(accessData);
-                    const now = new Date();
-                    const expiry = new Date(expiryDate);
-                    
-                    if (now >= expiry) {
-                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
-                        localStorage.removeItem('premiumAccess');
-                        return false;
-                    }
+                if (isAccessValid()) {
+                    const accessData = JSON.parse(localStorage.getItem('premiumAccess'));
+                    // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
+                    window.location.href = 'quiz.html?user_id=' + accessData.userId;
                     return true;
                 }
                 return false;
             }
 
             // नियमित अंतराल पर एक्सेस वैधता जांचें
-            setInterval(validateLocalAccess, 60000); // हर मिनट जांचें
+            setInterval(function() {
+                if (!isAccessValid()) {
+                    window.location.href = 'index.html?expired=true';
+                }
+            }, 5 * 60 * 1000); // हर 5 मिनट जांचें
+
+            // ब्राउज़र टैब/विंडो फोकस पाने पर एक्सेस चेक करें
+            window.addEventListener('focus', function() {
+                if (!isAccessValid()) {
+                    window.location.href = 'index.html?expired=true';
+                }
+            });
 
             // रियल-टाइम लिसनर सेटअप करें जो Firebase में पेमेंट स्टेटस के बदलावों को ट्रैक करे
             function setupPaymentStatusListener() {
@@ -1256,14 +1309,9 @@
                     return;
                 }
                 
-                // पहले से मौजूद लिसनर को हटाएं
-                if (paymentStatusListener) {
-                    paymentStatusListener.off();
-                }
-                
                 const paymentsRef = database.ref('payments');
                 
-                paymentStatusListener = paymentsRef.on('value', (snapshot) => {
+                paymentsRef.on('value', (snapshot) => {
                     const payments = snapshot.val();
                     if (!payments) return;
                     
@@ -1274,6 +1322,9 @@
                         // अगर स्टेटस 'approved' है
                         if (payment.status === 'approved') {
                             const userId = payment.user_id;
+                            const mobileNumber = payment.mobile_number;
+                            const transactionId = payment.transaction_id;
+                            const amount = payment.amount;
                             
                             // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
                             let approvalDate;
@@ -1284,11 +1335,8 @@
                                 approvalDate = new Date(payment.timestamp);
                             }
                             
-                            const expiryDate = new Date(approvalDate);
-                            expiryDate.setDate(approvalDate.getDate() + 30);
-                            
-                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, expiryDate);
+                            // एक्सेस सेट करें जो 30 दिन बाद एक्सपायर हो जाएगी
+                            setAccessExpiry(userId, mobileNumber, transactionId, amount, 30);
                         }
                     }
                 });
@@ -1343,17 +1391,17 @@
                             approvalDate = new Date(foundApprovedPayment.timestamp);
                         }
                         
-                        const expiryDate = new Date(approvalDate);
-                        expiryDate.setDate(approvalDate.getDate() + 30);
-                        const now = new Date();
-
-                        if (now < expiryDate) {
-                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, expiryDate);
-                            
-                            window.location.href = 'quiz.html?user_id=' + userId;
-                            return;
-                        }
+                        // एक्सेस सेट करें जो 30 दिन बाद एक्सपायर हो जाएगी
+                        setAccessExpiry(
+                            foundApprovedPayment.user_id, 
+                            foundApprovedPayment.mobile_number,
+                            foundApprovedPayment.transaction_id,
+                            foundApprovedPayment.amount,
+                            30
+                        );
+                        
+                        window.location.href = 'quiz.html?user_id=' + userId;
+                        return;
                     }
                     
                     // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
@@ -1812,86 +1860,67 @@
             statusMessage.style.display = 'none'; // पुराने मैसेज को छुपाएं
             
             try {
-                // Firebase से सीधे डेटा लाने की कोशिश करें, user_session पर भरोसा न करें
+                // पुराने तरीके का उपयोग करें - user_session से डेटा लें
+                const userDataRef = database.ref('user_session/' + userId);
+                const userDataSnapshot = await userDataRef.once('value');
+                const storedData = userDataSnapshot.val();
+                
+                let transactionIdToCheck = '';
+                
+                if (storedData && storedData.transactionId) {
+                    transactionIdToCheck = storedData.transactionId;
+                } else {
+                    transactionIdToCheck = document.getElementById('transaction_id').value.trim();
+                    if (!transactionIdToCheck) {
+                        hideProcessingScreen();
+                        showNotification('पेमेंट स्टेटस', 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।', 'error');
+                        return;
+                    }
+                }
+
                 const paymentsRef = database.ref('payments');
                 
-                // बेहतर क्वेरी - सभी पेमेंट्स को लाएं और फिर फिल्टर करें
-                const snapshot = await paymentsRef.once('value');
-                const allPayments = snapshot.val();
-                
-                hideProcessingScreen();
-                
-                if (!allPayments) {
-                    showNotification('पेमेंट स्टेटस', 'अभी तक कोई पेमेंट रिकॉर्ड नहीं मिला। कृपया पहले पेमेंट करें।', 'info');
-                    return;
-                }
-                
-                // उपयोगकर्ता के लिए सभी पेमेंट्स खोजें
-                let userPayments = [];
-                for (let key in allPayments) {
-                    const payment = allPayments[key];
-                    // user_id की तुलना करते समय विशेष वर्णों को बदलें
-                    if (payment.user_id === userId) {
-                        userPayments.push({
-                            key: key,
-                            ...payment
-                        });
-                    }
-                }
-                
-                if (userPayments.length === 0) {
-                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID से कोई पेमेंट नहीं मिली। कृपया सही ईमेल ID दर्ज करें।', 'info');
-                    return;
-                }
-                
-                // सबसे हाल का पेमेंट ढूंढें
-                let latestPayment = null;
-                for (let payment of userPayments) {
-                    if (!latestPayment || new Date(payment.timestamp) > new Date(latestPayment.timestamp)) {
-                        latestPayment = payment;
-                    }
-                }
-                
-                if (latestPayment) {
-                    // यहाँ अतिरिक्त जांच जोड़ी गई है
-                    if (latestPayment.mobile_number === mobileNumber && 
-                        latestPayment.transaction_id === transactionId && 
-                        latestPayment.amount === amount) {
-                        
-                        if (latestPayment.status === 'approved') {
-                            // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
-                            let approvalDate;
-                            if (latestPayment.approved_at) {
-                                approvalDate = new Date(latestPayment.approved_at);
-                            } else {
-                                // अगर approved_at नहीं है, तो timestamp का उपयोग करें
-                                approvalDate = new Date(latestPayment.timestamp);
-                            }
-                            
-                            const expiryDate = new Date(approvalDate);
-                            expiryDate.setDate(approvalDate.getDate() + 30);
-                            
-                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, expiryDate);
-                            
-                            showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
+                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
+                const payments = snapshot.val();
+                let foundPayment = null;
 
-                            setTimeout(() => {
-                                window.location.href = 'quiz.html?user_id=' + userId;
-                            }, 5000);
-
-                        } else if (latestPayment.status === 'pending') {
-                            showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।', 'info');
-                        } else if (latestPayment.status === 'rejected') {
-                            showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।', 'error');
-                        } else {
-                            showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
+                if (payments) {
+                    for (let key in payments) {
+                        if (payments[key].transaction_id === transactionIdToCheck) {
+                            foundPayment = payments[key];
+                            break;
                         }
+                    }
+                }
+
+                hideProcessingScreen();
+
+                if (foundPayment) {
+                    if (foundPayment.status === 'approved') {
+                        // एक्सेस सेट करें जो 30 दिन बाद एक्सपायर हो जाएगी
+                        setAccessExpiry(
+                            userId, 
+                            foundPayment.mobile_number,
+                            foundPayment.transaction_id,
+                            foundPayment.amount,
+                            30
+                        );
+                        
+                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
+
+                        setTimeout(() => {
+                            window.location.href = 'quiz.html?user_id=' + userId;
+                        }, 5000);
+
+                    } else if (foundPayment.status === 'pending') {
+                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।', 'info');
+                    } else if (foundPayment.status === 'rejected') {
+                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।', 'error');
                     } else {
-                        showNotification('पेमेंट स्टेटस', 'दर्ज की गई जानकारी मेल नहीं खा रही है। कृपया सभी फील्ड्स को सही ढंग से भरें।', 'error');
+                        showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
                     }
                 } else {
-                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID से कोई पेमेंट नहीं मिली। कृपया सही ईमेल ID दर्ज करें।', 'info');
+                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।', 'error');
                 }
 
             } catch (error) {
