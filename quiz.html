@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics-compat.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -790,7 +794,7 @@
             50% { transform: translateY(-15px); opacity: 1; }
         }
 
-        /* Leaderboard Styles */
+        /* Leaderboard Styles - यहाँ लीडरबोर्ड के लिए स्टाइल जोड़ी गई है */
         .leaderboard-section {
             display: none;
             background: var(--light);
@@ -799,8 +803,11 @@
             margin: 15px 0;
             box-shadow: var(--card-shadow);
             border: 1px solid rgba(0,0,0,0.05);
-            animation: fadeInUp 0.6s ease-out;
+            animation: fadeInUp 0.7s ease-out;
             width: 100%;
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .leaderboard-header {
@@ -828,56 +835,9 @@
             font-size: 12px;
             font-weight: 600;
             color: var(--gray);
-            background: rgba(241, 245, 249, 0.7);
+            background: rgba(241, 245, 249, 0.8);
             padding: 5px 10px;
             border-radius: 20px;
-        }
-
-        .user-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .user-action-btn {
-            flex: 1;
-            background: var(--paid-gradient);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--button-shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .user-action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-        }
-
-        .countdown-timer {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray);
-            background: rgba(241, 245, 249, 0.7);
-            padding: 8px;
-            border-radius: 10px;
-        }
-
-        .countdown-timer span {
-            color: var(--paid-color);
-            font-weight: 700;
         }
 
         .current-user-rank {
@@ -889,7 +849,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 2px solid rgba(245, 158, 11, 0.3);
+            border: 2px solid rgba(59, 130, 246, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -901,7 +861,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
             z-index: 0;
         }
 
@@ -917,7 +877,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--paid-gradient);
+            background: var(--gradient);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -941,7 +901,7 @@
         }
 
         .current-user-rank-badge {
-            background: var(--paid-gradient);
+            background: var(--gradient);
             color: white;
             width: 30px;
             height: 30px;
@@ -966,7 +926,7 @@
         .leaderboard-divider-line {
             flex: 1;
             height: 2px;
-            background: linear-gradient(90deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
             border-radius: 2px;
         }
 
@@ -991,7 +951,7 @@
         }
 
         .champions-header i {
-            color: #f59e0b;
+            color: #facc15;
             font-size: 18px;
         }
 
@@ -1014,16 +974,16 @@
             align-items: center;
             padding: 12px;
             margin-bottom: 10px;
-            background: rgba(241, 245, 249, 0.7);
+            background: rgba(241, 245, 249, 0.8);
             border-radius: 12px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.03);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.04);
             transition: all 0.3s ease;
             position: relative;
         }
 
         .leaderboard-item.current-user {
             background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            border: 1px solid rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .leaderboard-item:hover {
@@ -1062,9 +1022,9 @@
         }
 
         .rank-other {
-            background: var(--paid-gradient);
+            background: var(--gradient);
             color: white;
-            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
         }
 
         .leaderboard-user {
@@ -1118,7 +1078,7 @@
 
         .score-value {
             font-weight: 700;
-            color: var(--paid-color);
+            color: var(--primary);
             font-size: 16px;
         }
 
@@ -1135,7 +1095,7 @@
         }
 
         .leaderboard-toggle-btn {
-            background: var(--paid-gradient);
+            background: var(--premium-gradient);
             color: white;
             border: none;
             border-radius: 12px;
@@ -1155,14 +1115,14 @@
 
         .leaderboard-toggle-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
         }
 
         .leaderboard-start-btn {
             background: var(--paid-gradient);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 12px 18px;
             font-size: 15px;
             font-weight: 700;
@@ -1175,11 +1135,29 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .leaderboard-start-btn:hover::before {
+            left: 100%;
         }
 
         .leaderboard-start-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
         }
 
         .loading-spinner {
@@ -1194,8 +1172,12 @@
             height: 40px;
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
-            border-top-color: var(--paid-color);
+            border-top-color: var(--primary);
             animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .first-time-badge {
@@ -1209,124 +1191,152 @@
             display: inline-block;
         }
 
-        .time-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 10px;
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .user-action-btn {
+            flex: 1;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 14px;
             font-weight: 600;
-            color: var(--paid-color);
-            border: 1px solid rgba(245, 158, 11, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--button-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .time-badge.recent {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
-            color: var(--success);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+        .user-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
 
-        .time-badge.old {
-            background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
+        .user-action-btn:hover::before {
+            left: 100%;
+        }
+
+        .user-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-action-btn.secondary {
+            background: var(--premium-gradient);
+        }
+
+        .user-action-btn.secondary:hover {
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .countdown-timer {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-weight: 600;
             color: var(--gray);
-            border: 1px solid rgba(107, 114, 128, 0.2);
+            background: rgba(241, 245, 249, 0.8);
+            padding: 8px;
+            border-radius: 12px;
         }
 
-        /* Notification Styles */
-        .notification-overlay {
+        .countdown-timer span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Name Input Modal Styles */
+        .name-modal-overlay {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0);
-            z-index: 10000;
-            display: flex;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
             justify-content: center;
             align-items: center;
-            pointer-events: none;
+            animation: fadeIn 0.3s ease-out;
         }
 
-        .notification {
+        .name-modal {
             background: white;
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            max-width: 320px;
             width: 90%;
-            display: flex;
-            align-items: center;
-            transform: translateY(-100px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: auto;
+            max-width: 320px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
         }
 
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .notification-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-
-        .notification-icon.success {
-            background: var(--success);
-            color: white;
-        }
-
-        .notification-icon.info {
-            background: var(--paid-color);
-            color: white;
-        }
-
-        .notification-icon.warning {
-            background: var(--warning);
-            color: white;
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-title {
-            font-size: 16px;
+        .name-modal h3 {
+            font-size: 20px;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
 
-        .notification-message {
+        .name-modal p {
             font-size: 14px;
             color: var(--gray);
+            margin-bottom: 20px;
             line-height: 1.4;
         }
 
-        .notification-close {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .name-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
 
-        .notification-close:hover {
-            background: rgba(0, 0, 0, 0.2);
+        .name-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .name-submit-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: var(--button-shadow);
+        }
+
+        .name-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
         }
 
         /* Premium Rotating Button Styles */
@@ -1373,20 +1383,20 @@
             color: white;
             backface-visibility: hidden;
             overflow: hidden;
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            font-family: var(--premium-text);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .premium-rotating-btn-front {
-            background: var(--paid-gradient);
+            background: var(--neon-gradient);
             z-index: 2;
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+            box-shadow: var(--neon-shadow);
         }
 
         .premium-rotating-btn-back {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+            background: linear-gradient(135deg, #FF1493, #9400D3);
             transform: rotateY(180deg);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.7), 0 0 40px rgba(148, 0, 211, 0.5);
         }
 
         .premium-rotating-btn-shine {
@@ -1395,7 +1405,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             transition: 0.8s;
         }
 
@@ -1410,7 +1420,7 @@
             width: 100%;
             height: 100%;
             border-radius: 35px;
-            background: rgba(245, 158, 11, 0.3);
+            background: rgba(255, 0, 255, 0.3);
             transform: scale(0);
             animation: glowPulse 2s infinite;
         }
@@ -1484,90 +1494,30 @@
             }
         }
 
-        /* User Name Input Section */
-        .name-input-section {
-            display: none;
-            background: var(--light);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 15px 0;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-            animation: fadeInUp 0.6s ease-out;
-            width: 100%;
-        }
-
-        .name-input-section h2 {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .name-input-container {
-            margin-bottom: 20px;
-        }
-
-        .name-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid rgba(245, 158, 11, 0.3);
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--dark);
-            background: rgba(241, 245, 249, 0.7);
-            transition: all 0.3s ease;
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
-        }
-
-        .name-input:focus {
-            outline: none;
-            border-color: var(--paid-color);
-            background: var(--light);
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-        }
-
-        .name-input::placeholder {
-            color: var(--gray);
-            opacity: 0.7;
-        }
-
-        .name-input-error {
-            color: var(--danger);
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .submit-name-btn {
-            background: var(--paid-gradient);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 18px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: var(--button-shadow);
-            display: flex;
+        /* Premium time display styles */
+        .time-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            gap: 4px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
-        .submit-name-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        .time-badge.recent {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
-        .submit-name-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .time-badge.old {
+            background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
+            color: var(--gray);
+            border: 1px solid rgba(107, 114, 128, 0.2);
         }
 
         @media (min-width: 601px) {
@@ -1742,7 +1692,7 @@
                             <li><i class="fas fa-check-circle"></i> मोबाइल-डेस्कटॉप सपोर्ट</li>
                             <li><i class="fas fa-check-circle"></i> अपडेटेड कंटेंट</li>
                         </ul>
-                        <button class="start-btn" onclick="showNameInput()">
+                        <button class="start-btn" onclick="startQuiz()">
                             <span>क्विज़ शुरू करें</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
@@ -1752,24 +1702,11 @@
                         </button>
                     </div>
                     
-                    <!-- User Name Input Section -->
-                    <div id="name-input-section" class="name-input-section">
-                        <h2><i class="fas fa-user" style="color: #f59e0b;"></i> अपना नाम दर्ज करें</h2>
-                        <div class="name-input-container">
-                            <input type="text" id="user-name-input" class="name-input" placeholder="अपना नाम यहाँ दर्ज करें" maxlength="20">
-                            <div id="name-input-error" class="name-input-error">कृपया अपना नाम दर्ज करें</div>
-                        </div>
-                        <button class="submit-name-btn" id="submit-name-btn" onclick="submitUserName()">
-                            <span>जारी रखें</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Leaderboard Section -->
+                    <!-- Leaderboard Section - यहाँ लीडरबोर्ड सेक्शन जोड़ा गया है -->
                     <div id="leaderboard-section" class="leaderboard-section">
                         <div class="leaderboard-header">
                             <div class="leaderboard-title">
-                                <i class="fas fa-trophy" style="color: #f59e0b;"></i>
+                                <i class="fas fa-trophy" style="color: #facc15;"></i>
                                 <h2>आज के चैंपियन</h2>
                             </div>
                             <div class="leaderboard-date" id="leaderboard-date">आज</div>
@@ -1781,7 +1718,7 @@
                                 <i class="fas fa-chart-line"></i>
                                 <span>मेरा स्कोर</span>
                             </button>
-                            <button class="user-action-btn" id="my-rank-btn" onclick="showMyRank()">
+                            <button class="user-action-btn secondary" id="my-rank-btn" onclick="showMyRank()">
                                 <i class="fas fa-medal"></i>
                                 <span>मेरी रैंक</span>
                             </button>
@@ -1825,7 +1762,7 @@
                         <ul id="leaderboard-list" class="leaderboard-list"></ul>
                         
                         <!-- Professional Start Quiz Button -->
-                        <button class="leaderboard-start-btn" onclick="showNameInputFromLeaderboard()">
+                        <button class="leaderboard-start-btn" onclick="startQuizFromLeaderboard()">
                             <i class="fas fa-play"></i>
                             <span>प्रीमियम क्विज़ शुरू करें</span>
                         </button>
@@ -1877,6 +1814,20 @@
             </div>
         </div>
     </div>
+    
+    <!-- Starburst Animation Container -->
+    <div class="starburst-container" id="starburst-container"></div>
+    
+    <!-- Name Input Modal -->
+    <div id="name-modal-overlay" class="name-modal-overlay">
+        <div class="name-modal">
+            <h3>अपना नाम दर्ज करें</h3>
+            <p>कृपया अपना नाम दर्ज करें ताकि हम आपका स्कोर लीडरबोर्ड में सेव कर सकें</p>
+            <input type="text" id="user-name-input" class="name-input" placeholder="आपका नाम" maxlength="20">
+            <button class="name-submit-btn" onclick="saveUserName()">जारी रखें</button>
+        </div>
+    </div>
+    
     <div id="error-overlay" class="error-overlay">
         <div class="error-container">
             <div class="error-image">❌</div>
@@ -1885,26 +1836,24 @@
         </div>
     </div>
 
-    <!-- Starburst Animation Container -->
-    <div class="starburst-container" id="starburst-container"></div>
-
-    <!-- Custom Notification -->
-    <div id="notification-overlay" class="notification-overlay">
-        <div class="notification" id="notification">
-            <div class="notification-icon" id="notification-icon">
-                <i class="fas fa-info"></i>
-            </div>
-            <div class="notification-content">
-                <div class="notification-title" id="notification-title">सूचना</div>
-                <div class="notification-message" id="notification-message">संदेश</div>
-            </div>
-            <div class="notification-close" onclick="hideNotification()">
-                <i class="fas fa-times"></i>
-            </div>
-        </div>
-    </div>
-
     <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDB0mVcsgSUcM7X01xcffmRBiKWRU55u_M",
+            authDomain: "rajasthan-gk-quiz-41cc5.firebaseapp.com",
+            databaseURL: "https://rajasthan-gk-quiz-41cc5-default-rtdb.firebaseio.com",
+            projectId: "rajasthan-gk-quiz-41cc5",
+            storageBucket: "rajasthan-gk-quiz-41cc5.firebasestorage.app",
+            messagingSenderId: "876482514501",
+            appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
+            measurementId: "G-VB140B6NCW"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const analytics = firebase.analytics();
+
         let questions = [];
         let currentQuestionIndex = 0;
         let score = 0;
@@ -1915,17 +1864,13 @@
         let todayScores = [];
         let isLeaderboardLoaded = false;
         let countdownInterval; // For the countdown timer
-        let hasAnswered = false; // Track if user has answered the current question
-        let questionHistory = []; // Store history of questions and answers
-        let autoNextTimeout; // Timeout for auto next question
+        let quizStarted = false;
         let quizCompleted = false; // Track if the quiz has been completed once
         let lastLeaderboardDate = ''; // Track the last date leaderboard was loaded
         let leaderboardToggleState = false; // Track the toggle state to prevent double clicks
         let midnightResetInterval; // For midnight reset
         let isRotating = false; // Track if button is currently rotating
         let notificationTimeout = null; // Track notification timeout
-        let quizStarted = false;
-        let nameInputShown = false; // Track if name input has been shown
 
         // Initialize sound effects - MIT App Inventor Assets के लिए paths
         const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
@@ -1981,8 +1926,8 @@
 
         function checkUserName() {
             // Check if user name is already saved in localStorage
-            const savedName = localStorage.getItem('paidQuizUserName');
-            const savedUserId = localStorage.getItem('paidQuizUserId');
+            const savedName = localStorage.getItem('quizUserName');
+            const savedUserId = localStorage.getItem('quizUserId');
             
             if (savedName && savedUserId) {
                 userName = savedName;
@@ -1991,16 +1936,8 @@
                 // Update the current user avatar with first letter of name
                 updateCurrentUserAvatar();
             } else {
-                // Generate a default name for paid users
-                userName = "प्रीमियम उपयोगकर्ता";
-                // Generate a unique ID for the user (using timestamp and random number)
-                userId = 'paid_user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-                
-                // Save to localStorage
-                localStorage.setItem('paidQuizUserName', userName);
-                localStorage.setItem('paidQuizUserId', userId);
-                
-                updateCurrentUserAvatar();
+                // Show name input modal
+                document.getElementById('name-modal-overlay').style.display = 'flex';
             }
         }
 
@@ -2011,97 +1948,26 @@
             }
         }
 
-        // Show name input section
-        function showNameInput() {
-            const welcomeSection = document.getElementById('welcome-section');
-            const nameInputSection = document.getElementById('name-input-section');
-            
-            welcomeSection.style.display = 'none';
-            nameInputSection.style.display = 'block';
-            nameInputShown = true;
-            
-            // Focus on the input field
-            setTimeout(() => {
-                document.getElementById('user-name-input').focus();
-            }, 300);
-        }
-
-        // Show name input from leaderboard
-        function showNameInputFromLeaderboard() {
-            const leaderboardSection = document.getElementById('leaderboard-section');
-            const nameInputSection = document.getElementById('name-input-section');
-            
-            leaderboardSection.style.display = 'none';
-            nameInputSection.style.display = 'block';
-            nameInputShown = true;
-            
-            // Focus on the input field
-            setTimeout(() => {
-                document.getElementById('user-name-input').focus();
-            }, 300);
-        }
-
-        // Submit user name
-        function submitUserName() {
+        function saveUserName() {
             const nameInput = document.getElementById('user-name-input');
-            const nameError = document.getElementById('name-input-error');
-            const submitBtn = document.getElementById('submit-name-btn');
-            
-            // Get the entered name
             const enteredName = nameInput.value.trim();
             
-            // Validate the name
-            if (!enteredName) {
-                nameError.style.display = 'block';
+            if (enteredName.length < 2) {
+                showNotification('warning', 'चेतावनी', 'कृपया कम से कम 2 अक्षरों का नाम दर्ज करें');
                 return;
             }
             
-            // Hide error message
-            nameError.style.display = 'none';
-            
-            // Disable submit button to prevent multiple submissions
-            submitBtn.disabled = true;
-            
-            // Save the user name
             userName = enteredName;
-            
-            // Generate a unique ID for the user if not already exists
-            if (!userId) {
-                userId = 'paid_user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-            }
+            // Generate a unique ID for the user (using timestamp and random number)
+            userId = 'user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
             
             // Save to localStorage
-            localStorage.setItem('paidQuizUserName', userName);
-            localStorage.setItem('paidQuizUserId', userId);
+            localStorage.setItem('quizUserName', userName);
+            localStorage.setItem('quizUserId', userId);
             
-            // Update the current user avatar
+            document.getElementById('name-modal-overlay').style.display = 'none';
             updateCurrentUserAvatar();
-            
-            // Hide name input section and start quiz
-            const nameInputSection = document.getElementById('name-input-section');
-            nameInputSection.style.display = 'none';
-            
-            // Start the quiz
-            startQuiz();
-            
-            // Re-enable submit button after a short delay
-            setTimeout(() => {
-                submitBtn.disabled = false;
-                nameInput.value = ''; // Clear the input for next time
-            }, 500);
         }
-
-        // Handle Enter key in name input
-        document.addEventListener('DOMContentLoaded', function() {
-            const nameInput = document.getElementById('user-name-input');
-            if (nameInput) {
-                nameInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        submitUserName();
-                    }
-                });
-            }
-        });
 
         async function loadQuestions() {
             const errorSection = document.getElementById('error-section');
@@ -2189,6 +2055,11 @@
                 return; // एक्सेस वैध नहीं है, फंक्शन से बाहर निकलें
             }
             
+            if (!userName) {
+                checkUserName();
+                return;
+            }
+            
             if (!navigator.onLine) {
                 document.getElementById('offline-section').style.display = 'block';
                 document.getElementById('online-content').style.display = 'none';
@@ -2199,23 +2070,21 @@
             quizStarted = true;
             
             const welcomeSection = document.getElementById('welcome-section');
-            const nameInputSection = document.getElementById('name-input-section');
             const quizSection = document.getElementById('quiz-section');
             const scoreSection = document.getElementById('score-section');
             const leaderboardSection = document.getElementById('leaderboard-section');
             
-            if (quizSection && scoreSection) {
+            if (welcomeSection && quizSection && scoreSection) {
                 welcomeSection.style.display = 'none';
-                nameInputSection.style.display = 'none';
                 quizSection.style.display = 'block';
                 scoreSection.style.display = 'none';
-                leaderboardSection.style.display = 'none';
+                if (leaderboardSection) {
+                    leaderboardSection.style.display = 'none';
+                }
                 
                 currentQuestionIndex = 0;
                 score = 0;
                 initialScore = 0; // Reset initial score
-                questionHistory = []; // Reset question history
-                quizCompleted = false; // Reset quiz completion flag
                 updateScore();
                 
                 if (questions.length === 0) {
@@ -2243,15 +2112,7 @@
                 leaderboardSection.style.display = 'none';
                 leaderboardToggleState = false; // Reset toggle state
             }
-            
-            // Check if user has entered a name
-            if (!userName || userName === "प्रीमियम उपयोगकर्ता") {
-                // Show name input first
-                showNameInputFromLeaderboard();
-            } else {
-                // User already has a name, start quiz directly
-                startQuiz();
-            }
+            startQuiz();
         }
 
         function updateScore() {
@@ -2306,14 +2167,6 @@
             nextBtn.style.display = 'none';
             updateProgressBar();
             
-            // Reset the answered flag
-            hasAnswered = false;
-            
-            // Clear any existing timeout
-            if (autoNextTimeout) {
-                clearTimeout(autoNextTimeout);
-            }
-            
             question.options.forEach((option, index) => {
                 const li = document.createElement('li');
                 li.textContent = option || 'विकल्प गायब';
@@ -2354,10 +2207,6 @@
         }
 
         function checkAnswer(selectedIndex) {
-            // Prevent multiple answers to the same question
-            if (hasAnswered) return;
-            hasAnswered = true;
-            
             const question = questions[currentQuestionIndex];
             const options = document.querySelectorAll('#options-list li');
             const result = document.getElementById('result');
@@ -2367,14 +2216,6 @@
                 showErrorOverlay();
                 return;
             }
-            
-            // Store this question in history
-            questionHistory.push({
-                questionIndex: currentQuestionIndex,
-                selectedIndex: selectedIndex,
-                correctAnswer: question.correct,
-                wasCorrect: selectedIndex === question.correct
-            });
             
             options.forEach((option, index) => {
                 option.onclick = null;
@@ -2411,8 +2252,7 @@
             
             if ('vibrate' in navigator) navigator.vibrate(200);
             
-            // Auto move to next question after 1.5 seconds
-            autoNextTimeout = setTimeout(() => {
+            setTimeout(() => {
                 currentQuestionIndex++;
                 showQuestion();
             }, 1500);
@@ -2446,11 +2286,11 @@
                 समय: ${new Date().toLocaleTimeString()}
             `;
             
-            // Save score to localStorage (only the initial score)
-            saveScoreToLocalStorage();
+            // Save score to Firebase (only the initial score)
+            saveScoreToFirebase();
         }
 
-        function saveScoreToLocalStorage() {
+        function saveScoreToFirebase() {
             if (!userName || !userId) return;
             
             // Get current date in YYYY-MM-DD format
@@ -2469,239 +2309,67 @@
                 isFirstTime: isFirstTime
             };
             
-            // Get existing scores from localStorage
-            let localScores = JSON.parse(localStorage.getItem('paidLeaderboardScores') || '{}');
-            
-            // Initialize date array if it doesn't exist
-            if (!localScores[dateStr]) {
-                localScores[dateStr] = [];
-            }
-            
             // Check if user already has a score for today
-            const existingScoreIndex = localScores[dateStr].findIndex(s => s.userId === newScore.userId);
-            
-            if (existingScoreIndex === -1) {
-                // Add new score
-                localScores[dateStr].push(newScore);
-                
-                // Sort scores by score (descending)
-                localScores[dateStr].sort((a, b) => b.score - a.score);
-                
-                // Keep only top 50 scores
-                localScores[dateStr] = localScores[dateStr].slice(0, 50);
-                
-                // Save back to localStorage
-                localStorage.setItem('paidLeaderboardScores', JSON.stringify(localScores));
-                
-                console.log('Score saved to localStorage');
-            } else {
-                console.log('User already has a score for today, not updating');
-            }
+            database.ref(`todayScores/${dateStr}`).orderByChild('userId').equalTo(userId).once('value')
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        // User already has a score for today, don't update it
+                        console.log('User already has a score for today, not updating');
+                    } else {
+                        // User doesn't have a score for today, create a new one
+                        database.ref(`todayScores/${dateStr}`).push(newScore)
+                            .then(() => {
+                                console.log('Score saved to today scores in Firebase');
+                                // Also save to localStorage for backup
+                                saveToLocalStorage(dateStr, newScore);
+                            })
+                            .catch((error) => {
+                                console.error('Error saving score to Firebase:', error);
+                                // Still save to localStorage even if Firebase fails
+                                saveToLocalStorage(dateStr, newScore);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error checking existing scores:', error);
+                    // Still save to localStorage even if Firebase fails
+                    saveToLocalStorage(dateStr, newScore);
+                });
         }
 
-        function restartQuiz() {
-            // क्विज़ रीस्टार्ट करने से पहले एक्सेस जांचें
-            if (!checkUserAccess()) {
-                return; // एक्सेस वैध नहीं है, फंक्शन से बाहर निकलें
-            }
-            
-            quizStarted = false;
-            const quizSection = document.getElementById('quiz-section');
-            const scoreSection = document.getElementById('score-section');
-            const welcomeSection = document.getElementById('welcome-section');
-            if (quizSection && scoreSection && welcomeSection) {
-                scoreSection.style.display = 'none';
-                quizSection.style.display = 'none';
-                welcomeSection.style.display = 'block';
-                currentQuestionIndex = 0;
-                score = 0;
-                initialScore = 0; // Reset initial score
-                questionHistory = []; // Reset question history
-                quizCompleted = false; // Reset quiz completion flag
-                updateScore();
-            }
-        }
-
-        function showErrorOverlay() {
-            const errorOverlay = document.getElementById('error-overlay');
-            if (errorOverlay) {
-                errorOverlay.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function retry() {
-            quizStarted = false;
-            const errorOverlay = document.getElementById('error-overlay');
-            if (errorOverlay) {
-                errorOverlay.style.display = 'none';
-                document.body.style.overflow = 'hidden';
-                checkNetworkStatus();
-                if (navigator.onLine) {
-                    loadQuestions().then(() => {
-                        if (questions.length > 0) {
-                            startQuiz();
-                        }
-                    });
-                }
-            }
-        }
-
-        // Check network status when page becomes visible again
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                checkNetworkStatus();
-                // पेज विजिबल होने पर एक्सेस जांचें
-                checkUserAccess();
-            }
-        });
-
-        // Handle page load when offline
-        window.addEventListener('load', () => {
-            if (!navigator.onLine) {
-                document.getElementById('offline-section').style.display = 'block';
-                document.getElementById('online-content').style.display = 'none';
-            }
-            // पेज लोड होने पर तुरंत एक्सेस जांचें
-            checkUserAccess();
-        });
-
-        window.onerror = function(message) {
-            console.error('Global error for paid quiz:', message);
-            showErrorOverlay();
-            return true;
-        };
-
-        window.addEventListener('online', checkNetworkStatus);
-        window.addEventListener('offline', checkNetworkStatus);
-
-        // उपयोगकर्ता की एक्सेस जांचने का फंक्शन
-        function checkUserAccess() {
-            const accessData = localStorage.getItem('premiumAccess');
-            
-            if (!accessData) {
-                // कोई एक्सेस डेटा नहीं है, उपयोगकर्ता को index.html पर भेजें
-                redirectToPayment();
-                return false;
-            }
-            
+        function saveToLocalStorage(dateStr, scoreData) {
             try {
-                const { userId, expiryDate } = JSON.parse(accessData);
-                const now = new Date();
-                const expiry = new Date(expiryDate);
+                // Get existing scores from localStorage
+                let localScores = JSON.parse(localStorage.getItem('leaderboardScores') || '{}');
                 
-                if (now >= expiry) {
-                    // एक्सेस समाप्त हो गई है, localStorage से हटाएं और उपयोगकर्ता को index.html पर भेजें
-                    localStorage.removeItem('premiumAccess');
-                    redirectToPayment();
-                    return false;
+                // Initialize date array if it doesn't exist
+                if (!localScores[dateStr]) {
+                    localScores[dateStr] = [];
                 }
                 
-                // एक्सेस अभी भी वैध है
-                return true;
+                // Check if user already has a score for today
+                const existingScoreIndex = localScores[dateStr].findIndex(s => s.userId === scoreData.userId);
+                
+                if (existingScoreIndex === -1) {
+                    // Add new score
+                    localScores[dateStr].push(scoreData);
+                    
+                    // Sort scores by score (descending)
+                    localScores[dateStr].sort((a, b) => b.score - a.score);
+                    
+                    // Keep only top 50 scores
+                    localScores[dateStr] = localScores[dateStr].slice(0, 50);
+                    
+                    // Save back to localStorage
+                    localStorage.setItem('leaderboardScores', JSON.stringify(localScores));
+                    
+                    console.log('Score saved to localStorage');
+                }
             } catch (error) {
-                console.error('Access check error:', error);
-                // डेटा पार्स करने में त्रुटि, उपयोगकर्ता को index.html पर भेजें
-                redirectToPayment();
-                return false;
+                console.error('Error saving to localStorage:', error);
             }
         }
 
-        // उपयोगकर्ता को भुगतान पृष्ठ पर रीडायरेक्ट करने का फंक्शन
-        function redirectToPayment() {
-            // एक सूचना दिखाएं कि एक्सेस समाप्त हो गई है
-            showAccessExpiredNotification();
-            
-            // 3 सेकंड के बाद उपयोगकर्ता को index.html पर रीडायरेक्ट करें
-            setTimeout(() => {
-                if (window.AppInventor) {
-                    // Kodular APK के लिए
-                    window.AppInventor.setWebViewString('index.html');
-                } else {
-                    // वेब ब्राउज़र के लिए
-                    window.location.href = 'index.html';
-                }
-            }, 3000);
-        }
-
-        // एक्सेस समाप्ति सूचना दिखाने का फंक्शन
-        function showAccessExpiredNotification() {
-            // यदि पहले से कोई नोटिफिकेशन कंटेनर नहीं है, तो बनाएं
-            let notificationContainer = document.getElementById('notification-container');
-            if (!notificationContainer) {
-                notificationContainer = document.createElement('div');
-                notificationContainer.id = 'notification-container';
-                notificationContainer.style.position = 'fixed';
-                notificationContainer.style.top = '20px';
-                notificationContainer.style.left = '50%';
-                notificationContainer.style.transform = 'translateX(-50%)';
-                notificationContainer.style.zIndex = '3000';
-                notificationContainer.style.width = '90%';
-                notificationContainer.style.maxWidth = '400px';
-                document.body.appendChild(notificationContainer);
-            }
-            
-            // नोटिफिकेशन एलिमेंट बनाएं
-            const notification = document.createElement('div');
-            notification.style.background = 'white';
-            notification.style.borderRadius = '12px';
-            notification.style.padding = '16px';
-            notification.style.marginBottom = '10px';
-            notification.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
-            notification.style.display = 'flex';
-            notification.style.alignItems = 'center';
-            notification.style.gap = '12px';
-            notification.style.animation = 'slideDown 0.3s ease-out';
-            
-            notification.innerHTML = `
-                <div style="font-size: 24px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(214, 48, 49, 0.1); color: #d63031;">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px; color: #2d3436;">
-                        एक्सेस समाप्त
-                    </div>
-                    <div style="font-size: 14px; color: #666;">
-                        आपकी 30 दिन की प्रीमियम एक्सेस समाप्त हो गई है। आपको भुगतान पृष्ठ पर रीडायरेक्ट किया जा रहा है...
-                    </div>
-                </div>
-            `;
-            
-            // नोटिफिकेशन कंटेनर में नोटिफिकेशन जोड़ें
-            notificationContainer.appendChild(notification);
-            
-            // 5 सेकंड बाद नोटिफिकेशन हटाएं
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.animation = 'slideUpOut 0.3s ease-out forwards';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notificationContainer.removeChild(notification);
-                        }
-                    }, 300);
-                }
-            }, 5000);
-        }
-
-        // CSS एनिमेशन जोड़ें
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideDown {
-                from { transform: translateY(-100%); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-            
-            @keyframes slideUpOut {
-                from { transform: translateY(0); opacity: 1; }
-                to { transform: translateY(-20px); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // हर 5 मिनट में एक्सेस जांचें
-        setInterval(checkUserAccess, 5 * 60 * 1000);
-
-        // Leaderboard Functions
         function toggleLeaderboard() {
             // Prevent double clicks
             if (leaderboardToggleState) return;
@@ -2713,13 +2381,12 @@
             
             if (leaderboardSection.style.display === 'none' || leaderboardSection.style.display === '') {
                 welcomeSection.style.display = 'none';
-                quizSection.style.display = 'none'; // Make sure quiz section is hidden
+                quizSection.style.display = 'none';
                 leaderboardSection.style.display = 'block';
                 loadLeaderboardData();
             } else {
                 leaderboardSection.style.display = 'none';
                 welcomeSection.style.display = 'block';
-                // Don't show quiz section here, only show welcome section
             }
             
             // Reset the toggle state after a short delay
@@ -2738,7 +2405,7 @@
             }
             
             if (quizSection) {
-                quizSection.style.display = 'none'; // Make sure quiz section is hidden
+                quizSection.style.display = 'none';
             }
             
             if (leaderboardSection) {
@@ -2847,19 +2514,50 @@
             const today = new Date();
             const dateStr = today.toISOString().split('T')[0];
             
-            // Try to load from localStorage
-            loadFromLocalStorage(dateStr);
-            
-            // Hide loading spinner
-            loadingSpinner.style.display = 'none';
-            
-            // Display leaderboard
-            displayLeaderboard();
+            // Try to load from Firebase first
+            database.ref(`todayScores/${dateStr}`).once('value')
+                .then((snapshot) => {
+                    todayScores = [];
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        Object.keys(data).forEach(key => {
+                            todayScores.push({
+                                id: key,
+                                ...data[key]
+                            });
+                        });
+                        
+                        // Also update localStorage with Firebase data
+                        localStorage.setItem('leaderboardScores', JSON.stringify({
+                            [dateStr]: todayScores
+                        }));
+                    } else {
+                        // If no data in Firebase, try to load from localStorage
+                        loadFromLocalStorage(dateStr);
+                    }
+                    
+                    // Hide loading spinner
+                    loadingSpinner.style.display = 'none';
+                    
+                    // Display leaderboard
+                    displayLeaderboard();
+                })
+                .catch((error) => {
+                    console.error('Error loading leaderboard data from Firebase:', error);
+                    // If Firebase fails, try to load from localStorage
+                    loadFromLocalStorage(dateStr);
+                    
+                    // Hide loading spinner
+                    loadingSpinner.style.display = 'none';
+                    
+                    // Display leaderboard
+                    displayLeaderboard();
+                });
         }
 
         function loadFromLocalStorage(dateStr) {
             try {
-                const localScores = JSON.parse(localStorage.getItem('paidLeaderboardScores') || '{}');
+                const localScores = JSON.parse(localStorage.getItem('leaderboardScores') || '{}');
                 if (localScores[dateStr]) {
                     todayScores = localScores[dateStr];
                     console.log('Loaded scores from localStorage');
@@ -3060,17 +2758,17 @@
             // Clear all leaderboard data from localStorage
             try {
                 // Clear all leaderboard scores
-                localStorage.removeItem('paidLeaderboardScores');
+                localStorage.removeItem('leaderboardScores');
                 
                 // Clear any other related data
-                localStorage.removeItem('lastPaidLeaderboardDate');
-                localStorage.removeItem('cachedPaidLeaderboardData');
+                localStorage.removeItem('lastLeaderboardDate');
+                localStorage.removeItem('cachedLeaderboardData');
                 
                 // Clear today's scores from todayScores array
                 todayScores = [];
                 
                 // Update the last leaderboard date
-                localStorage.setItem('lastPaidLeaderboardDate', todayStr);
+                localStorage.setItem('lastLeaderboardDate', todayStr);
                 
                 console.log('Cleared all leaderboard data from localStorage');
                 
@@ -3088,6 +2786,19 @@
             } catch (error) {
                 console.error('Error resetting leaderboard:', error);
             }
+            
+            // Also clear Firebase data for today
+            try {
+                database.ref(`todayScores/${todayStr}`).remove()
+                    .then(() => {
+                        console.log('Cleared today\'s scores from Firebase');
+                    })
+                    .catch((error) => {
+                        console.error('Error clearing Firebase data:', error);
+                    });
+            } catch (error) {
+                console.error('Error with Firebase reset:', error);
+            }
         }
 
         function checkAndResetLeaderboard() {
@@ -3096,7 +2807,7 @@
             const todayStr = today.toISOString().split('T')[0];
             
             // Get the last leaderboard date from localStorage
-            const lastDate = localStorage.getItem('lastPaidLeaderboardDate');
+            const lastDate = localStorage.getItem('lastLeaderboardDate');
             
             // If it's a new day, reset the leaderboard
             if (lastDate !== todayStr) {
@@ -3104,10 +2815,10 @@
                 todayScores = [];
                 
                 // Update the last leaderboard date
-                localStorage.setItem('lastPaidLeaderboardDate', todayStr);
+                localStorage.setItem('lastLeaderboardDate', todayStr);
                 
                 // Clear any cached leaderboard data
-                localStorage.removeItem('cachedPaidLeaderboardData');
+                localStorage.removeItem('cachedLeaderboardData');
                 
                 console.log('Leaderboard reset for new day:', todayStr);
                 
@@ -3118,6 +2829,206 @@
                 }
             }
         }
+
+        function restartQuiz() {
+            // क्विज़ रीस्टार्ट करने से पहले एक्सेस जांचें
+            if (!checkUserAccess()) {
+                return; // एक्सेस वैध नहीं है, फंक्शन से बाहर निकलें
+            }
+            
+            quizStarted = false;
+            const quizSection = document.getElementById('quiz-section');
+            const scoreSection = document.getElementById('score-section');
+            const welcomeSection = document.getElementById('welcome-section');
+            if (quizSection && scoreSection && welcomeSection) {
+                scoreSection.style.display = 'none';
+                quizSection.style.display = 'none';
+                welcomeSection.style.display = 'block';
+                currentQuestionIndex = 0;
+                score = 0;
+                initialScore = 0; // Reset initial score
+                updateScore();
+            }
+        }
+
+        function showErrorOverlay() {
+            const errorOverlay = document.getElementById('error-overlay');
+            if (errorOverlay) {
+                errorOverlay.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function retry() {
+            quizStarted = false;
+            const errorOverlay = document.getElementById('error-overlay');
+            if (errorOverlay) {
+                errorOverlay.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+                checkNetworkStatus();
+                if (navigator.onLine) {
+                    loadQuestions().then(() => {
+                        if (questions.length > 0) {
+                            startQuiz();
+                        }
+                    });
+                }
+            }
+        }
+
+        // Check network status when page becomes visible again
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                checkNetworkStatus();
+                // पेज विजिबल होने पर एक्सेस जांचें
+                checkUserAccess();
+            }
+        });
+
+        // Handle page load when offline
+        window.addEventListener('load', () => {
+            if (!navigator.onLine) {
+                document.getElementById('offline-section').style.display = 'block';
+                document.getElementById('online-content').style.display = 'none';
+            }
+            // पेज लोड होने पर तुरंत एक्सेस जांचें
+            checkUserAccess();
+        });
+
+        window.onerror = function(message) {
+            console.error('Global error for paid quiz:', message);
+            showErrorOverlay();
+            return true;
+        };
+
+        window.addEventListener('online', checkNetworkStatus);
+        window.addEventListener('offline', checkNetworkStatus);
+
+        // उपयोगकर्ता की एक्सेस जांचने का फंक्शन
+        function checkUserAccess() {
+            const accessData = localStorage.getItem('premiumAccess');
+            
+            if (!accessData) {
+                // कोई एक्सेस डेटा नहीं है, उपयोगकर्ता को index.html पर भेजें
+                redirectToPayment();
+                return false;
+            }
+            
+            try {
+                const { userId, expiryDate } = JSON.parse(accessData);
+                const now = new Date();
+                const expiry = new Date(expiryDate);
+                
+                if (now >= expiry) {
+                    // एक्सेस समाप्त हो गई है, localStorage से हटाएं और उपयोगकर्ता को index.html पर भेजें
+                    localStorage.removeItem('premiumAccess');
+                    redirectToPayment();
+                    return false;
+                }
+                
+                // एक्सेस अभी भी वैध है
+                return true;
+            } catch (error) {
+                console.error('Access check error:', error);
+                // डेटा पार्स करने में त्रुटि, उपयोगकर्ता को index.html पर भेजें
+                redirectToPayment();
+                return false;
+            }
+        }
+
+        // उपयोगकर्ता को भुगतान पृष्ठ पर रीडायरेक्ट करने का फंक्शन
+        function redirectToPayment() {
+            // एक सूचना दिखाएं कि एक्सेस समाप्त हो गई है
+            showAccessExpiredNotification();
+            
+            // 3 सेकंड के बाद उपयोगकर्ता को index.html पर रीडायरेक्ट करें
+            setTimeout(() => {
+                if (window.AppInventor) {
+                    // Kodular APK के लिए
+                    window.AppInventor.setWebViewString('index.html');
+                } else {
+                    // वेब ब्राउज़र के लिए
+                    window.location.href = 'index.html';
+                }
+            }, 3000);
+        }
+
+        // एक्सेस समाप्ति सूचना दिखाने का फंक्शन
+        function showAccessExpiredNotification() {
+            // यदि पहले से कोई नोटिफिकेशन कंटेनर नहीं है, तो बनाएं
+            let notificationContainer = document.getElementById('notification-container');
+            if (!notificationContainer) {
+                notificationContainer = document.createElement('div');
+                notificationContainer.id = 'notification-container';
+                notificationContainer.style.position = 'fixed';
+                notificationContainer.style.top = '20px';
+                notificationContainer.style.left = '50%';
+                notificationContainer.style.transform = 'translateX(-50%)';
+                notificationContainer.style.zIndex = '3000';
+                notificationContainer.style.width = '90%';
+                notificationContainer.style.maxWidth = '400px';
+                document.body.appendChild(notificationContainer);
+            }
+            
+            // नोटिफिकेशन एलिमेंट बनाएं
+            const notification = document.createElement('div');
+            notification.style.background = 'white';
+            notification.style.borderRadius = '12px';
+            notification.style.padding = '16px';
+            notification.style.marginBottom = '10px';
+            notification.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+            notification.style.display = 'flex';
+            notification.style.alignItems = 'center';
+            notification.style.gap = '12px';
+            notification.style.animation = 'slideDown 0.3s ease-out';
+            
+            notification.innerHTML = `
+                <div style="font-size: 24px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(214, 48, 49, 0.1); color: #d63031;">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px; color: #2d3436;">
+                        एक्सेस समाप्त
+                    </div>
+                    <div style="font-size: 14px; color: #666;">
+                        आपकी 30 दिन की प्रीमियम एक्सेस समाप्त हो गई है। आपको भुगतान पृष्ठ पर रीडायरेक्ट किया जा रहा है...
+                    </div>
+                </div>
+            `;
+            
+            // नोटिफिकेशन कंटेनर में नोटिफिकेशन जोड़ें
+            notificationContainer.appendChild(notification);
+            
+            // 5 सेकंड बाद नोटिफिकेशन हटाएं
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideUpOut 0.3s ease-out forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notificationContainer.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // CSS एनिमेशन जोड़ें
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { transform: translateY(-100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            
+            @keyframes slideUpOut {
+                from { transform: translateY(0); opacity: 1; }
+                to { transform: translateY(-20px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // हर 5 मिनट में एक्सेस जांचें
+        setInterval(checkUserAccess, 5 * 60 * 1000);
 
         // Premium Button Functions
         function createParticles() {
