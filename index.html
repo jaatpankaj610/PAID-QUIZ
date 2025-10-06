@@ -1814,22 +1814,41 @@
             try {
                 // Firebase से सीधे डेटा लाने की कोशिश करें, user_session पर भरोसा न करें
                 const paymentsRef = database.ref('payments');
-                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
-                const payments = snapshot.val();
-
+                
+                // बेहतर क्वेरी - सभी पेमेंट्स को लाएं और फिर फिल्टर करें
+                const snapshot = await paymentsRef.once('value');
+                const allPayments = snapshot.val();
+                
                 hideProcessingScreen();
-
-                if (!payments) {
-                    // यहाँ बदलाव किया गया है - अब हम यह नहीं बताएंगे कि इस ईमेल ID से कोई पेमेंट नहीं मिली
-                    showNotification('पेमेंट स्टेटस', 'आपने अभी तक कोई पेमेंट नहीं की है। कृपया पहले पेमेंट करें।', 'info');
+                
+                if (!allPayments) {
+                    showNotification('पेमेंट स्टेटस', 'अभी तक कोई पेमेंट रिकॉर्ड नहीं मिला। कृपया पहले पेमेंट करें।', 'info');
                     return;
                 }
-
-                let latestPayment = null;
+                
+                // उपयोगकर्ता के लिए सभी पेमेंट्स खोजें
+                let userPayments = [];
+                for (let key in allPayments) {
+                    const payment = allPayments[key];
+                    // user_id की तुलना करते समय विशेष वर्णों को बदलें
+                    if (payment.user_id === userId) {
+                        userPayments.push({
+                            key: key,
+                            ...payment
+                        });
+                    }
+                }
+                
+                if (userPayments.length === 0) {
+                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID से कोई पेमेंट नहीं मिली। कृपया सही ईमेल ID दर्ज करें।', 'info');
+                    return;
+                }
+                
                 // सबसे हाल का पेमेंट ढूंढें
-                for (let key in payments) {
-                    if (!latestPayment || new Date(payments[key].timestamp) > new Date(latestPayment.timestamp)) {
-                        latestPayment = payments[key];
+                let latestPayment = null;
+                for (let payment of userPayments) {
+                    if (!latestPayment || new Date(payment.timestamp) > new Date(latestPayment.timestamp)) {
+                        latestPayment = payment;
                     }
                 }
                 
@@ -1869,12 +1888,10 @@
                             showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
                         }
                     } else {
-                        // यहाँ बदलाव किया गया है - अब हम यह नहीं बताएंगे कि जानकारी मेल नहीं खाती
-                        showNotification('पेमेंट स्टेटस', 'आपने अभी तक कोई पेमेंट नहीं की है। कृपया पहले पेमेंट करें।', 'info');
+                        showNotification('पेमेंट स्टेटस', 'दर्ज की गई जानकारी मेल नहीं खा रही है। कृपया सभी फील्ड्स को सही ढंग से भरें।', 'error');
                     }
                 } else {
-                     // यहाँ भी बदलाव किया गया है
-                     showNotification('पेमेंट स्टेटस', 'आपने अभी तक कोई पेमेंट नहीं की है। कृपया पहले पेमेंट करें।', 'info');
+                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID से कोई पेमेंट नहीं मिली। कृपया सही ईमेल ID दर्ज करें।', 'info');
                 }
 
             } catch (error) {
