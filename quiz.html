@@ -78,8 +78,8 @@
         
         .scrollable-content { 
             flex: 1; 
-            overflow: hidden;
-            -webkit-overflow-scrolling: none;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
         
@@ -1416,7 +1416,7 @@
             margin-top: 15px;
             margin-bottom: 15px;
             box-shadow: var(--button-shadow);
-            display: flex !important;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
@@ -3630,7 +3630,7 @@
         }
 
         function restartQuiz() {
-            // क्विज़़ रीस्टार्ट करने से पहले एक्सेस जांचें
+            // क्विज़ रीस्टार्ट करने से पहले एक्सेस जांचें
             if (!checkUserAccess()) {
                 return; // एक्सेस वैध नहीं है, फंक्शन से बाहर निकलें
             }
@@ -3793,7 +3793,7 @@
                         एक्सेस समाप्त
                     </div>
                     <div style="font-size: 14px; color: #666;">
-                        आपकी 30 दिन की प्रीमियम एक्सेस समाप्त हो गई है। आपको भुगतान पृष्ठ पृष्ठ पर रीडायरेक्ट किया जा रहा है...
+                        आपकी 30 दिन की प्रीमियम एक्सेस समाप्त हो गई है। आपको भुगतान पृष्ठ पर रीडायरेक्ट किया जा रहा है...
                     </div>
                 </div>
             `;
@@ -3814,7 +3814,7 @@
             }, 5000);
         }
 
-        // CSS एनिमेशन जोड़े
+        // CSS एनिमेशन जोड़ें
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideDown {
