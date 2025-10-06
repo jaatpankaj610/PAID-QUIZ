@@ -41,6 +41,13 @@
             overflow: hidden;
             touch-action: pan-y;
             -webkit-tap-highlight-color: transparent;
+            /* पेज रिफ्रेश और स्क्रॉल को रोकने के लिए */
+            overscroll-behavior: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
 
         body {
@@ -56,7 +63,9 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
-            overscroll-behavior: none;
+            /* पेज रिफ्रेश रोकने के लिए */
+            -webkit-pull-to-refresh: no;
+            pull-to-refresh: no;
         }
 
         .container {
@@ -70,6 +79,9 @@
             position: fixed;
             top: 0;
             left: 0;
+            /* पेज हिलने से रोकने के लिए */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
         .scrollable-content {
@@ -78,6 +90,8 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            /* स्क्रॉल के दौरान पेज हिलने से रोकने के लिए */
+            -webkit-overflow-scrolling: auto;
         }
 
         .scrollable-content::-webkit-scrollbar {
@@ -1205,6 +1219,7 @@
         let database;
         let firebaseInitialized = false;
         let timerInterval;
+        let appInitialized = false;
 
         // Firebase कॉन्फिगरेशन
         const firebaseConfig = {
@@ -1217,6 +1232,41 @@
             appId: "1:876482514501:web:1ac10bc020591a5d931d2c",
             measurementId: "G-VB140B6NCW"
         };
+
+        // रिफ्रेश कंट्रोल के लिए फंक्शन
+        function preventRefresh() {
+            // पेज रिफ्रेश रोकने के लिए
+            document.addEventListener('keydown', function(e) {
+                if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82 && e.ctrlKey) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // टच डिवाइस पर रिफ्रेश रोकने के लिए
+            document.addEventListener('touchmove', function(e) {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // पुल टू रिफ्रेश रोकने के लिए
+            let startY = 0;
+            document.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].pageY;
+            });
+            
+            document.addEventListener('touchmove', function(e) {
+                const scrollY = window.scrollY;
+                const touchY = e.touches[0].pageY;
+                const touchDiff = touchY - startY;
+                
+                // अगर उपयोगकर्ता ऊपर की ओर स्क्रॉल कर रहा है और पेज टॉप पर है
+                if (touchDiff > 0 && scrollY === 0) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
 
         // Firebase इनिशियलाइज़ेशन फंक्शन
         function initializeFirebase() {
@@ -1461,6 +1511,26 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
+            // रिफ्रेश कंट्रोल लागू करें
+            preventRefresh();
+            
+            // ऐप इनिशियलाइज़ेशन फ्लैग चेक करें
+            const appInitializedFlag = localStorage.getItem('appInitialized');
+            const currentSessionId = sessionStorage.getItem('sessionId');
+            
+            // अगर करेंट सेशन ID नहीं है, तो एक नया बनाएं
+            if (!currentSessionId) {
+                const newSessionId = Date.now().toString();
+                sessionStorage.setItem('sessionId', newSessionId);
+                
+                // अगर ऐप पहले इनिशियलाइज़ नहीं हुआ है, तो इनिशियलाइज़ करें
+                if (!appInitializedFlag) {
+                    localStorage.setItem('appInitialized', 'true');
+                    // यहां पर आप वह कोड डाल सकते हैं जो सिर्फ एक बार चलना चाहिए
+                    console.log("App initialized for the first time");
+                }
+            }
+            
             // फॉर्म डेटा को रिस्टोर करें
             restoreFormData();
             
