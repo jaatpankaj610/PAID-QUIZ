@@ -1200,9 +1200,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             // लोकल स्टोरेज से उपयोगकर्ता की एक्सेस जांचें
             function checkLocalAccess() {
-                const accessData = localStorage.getItem('premiumAccess');
+                // Kodular के लिए localStorage के अलावा अन्य विधियों का उपयोग करें
+                const accessData = getAccessData();
+                
                 if (accessData) {
-                    const { userId, mobileNumber, transactionId, amount, expiryDate } = JSON.parse(accessData);
+                    const { userId, mobileNumber, transactionId, amount, expiryDate } = accessData;
                     const now = new Date();
                     const expiry = new Date(expiryDate);
                     
@@ -1220,40 +1222,137 @@
                             return true;
                         } else {
                             // अगर फील्ड्स मेल नहीं खाते, तो एक्सेस को अमान्य करें
-                            localStorage.removeItem('premiumAccess');
+                            clearAccessData();
                             showNotification('सुरक्षा चेतावनी', 'आपकी जानकारी मेल नहीं खा रही है। कृपया सभी फील्ड्स सही भरें।', 'error');
                         }
                     } else {
-                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
-                        localStorage.removeItem('premiumAccess');
+                        // एक्सेस समाप्त हो गई है, डेटा हटाएं
+                        clearAccessData();
                         showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
                     }
                 }
                 return false;
             }
 
-            // यह फंक्शन लोकल स्टोरेज में एक्सेस डेटा सेव करेगा
-            function saveAccessToLocalStorage(userId, mobileNumber, transactionId, amount, expiryDate) {
-                localStorage.setItem('premiumAccess', JSON.stringify({
+            // यह फंक्शन एक्सेस डेटा को localStorage और Kodular के लिए अन्य विधियों में सेव करेगा
+            function saveAccessData(userId, mobileNumber, transactionId, amount, expiryDate) {
+                const data = {
                     userId: userId,
                     mobileNumber: mobileNumber,
                     transactionId: transactionId,
                     amount: amount,
                     expiryDate: expiryDate.toISOString()
-                }));
+                };
+                
+                // localStorage में सेव करें
+                try {
+                    localStorage.setItem('premiumAccess', JSON.stringify(data));
+                } catch (e) {
+                    console.error("LocalStorage save failed:", e);
+                }
+                
+                // Kodular के लिए WebViewString का उपयोग करें
+                try {
+                    if (window.AppInventor) {
+                        window.AppInventor.setWebViewString('premiumAccess:' + JSON.stringify(data));
+                    }
+                } catch (e) {
+                    console.error("WebViewString save failed:", e);
+                }
+                
+                // URL में डेटा सेव करें (बैकअप के रूप में)
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.set('access_data', btoa(JSON.stringify(data)));
+                    const newUrl = window.location.pathname + '?' + urlParams.toString();
+                    window.history.replaceState({}, '', newUrl);
+                } catch (e) {
+                    console.error("URL save failed:", e);
+                }
+            }
+
+            // यह फंक्शन एक्सेस डेटा को localStorage और Kodular के लिए अन्य विधियों से प्राप्त करेगा
+            function getAccessData() {
+                let accessData = null;
+                
+                // पहले localStorage से प्राप्त करने का प्रयास करें
+                try {
+                    const localData = localStorage.getItem('premiumAccess');
+                    if (localData) {
+                        accessData = JSON.parse(localData);
+                    }
+                } catch (e) {
+                    console.error("LocalStorage read failed:", e);
+                }
+                
+                // अगर localStorage में डेटा नहीं है, तो Kodular WebViewString से प्राप्त करने का प्रयास करें
+                if (!accessData && window.AppInventor) {
+                    try {
+                        const webViewString = window.AppInventor.getWebViewString();
+                        if (webViewString && webViewString.startsWith('premiumAccess:')) {
+                            accessData = JSON.parse(webViewString.substring(14));
+                        }
+                    } catch (e) {
+                        console.error("WebViewString read failed:", e);
+                    }
+                }
+                
+                // अगर अभी भी डेटा नहीं है, तो URL से प्राप्त करने का प्रयास करें
+                if (!accessData) {
+                    try {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const encodedData = urlParams.get('access_data');
+                        if (encodedData) {
+                            accessData = JSON.parse(atob(encodedData));
+                        }
+                    } catch (e) {
+                        console.error("URL read failed:", e);
+                    }
+                }
+                
+                return accessData;
+            }
+
+            // यह फंक्शन एक्सेस डेटा को सभी स्थानों से हटाएगा
+            function clearAccessData() {
+                // localStorage से हटाएं
+                try {
+                    localStorage.removeItem('premiumAccess');
+                } catch (e) {
+                    console.error("LocalStorage clear failed:", e);
+                }
+                
+                // Kodular WebViewString से हटाएं
+                try {
+                    if (window.AppInventor) {
+                        window.AppInventor.setWebViewString('');
+                    }
+                } catch (e) {
+                    console.error("WebViewString clear failed:", e);
+                }
+                
+                // URL से हटाएं
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.delete('access_data');
+                    const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+                    window.history.replaceState({}, '', newUrl);
+                } catch (e) {
+                    console.error("URL clear failed:", e);
+                }
             }
 
             // यह फंक्शन लोकल स्टोरेज में सेव एक्सेस की वैधता जांचेगा
             function validateLocalAccess() {
-                const accessData = localStorage.getItem('premiumAccess');
+                const accessData = getAccessData();
                 if (accessData) {
-                    const { userId, mobileNumber, transactionId, amount, expiryDate } = JSON.parse(accessData);
+                    const { userId, mobileNumber, transactionId, amount, expiryDate } = accessData;
                     const now = new Date();
                     const expiry = new Date(expiryDate);
                     
                     if (now >= expiry) {
-                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
-                        localStorage.removeItem('premiumAccess');
+                        // एक्सेस समाप्त हो गई है, सभी स्थानों से हटाएं
+                        clearAccessData();
                         return false;
                     }
                     return true;
@@ -1300,8 +1399,8 @@
                             const expiryDate = new Date(approvalDate);
                             expiryDate.setDate(approvalDate.getDate() + 30);
                             
-                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, mobileNumber, transactionId, amount, expiryDate);
+                            // सभी स्थानों में एक्सेस जानकारी सेव करें
+                            saveAccessData(userId, mobileNumber, transactionId, amount, expiryDate);
                         }
                     }
                 });
@@ -1361,8 +1460,8 @@
                         const now = new Date();
 
                         if (now < expiryDate) {
-                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, foundApprovedPayment.mobile_number, 
+                            // सभी स्थानों में एक्सेस जानकारी सेव करें
+                            saveAccessData(userId, foundApprovedPayment.mobile_number, 
                                 foundApprovedPayment.transaction_id, foundApprovedPayment.amount, expiryDate);
                             
                             // फॉर्म फील्ड्स को भरें
@@ -1893,14 +1992,8 @@
                         const expiryDate = new Date(approvalDate);
                         expiryDate.setDate(approvalDate.getDate() + 30);
                         
-                        // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                        localStorage.setItem('premiumAccess', JSON.stringify({
-                            userId: userId,
-                            mobileNumber: mobileNumber,
-                            transactionId: transactionId,
-                            amount: amount,
-                            expiryDate: expiryDate.toISOString()
-                        }));
+                        // सभी स्थानों में एक्सेस जानकारी सेव करें
+                        saveAccessData(userId, mobileNumber, transactionId, amount, expiryDate);
                         
                         showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
 
@@ -2025,8 +2118,8 @@
                 const userDataRef = database.ref('user_session/' + userId);
                 await userDataRef.remove();
                 
-                // लोकल स्टोरेज से भी डेटा हटाएं
-                localStorage.removeItem('premiumAccess');
+                // सभी स्थानों से भी डेटा हटाएं
+                clearAccessData();
                 
                 showNotification('डेटा रीसेट', 'आपका पेमेंट डेटा रीसेट हो गया है।', 'success');
                 document.getElementById('payment-form').reset();
