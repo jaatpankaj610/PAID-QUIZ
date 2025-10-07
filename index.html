@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <meta name="theme-color" content="#4a00e0">
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -33,14 +30,14 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Noto Sans Devanagari', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         html, body {
             height: 100%;
             width: 100%;
-            overflow: hidden;
-            touch-action: pan-y;
-            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            position: relative;
         }
 
         body {
@@ -50,38 +47,18 @@
             align-items: center;
             min-height: 100vh;
             min-width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            overscroll-behavior: none;
         }
 
         .container {
             width: 100%;
-            height: 100vh;
+            max-width: 500px;
             background: var(--light);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
-
-        .scrollable-content {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .scrollable-content::-webkit-scrollbar {
-            display: none;
+            margin: 20px;
         }
 
         .header {
@@ -89,11 +66,6 @@
             padding: 16px 12px;
             text-align: center;
             color: var(--light);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 100;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
@@ -106,26 +78,22 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: calc(100vw - 24px);
         }
 
         .header p {
             font-size: 12px;
             font-weight: 500;
             opacity: 0.9;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: calc(100vw - 24px);
         }
 
         .content {
-            padding: 72px 12px 80px;
+            padding: 16px;
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 16px;
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
         }
 
         .payment-info {
@@ -386,7 +354,7 @@
             width: 100%;
             height: 100vh;
             background: var(--offline-gradient);
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -909,11 +877,56 @@
             background: var(--warning);
         }
         
+        /* Timer styles */
+        .timer-container {
+            background: rgba(74, 0, 224, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+        
+        .timer-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .timer-display {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .timer-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .timer-progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            width: 100%;
+            transition: width 1s linear;
+        }
+        
         @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                border-radius: 8px;
+            }
             .header { padding: 12px 8px; }
-            .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
-            .header p { font-size: 11px; max-width: calc(100vw - 20px); }
-            .content { padding: 64px 8px 72px; gap: 12px; }
+            .header h1 { font-size: 18px; }
+            .header p { font-size: 11px; }
+            .content { padding: 12px; gap: 12px; }
             .payment-info { padding: 12px; }
             .payment-info h2 { font-size: 16px; }
             .price-tag { font-size: 28px; }
@@ -944,13 +957,18 @@
             .notification-message { font-size: 12px; }
             .notification-icon { font-size: 20px; width: 32px; height: 32px; }
             .security-warning { font-size: 12px; }
+            .timer-display { font-size: 20px; }
         }
 
         @media (min-width: 768px) {
+            .container {
+                margin: 40px auto;
+                max-width: 600px;
+            }
             .header { padding: 20px 16px; }
             .header h1 { font-size: 22px; }
             .header p { font-size: 14px; }
-            .content { padding: 80px 16px 88px; gap: 20px; }
+            .content { padding: 20px; gap: 20px; }
             .payment-info { padding: 20px; }
             .payment-info h2 { font-size: 20px; }
             .price-tag { font-size: 36px; }
@@ -976,6 +994,7 @@
             .processing-screen .app-logo-name { font-size: 28px; }
             .processing-screen .processing-message { font-size: 20px; }
             .security-warning { font-size: 14px; }
+            .timer-display { font-size: 28px; }
         }
     </style>
 </head>
@@ -1037,94 +1056,100 @@
             <p>मात्र ₹49 में 30 दिन की प्रीमियम एक्सेस अनलॉक करें!</p>
         </div>
         
-        <div class="scrollable-content">
-            <div class="content">
-                <div id="online-content">
-                    <div class="payment-info">
-                        <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
-                        <div class="price-tag">₹49</div>
-                        <div class="price-period">30 दिन की असीमित क्विज़ एक्सेस</div>
-                        
-                        <ul class="features">
-                            <li><i class="fas fa-check-circle"></i> 100+ विशेषज्ञ द्वारा तैयार GK सवाल</li>
-                            <li><i class="fas fa-check-circle"></i> दैनिक क्विज़ और प्रैक्टिस टेस्ट</li>
-                            <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग और प्रोग्रेस रिपोर्ट</li>
-                            <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड कंटेंट</li>
-                        </ul>
-                    </div>
+        <div class="content">
+            <div id="online-content">
+                <div class="payment-info">
+                    <h2><i class="fas fa-crown"></i> प्रीमियम प्लान</h2>
+                    <div class="price-tag">₹49</div>
+                    <div class="price-period">30 दिन की असीमित क्विज़ एक्सेस</div>
                     
-                    <div class="security-warning">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>सुरक्षा चेतावनी: केवल वैध पेमेंट के बाद ही एक्सेस मिलेगा। सभी फील्ड्स सही भरना अनिवार्य है।</span>
-                    </div>
-                    
-                    <div class="qr-section">
-                        <h3>आसान UPI पेमेंट</h3>
-                        <div class="qr-code">
-                            <img src="qrcode.png" alt="UPI QR Code" onerror="this.style.display='none'; document.getElementById('error-section').style.display='flex'; document.getElementById('online-content').style.display='none'; document.getElementById('error-message').textContent='QR कोड लोड करने में त्रुटि। कृपया UPI ID का उपयोग करें।';">
-                        </div>
-                        <div class="upi-id">
-                            <i class="fas fa-copy"></i>
-                            9057650616@amazon.pay
-                        </div>
-                        <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
-                        <ol class="instructions">
-                            <li><i class="fas fa-qrcode"></i> QR कोड को अपने UPI ऐप से स्कैन करें।</li>
-                            <li><i class="fas fa-money-bill"></i> ₹49 का पेमेंट करें।</li>
-                            <li><i class="fas fa-receipt"></i> UPI ट्रांजैक्शन ID फॉर्म में डालें।</li>
-                            <li><i class="fas fa-check-square"></i> "पेमेंट करने के बाद इस बॉक्स को टिक करें" चेकबॉक्स टिक करें।</li>
-                        </ol>
-                    </div>
-                    
-                    <form id="payment-form">
-                        <div id="form-error" class="error-text"></div>
-                        <div class="form-group" id="user_id_group">
-                            <label for="user_id">अपना ईमेल ID दर्ज करें</label>
-                            <input type="text" id="user_id" name="user_id" placeholder="उदाहरण: example@gmail.com" required>
-                            <div id="user_id_error" class="error-text"></div>
-                        </div>
-                        
-                        <div class="form-group" id="mobile_number_group">
-                            <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
-                            <input type="text" id="mobile_number" name="mobile_number" placeholder="उदाहरण: 76652XXXXX" required>
-                            <div id="mobile_number_error" class="error-text"></div>
-                        </div>
-                        
-                        <div class="form-group" id="transaction_id_group">
-                            <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
-                            <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
-                            <div id="transaction_id_error" class="error-text"></div>
-                        </div>
-                        
-                        <div class="form-group" id="amount_group">
-                            <label for="amount">पेमेंट राशि</label>
-                            <input type="text" id="amount" name="amount" placeholder="49" value="49" required>
-                            <div id="amount_error" class="error-text"></div>
-                        </div>
-                        
-                        <div class="form-group" id="payment_made_group">
-                            <div class="checkbox-container disabled" id="payment_made_container">
-                                <label for="payment_made">
-                                    <input type="checkbox" id="payment_made" name="payment_made" disabled>
-                                    पेमेंट करने के बाद इस बॉक्स को टिक करें
-                                    <span class="checkbox-hint">पेमेंट रिक्वेस्ट भेजने के लिए QR कोड स्कैन करें और यहाँ टिक करें।</span>
-                                </label>
-                            </div>
-                            <div id="payment_made_error" class="error-text"></div>
-                        </div>
-                        
-                        <div class="form-group" id="payment_note_group">
-                            <label for="payment_note">कोई अतिरिक्त जानकारी (वैकल्पिक)</label>
-                            <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">पेमेंट रिक्वेस्ट भेजें</button>
-                        <button type="button" class="check-btn" onclick="checkPaymentStatus()">पेमेंट स्टेटस चेक करें</button>
-                        <button type="button" class="clear-btn" onclick="clearFirebaseData()">पेमेंट डेटा रीसेट करें</button>
-                    </form>
-                    
-                    <div id="status-message" class="status-message"></div>
+                    <ul class="features">
+                        <li><i class="fas fa-check-circle"></i> 100+ विशेषज्ञ द्वारा तैयार GK सवाल</li>
+                        <li><i class="fas fa-check-circle"></i> दैनिक क्विज़ और प्रैक्टिस टेस्ट</li>
+                        <li><i class="fas fa-check-circle"></i> स्कोर ट्रैकिंग और प्रोग्रेस रिपोर्ट</li>
+                        <li><i class="fas fa-check-circle"></i> नवीनतम और अपडेटेड कंटेंट</li>
+                    </ul>
                 </div>
+                
+                <div class="security-warning">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>सुरक्षा चेतावनी: केवल वैध पेमेंट के बाद ही एक्सेस मिलेगा। सभी फील्ड्स सही भरना अनिवार्य है।</span>
+                </div>
+                
+                <div class="qr-section">
+                    <h3>आसान UPI पेमेंट</h3>
+                    <div class="qr-code">
+                        <img src="qrcode.png" alt="UPI QR Code" onerror="this.style.display='none'; document.getElementById('error-section').style.display='flex'; document.getElementById('online-content').style.display='none'; document.getElementById('error-message').textContent='QR कोड लोड करने में त्रुटि। कृपया UPI ID का उपयोग करें।';">
+                    </div>
+                    <div class="upi-id">
+                        <i class="fas fa-copy"></i>
+                        9057650616@amazon.pay
+                    </div>
+                    <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
+                    <ol class="instructions">
+                        <li><i class="fas fa-qrcode"></i> QR कोड को अपने UPI ऐप से स्कैन करें।</li>
+                        <li><i class="fas fa-money-bill"></i> ₹49 का पेमेंट करें।</li>
+                        <li><i class="fas fa-receipt"></i> UPI ट्रांजैक्शन ID फॉर्म में डालें।</li>
+                        <li><i class="fas fa-check-square"></i> "पेमेंट करने के बाद इस बॉक्स को टिक करें" चेकबॉक्स टिक करें।</li>
+                    </ol>
+                </div>
+                
+                <div class="timer-container" id="timer-container">
+                    <div class="timer-title">आपकी प्रीमियम एक्सेस की समय सीमा</div>
+                    <div class="timer-display" id="timer-display">30 दिन, 0 घंटे, 0 मिनट, 0 सेकंड</div>
+                    <div class="timer-progress">
+                        <div class="timer-progress-bar" id="timer-progress-bar"></div>
+                    </div>
+                </div>
+                
+                <form id="payment-form">
+                    <div id="form-error" class="error-text"></div>
+                    <div class="form-group" id="user_id_group">
+                        <label for="user_id">अपना ईमेल ID दर्ज करें</label>
+                        <input type="text" id="user_id" name="user_id" placeholder="उदाहरण: example@gmail.com" required>
+                        <div id="user_id_error" class="error-text"></div>
+                    </div>
+                    
+                    <div class="form-group" id="mobile_number_group">
+                        <label for="mobile_number">अपना मोबाइल नंबर डालें</label>
+                        <input type="text" id="mobile_number" name="mobile_number" placeholder="उदाहरण: 76652XXXXX" required>
+                        <div id="mobile_number_error" class="error-text"></div>
+                    </div>
+                    
+                    <div class="form-group" id="transaction_id_group">
+                        <label for="transaction_id">UPI ट्रांजैक्शन ID</label>
+                        <input type="text" id="transaction_id" name="transaction_id" placeholder="उदाहरण: TXN123456" required>
+                        <div id="transaction_id_error" class="error-text"></div>
+                    </div>
+                    
+                    <div class="form-group" id="amount_group">
+                        <label for="amount">पेमेंट राशि</label>
+                        <input type="text" id="amount" name="amount" placeholder="49" value="49" required>
+                        <div id="amount_error" class="error-text"></div>
+                    </div>
+                    
+                    <div class="form-group" id="payment_made_group">
+                        <div class="checkbox-container disabled" id="payment_made_container">
+                            <label for="payment_made">
+                                <input type="checkbox" id="payment_made" name="payment_made" disabled>
+                                पेमेंट करने के बाद इस बॉक्स को टिक करें
+                                <span class="checkbox-hint">पेमेंट रिक्वेस्ट भेजने के लिए QR कोड स्कैन करें और यहाँ टिक करें।</span>
+                            </label>
+                        </div>
+                        <div id="payment_made_error" class="error-text"></div>
+                    </div>
+                    
+                    <div class="form-group" id="payment_note_group">
+                        <label for="payment_note">कोई अतिरिक्त जानकारी (वैकल्पिक)</label>
+                        <textarea id="payment_note" name="payment_note" rows="3" placeholder="पेमेंट संबंधी कोई विशेष जानकारी"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">पेमेंट रिक्वेस्ट भेजें</button>
+                    <button type="button" class="check-btn" onclick="checkPaymentStatus()">पेमेंट स्टेटस चेक करें</button>
+                    <button type="button" class="clear-btn" onclick="clearFirebaseData()">पेमेंट डेटा रीसेट करें</button>
+                </form>
+                
+                <div id="status-message" class="status-message"></div>
             </div>
         </div>
     </div>
@@ -1153,6 +1178,7 @@
         // Firebase को ग्लोबल स्कोप में इनिशियलाइज़ करें
         let database;
         let firebaseInitialized = false;
+        let timerInterval;
 
         // Firebase कॉन्फिगरेशन
         const firebaseConfig = {
@@ -1186,6 +1212,48 @@
         // पेज लोड होते ही Firebase इनिशियलाइज़ करें
         initializeFirebase();
 
+        // यह फंक्शन फॉर्म डेटा को सेव करेगा
+        function saveFormData() {
+            const formData = {
+                user_id: document.getElementById('user_id').value,
+                mobile_number: document.getElementById('mobile_number').value,
+                transaction_id: document.getElementById('transaction_id').value,
+                amount: document.getElementById('amount').value,
+                payment_note: document.getElementById('payment_note').value,
+                payment_made: document.getElementById('payment_made').checked
+            };
+            
+            localStorage.setItem('paymentFormData', JSON.stringify(formData));
+        }
+
+        // यह फंक्शन फॉर्म डेटा को रिस्टोर करेगा
+        function restoreFormData() {
+            const savedFormData = localStorage.getItem('paymentFormData');
+            
+            if (savedFormData) {
+                try {
+                    const formData = JSON.parse(savedFormData);
+                    
+                    document.getElementById('user_id').value = formData.user_id || '';
+                    document.getElementById('mobile_number').value = formData.mobile_number || '';
+                    document.getElementById('transaction_id').value = formData.transaction_id || '';
+                    document.getElementById('amount').value = formData.amount || '49';
+                    document.getElementById('payment_note').value = formData.payment_note || '';
+                    document.getElementById('payment_made').checked = formData.payment_made || false;
+                    
+                    // चेकबॉक्स की स्थिति के आधार पर इसे एनेबल/डिसेबल करें
+                    checkAllFieldsForCheckbox();
+                    
+                    return true;
+                } catch (error) {
+                    console.error("Error restoring form data:", error);
+                    return false;
+                }
+            }
+            
+            return false;
+        }
+
         // यह फंक्शन लोकल स्टोरेज में एक्सेस एक्सपायरी टाइमस्टैम्प सेट करेगा
         function setAccessExpiry(userId, mobileNumber, transactionId, amount, days = 30) {
             const now = new Date();
@@ -1203,6 +1271,9 @@
             
             // यह फ्लैग सेट करें ताकि हम जान सकें कि उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
             localStorage.setItem('hadPremiumAccess', 'true');
+            
+            // टाइमर शुरू करें
+            startTimer(expiryTime);
             
             // एक्सपायरी चेक करने के लिए एक इवेंट सेट करें
             scheduleExpiryCheck(expiryTime);
@@ -1255,6 +1326,14 @@
             if (localStorage.getItem('premiumAccess')) {
                 localStorage.removeItem('premiumAccess');
                 
+                // टाइमर रोकें
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+                
+                // फॉर्म डेटा को सेव करें
+                saveFormData();
+                
                 // यूजर को पेमेंट पेज पर रीडायरेक्ट करें, लेकिन एक्सपायर्ड फ्लैग के साथ
                 window.location.href = 'index.html?expired=true';
             }
@@ -1274,6 +1353,7 @@
                 
                 // अगर एक्सपायरी समय बीत चुका है, तो एक्सेस अवैध है
                 if (currentTime >= expiryTime) {
+                    // एक्सेस एक्सपायर होने पर लोकल स्टोरेज क्लियर करें और यूजर को रीडायरेक्ट करें
                     clearExpiredAccess();
                     return false;
                 }
@@ -1283,6 +1363,64 @@
                 console.error("Error checking access validity:", error);
                 return false;
             }
+        }
+
+        // यह फंक्शन नोटिफिकेशन दिखाने से पहले चेक करेगा कि यह पहले से दिखाया जा चुका है या नहीं
+        function showNotificationOnce(title, message, type = 'info', storageKey) {
+            // चेक करें कि नोटिफिकेशन पहले से दिखाया जा चुका है या नहीं
+            const notificationShown = localStorage.getItem(storageKey);
+            
+            if (!notificationShown) {
+                showNotification(title, message, type);
+                // नोटिफिकेशन दिखाने के बाद इसे लोकल स्टोरेज में मार्क करें
+                localStorage.setItem(storageKey, 'true');
+            }
+        }
+
+        // टाइमर शुरू करने का फंक्शन
+        function startTimer(expiryTime) {
+            // पहले से चल रहे टाइमर को रोकें
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // टाइमर कंटेनर दिखाएं
+            document.getElementById('timer-container').style.display = 'block';
+            
+            // टाइमर अपडेट करने का फंक्शन
+            function updateTimer() {
+                const currentTime = new Date().getTime();
+                const timeRemaining = expiryTime - currentTime;
+                
+                if (timeRemaining <= 0) {
+                    // टाइमर समाप्त हो गया है
+                    clearInterval(timerInterval);
+                    document.getElementById('timer-display').textContent = 'एक्सेस समाप्त';
+                    document.getElementById('timer-progress-bar').style.width = '0%';
+                    return;
+                }
+                
+                // दिन, घंटे, मिनट और सेकंड की गणना करें
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                
+                // टाइमर डिस्प्ले अपडेट करें
+                document.getElementById('timer-display').textContent = 
+                    `${days} दिन, ${hours} घंटे, ${minutes} मिनट, ${seconds} सेकंड`;
+                
+                // प्रोग्रेस बार अपडेट करें
+                const totalTime = 30 * 24 * 60 * 60 * 1000; // 30 दिन मिलीसेकंड में
+                const progressPercentage = (timeRemaining / totalTime) * 100;
+                document.getElementById('timer-progress-bar').style.width = `${progressPercentage}%`;
+            }
+            
+            // तुरंत टाइमर अपडेट करें
+            updateTimer();
+            
+            // हर सेकंड टाइमर अपडेट करें
+            timerInterval = setInterval(updateTimer, 1000);
         }
 
         (function() {
@@ -1297,17 +1435,40 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
+            // ऐप इनिशियलाइज़ेशन फ्लैग चेक करें
+            const appInitializedFlag = localStorage.getItem('appInitialized');
+            const currentSessionId = sessionStorage.getItem('sessionId');
+            
+            // अगर करेंट सेशन ID नहीं है, तो एक नया बनाएं
+            if (!currentSessionId) {
+                const newSessionId = Date.now().toString();
+                sessionStorage.setItem('sessionId', newSessionId);
+                
+                // अगर ऐप पहले इनिशियलाइज़ नहीं हुआ है, तो इनिशियलाइज़ करें
+                if (!appInitializedFlag) {
+                    localStorage.setItem('appInitialized', 'true');
+                    // यहां पर आप वह कोड डाल सकते हैं जो सिर्फ एक बार चलना चाहिए
+                    console.log("App initialized for the first time");
+                }
+            }
+            
+            // फॉर्म डेटा को रिस्टोर करें
+            restoreFormData();
+            
             // चेक करें कि यूजर एक्सपायर्ड होकर आया है या नहीं, लेकिन सिर्फ तभी जब उसके पास पहले एक्सेस था
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('expired') === 'true' && localStorage.getItem('hadPremiumAccess') === 'true') {
-                showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
+                // एक्सपायर्ड नोटिफिकेशन केवल एक बार दिखाएं
+                showNotificationOnce('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info', 'expired_notification_shown');
             }
             
             // यह फंक्शन लोकल स्टोरेज से उपयोगकर्ता की एक्सेस जांचें
             function checkLocalAccess() {
                 if (isAccessValid()) {
                     const accessData = JSON.parse(localStorage.getItem('premiumAccess'));
-                    // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
+                    // एक्सेस अभी भी वैध है, टाइमर शुरू करें
+                    startTimer(accessData.expiryTime);
+                    // सीधे क्विज़ पेज पर जाएं
                     window.location.href = 'quiz.html?user_id=' + accessData.userId;
                     return true;
                 }
@@ -1319,6 +1480,8 @@
                 if (!isAccessValid()) {
                     // सिर्फ तभी रीडायरेक्ट करें जब उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
                     if (localStorage.getItem('hadPremiumAccess') === 'true') {
+                        // फॉर्म डेटा को सेव करें
+                        saveFormData();
                         window.location.href = 'index.html?expired=true';
                     }
                 }
@@ -1329,6 +1492,8 @@
                 if (!isAccessValid()) {
                     // सिर्फ तभी रीडायरेक्ट करें जब उपयोगकर्ता के पास पहले प्रीमियम एक्सेस था
                     if (localStorage.getItem('hadPremiumAccess') === 'true') {
+                        // फॉर्म डेटा को सेव करें
+                        saveFormData();
                         window.location.href = 'index.html?expired=true';
                     }
                 }
@@ -1377,80 +1542,6 @@
             // पेमेंट स्टेटस लिसनर सेटअप करें
             setupPaymentStatusListener();
 
-            async function checkPremiumAccess() {
-                // पहले लोकल स्टोरेज जांचें
-                if (checkLocalAccess()) {
-                    return;
-                }
-
-                const params = new URLSearchParams(window.location.search);
-                const userEmail = params.get('user_id');
-
-                if (!userEmail) {
-                    document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('online-content').style.display = 'block';
-                    return;
-                }
-
-                const userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
-
-                try {
-                    if (!firebaseInitialized || !database) {
-                        throw new Error("Firebase not initialized");
-                    }
-                    
-                    const paymentsRef = database.ref('payments');
-                    const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
-                    const payments = snapshot.val();
-                    let foundApprovedPayment = null;
-
-                    if (payments) {
-                        for (let key in payments) {
-                            if (payments[key].status === 'approved') {
-                                foundApprovedPayment = payments[key];
-                                break;
-                            }
-                        }
-                    }
-
-                    if (foundApprovedPayment) {
-                        // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
-                        let approvalDate;
-                        if (foundApprovedPayment.approved_at) {
-                            approvalDate = new Date(foundApprovedPayment.approved_at);
-                        } else {
-                            // अगर approved_at नहीं है, तो timestamp का उपयोग करें
-                            approvalDate = new Date(foundApprovedPayment.timestamp);
-                        }
-                        
-                        // एक्सेस सेट करें जो 30 दिन बाद एक्सपायर हो जाएगी
-                        setAccessExpiry(
-                            foundApprovedPayment.user_id, 
-                            foundApprovedPayment.mobile_number,
-                            foundApprovedPayment.transaction_id,
-                            foundApprovedPayment.amount,
-                            30
-                        );
-                        
-                        window.location.href = 'quiz.html?user_id=' + userId;
-                        return;
-                    }
-                    
-                    // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
-                    document.getElementById('user_id').value = userEmail;
-                    document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('online-content').style.display = 'block';
-
-                } catch (error) {
-                    console.error("Access check error:", error);
-                    document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('online-content').style.display = 'block';
-                }
-            }
-            
-            // इस फंक्शन को कॉल करने से पहले टिप्पणी करें
-            // checkPremiumAccess();
-
             // फॉर्म सबमिट इवेंट मजबूती से बाइंड
             const paymentForm = document.getElementById('payment-form');
             if (paymentForm) {
@@ -1465,6 +1556,19 @@
             
             // इनपुट फील्ड्स पर रीयल-टाइम वैलिडेशन जोड़ें
             setupRealtimeValidation();
+            
+            // इनपुट फील्ड्स पर चेंज इवेंट जोड़ें ताकि डेटा सेव होता रहे
+            const inputFields = document.querySelectorAll('input, textarea');
+            inputFields.forEach(field => {
+                field.addEventListener('input', saveFormData);
+                field.addEventListener('change', saveFormData);
+            });
+        });
+        
+        // फॉर्म रीसेट करने पर फॉर्म डेटा को क्लियर करें
+        document.getElementById('payment-form').addEventListener('reset', function() {
+            localStorage.removeItem('paymentFormData');
+            checkAllFieldsForCheckbox();
         });
         
         function setupRealtimeValidation() {
@@ -1733,6 +1837,9 @@
                 return;
             }
 
+            // फॉर्म सबमिट फ्लैग सेट करें
+            document.getElementById('payment-form').setAttribute('data-submitting', 'true');
+
             showProcessingScreen();
             console.log("Processing screen shown"); // डिबग
 
@@ -1800,6 +1907,9 @@
                 
                 // रिट्राई बटन दिखाएं
                 addRetryButton();
+            } finally {
+                // फॉर्म सबमिट फ्लैग हटाएं
+                document.getElementById('payment-form').removeAttribute('data-submitting');
             }
         }
 
@@ -2064,6 +2174,14 @@
                 // लोकल स्टोरेज से भी डेटा हटाएं
                 localStorage.removeItem('premiumAccess');
                 
+                // टाइमर रोकें
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+                
+                // टाइमर कंटेनर छुपाएं
+                document.getElementById('timer-container').style.display = 'none';
+                
                 showNotification('डेटा रीसेट', 'आपका पेमेंट डेटा रीसेट हो गया है।', 'success');
                 document.getElementById('payment-form').reset();
                 
@@ -2123,22 +2241,6 @@
                 console.error('Failed to copy UPI ID: ', err);
             });
         });
-
-        // बैक प्रेस हैंडलिंग - डायरेक्ट होम पेज पर जाए
-        window.onpopstate = function() {
-            window.location.href = 'file:///android_asset/home.html';
-            if (window.AppInventor) {
-                window.AppInventor.loadUrl('file:///android_asset/home.html');
-            }
-        };
-        // बैक बटन को ओवरराइड और सेटअप
-        window.history.pushState(null, null, window.location.href);
-        window.onpopstate = window.onpopstate || function() {
-            window.location.href = 'file:///android_asset/home.html';
-            if (window.AppInventor) {
-                window.AppInventor.loadUrl('file:///android_asset/home.html');
-            }
-        };
     </script>
 </body>
 </html>
