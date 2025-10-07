@@ -2324,6 +2324,7 @@ height: 450px;
 </div>
 </div>
 </div>
+</div>
 
 <!-- Starburst Animation Container -->
 <div class="starburst-container" id="starburst-container"></div>
@@ -2677,7 +2678,7 @@ const nameInput = document.getElementById('user-name-input');
 const enteredName = nameInput.value.trim();
 
 if (enteredName.length < 2) {
-showNotification('warning', 'चेतावनी', 'कृपया कम से कम से 2 अक्षरों का नाम दर्ज करें');
+showNotification('warning', 'चेतावनी', 'कृपया कम से कम 2 अक्षरों का नाम दर्ज करें');
 return;
 }
 
@@ -3706,84 +3707,83 @@ window.addEventListener('offline', checkNetworkStatus);
 
 // उपयोगकर्ता की एक्सेस जांचने का फंक्शन
 function checkUserAccess() {
-    // Kodular के लिए localStorage के अलावा अन्य विधियों का उपयोग करें
-    const accessData = getAccessData();
-    
-    if (!accessData) {
-        // कोई एक्सेस डेटा नहीं है, उपयोगकर्ता को index.html पर भेजें
-        redirectToPayment();
-        return false;
-    }
+const accessData = localStorage.getItem('premiumAccess');
 
-    try {
-        const { userId, mobileNumber, transactionId, amount, expiryDate } = accessData;
-        const now = new Date();
-        const expiry = new Date(expiryDate);
+if (!accessData) {
+// कोई एक्सेस डेटा नहीं है, उपयोगकर्ता को index.html पर भेजें
+redirectToPayment();
+return false;
+}
 
-        if (now >= expiry) {
-            // एक्सेस समाप्त हो गई है, सभी स्थानों से हटाएं और उपयोगकर्ता को index.html पर भेजें
-            clearAccessData();
-            redirectToPayment();
-            return false;
-        }
+try {
+const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
+const now = new Date();
+const expiry = new Date(expiryDate);
 
-        // एक्सेस अभी भी वैध है
-        return true;
-    } catch (error) {
-        console.error('Access check error:', error);
-        // डेटा पार्स करने में त्रुटि, उपयोगकर्ता को index.html पर भेजें
-        redirectToPayment();
-        return false;
-    }
+if (now >= expiry) {
+// एक्सेस समाप्त हो गई है, localStorage से हटाएं और उपयोगकर्ता को index.html पर भेजें
+localStorage.removeItem('premiumAccess');
+redirectToPayment();
+return false;
+}
+
+// एक्सेस अभी भी वैध है
+return true;
+} catch (error) {
+console.error('Access check error:', error);
+// डेटा पार्स करने में त्रुटि, उपयोगकर्ता को index.html पर भेजें
+redirectToPayment();
+return false;
+}
 }
 
 // उपयोगकर्ता को भुगतान पृष्ठ पर रीडायरेक्ट करने का फंक्शन
 function redirectToPayment() {
-    // एक सूचना दिखाएं कि एक्सेस समाप्त हो गई है
-    showAccessExpiredNotification();
+// एक सूचना दिखाएं कि एक्सेस समाप्त हो गई है
+showAccessExpiredNotification();
 
-    // 3 सेकंड के बाद उपयोगकर्ता को index.html पर रीडायरेक्ट करें
-    setTimeout(() => {
-        if (window.AppInventor) {
-            // Kodular APK के लिए
-            window.AppInventor.setWebViewString('file:///android_asset/index.html');
-        } else {
-            // वेब ब्राउज़र के लिए
-            window.location.href = 'file:///android_asset/index.html';
-        }
-    }, 3000);
+// 3 सेकंड के बाद उपयोगकर्ता को index.html पर रीडायरेक्ट करें
+setTimeout(() => {
+if (window.AppInventor) {
+// Kodular APK के लिए
+window.AppInventor.setWebViewString('file:///android_asset/index.html');
+} else {
+// वेब ब्राउज़र के लिए
+window.location.href = 'file:///android_asset/index.html';
+}
+}, 3000);
 }
 
 // एक्सेस समाप्ति सूचना दिखाने का फंक्शन
 function showAccessExpiredNotification() {
-    // यदि पहले से कोई नोटिफिकेशन कंटेनर नहीं है, तो बनाएं
-    let notificationContainer = document.getElementById('notification-container');
-    if (!notificationContainer) {
-        notificationContainer = document.createElement('div');
-        notificationContainer.id = 'notification-container';
-        notificationContainer.style.position = 'fixed';
-        notificationContainer.style.top = '20px';
-        notificationContainer.style.left = '50%';
-        notificationContainer.style.transform = 'translateX(-50%)';
-        notificationContainer.style.zIndex = '3000';
-        notificationContainer.style.width = '90%';
-        notificationContainer.style.maxWidth = '400px';
-        document.body.appendChild(notificationContainer);
-    }
+// यदि पहले से कोई नोटिफिकेशन कंटेनर नहीं है, तो बनाएं
+let notificationContainer = document.getElementById('notification-container');
+if (!notificationContainer) {
+notificationContainer = document.createElement('div');
+notificationContainer.id = 'notification-container';
+notificationContainer.style.position = 'fixed';
+notificationContainer.style.top = '20px';
+notificationContainer.style.left = '50%';
+notificationContainer.style.transform = 'translateX(-50%)';
+notificationContainer.style.zIndex = '3000';
+notificationContainer.style.width = '90%';
+notificationContainer.style.maxWidth = '400px';
+document.body.appendChild(notificationContainer);
+}
 
-    // नोटिफिकेशन एलिमेंट बनाएं
-    const notification = document.createElement('div');
-    notification.style.background = 'white';
-    notification.style.borderRadius = '12px';
-    notification.style.padding = '16px';
-    notification.style.marginBottom = '10px';
-    notification.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
-    notification.style.display = 'flex';
-    notification.style.alignItems = 'center';
-    notification.style.gap = '12px';
-    notification.style.animation = 'slideDown 0.3s ease-out';
+// नोटिफिकेशन एलिमेंट बनाएं
+const notification = document.createElement('div');
+notification.style.background = 'white';
+notification.style.borderRadius = '12px';
+notification.style.padding = '16px';
+notification.style.marginBottom = '10px';
+notification.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+notification.style.display = 'flex';
+notification.style.alignItems = 'center';
+notification.style.gap = '12px';
+notification.style.animation = 'slideDown 0.3s ease-out';
 
-    notification.innerHTML = `
+notification.innerHTML = `
 <div style="font-size: 24px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(214, 48, 49, 0.1); color: #d63031;">
 <i class="fas fa-exclamation-circle"></i>
 </div>
@@ -3797,128 +3797,20 @@ function showAccessExpiredNotification() {
 </div>
 `;
 
-    // नोटिफिकेशन कंटेनर में नोटिफिकेशन जोड़ें
-    notificationContainer.appendChild(notification);
+// नोटिफिकेशन कंटेनर में नोटिफिकेशन जोड़ें
+notificationContainer.appendChild(notification);
 
-    // 5 सेकंड बाद नोटिफिकेशन हटाएं
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.animation = 'slideUpOut 0.3s ease-out forwards';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notificationContainer.removeChild(notification);
-                }
-            }, 300);
-        }
-    }, 5000);
+// 5 सेकंड बाद नोटिफिकेशन हटाएं
+setTimeout(() => {
+if (notification.parentNode) {
+notification.style.animation = 'slideUpOut 0.3s ease-out forwards';
+setTimeout(() => {
+if (notification.parentNode) {
+notificationContainer.removeChild(notification);
 }
-
-// यह फंक्शन एक्सेस डेटा को localStorage और Kodular के लिए अन्य विधियों में सेव करेगा
-function saveAccessData(userId, mobileNumber, transactionId, amount, expiryDate) {
-    const data = {
-        userId: userId,
-        mobileNumber: mobileNumber,
-        transactionId: transactionId,
-        amount: amount,
-        expiryDate: expiryDate.toISOString()
-    };
-    
-    // localStorage में सेव करें
-    try {
-        localStorage.setItem('premiumAccess', JSON.stringify(data));
-    } catch (e) {
-        console.error("LocalStorage save failed:", e);
-    }
-    
-    // Kodular के लिए WebViewString का उपयोग करें
-    try {
-        if (window.AppInventor) {
-            window.AppInventor.setWebViewString('premiumAccess:' + JSON.stringify(data));
-        }
-    } catch (e) {
-        console.error("WebViewString save failed:", e);
-    }
-    
-    // URL में डेटा सेव करें (बैकअप के रूप में)
-    try {
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('access_data', btoa(JSON.stringify(data)));
-        const newUrl = window.location.pathname + '?' + urlParams.toString();
-        window.history.replaceState({}, '', newUrl);
-    } catch (e) {
-        console.error("URL save failed:", e);
-    }
+}, 300);
 }
-
-// यह फंक्शन एक्सेस डेटा को localStorage और Kodular के लिए अन्य विधियों से प्राप्त करेगा
-function getAccessData() {
-    let accessData = null;
-    
-    // पहले localStorage से प्राप्त करने का प्रयास करें
-    try {
-        const localData = localStorage.getItem('premiumAccess');
-        if (localData) {
-            accessData = JSON.parse(localData);
-        }
-    } catch (e) {
-        console.error("LocalStorage read failed:", e);
-    }
-    
-    // अगर localStorage में डेटा नहीं है, तो Kodular WebViewString से प्राप्त करने का प्रयास करें
-    if (!accessData && window.AppInventor) {
-        try {
-            const webViewString = window.AppInventor.getWebViewString();
-            if (webViewString && webViewString.startsWith('premiumAccess:')) {
-                accessData = JSON.parse(webViewString.substring(14));
-            }
-        } catch (e) {
-            console.error("WebViewString read failed:", e);
-        }
-    }
-    
-    // अगर अभी भी डेटा नहीं है, तो URL से प्राप्त करने का प्रयास करें
-    if (!accessData) {
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedData = urlParams.get('access_data');
-            if (encodedData) {
-                accessData = JSON.parse(atob(encodedData));
-            }
-        } catch (e) {
-            console.error("URL read failed:", e);
-        }
-    }
-    
-    return accessData;
-}
-
-// यह फंक्शन एक्सेस डेटा को सभी स्थानों से हटाएगा
-function clearAccessData() {
-    // localStorage से हटाएं
-    try {
-        localStorage.removeItem('premiumAccess');
-    } catch (e) {
-        console.error("LocalStorage clear failed:", e);
-    }
-    
-    // Kodular WebViewString से हटाएं
-    try {
-        if (window.AppInventor) {
-            window.AppInventor.setWebViewString('');
-        }
-    } catch (e) {
-        console.error("WebViewString clear failed:", e);
-    }
-    
-    // URL से हटाएं
-    try {
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.delete('access_data');
-        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
-        window.history.replaceState({}, '', newUrl);
-    } catch (e) {
-        console.error("URL clear failed:", e);
-    }
+}, 5000);
 }
 
 // CSS एनिमेशन जोड़ें
