@@ -698,12 +698,11 @@ height: 50px;
 border: 5px solid rgba(245, 158, 11, 0.2);
 border-top: 5px solid var(--paid-color);
 border-radius: 50%;
-animation: spin 1s linear infinite;
+animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
+to { transform: rotate(360deg); }
 }
 
 .offline-image-container {
@@ -3717,7 +3716,7 @@ return false;
 }
 
 try {
-const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
+const { userId, mobileNumber, transactionId, amount, expiryDate } = JSON.parse(accessData);
 const now = new Date();
 const expiry = new Date(expiryDate);
 
