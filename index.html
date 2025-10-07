@@ -1237,12 +1237,28 @@
 
             // यह फंक्शन लोकल स्टोरेज में एक्सेस डेटा सेव करेगा
             function saveAccessToLocalStorage(userId, mobileNumber, transactionId, expiryDate) {
-                localStorage.setItem('premiumAccess', JSON.stringify({
+                const accessData = {
                     userId: userId,
                     mobileNumber: mobileNumber,
                     transactionId: transactionId,
                     expiryDate: expiryDate.toISOString()
-                }));
+                };
+                
+                // सुनिश्चित करें कि डेटा सही ढंग से सेव हो रहा है
+                try {
+                    localStorage.setItem('premiumAccess', JSON.stringify(accessData));
+                    console.log("Access data saved to localStorage:", accessData);
+                    
+                    // डेबग के लिए तुरंत जांचें कि डेटा सही ढंग से सेव हुआ है
+                    const savedData = JSON.parse(localStorage.getItem('premiumAccess'));
+                    console.log("Verified saved data:", savedData);
+                    
+                    // डेटा सेव होने के बाद एक सूचना दिखाएं
+                    showNotification('सफलता', 'आपकी एक्सेस जानकारी सफलतापूर्वक सेव हो गई है।', 'success');
+                } catch (error) {
+                    console.error("Error saving to localStorage:", error);
+                    showNotification('त्रुटि', 'एक्सेस डेटा सेव करने में त्रुटि। कृपया फिर से कोशिश करें।', 'error');
+                }
             }
 
             // यह फंक्शन लोकल स्टोरेज में सेव एक्सेस की वैधता जांचेगा
