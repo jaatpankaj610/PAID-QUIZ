@@ -393,6 +393,13 @@
             position: relative;
             width: 100%;
             animation: popIn 0.6s ease-out forwards;
+            /* Added for better touch handling on mobile */
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            touch-action: manipulation;
+            /* Ensure proper z-index */
+            z-index: 1;
+            /* Ensure pointer events work properly */
+            pointer-events: auto;
         }
         
         @keyframes popIn {
@@ -422,13 +429,22 @@
             animation: pop3D 0.5s ease-out forwards;
         }
         
-        .options li.correct::after {
-            content: "\f00c";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            margin-left: auto;
+        /* Position the check icon in the bottom right corner */
+        .options li.correct .option-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
             font-size: 18px;
             color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            pointer-events: none; /* Prevent icon from interfering with clicks */
         }
         
         .options li.incorrect { 
@@ -440,12 +456,22 @@
             animation: pop3D 0.5s ease-out forwards;
         }
         
-        .options li.incorrect::after {
-            content: "\f00d";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            margin-left: auto;
+        /* Position the cross icon in the bottom right corner */
+        .options li.incorrect .option-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
             font-size: 18px;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            pointer-events: none; /* Prevent icon from interfering with clicks */
         }
         
         @keyframes pop3D {
@@ -492,7 +518,7 @@
         /* Professional Back Button Styles */
         .back-btn-container {
             margin-top: 20px;
-            display: flex;
+            display: none; /* Hide by default */
             justify-content: center;
             width: 100%;
         }
@@ -1168,6 +1194,13 @@
         .leaderboard-time {
             font-size: 11px;
             color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .leaderboard-time i {
+            font-size: 10px;
         }
 
         .leaderboard-score {
@@ -1195,7 +1228,7 @@
         }
 
         .leaderboard-toggle-btn {
-            background: var(--premium-gradient); /* Changed from gradient to premium-gradient */
+            background: var(--premium-gradient);
             color: white;
             border: none;
             border-radius: 12px;
@@ -1315,6 +1348,23 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .user-action-btn:hover::before {
+            left: 100%;
         }
 
         .user-action-btn:hover {
@@ -1347,10 +1397,10 @@
             font-weight: 700;
         }
 
-        /* Custom Notification Styles */
+        /* Custom Notification Styles - Modified to appear from bottom */
         .notification-overlay {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
             height: 100%;
@@ -1358,8 +1408,9 @@
             z-index: 10000;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
             pointer-events: none;
+            padding-bottom: 20px;
         }
 
         .notification {
@@ -1371,10 +1422,11 @@
             width: 90%;
             display: flex;
             align-items: center;
-            transform: translateY(-100px);
+            transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s ease;
             pointer-events: auto;
+            border-bottom: 4px solid var(--primary);
         }
 
         .notification.show {
@@ -1604,6 +1656,32 @@
             display: none !important;
         }
 
+        /* Premium time display styles */
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .time-badge.recent {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .time-badge.old {
+            background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
+            color: var(--gray);
+            border: 1px solid rgba(107, 114, 128, 0.2);
+        }
+
         @media (min-width: 601px) {
             .header { 
                 padding: 18px; 
@@ -1829,11 +1907,11 @@
                     
                     <!-- User Actions -->
                     <div class="user-actions">
-                        <button class="user-action-btn" onclick="showMyScore()">
+                        <button class="user-action-btn" id="my-score-btn" onclick="showMyScore()">
                             <i class="fas fa-chart-line"></i>
                             <span>मेरा स्कोर</span>
                         </button>
-                        <button class="user-action-btn secondary" onclick="showMyRank()">
+                        <button class="user-action-btn secondary" id="my-rank-btn" onclick="showMyRank()">
                             <i class="fas fa-medal"></i>
                             <span>मेरी रैंक</span>
                         </button>
@@ -1917,7 +1995,7 @@
                                 <div class="premium-rotating-btn-glow"></div>
                                 <div class="premium-rotating-btn-particles" id="particles-container"></div>
                                 <i class="fas fa-rocket premium-rotating-btn-icon"></i>
-                                <span>अंतिम रैंकिंग देखें</span>
+                                <span style="font-size: 18px; font-weight: 900;">अंतिम रैंकिंग देखें</span>
                             </div>
                             <div class="premium-rotating-btn-face premium-rotating-btn-back">
                                 <i class="fas fa-star premium-rotating-btn-icon"></i>
@@ -2005,7 +2083,6 @@
         let todayScores = [];
         let isLeaderboardLoaded = false;
         let countdownInterval; // For the countdown timer
-        let hasAnswered = false; // Track if user has answered the current question
         let questionHistory = []; // Store history of questions and answers
         let autoNextTimeout; // Timeout for auto next question
         let quizCompleted = false; // Track if the quiz has been completed once
@@ -2013,6 +2090,8 @@
         let leaderboardToggleState = false; // Track the toggle state to prevent double clicks
         let midnightResetInterval; // For midnight reset
         let isRotating = false; // Track if button is currently rotating
+        let notificationTimeout = null; // Track notification timeout
+        let userAnswered = false; // Track if user has answered the current question
 
         // Initialize sound effects
         const correctSound = document.getElementById('correct-sound');
@@ -2035,6 +2114,10 @@
             if (navigator.onLine) {
                 loadQuestions();
             }
+            
+            // Add proper event listeners for the user action buttons
+            document.getElementById('my-score-btn').addEventListener('click', showMyScore);
+            document.getElementById('my-rank-btn').addEventListener('click', showMyRank);
         });
 
         function initializeQuiz() {
@@ -2145,6 +2228,27 @@
                 document.getElementById('free-offline-section').style.display = 'block';
                 return;
             }
+            
+            // Check if user already has a score for today
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            
+            // First check localStorage
+            const localScores = JSON.parse(localStorage.getItem('leaderboardScores') || '{}');
+            if (localScores[dateStr]) {
+                const existingUserScore = localScores[dateStr].find(s => s.userId === userId);
+                if (existingUserScore) {
+                    // User already has a score for today, set initialScore to that value
+                    initialScore = existingUserScore.score;
+                } else {
+                    // No score for today, reset initialScore
+                    initialScore = 0;
+                }
+            } else {
+                // No scores for today, reset initialScore
+                initialScore = 0;
+            }
+            
             if (questions.length === 0) {
                 loadQuestions().then(() => {
                     if (questions.length > 0) {
@@ -2157,9 +2261,9 @@
                             scoreSection.style.display = 'none';
                             currentQuestionIndex = 0;
                             score = 0;
-                            initialScore = 0; // Reset initial score
                             questionHistory = []; // Reset question history
                             quizCompleted = false; // Reset quiz completion flag
+                            userAnswered = false; // Reset userAnswered flag
                             updateScore();
                             showQuestion();
                         } else {
@@ -2178,9 +2282,9 @@
                     scoreSection.style.display = 'none';
                     currentQuestionIndex = 0;
                     score = 0;
-                    initialScore = 0; // Reset initial score
                     questionHistory = []; // Reset question history
                     quizCompleted = false; // Reset quiz completion flag
+                    userAnswered = false; // Reset userAnswered flag
                     updateScore();
                     showQuestion();
                 } else {
@@ -2246,25 +2350,41 @@
             updateProgressBar();
             
             // Reset the answered flag
-            hasAnswered = false;
+            userAnswered = false;
             
             // Clear any existing timeout
             if (autoNextTimeout) {
                 clearTimeout(autoNextTimeout);
             }
             
+            // Create a document fragment for better performance
+            const fragment = document.createDocumentFragment();
+            
             question.options.forEach((option, index) => {
                 const li = document.createElement('li');
                 li.textContent = option || 'विकल्प गायब';
                 li.style.opacity = '0';
                 li.style.transform = 'scale(0.92) translateY(20px)';
-                li.onclick = () => checkAnswer(index);
-                optionsList.appendChild(li);
+                li.dataset.index = index; // Store index as data attribute
                 
+                // Use event delegation approach instead of direct event listeners
+                fragment.appendChild(li);
+            });
+            
+            // Append all options at once
+            optionsList.appendChild(fragment);
+            
+            // Add a single event listener to the parent container
+            optionsList.addEventListener('click', handleOptionClick);
+            optionsList.addEventListener('touchstart', handleOptionTouch);
+            
+            // Animate options appearing
+            const allOptions = optionsList.querySelectorAll('li');
+            allOptions.forEach((option, index) => {
                 setTimeout(() => {
-                    li.style.transition = 'all 0.6s ease';
-                    li.style.opacity = '1';
-                    li.style.transform = 'scale(1) translateY(0)';
+                    option.style.transition = 'all 0.6s ease';
+                    option.style.opacity = '1';
+                    option.style.transform = 'scale(1) translateY(0)';
                 }, index * 120);
             });
             
@@ -2273,6 +2393,22 @@
                 backBtnContainer.style.display = 'flex';
             } else {
                 backBtnContainer.style.display = 'none';
+            }
+        }
+
+        // New handler functions for option clicks
+        function handleOptionClick(e) {
+            if (e.target.tagName === 'LI' && !userAnswered) {
+                const index = parseInt(e.target.dataset.index);
+                checkAnswer(index);
+            }
+        }
+
+        function handleOptionTouch(e) {
+            if (e.target.tagName === 'LI' && !userAnswered) {
+                e.preventDefault(); // Prevent default touch behavior
+                const index = parseInt(e.target.dataset.index);
+                checkAnswer(index);
             }
         }
 
@@ -2301,13 +2437,14 @@
 
         function checkAnswer(selectedIndex) {
             // Prevent multiple answers to the same question
-            if (hasAnswered) return;
-            hasAnswered = true;
+            if (userAnswered) return;
+            userAnswered = true;
             
             const question = questions[currentQuestionIndex];
             const options = document.querySelectorAll('#free-options-list li');
             const result = document.getElementById('free-result');
             const backBtnContainer = document.getElementById('back-btn-container');
+            const optionsList = document.getElementById('free-options-list');
             
             if (!result || !options.length) {
                 console.error('Result or options not found for free quiz');
@@ -2323,10 +2460,27 @@
                 wasCorrect: selectedIndex === question.correctAnswer
             });
             
+            // Remove event listeners from the options list
+            optionsList.removeEventListener('click', handleOptionClick);
+            optionsList.removeEventListener('touchstart', handleOptionTouch);
+            
             options.forEach((option, index) => {
-                option.onclick = null;
-                if (index === question.correctAnswer) option.classList.add('correct');
-                if (index === selectedIndex && selectedIndex !== question.correctAnswer) option.classList.add('incorrect');
+                if (index === question.correctAnswer) {
+                    option.classList.add('correct');
+                    // Create and add the check icon
+                    const icon = document.createElement('div');
+                    icon.className = 'option-icon';
+                    icon.innerHTML = '<i class="fas fa-check"></i>';
+                    option.appendChild(icon);
+                }
+                if (index === selectedIndex && selectedIndex !== question.correctAnswer) {
+                    option.classList.add('incorrect');
+                    // Create and add the cross icon
+                    const icon = document.createElement('div');
+                    icon.className = 'option-icon';
+                    icon.innerHTML = '<i class="fas fa-times"></i>';
+                    option.appendChild(icon);
+                }
             });
             
             if (selectedIndex === question.correctAnswer) {
@@ -2386,6 +2540,7 @@
                 
                 // Go back to the previous question
                 currentQuestionIndex = lastQuestion.questionIndex;
+                userAnswered = false; // Reset userAnswered flag
                 showQuestion();
             }
         }
@@ -2434,6 +2589,16 @@
             const dateStr = today.toISOString().split('T')[0];
             const timestamp = today.getTime();
             
+            // Check if user already has a score for today in localStorage first
+            const localScores = JSON.parse(localStorage.getItem('leaderboardScores') || '{}');
+            if (localScores[dateStr]) {
+                const existingUserScore = localScores[dateStr].find(s => s.userId === userId);
+                if (existingUserScore) {
+                    console.log('User already has a score for today in localStorage, not updating');
+                    return;
+                }
+            }
+            
             // Create new score entry with initial score (not current score)
             const newScore = {
                 name: userName,
@@ -2445,12 +2610,20 @@
                 isFirstTime: isFirstTime
             };
             
-            // Check if user already has a score for today
+            // Check if user already has a score for today in Firebase
             database.ref(`todayScores/${dateStr}`).orderByChild('userId').equalTo(userId).once('value')
                 .then((snapshot) => {
                     if (snapshot.exists()) {
                         // User already has a score for today, don't update it
-                        console.log('User already has a score for today, not updating');
+                        console.log('User already has a score for today in Firebase, not updating');
+                        
+                        // Update localStorage with Firebase data to ensure consistency
+                        const firebaseData = snapshot.val();
+                        localScores[dateStr] = Object.keys(firebaseData).map(key => ({
+                            id: key,
+                            ...firebaseData[key]
+                        }));
+                        localStorage.setItem('leaderboardScores', JSON.stringify(localScores));
                     } else {
                         // User doesn't have a score for today, create a new one
                         database.ref(`todayScores/${dateStr}`).push(newScore)
@@ -2597,6 +2770,11 @@
         }
 
         function showNotification(type, title, message) {
+            // Clear any existing timeout
+            if (notificationTimeout) {
+                clearTimeout(notificationTimeout);
+            }
+            
             const notificationOverlay = document.getElementById('notification-overlay');
             const notification = document.getElementById('notification');
             const notificationIcon = document.getElementById('notification-icon');
@@ -2624,8 +2802,8 @@
                 notification.classList.add('show');
             }, 10);
             
-            // Auto hide after 3 seconds
-            setTimeout(() => {
+            // Auto hide after exactly 3 seconds
+            notificationTimeout = setTimeout(() => {
                 hideNotification();
             }, 3000);
         }
@@ -2769,7 +2947,7 @@
                 else if (index === 1) rankClass = 'rank-2';
                 else if (index === 2) rankClass = 'rank-3';
                 
-                // Calculate time ago
+                // Calculate time ago with improved accuracy
                 const timeAgo = getTimeAgo(score.timestamp);
                 const percentage = ((score.score / score.totalQuestions) * 100).toFixed(1);
                 
@@ -2801,24 +2979,24 @@
             
             // If less than a minute
             if (diff < 60000) {
-                return 'अभी अभी';
+                return '<span class="time-badge recent"><i class="fas fa-clock"></i> अभी अभी</span>';
             }
             
             // If less than an hour
             if (diff < 3600000) {
                 const minutes = Math.floor(diff / 60000);
-                return `${minutes} मिनट पहले`;
+                return `<span class="time-badge recent"><i class="fas fa-clock"></i> ${minutes} मिनट पहले</span>`;
             }
             
             // If less than a day
             if (diff < 86400000) {
                 const hours = Math.floor(diff / 3600000);
-                return `${hours} घंटे पहले`;
+                return `<span class="time-badge"><i class="fas fa-clock"></i> ${hours} घंटे पहले</span>`;
             }
             
             // If more than a day
             const days = Math.floor(diff / 86400000);
-            return `${days} दिन पहले`;
+            return `<span class="time-badge old"><i class="fas fa-calendar"></i> ${days} दिन पहले</span>`;
         }
 
         function startCountdownTimer() {
@@ -2852,6 +3030,12 @@
                 const countdownElement = document.getElementById('countdown-time');
                 if (countdownElement) {
                     countdownElement.textContent = formattedTime;
+                }
+                
+                // Check if it's exactly midnight (00:00:00)
+                if (hours === 0 && minutes === 0 && seconds === 0) {
+                    // Reset leaderboard at midnight
+                    resetLeaderboardAtMidnight();
                 }
             }, 1000);
         }
@@ -2972,9 +3156,11 @@
                 quizSection.style.display = 'block';
                 currentQuestionIndex = 0;
                 score = 0;
-                initialScore = 0; // Reset initial score
+                // Don't reset initialScore here - this prevents cheating
+                // initialScore = 0; // Remove this line
                 questionHistory = []; // Reset question history
                 quizCompleted = false; // Reset quiz completion flag
+                userAnswered = false; // Reset userAnswered flag
                 updateScore();
                 
                 // Hide back button at the start of a new quiz
