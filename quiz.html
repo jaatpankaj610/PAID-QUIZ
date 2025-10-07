@@ -2686,7 +2686,7 @@ userName = enteredName;
 // Generate a unique ID for the user (using timestamp and random number)
 userId = 'paid_user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
-// Save to localStorage
+// Save to localStorage permanently (no expiry)
 localStorage.setItem('paidQuizUserName', userName);
 localStorage.setItem('paidQuizUserId', userId);
 
