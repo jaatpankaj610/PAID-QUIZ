@@ -3717,13 +3717,12 @@
             }
             
             try {
-                const { userId, expiryDate } = JSON.parse(accessData);
-                const now = new Date();
-                const expiry = new Date(expiryDate);
+                const { expiryTime } = JSON.parse(accessData);
+                const now = new Date().getTime();
                 
-                if (now >= expiry) {
-                    // एक्सेस समाप्त हो गई है, localStorage से हटाएं और उपयोगकर्ता को index.html पर भेजें
-                    localStorage.removeItem('premiumAccess');
+                if (now >= expiryTime) {
+                    // एक्सेस समाप्त हो गई है, localStorage से सभी डेटा हटाएं और उपयोगकर्ता को index.html पर भेजें
+                    clearAllAccessData();
                     redirectToPayment();
                     return false;
                 }
@@ -3733,9 +3732,21 @@
             } catch (error) {
                 console.error('Access check error:', error);
                 // डेटा पार्स करने में त्रुटि, उपयोगकर्ता को index.html पर भेजें
+                clearAllAccessData();
                 redirectToPayment();
                 return false;
             }
+        }
+
+        // सभी एक्सेस डेटा को हटाने का नया फंक्शन
+        function clearAllAccessData() {
+            localStorage.removeItem('premiumAccess');
+            localStorage.removeItem('hadPremiumAccess');
+            localStorage.removeItem('paidQuizUserName');
+            localStorage.removeItem('paidQuizUserId');
+            localStorage.removeItem('paidLeaderboardScores');
+            localStorage.removeItem('paidLastLeaderboardDate');
+            localStorage.removeItem('paidCachedLeaderboardData');
         }
 
         // उपयोगकर्ता को भुगतान पृष्ठ पर रीडायरेक्ट करने का फंक्शन
