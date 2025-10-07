@@ -1254,7 +1254,9 @@
             // सिर्फ तभी क्लियर करें जब एक्सेस डेटा मौजूद हो
             if (localStorage.getItem('premiumAccess')) {
                 localStorage.removeItem('premiumAccess');
-                localStorage.removeItem('hadPremiumAccess'); // इस फ्लैग को भी हटाएं
+                
+                // यूजर को पेमेंट पेज पर रीडायरेक्ट करें, लेकिन एक्सपायर्ड फ्लैग के साथ
+                window.location.href = 'index.html?expired=true';
             }
         }
 
@@ -1601,7 +1603,7 @@
             const isTransactionValid = transactionId.trim() !== '';
             const isAmountValid = amount && !isNaN(parsedAmount) && parsedAmount > 0;
             
-            // अगर सभी फील्ड्स वैध हैं, तो चेकबॉक्स को एनेबल करें
+            // अगर सभी फील्ड्स वैलिड हैं, तो चेकबॉक्स को एनेबल करें
             if (isUserIdValid && isMobileValid && isTransactionValid && isAmountValid) {
                 paymentMadeCheckbox.disabled = false;
                 paymentMadeContainer.classList.remove('disabled');
