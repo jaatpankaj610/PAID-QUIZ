@@ -1227,6 +1227,7 @@
                     transactionId: transactionId,
                     expiryDate: expiryDate.toISOString()
                 }));
+                console.log("Access data saved to localStorage");
             }
 
             // यह फंक्शन लोकल स्टोरेज में सेव एक्सेस की वैधता जांचेगा
@@ -2025,6 +2026,23 @@
         }
         
         document.addEventListener('DOMContentLoaded', function() {
+            // पेज लोड होते ही लोकल स्टोरेज जांचें
+            const accessData = localStorage.getItem('premiumAccess');
+            if (accessData) {
+                const { userId, expiryDate } = JSON.parse(accessData);
+                const now = new Date();
+                const expiry = new Date(expiryDate);
+                
+                if (now < expiry) {
+                    // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
+                    window.location.href = 'quiz.html?user_id=' + userId;
+                    return;
+                } else {
+                    // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
+                    localStorage.removeItem('premiumAccess');
+                }
+            }
+            
             checkNetworkStatus();
             const images = document.querySelectorAll('img');
             images.forEach(img => {
