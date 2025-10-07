@@ -1202,72 +1202,61 @@
             function checkLocalAccess() {
                 const accessData = localStorage.getItem('premiumAccess');
                 if (accessData) {
-                    try {
-                        const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
-                        const now = new Date();
-                        const expiry = new Date(expiryDate);
+                    const { userId, mobileNumber, transactionId, amount, expiryDate } = JSON.parse(accessData);
+                    const now = new Date();
+                    const expiry = new Date(expiryDate);
+                    
+                    if (now < expiry) {
+                        // एक्सेस अभी भी वैध है, लेकिन सभी फील्ड्स की जांच करें
+                        const currentUserId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+                        const currentMobileNumber = document.getElementById('mobile_number').value.trim();
+                        const currentTransactionId = document.getElementById('transaction_id').value.trim();
+                        const currentAmount = document.getElementById('amount').value.trim();
                         
-                        if (now < expiry) {
-                            // एक्सेस अभी भी वैध है, लेकिन सभी फील्ड्स की जांच करें
-                            const currentUserId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
-                            const currentMobileNumber = document.getElementById('mobile_number').value.trim();
-                            const currentTransactionId = document.getElementById('transaction_id').value.trim();
-                            
-                            // अगर सभी फील्ड्स मेल खाते हैं, तो ही रीडायरेक्ट करें
-                            if (currentUserId === userId && currentMobileNumber === mobileNumber && currentTransactionId === transactionId) {
-                                window.location.href = 'quiz.html?user_id=' + userId;
-                                return true;
-                            } else {
-                                // अगर फील्ड्स मेल नहीं खाते, तो एक्सेस को अमान्य करें
-                                localStorage.removeItem('premiumAccess');
-                                showNotification('सुरक्षा चेतावनी', 'आपकी जानकारी मेल नहीं खा रही है। कृपया सभी फील्ड्स सही भरें।', 'error');
-                            }
+                        // अगर सभी फील्ड्स मेल खाते हैं, तो ही रीडायरेक्ट करें
+                        if (currentUserId === userId && currentMobileNumber === mobileNumber && 
+                            currentTransactionId === transactionId && currentAmount === amount) {
+                            window.location.href = 'quiz.html?user_id=' + userId;
+                            return true;
                         } else {
-                            // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
+                            // अगर फील्ड्स मेल नहीं खाते, तो एक्सेस को अमान्य करें
                             localStorage.removeItem('premiumAccess');
-                            showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
+                            showNotification('सुरक्षा चेतावनी', 'आपकी जानकारी मेल नहीं खा रही है। कृपया सभी फील्ड्स सही भरें।', 'error');
                         }
-                    } catch (error) {
-                        console.error('Access check error:', error);
+                    } else {
+                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                         localStorage.removeItem('premiumAccess');
-                        showNotification('एक्सेस त्रुटि', 'आपकी एक्सेस जांच में त्रुटि हुई। कृपया फिर से लॉगिन करें।', 'error');
+                        showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
                     }
                 }
                 return false;
             }
 
             // यह फंक्शन लोकल स्टोरेज में एक्सेस डेटा सेव करेगा
-            function saveAccessToLocalStorage(userId, mobileNumber, transactionId, expiryDate) {
-                const accessData = {
+            function saveAccessToLocalStorage(userId, mobileNumber, transactionId, amount, expiryDate) {
+                localStorage.setItem('premiumAccess', JSON.stringify({
                     userId: userId,
                     mobileNumber: mobileNumber,
                     transactionId: transactionId,
+                    amount: amount,
                     expiryDate: expiryDate.toISOString()
-                };
-                localStorage.setItem('premiumAccess', JSON.stringify(accessData));
-                console.log('Access data saved to localStorage:', accessData);
+                }));
             }
 
             // यह फंक्शन लोकल स्टोरेज में सेव एक्सेस की वैधता जांचेगा
             function validateLocalAccess() {
                 const accessData = localStorage.getItem('premiumAccess');
                 if (accessData) {
-                    try {
-                        const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
-                        const now = new Date();
-                        const expiry = new Date(expiryDate);
-                        
-                        if (now >= expiry) {
-                            // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
-                            localStorage.removeItem('premiumAccess');
-                            return false;
-                        }
-                        return true;
-                    } catch (error) {
-                        console.error('Access validation error:', error);
+                    const { userId, mobileNumber, transactionId, amount, expiryDate } = JSON.parse(accessData);
+                    const now = new Date();
+                    const expiry = new Date(expiryDate);
+                    
+                    if (now >= expiry) {
+                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                         localStorage.removeItem('premiumAccess');
                         return false;
                     }
+                    return true;
                 }
                 return false;
             }
@@ -1297,6 +1286,7 @@
                             const userId = payment.user_id;
                             const mobileNumber = payment.mobile_number;
                             const transactionId = payment.transaction_id;
+                            const amount = payment.amount;
                             
                             // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
                             let approvalDate;
@@ -1311,7 +1301,7 @@
                             expiryDate.setDate(approvalDate.getDate() + 30);
                             
                             // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, mobileNumber, transactionId, expiryDate);
+                            saveAccessToLocalStorage(userId, mobileNumber, transactionId, amount, expiryDate);
                         }
                     }
                 });
@@ -1372,12 +1362,14 @@
 
                         if (now < expiryDate) {
                             // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, foundApprovedPayment.mobile_number, foundApprovedPayment.transaction_id, expiryDate);
+                            saveAccessToLocalStorage(userId, foundApprovedPayment.mobile_number, 
+                                foundApprovedPayment.transaction_id, foundApprovedPayment.amount, expiryDate);
                             
                             // फॉर्म फील्ड्स को भरें
                             document.getElementById('user_id').value = userEmail;
                             document.getElementById('mobile_number').value = foundApprovedPayment.mobile_number;
                             document.getElementById('transaction_id').value = foundApprovedPayment.transaction_id;
+                            document.getElementById('amount').value = foundApprovedPayment.amount;
                             
                             // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
                             document.getElementById('processing-screen').style.display = 'none';
@@ -1723,6 +1715,7 @@
                 await userDataRef.set({
                     transactionId: transactionId,
                     mobileNumber: mobileNumber,
+                    amount: amount,
                     firebaseId: newPaymentRef.key,
                     timestamp: new Date().toISOString()
                 });
@@ -1788,6 +1781,7 @@
             const userId = userIdInput.value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
             const mobileNumber = document.getElementById('mobile_number').value.trim();
             const transactionId = document.getElementById('transaction_id').value.trim();
+            const amount = document.getElementById('amount').value.trim();
 
             // पहले सभी फील्ड्स की जांच करें
             if (!userId) {
@@ -1813,6 +1807,13 @@
                 document.getElementById('transaction_id_group').classList.add('error');
                 document.getElementById('transaction_id_error').textContent = 'कृपया ट्रांजैक्शन ID दर्ज करें!';
                 document.getElementById('transaction_id_error').style.display = 'block';
+                hasEmptyFields = true;
+            }
+            
+            if (!amount) {
+                document.getElementById('amount_group').classList.add('error');
+                document.getElementById('amount_error').textContent = 'कृपया राशि दर्ज करें!';
+                document.getElementById('amount_error').style.display = 'block';
                 hasEmptyFields = true;
             }
             
@@ -1842,13 +1843,16 @@
                 
                 let transactionIdToCheck = '';
                 let mobileNumberToCheck = '';
+                let amountToCheck = '';
                 
                 if (storedData && storedData.transactionId) {
                     transactionIdToCheck = storedData.transactionId;
                     mobileNumberToCheck = storedData.mobileNumber || '';
+                    amountToCheck = storedData.amount || '';
                 } else {
                     transactionIdToCheck = document.getElementById('transaction_id').value.trim();
                     mobileNumberToCheck = document.getElementById('mobile_number').value.trim();
+                    amountToCheck = document.getElementById('amount').value.trim();
                     if (!transactionIdToCheck) {
                         hideProcessingScreen();
                         showNotification('पेमेंट स्टेटस', 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।', 'error');
@@ -1865,7 +1869,8 @@
                 if (payments) {
                     for (let key in payments) {
                         if (payments[key].transaction_id === transactionIdToCheck && 
-                            payments[key].mobile_number === mobileNumberToCheck) {
+                            payments[key].mobile_number === mobileNumberToCheck &&
+                            payments[key].amount === amountToCheck) {
                             foundPayment = payments[key];
                             break;
                         }
@@ -1893,6 +1898,7 @@
                             userId: userId,
                             mobileNumber: mobileNumber,
                             transactionId: transactionId,
+                            amount: amount,
                             expiryDate: expiryDate.toISOString()
                         }));
                         
