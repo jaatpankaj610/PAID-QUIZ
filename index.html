@@ -1208,7 +1208,7 @@
                     
                     if (now < expiry) {
                         // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
-                        window.location.href = 'quiz.html?user_id=' + userId;
+                        window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
                         return true;
                     } else {
                         // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
@@ -1367,7 +1367,7 @@
                             // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
                             saveAccessToLocalStorage(userId, foundApprovedPayment.mobile_number, foundApprovedPayment.transaction_id, expiryDate);
                             
-                            window.location.href = 'quiz.html?user_id=' + userId;
+                            window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + foundApprovedPayment.mobile_number + '&transaction=' + foundApprovedPayment.transaction_id;
                             return;
                         }
                     }
@@ -1707,6 +1707,7 @@
                 const userDataRef = database.ref('user_session/' + userId);
                 await userDataRef.set({
                     transactionId: transactionId,
+                    mobileNumber: mobileNumber,
                     firebaseId: newPaymentRef.key,
                     timestamp: new Date().toISOString()
                 });
@@ -1767,50 +1768,37 @@
         // यह अपडेटेड और बेहतर फंक्शन है
         async function checkPaymentStatus() {
             const userIdInput = document.getElementById('user_id');
+            const mobileInput = document.getElementById('mobile_number');
+            const transactionInput = document.getElementById('transaction_id');
             const statusMessage = document.getElementById('status-message');
             
             const userId = userIdInput.value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+            const mobileNumber = mobileInput.value.trim();
+            const transactionId = transactionInput.value.trim();
 
             // पहले सभी फील्ड्स की जांच करें
-            const mobileNumber = document.getElementById('mobile_number').value.trim();
-            const transactionId = document.getElementById('transaction_id').value.trim();
-            const amount = document.getElementById('amount').value.trim();
-            
-            if (!userId) {
-                showNotification('ईमेल आईडी त्रुटि', 'कृपया अपना ईमेल ID दर्ज करें!', 'error');
-                // ईमेल फील्ड को रेड हाइलाइट करें
-                document.getElementById('user_id_group').classList.add('error');
-                document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
-                document.getElementById('user_id_error').style.display = 'block';
-                return;
-            }
-            
-            // अगर अन्य फील्ड्स खाली हैं, तो उन्हें भी रेड हाइलाइट करें
-            let hasEmptyFields = false;
-            
-            if (!mobileNumber) {
-                document.getElementById('mobile_number_group').classList.add('error');
-                document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
-                document.getElementById('mobile_number_error').style.display = 'block';
-                hasEmptyFields = true;
-            }
-            
-            if (!transactionId) {
-                document.getElementById('transaction_id_group').classList.add('error');
-                document.getElementById('transaction_id_error').textContent = 'कृपया ट्रांजैक्शन ID दर्ज करें!';
-                document.getElementById('transaction_id_error').style.display = 'block';
-                hasEmptyFields = true;
-            }
-            
-            if (!amount) {
-                document.getElementById('amount_group').classList.add('error');
-                document.getElementById('amount_error').textContent = 'कृपया राशि दर्ज करें!';
-                document.getElementById('amount_error').style.display = 'block';
-                hasEmptyFields = true;
-            }
-            
-            if (hasEmptyFields) {
-                showNotification('फॉर्म त्रुटि', 'कृपया सभी फील्ड्स को सही ढंग से भरें!', 'error');
+            if (!userId || !mobileNumber || !transactionId) {
+                showNotification('फॉर्म त्रुटि', 'कृपया सभी जरूरी फील्ड्स (ईमेल ID, मोबाइल नंबर, ट्रांजैक्शन ID) भरें!', 'error');
+                
+                // खाली फील्ड्स को हाइलाइट करें
+                if (!userId) {
+                    document.getElementById('user_id_group').classList.add('error');
+                    document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
+                    document.getElementById('user_id_error').style.display = 'block';
+                }
+                
+                if (!mobileNumber) {
+                    document.getElementById('mobile_number_group').classList.add('error');
+                    document.getElementById('mobile_number_error').textContent = 'कृपया मोबाइल नंबर दर्ज करें!';
+                    document.getElementById('mobile_number_error').style.display = 'block';
+                }
+                
+                if (!transactionId) {
+                    document.getElementById('transaction_id_group').classList.add('error');
+                    document.getElementById('transaction_id_error').textContent = 'कृपया ट्रांजैक्शन ID दर्ज करें!';
+                    document.getElementById('transaction_id_error').style.display = 'block';
+                }
+                
                 return;
             }
 
@@ -1834,12 +1822,16 @@
                 const storedData = userDataSnapshot.val();
                 
                 let transactionIdToCheck = '';
+                let mobileNumberToCheck = '';
                 
-                if (storedData && storedData.transactionId) {
+                if (storedData && storedData.transactionId && storedData.mobileNumber) {
                     transactionIdToCheck = storedData.transactionId;
+                    mobileNumberToCheck = storedData.mobileNumber;
                 } else {
                     transactionIdToCheck = document.getElementById('transaction_id').value.trim();
-                    if (!transactionIdToCheck) {
+                    mobileNumberToCheck = document.getElementById('mobile_number').value.trim();
+                    
+                    if (!transactionIdToCheck || !mobileNumberToCheck) {
                         hideProcessingScreen();
                         showNotification('पेमेंट स्टेटस', 'इस ईमेल ID के लिए कोई हाल की पेमेंट रिक्वेस्ट नहीं मिली।', 'error');
                         return;
@@ -1854,7 +1846,8 @@
 
                 if (payments) {
                     for (let key in payments) {
-                        if (payments[key].transaction_id === transactionIdToCheck) {
+                        if (payments[key].transaction_id === transactionIdToCheck && 
+                            payments[key].mobile_number === mobileNumberToCheck) {
                             foundPayment = payments[key];
                             break;
                         }
@@ -1888,7 +1881,7 @@
                         showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
 
                         setTimeout(() => {
-                            window.location.href = 'quiz.html?user_id=' + userId;
+                            window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + foundPayment.mobile_number + '&transaction=' + foundPayment.transaction_id;
                         }, 5000);
 
                     } else if (foundPayment.status === 'pending') {
@@ -1899,7 +1892,7 @@
                         showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
                     }
                 } else {
-                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।', 'error');
+                    showNotification('पेमेंट स्टेटस', 'इस ईमेल ID, मोबाइल नंबर और ट्रांजैक्शन ID के लिए कोई पेमेंट रिकॉर्ड नहीं मिला।', 'error');
                 }
 
             } catch (error) {
@@ -2046,13 +2039,13 @@
             // पेज लोड होते ही लोकल स्टोरेज जांचें
             const accessData = localStorage.getItem('premiumAccess');
             if (accessData) {
-                const { userId, expiryDate } = JSON.parse(accessData);
+                const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
                 const now = new Date();
                 const expiry = new Date(expiryDate);
                 
                 if (now < expiry) {
                     // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
-                    window.location.href = 'quiz.html?user_id=' + userId;
+                    window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
                     return;
                 } else {
                     // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
