@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#4a00e0">
     <title>राजस्थान GK क्विज़ - प्रीमियम एक्सेस</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap">
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
     <style>
@@ -26,13 +26,16 @@
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
             --offline-gradient: linear-gradient(135deg, #f5f7fa, #e4e7eb);
             --error-gradient: linear-gradient(135deg, #ff7675, #d63031);
+            --premium-gold: #FFD700;
+            --premium-dark: #1a1a2e;
+            --premium-light: #eef2ff;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
         }
 
         html, body {
@@ -401,13 +404,14 @@
             to { opacity: 1; }
         }
 
+        /* Professional Premium Loading Screen */
         .processing-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(135deg, rgba(74, 0, 224, 0.95), rgba(142, 45, 226, 0.95));
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
@@ -416,71 +420,170 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            gap: 20px;
             color: white;
+            overflow: hidden;
         }
 
-        .processing-screen .app-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+        .processing-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(74, 0, 224, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+        }
+
+        .processing-screen::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/><circle cx="50" cy="50" r="10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></svg>');
+            background-size: 200px 200px;
+            opacity: 0.1;
+            z-index: -1;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .app-logo-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .app-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-        .processing-screen .app-logo i {
-            font-size: 50px;
-            color: white;
-        }
-
-        .processing-screen .app-logo-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .processing-screen .processing-message {
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .spinner-container {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
             position: relative;
-            width: 80px;
-            height: 80px;
-            margin: 20px auto;
         }
 
-        .spinner {
-            width: 80px;
-            height: 80px;
-            border: 6px solid rgba(255, 255, 255, 0.2);
-            border-top: 6px solid white;
+        .app-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .app-logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            z-index: 1;
+        }
+
+        .app-logo-fallback {
+            font-size: 60px;
+            color: var(--premium-gold);
+            z-index: 1;
+        }
+
+        .app-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--premium-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .app-tagline {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        .processing-message {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .premium-loader {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+        }
+
+        .premium-loader-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--premium-gold);
             animation: spin 1.5s linear infinite;
         }
 
-        .spinner-inner {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 5px solid rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
+        .premium-loader-circle:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-top-color: var(--primary);
             animation: spin 2s linear infinite reverse;
+        }
+
+        .premium-loader-circle:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border-top-color: var(--secondary);
+            animation: spin 2.5s linear infinite;
+        }
+
+        .premium-loader-center {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            background: radial-gradient(circle, var(--premium-gold) 0%, rgba(255, 215, 0, 0.7) 70%, transparent 100%);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes spin {
@@ -489,25 +592,38 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .progress-container {
+            width: 80%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 0 auto 30px;
+            overflow: hidden;
+            position: relative;
         }
 
         .progress-bar {
-            width: 80%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-
-        .progress {
             height: 100%;
-            background: white;
+            background: linear-gradient(90deg, var(--primary), var(--premium-gold));
             border-radius: 3px;
             width: 0%;
             animation: progress 2s ease-in-out forwards;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
         }
 
         @keyframes progress {
@@ -515,56 +631,52 @@
             100% { width: 100%; }
         }
 
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
         .loading-dots {
-            display: inline-block;
-            position: relative;
-            width: 80px;
-            height: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .loading-dots div {
-            position: absolute;
-            top: 0;
-            width: 13px;
-            height: 13px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: white;
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+            background: var(--premium-gold);
+            animation: bounce 1.4s infinite ease-in-out both;
         }
 
-        .loading-dots div:nth-child(1) {
-            left: 8px;
-            animation: dots1 0.6s infinite;
+        .loading-dots div:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots div:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
         }
 
-        .loading-dots div:nth-child(2) {
-            left: 8px;
-            animation: dots2 0.6s infinite;
+        .premium-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--premium-gold);
+            color: var(--premium-dark);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            animation: pulse-badge 2s infinite;
         }
 
-        .loading-dots div:nth-child(3) {
-            left: 32px;
-            animation: dots2 0.6s infinite;
-        }
-
-        .loading-dots div:nth-child(4) {
-            left: 56px;
-            animation: dots3 0.6s infinite;
-        }
-
-        @keyframes dots1 {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes dots3 {
-            0% { transform: scale(1); }
-            100% { transform: scale(0); }
-        }
-
-        @keyframes dots2 {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(24px, 0); }
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .custom-design {
@@ -1053,14 +1165,17 @@
             .offline-message, .error-message { font-size: 16px; }
             .checkbox-container { padding: 8px; }
             .checkbox-hint { font-size: 11px; }
-            .processing-screen .app-logo-name { font-size: 20px; }
-            .processing-screen .processing-message { font-size: 16px; }
+            .app-name { font-size: 24px; }
+            .app-tagline { font-size: 12px; }
+            .processing-message { font-size: 16px; }
             .notification-container { width: 95%; }
             .notification { padding: 12px; }
             .notification-title { font-size: 14px; }
             .notification-message { font-size: 12px; }
             .notification-icon { font-size: 20px; width: 32px; height: 32px; }
             .security-warning { font-size: 12px; }
+            .app-logo-container { width: 100px; height: 100px; }
+            .app-logo { width: 100px; height: 100px; }
         }
 
         @media (min-width: 768px) {
@@ -1090,31 +1205,46 @@
             .offline-message, .error-message { font-size: 20px; }
             .checkbox-container { padding: 12px; }
             .checkbox-hint { font-size: 13px; }
-            .processing-screen .app-logo-name { font-size: 28px; }
-            .processing-screen .processing-message { font-size: 20px; }
+            .app-name { font-size: 32px; }
+            .app-tagline { font-size: 16px; }
+            .processing-message { font-size: 20px; }
             .security-warning { font-size: 14px; }
+            .app-logo-container { width: 140px; height: 140px; }
+            .app-logo { width: 140px; height: 140px; }
         }
     </style>
 </head>
 <body>
     <div class="notification-container" id="notification-container"></div>
     
-    <!-- Enhanced Processing Screen -->
+    <!-- Professional Premium Loading Screen -->
     <div id="processing-screen" class="processing-screen">
-        <div class="app-logo">
-            <i class="fas fa-landmark"></i>
+        <div class="app-logo-container">
+            <div class="app-logo">
+                <!-- यहाँ अपने ऐप के लोगो का पाथ डालें -->
+                <img src="file:///android_asset/logo.png" alt="Mind Grid Premium" onerror="this.style.display='none'; document.querySelector('.app-logo-fallback').style.display='block';">
+                <i class="fas fa-brain app-logo-fallback" style="display: none;"></i>
+            </div>
+            <div class="premium-badge">PREMIUM</div>
         </div>
-        <div class="app-logo-name">राजस्थान GK क्विज़</div>
+        
+        <div class="app-name">Mind_Grid_premium</div>
+        <div class="app-tagline">ज्ञान की दुनिया में एक कदम आगे</div>
+        
         <div class="processing-message" id="processing-message">आपकी प्रीमियम एक्सेस जांच रहे हैं...</div>
-        <div class="spinner-container">
-            <div class="spinner"></div>
-            <div class="spinner-inner"></div>
+        
+        <div class="premium-loader">
+            <div class="premium-loader-circle"></div>
+            <div class="premium-loader-circle"></div>
+            <div class="premium-loader-circle"></div>
+            <div class="premium-loader-center"></div>
         </div>
-        <div class="progress-bar">
-            <div class="progress"></div>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
         </div>
+        
         <div class="loading-dots">
-            <div></div>
             <div></div>
             <div></div>
             <div></div>
@@ -1335,7 +1465,7 @@
             document.getElementById('online-content').style.display = 'none';
             
             // Set initial message
-            document.getElementById('processing-message').textContent = 'आपकी प्रीमियम एक्सेस जांच रहे हैं...';
+            document.getElementById('processing-message').textContent = 'Mind_Grid_premium लोड हो रहा है...';
             
             // ऑटोमेटिक डेटा क्लीनअप सेटअप करें
             setupAutomaticDataCleanup();
