@@ -296,6 +296,55 @@ flex-direction: column;
 width: 100%;
 }
 
+/* Enhanced question navigation styles */
+.question-navigation {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+gap: 10px;
+}
+
+.nav-btn {
+background: var(--paid-gradient);
+color: var(--light);
+border: none;
+border-radius: 10px;
+padding: 8px 12px;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+display: flex;
+align-items: center;
+gap: 6px;
+min-width: 100px;
+}
+
+.nav-btn:hover {
+transform: translateY(-1px);
+box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.nav-btn:disabled {
+background: linear-gradient(135deg, #9ca3af, #6b7280);
+cursor: not-allowed;
+opacity: 0.6;
+transform: none;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.question-counter {
+background: rgba(245, 158, 11, 0.1);
+color: var(--paid-color);
+padding: 6px 12px;
+border-radius: 20px;
+font-size: 13px;
+font-weight: 700;
+border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
 .question {
 font-size: 16px;
 font-weight: 700;
@@ -341,6 +390,34 @@ align-items: center;
 position: relative;
 width: 100%;
 animation: popIn 0.5s ease-out forwards;
+}
+
+/* Enhanced option styles for selected state */
+.options li.selected {
+background: linear-gradient(135deg, #3b82f6, #1e40af);
+border: 2px solid #3b82f6;
+color: #ffffff;
+font-weight: 800;
+box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.options li.selected::after {
+content: "\f00c";
+font-family: "Font Awesome 6 Free";
+font-weight: 900;
+margin-left: auto;
+font-size: 16px;
+color: #ffffff;
+}
+
+/* Disable hover effects when question is answered or in review mode */
+.options li.review-mode {
+pointer-events: none;
+}
+
+.options li.review-mode:hover {
+transform: none;
+box-shadow: inherit;
 }
 
 @keyframes popIn {
@@ -2118,6 +2195,15 @@ font-size: 20px;
 .leaderboard-scroll-container {
 height: 450px;
 }
+.nav-btn {
+padding: 10px 15px;
+font-size: 15px;
+min-width: 120px;
+}
+.question-counter {
+padding: 8px 15px;
+font-size: 14px;
+}
 }
 </style>
 </head>
@@ -2281,6 +2367,21 @@ height: 450px;
 
 <div id="quiz-section" class="quiz-section" style="display: none;">
 <div class="question-container">
+<!-- Enhanced Question Navigation -->
+<div class="question-navigation">
+<button class="nav-btn" id="prev-btn" onclick="previousQuestion()">
+<i class="fas fa-arrow-left"></i>
+<span>पिछला सवाल</span>
+</button>
+<div class="question-counter" id="question-counter">
+1/10
+</div>
+<button class="nav-btn" id="next-btn-nav" onclick="nextQuestion()" style="display: none;">
+<span>अगला सवाल</span>
+<i class="fas fa-arrow-right"></i>
+</button>
+</div>
+
 <div class="question" id="question-text">प्रश्न लोड हो रहा है...</div>
 <div class="progress-bar">
 <div class="progress" id="progress-bar"></div>
@@ -2402,6 +2503,10 @@ let isRotating = false; // Track if button is currently rotating
 let notificationTimeout = null; // Track notification timeout
 let userAnswered = false; // Track if user has answered the current question
 
+// Enhanced Navigation Variables
+let isReviewMode = false; // Track if user is reviewing previous questions
+let completedQuestions = new Set(); // Track which questions have been answered
+
 // Premium scrolling variables
 let isPulling = false;
 let pullStartY = 0;
@@ -2413,14 +2518,16 @@ let topScrollIndicator = null;
 let bottomScrollIndicator = null;
 let pullToRefresh = null;
 
-// Initialize sound effects - MIT App Inventor Assets के लिए paths
+// Initialize sound effects - Kodular Assets के लिए paths
 const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
 const incorrectSound = new Audio('file:///android_asset/incorrect.mp3'); // गलत जवाब का sound (assets में upload करें)
+const firecrackerSound = new Audio('file:///android_asset/firecracker.mp3'); // पटाखे का sound "अंतिम रैंकिंग देखें" के लिए
 
 // Ensure audio plays after user interaction
 function unlockAudio() {
 correctSound.load();
 incorrectSound.load();
+firecrackerSound.load();
 document.removeEventListener('click', unlockAudio);
 }
 document.addEventListener('click', unlockAudio);
@@ -2811,6 +2918,9 @@ initialScore = 0; // Reset initial score
 questionHistory = []; // Reset question history
 quizCompleted = false; // Reset quiz completion flag
 userAnswered = false; // Reset userAnswered flag
+isReviewMode = false; // Reset review mode
+completedQuestions.clear(); // Clear completed questions
+
 updateScore();
 
 if (questions.length === 0) {
@@ -2866,6 +2976,34 @@ progressBar.style.width = `${progress}%`;
 }
 }
 
+function updateNavigationButtons() {
+const prevBtn = document.getElementById('prev-btn');
+const nextBtnNav = document.getElementById('next-btn-nav');
+const questionCounter = document.getElementById('question-counter');
+
+// Update question counter
+if (questionCounter) {
+questionCounter.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+}
+
+// Update previous button
+if (prevBtn) {
+prevBtn.disabled = currentQuestionIndex === 0;
+}
+
+// Update next button in navigation
+if (nextBtnNav) {
+const hasAnswered = completedQuestions.has(currentQuestionIndex);
+const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+if (hasAnswered && !isLastQuestion) {
+nextBtnNav.style.display = 'block';
+} else {
+nextBtnNav.style.display = 'none';
+}
+}
+}
+
 function showQuestion() {
 // प्रश्न दिखाने से पहले एक्सेस जांचें
 if (!checkUserAccess()) {
@@ -2900,21 +3038,48 @@ optionsList.innerHTML = '';
 result.style.display = 'none';
 nextBtn.style.display = 'none';
 updateProgressBar();
+updateNavigationButtons();
 
-// Reset the answered flag
-userAnswered = false;
+// Check if this question was already answered (review mode)
+const hasAnswered = completedQuestions.has(currentQuestionIndex);
+const questionData = questionHistory.find(q => q.questionIndex === currentQuestionIndex);
 
 // Clear any existing timeout
 if (autoNextTimeout) {
 clearTimeout(autoNextTimeout);
 }
 
+// Set review mode if question was already answered
+isReviewMode = hasAnswered;
+
 question.options.forEach((option, index) => {
 const li = document.createElement('li');
 li.textContent = option || 'विकल्प गायब';
 li.style.opacity = '0';
 li.style.transform = 'scale(0.9) translateY(15px)';
+
+// Add classes for answered questions
+if (hasAnswered && questionData) {
+// Add selected class for user's choice
+if (index === questionData.selectedIndex) {
+li.classList.add('selected');
+}
+// Add correct/incorrect classes if question was answered
+if (questionData.wasCorrect && index === questionData.selectedIndex) {
+li.classList.add('correct');
+} else if (!questionData.wasCorrect && index === questionData.selectedIndex) {
+li.classList.add('incorrect');
+}
+// Show correct answer
+if (index === question.correct) {
+li.classList.add('correct');
+}
+// Add review mode class to prevent clicking
+li.classList.add('review-mode');
+} else {
+// Only allow clicking if not in review mode
 li.onclick = () => checkAnswer(index);
+}
 optionsList.appendChild(li);
 
 setTimeout(() => {
@@ -2923,6 +3088,42 @@ li.style.opacity = '1';
 li.style.transform = 'scale(1) translateY(0)';
 }, index * 100);
 });
+
+// Show result if question was already answered
+if (hasAnswered && questionData) {
+if (questionData.wasCorrect) {
+result.textContent = 'सही जवाब!';
+result.className = 'result success';
+} else {
+result.textContent = `गलत जवाब! सही: ${question.options[question.correct]}`;
+result.className = 'result error';
+}
+result.style.display = 'block';
+}
+}
+
+function previousQuestion() {
+if (currentQuestionIndex > 0) {
+currentQuestionIndex--;
+userAnswered = false; // Reset answered flag
+showQuestion();
+}
+}
+
+function nextQuestion() {
+// Clear any existing timeout
+if (autoNextTimeout) {
+clearTimeout(autoNextTimeout);
+}
+
+if (currentQuestionIndex < questions.length - 1) {
+currentQuestionIndex++;
+userAnswered = false; // Reset answered flag
+showQuestion();
+} else {
+// Last question completed, show final score
+showFinalScore();
+}
 }
 
 function triggerConfetti() {
@@ -2949,8 +3150,8 @@ ticks: 200
 }
 
 function checkAnswer(selectedIndex) {
-// Prevent multiple answers to the same question
-if (userAnswered) return;
+// Prevent multiple answers to the same question (unless in review mode)
+if (userAnswered || isReviewMode) return;
 userAnswered = true;
 
 const question = questions[currentQuestionIndex];
@@ -2963,18 +3164,27 @@ showErrorOverlay();
 return;
 }
 
+// Mark this question as completed
+completedQuestions.add(currentQuestionIndex);
+
 // Store this question in history
-questionHistory.push({
+const questionData = {
 questionIndex: currentQuestionIndex,
 selectedIndex: selectedIndex,
 correctAnswer: question.correct,
 wasCorrect: selectedIndex === question.correct
-});
+};
+
+// Remove existing entry for this question if any
+questionHistory = questionHistory.filter(q => q.questionIndex !== currentQuestionIndex);
+questionHistory.push(questionData);
 
 options.forEach((option, index) => {
 option.onclick = null;
+option.classList.add('review-mode'); // Prevent further clicking
 if (index === question.correct) option.classList.add('correct');
 if (index === selectedIndex && selectedIndex !== question.correct) option.classList.add('incorrect');
+if (index === selectedIndex) option.classList.add('selected');
 });
 
 if (selectedIndex === question.correct) {
@@ -3003,14 +3213,23 @@ console.error('Incorrect sound error:', e);
 }
 
 result.style.display = 'block';
+updateNavigationButtons();
 
 if ('vibrate' in navigator) navigator.vibrate(200);
 
-// Auto move to next question after 1.5 seconds
+// Auto move to next question after 1.5 seconds (only if not last question)
+if (currentQuestionIndex < questions.length - 1) {
 autoNextTimeout = setTimeout(() => {
 currentQuestionIndex++;
+userAnswered = false;
 showQuestion();
 }, 1500);
+} else {
+// If it's the last question, show "Finish Quiz" button after delay
+autoNextTimeout = setTimeout(() => {
+showFinalScore();
+}, 1500);
+}
 }
 
 function showFinalScore() {
@@ -3682,6 +3901,8 @@ initialScore = 0; // Reset initial score
 questionHistory = []; // Reset question history
 quizCompleted = false; // Reset quiz completion flag
 userAnswered = false; // Reset userAnswered flag
+isReviewMode = false; // Reset review mode
+completedQuestions.clear(); // Clear completed questions
 updateScore();
 }
 }
@@ -3937,12 +4158,11 @@ const btn = document.getElementById('premium-rotating-btn');
 // Add rotating class
 btn.classList.add('rotating');
 
-// Play a sound effect if available
+// Play firecracker sound effect for "अंतिम रैंकिंग देखें"
 try {
-const sound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
-sound.play().catch(e => console.log('Sound play failed:', e));
+firecrackerSound.play().catch(e => console.log('Firecracker sound play failed:', e));
 } catch (e) {
-console.log('Sound creation failed:', e);
+console.log('Firecracker sound creation failed:', e);
 }
 
 // After animation completes
