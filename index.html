@@ -1198,18 +1198,61 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
+            // ऑटोमेटिक डेटा क्लीनअप सेटअप करें
+            setupAutomaticDataCleanup();
+            
             // लोकल स्टोरेज से उपयोगकर्ता की एक्सेस जांचें
-            function checkLocalAccess() {
+            async function checkLocalAccess() {
                 const accessData = localStorage.getItem('premiumAccess');
                 if (accessData) {
-                    const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
+                    const { userId, mobileNumber, transactionId, expiryDate, expiryTimestamp } = JSON.parse(accessData);
                     const now = new Date();
                     const expiry = new Date(expiryDate);
                     
+                    // एक्सपायरी टाइमस्टैम्प की जांच करें
+                    if (expiryTimestamp && now.getTime() > expiryTimestamp) {
+                        // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
+                        deleteExpiredUserData();
+                        showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
+                        return false;
+                    }
+                    
                     if (now < expiry) {
-                        // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
-                        window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
-                        return true;
+                        // अब फायरबेस से भी जांच करें कि उपयोगकर्ता अभी भी अप्रूव्ड है या नहीं
+                        try {
+                            if (!firebaseInitialized || !database) {
+                                initializeFirebase();
+                            }
+                            
+                            const paymentsRef = database.ref('payments');
+                            const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
+                            const payments = snapshot.val();
+                            let isStillApproved = false;
+                            
+                            if (payments) {
+                                for (let key in payments) {
+                                    if (payments[key].status === 'approved' && 
+                                        payments[key].transaction_id === transactionId) {
+                                        isStillApproved = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            if (isStillApproved) {
+                                // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
+                                window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
+                                return true;
+                            } else {
+                                // उपयोगकर्ता अब अप्रूव्ड नहीं है, लोकल स्टोरेज से हटाएं
+                                deleteExpiredUserData();
+                                showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'info');
+                            }
+                        } catch (error) {
+                            console.error("Error checking approval status:", error);
+                            // एरर होने पर भी लोकल स्टोरेज से हटाएं
+                            deleteExpiredUserData();
+                        }
                     } else {
                         // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                         deleteExpiredUserData();
@@ -1219,26 +1262,61 @@
                 return false;
             }
 
+            // ऑटोमेटिक डेटा क्लीनअप सेटअप करने का फंक्शन
+            function setupAutomaticDataCleanup() {
+                // हर 5 मिनट में एक्सपायर्ड डेटा की जांच करें
+                setInterval(() => {
+                    const accessData = localStorage.getItem('premiumAccess');
+                    if (accessData) {
+                        const { expiryTimestamp } = JSON.parse(accessData);
+                        const now = new Date();
+                        
+                        // अगर एक्सपायरी टाइमस्टैम्प है और वह अब से पहले का है, तो डेटा हटाएं
+                        if (expiryTimestamp && now.getTime() > expiryTimestamp) {
+                            deleteExpiredUserData();
+                            console.log("Automatic cleanup: Expired data removed");
+                        }
+                    }
+                }, 5 * 60 * 1000); // 5 मिनट
+                
+                // पेज लोड होते समय भी जांच करें
+                const accessData = localStorage.getItem('premiumAccess');
+                if (accessData) {
+                    const { expiryTimestamp } = JSON.parse(accessData);
+                    const now = new Date();
+                    
+                    // अगर एक्सपायरी टाइमस्टैम्प है और वह अब से पहले का है, तो डेटा हटाएं
+                    if (expiryTimestamp && now.getTime() > expiryTimestamp) {
+                        deleteExpiredUserData();
+                        console.log("Page load cleanup: Expired data removed");
+                    }
+                }
+            }
+
             // यह फंक्शन लोकल स्टोरेज में एक्सेस डेटा सेव करेगा
             function saveAccessToLocalStorage(userId, mobileNumber, transactionId, expiryDate) {
+                // एक्सपायरी टाइमस्टैम्प की गणना करें
+                const expiryTimestamp = expiryDate.getTime();
+                
                 localStorage.setItem('premiumAccess', JSON.stringify({
                     userId: userId,
                     mobileNumber: mobileNumber,
                     transactionId: transactionId,
-                    expiryDate: expiryDate.toISOString()
+                    expiryDate: expiryDate.toISOString(),
+                    expiryTimestamp: expiryTimestamp // एक्सपायरी टाइमस्टैम्प जोड़ें
                 }));
-                console.log("Access data saved to localStorage");
+                console.log("Access data saved to localStorage with expiry timestamp");
             }
 
             // यह फंक्शन लोकल स्टोरेज में सेव एक्सेस की वैधता जांचेगा
             function validateLocalAccess() {
                 const accessData = localStorage.getItem('premiumAccess');
                 if (accessData) {
-                    const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
+                    const { expiryTimestamp } = JSON.parse(accessData);
                     const now = new Date();
-                    const expiry = new Date(expiryDate);
                     
-                    if (now >= expiry) {
+                    // एक्सपायरी टाइमस्टैम्प की जांच करें
+                    if (expiryTimestamp && now.getTime() > expiryTimestamp) {
                         // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                         deleteExpiredUserData();
                         return false;
@@ -1285,7 +1363,7 @@
                     for (let key in payments) {
                         const payment = payments[key];
                         
-                        // अगर स्टेटस 'approved' है
+                        // केवल अप्रूव्ड पेमेंट्स की जांच करें
                         if (payment.status === 'approved') {
                             const userId = payment.user_id;
                             const mobileNumber = payment.mobile_number;
@@ -1315,7 +1393,8 @@
 
             async function checkPremiumAccess() {
                 // पहले लोकल स्टोरेज जांचें
-                if (checkLocalAccess()) {
+                const hasAccess = await checkLocalAccess();
+                if (hasAccess) {
                     return;
                 }
 
@@ -1384,8 +1463,8 @@
                 }
             }
             
-            // इस फंक्शन को कॉल करने से पहले टिप्पणी करें
-            // checkPremiumAccess();
+            // इस फंक्शन को कॉल करें
+            checkPremiumAccess();
 
             // फॉर्म सबमिट इवेंट मजबूती से बाइंड
             const paymentForm = document.getElementById('payment-form');
@@ -1876,7 +1955,8 @@
                             userId: userId,
                             mobileNumber: foundPayment.mobile_number,
                             transactionId: foundPayment.transaction_id,
-                            expiryDate: expiryDate.toISOString()
+                            expiryDate: expiryDate.toISOString(),
+                            expiryTimestamp: expiryDate.getTime() // एक्सपायरी टाइमस्टैम्प जोड़ें
                         }));
                         
                         showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
@@ -2041,14 +2121,18 @@
             // पेज लोड होते ही लोकल स्टोरेज जांचें
             const accessData = localStorage.getItem('premiumAccess');
             if (accessData) {
-                const { userId, mobileNumber, transactionId, expiryDate } = JSON.parse(accessData);
+                const { userId, mobileNumber, transactionId, expiryDate, expiryTimestamp } = JSON.parse(accessData);
                 const now = new Date();
                 const expiry = new Date(expiryDate);
                 
-                if (now < expiry) {
-                    // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
-                    window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
-                    return;
+                // एक्सपायरी टाइमस्टैम्प की जांच करें
+                if (expiryTimestamp && now.getTime() > expiryTimestamp) {
+                    // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
+                    deleteExpiredUserData();
+                    console.log("Page load: Expired data removed");
+                } else if (now < expiry) {
+                    // अब फायरबेस से भी जांच करें कि उपयोगकर्ता अभी भी अप्रूव्ड है या नहीं
+                    checkFirebaseApproval(userId, mobileNumber, transactionId);
                 } else {
                     // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                     deleteExpiredUserData();
@@ -2061,6 +2145,43 @@
                 img.addEventListener('error', handleImageError);
             });
         });
+        
+        // फायरबेस से अप्रूवल स्टेटस जांचने का नया फंक्शन
+        async function checkFirebaseApproval(userId, mobileNumber, transactionId) {
+            try {
+                if (!firebaseInitialized || !database) {
+                    initializeFirebase();
+                }
+                
+                const paymentsRef = database.ref('payments');
+                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
+                const payments = snapshot.val();
+                let isStillApproved = false;
+                
+                if (payments) {
+                    for (let key in payments) {
+                        if (payments[key].status === 'approved' && 
+                            payments[key].transaction_id === transactionId) {
+                            isStillApproved = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (isStillApproved) {
+                    // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
+                    window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
+                } else {
+                    // उपयोगकर्ता अब अप्रूव्ड नहीं है, लोकल स्टोरेज से हटाएं
+                    deleteExpiredUserData();
+                    showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'info');
+                }
+            } catch (error) {
+                console.error("Error checking approval status:", error);
+                // एरर होने पर भी लोकल स्टोरेज से हटाएं
+                deleteExpiredUserData();
+            }
+        }
         
         window.addEventListener('load', () => {
             const params = new URLSearchParams(window.location.search);
