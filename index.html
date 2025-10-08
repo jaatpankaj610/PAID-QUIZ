@@ -1224,6 +1224,7 @@
                                 initializeFirebase();
                             }
                             
+                            // यहाँ सबसे महत्वपूर्ण बदलाव है - हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों का उपयोग करके विशिष्ट पेमेंट रिकॉर्ड खोजेंगे
                             const paymentsRef = database.ref('payments');
                             const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                             const payments = snapshot.val();
@@ -1232,6 +1233,7 @@
                             
                             if (payments) {
                                 for (let key in payments) {
+                                    // यहाँ हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
                                     if (payments[key].transaction_id === transactionId) {
                                         if (payments[key].status === 'approved') {
                                             isStillApproved = true;
@@ -1452,6 +1454,7 @@
 
                     if (payments) {
                         for (let key in payments) {
+                            // यहाँ भी हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
                             if (payments[key].status === 'approved') {
                                 foundApprovedPayment = payments[key];
                             } else if (payments[key].status === 'rejected') {
@@ -1960,12 +1963,14 @@
 
                 const paymentsRef = database.ref('payments');
                 
+                // यहाँ सबसे महत्वपूर्ण बदलाव है - हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों का उपयोग करके विशिष्ट पेमेंट रिकॉर्ड खोजेंगे
                 const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                 const payments = snapshot.val();
                 let foundPayment = null;
 
                 if (payments) {
                     for (let key in payments) {
+                        // यहाँ हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
                         if (payments[key].transaction_id === transactionIdToCheck && 
                             payments[key].mobile_number === mobileNumberToCheck) {
                             foundPayment = payments[key];
@@ -2203,6 +2208,7 @@
                 
                 if (payments) {
                     for (let key in payments) {
+                        // यहाँ हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
                         if (payments[key].transaction_id === transactionId) {
                             if (payments[key].status === 'approved') {
                                 isStillApproved = true;
