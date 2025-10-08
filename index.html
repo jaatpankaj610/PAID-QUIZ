@@ -407,9 +407,9 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            background: linear-gradient(135deg, rgba(74, 0, 224, 0.95), rgba(142, 45, 226, 0.95));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
             display: none;
             flex-direction: column;
@@ -417,12 +417,31 @@
             justify-content: center;
             text-align: center;
             gap: 20px;
+            color: white;
+        }
+
+        .processing-screen .app-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .processing-screen .app-logo i {
+            font-size: 50px;
+            color: white;
         }
 
         .processing-screen .app-logo-name {
             font-size: 24px;
             font-weight: 700;
-            color: var(--primary);
+            color: white;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -432,22 +451,120 @@
         .processing-screen .processing-message {
             font-size: 18px;
             font-weight: 600;
-            color: var(--dark);
+            color: white;
             margin-bottom: 20px;
         }
 
+        .spinner-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 20px auto;
+        }
+
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
+            width: 80px;
+            height: 80px;
+            border: 6px solid rgba(255, 255, 255, 0.2);
+            border-top: 6px solid white;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+
+        .spinner-inner {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 5px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            animation: spin 2s linear infinite reverse;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            width: 0%;
+            animation: progress 2s ease-in-out forwards;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .loading-dots {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 20px;
+        }
+
+        .loading-dots div {
+            position: absolute;
+            top: 0;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: white;
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+
+        .loading-dots div:nth-child(1) {
+            left: 8px;
+            animation: dots1 0.6s infinite;
+        }
+
+        .loading-dots div:nth-child(2) {
+            left: 8px;
+            animation: dots2 0.6s infinite;
+        }
+
+        .loading-dots div:nth-child(3) {
+            left: 32px;
+            animation: dots2 0.6s infinite;
+        }
+
+        .loading-dots div:nth-child(4) {
+            left: 56px;
+            animation: dots3 0.6s infinite;
+        }
+
+        @keyframes dots1 {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes dots3 {
+            0% { transform: scale(1); }
+            100% { transform: scale(0); }
+        }
+
+        @keyframes dots2 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(24px, 0); }
         }
 
         .custom-design {
@@ -982,6 +1099,28 @@
 <body>
     <div class="notification-container" id="notification-container"></div>
     
+    <!-- Enhanced Processing Screen -->
+    <div id="processing-screen" class="processing-screen">
+        <div class="app-logo">
+            <i class="fas fa-landmark"></i>
+        </div>
+        <div class="app-logo-name">राजस्थान GK क्विज़</div>
+        <div class="processing-message" id="processing-message">आपकी प्रीमियम एक्सेस जांच रहे हैं...</div>
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <div class="spinner-inner"></div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="loading-dots">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    
     <div id="offline-section" class="offline-section" style="display: none;">
         <div class="custom-design">
             <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1024,14 +1163,6 @@
     </div>
 
     <div class="container">
-        <div id="processing-screen" class="processing-screen">
-            <img src="rajasthan-gk-quiz-logo.png" alt="App Logo" style="width: 80px; height: 80px; margin-bottom: 20px;">
-            <div class="app-logo-name"><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</div>
-            <div class="processing-message">आपकी पेमेंट रिक्वेस्ट प्रोसेस हो रही है...</div>
-            <div class="spinner"></div>
-            <div class="processing-message" style="margin-top: 20px;">कुछ ही सेकंड्स में...</div>
-        </div>
-        
         <div class="header">
             <h1><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</h1>
             <p>मात्र ₹49 में 30 दिन की प्रीमियम एक्सेस अनलॉक करें!</p>
@@ -1153,6 +1284,7 @@
         // Firebase को ग्लोबल स्कोप में इनिशियलाइज़ करें
         let database;
         let firebaseInitialized = false;
+        let currentUserId = null; // Current user ID को track करने के लिए
 
         // Firebase कॉन्फिगरेशन
         const firebaseConfig = {
@@ -1198,6 +1330,13 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
+            // Show processing screen immediately when page loads
+            document.getElementById('processing-screen').style.display = 'flex';
+            document.getElementById('online-content').style.display = 'none';
+            
+            // Set initial message
+            document.getElementById('processing-message').textContent = 'आपकी प्रीमियम एक्सेस जांच रहे हैं...';
+            
             // ऑटोमेटिक डेटा क्लीनअप सेटअप करें
             setupAutomaticDataCleanup();
             
@@ -1224,7 +1363,6 @@
                                 initializeFirebase();
                             }
                             
-                            // यहाँ सबसे महत्वपूर्ण बदलाव है - हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों का उपयोग करके विशिष्ट पेमेंट रिकॉर्ड खोजेंगे
                             const paymentsRef = database.ref('payments');
                             const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                             const payments = snapshot.val();
@@ -1233,11 +1371,14 @@
                             
                             if (payments) {
                                 for (let key in payments) {
-                                    // यहाँ हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
-                                    if (payments[key].transaction_id === transactionId) {
-                                        if (payments[key].status === 'approved') {
+                                    const payment = payments[key];
+                                    // महत्वपूर्ण: यहाँ specific user के transaction और mobile number की match करना जरूरी है
+                                    if (payment.user_id === userId && 
+                                        payment.transaction_id === transactionId && 
+                                        payment.mobile_number === mobileNumber) {
+                                        if (payment.status === 'approved') {
                                             isStillApproved = true;
-                                        } else if (payments[key].status === 'rejected') {
+                                        } else if (payment.status === 'rejected') {
                                             isRejected = true;
                                         }
                                         break;
@@ -1371,50 +1512,51 @@
                     const payments = snapshot.val();
                     if (!payments) return;
                     
-                    // सभी पेमेंट्स के लिए जांचें
+                    // केवल current user के local storage data को check करें
+                    const accessData = localStorage.getItem('premiumAccess');
+                    if (!accessData) return;
+                    
+                    const { userId: localUserId, mobileNumber: localMobile, transactionId: localTransaction } = JSON.parse(accessData);
+                    
+                    // सभी पेमेंट्स के लिए जांचें लेकिन केवल current user के लिए action लें
                     for (let key in payments) {
                         const payment = payments[key];
                         
-                        // केवल अप्रूव्ड पेमेंट्स की जांच करें
-                        if (payment.status === 'approved') {
-                            const userId = payment.user_id;
-                            const mobileNumber = payment.mobile_number;
-                            const transactionId = payment.transaction_id;
+                        // केवल current user के data को process करें
+                        if (payment.user_id === localUserId && 
+                            payment.mobile_number === localMobile && 
+                            payment.transaction_id === localTransaction) {
                             
-                            // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
-                            let approvalDate;
-                            if (payment.approved_at) {
-                                approvalDate = new Date(payment.approved_at);
-                            } else {
-                                // अगर approved_at नहीं है, तो timestamp का उपयोग करें
-                                approvalDate = new Date(payment.timestamp);
-                            }
-                            
-                            const expiryDate = new Date(approvalDate);
-                            expiryDate.setDate(approvalDate.getDate() + 30);
-                            
-                            // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                            saveAccessToLocalStorage(userId, mobileNumber, transactionId, expiryDate);
-                        }
-                        // रिजेक्टेड पेमेंट्स की भी जांच करें
-                        else if (payment.status === 'rejected') {
-                            const userId = payment.user_id;
-                            const transactionId = payment.transaction_id;
-                            
-                            // लोकल स्टोरेज से डेटा जांचें
-                            const accessData = localStorage.getItem('premiumAccess');
-                            if (accessData) {
-                                const { userId: storedUserId, transactionId: storedTransactionId } = JSON.parse(accessData);
-                                
-                                // अगर यह वही उपयोगकर्ता है जिसे रिजेक्ट किया गया है
-                                if (userId === storedUserId && transactionId === storedTransactionId) {
-                                    // लोकल स्टोरेज से डेटा हटाएं
-                                    deleteExpiredUserData();
-                                    
-                                    // उपयोगकर्ता को सूचित करें
-                                    showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
+                            // केवल अप्रूव्ड पेमेंट्स की जांच करें
+                            if (payment.status === 'approved') {
+                                // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                                let approvalDate;
+                                if (payment.approved_at) {
+                                    approvalDate = new Date(payment.approved_at);
+                                } else {
+                                    // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                                    approvalDate = new Date(payment.timestamp);
                                 }
+                                
+                                const expiryDate = new Date(approvalDate);
+                                expiryDate.setDate(approvalDate.getDate() + 30);
+                                
+                                // लोकल स्टोरेज में एक्सेस जानकारी update करें
+                                saveAccessToLocalStorage(payment.user_id, payment.mobile_number, payment.transaction_id, expiryDate);
+                                
+                                // यदि user approved हो गया है तो notification दिखाएं
+                                showNotification('पेमेंट अप्रूव्ड', 'आपकी पेमेंट अप्रूव हो गई है! आप अब क्विज़ खेल सकते हैं।', 'success');
                             }
+                            // रिजेक्टेड पेमेंट्स की भी जांच करें
+                            else if (payment.status === 'rejected') {
+                                // लोकल स्टोरेज से डेटा हटाएं
+                                deleteExpiredUserData();
+                                
+                                // उपयोगकर्ता को सूचित करें
+                                showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
+                            }
+                            
+                            break; // केवल current user के लिए action लिया गया है, loop से बाहर निकलें
                         }
                     }
                 });
@@ -1434,12 +1576,14 @@
                 const userEmail = params.get('user_id');
 
                 if (!userEmail) {
+                    // Hide processing screen and show main content
                     document.getElementById('processing-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
                     return;
                 }
 
                 const userId = userEmail.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+                currentUserId = userId; // Current user ID को set करें
 
                 try {
                     if (!firebaseInitialized || !database) {
@@ -1453,18 +1597,24 @@
                     let foundRejectedPayment = null;
 
                     if (payments) {
+                        // FIXED: पहले सभी payments को check करें specific user के लिए
                         for (let key in payments) {
-                            // यहाँ भी हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
-                            if (payments[key].status === 'approved') {
-                                foundApprovedPayment = payments[key];
-                            } else if (payments[key].status === 'rejected') {
-                                foundRejectedPayment = payments[key];
+                            const payment = payments[key];
+                            // केवल current user के payments को check करें
+                            if (payment.user_id === userId) {
+                                if (payment.status === 'approved') {
+                                    foundApprovedPayment = payment;
+                                    break; // पहला approved payment मिल गया
+                                } else if (payment.status === 'rejected') {
+                                    foundRejectedPayment = payment;
+                                }
                             }
                         }
                     }
 
-                    // अगर रिजेक्टेड पेमेंट मिला, तो एक्सेस दें नहीं
-                    if (foundRejectedPayment) {
+                    // अगर रिजेक्टेड पेमेंट मिला और कोई approved नहीं है, तो एक्सेस दें नहीं
+                    if (foundRejectedPayment && !foundApprovedPayment) {
+                        // Hide processing screen and show main content
                         document.getElementById('processing-screen').style.display = 'none';
                         document.getElementById('online-content').style.display = 'block';
                         showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
@@ -1496,11 +1646,13 @@
                     
                     // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
                     document.getElementById('user_id').value = userEmail;
+                    // Hide processing screen and show main content
                     document.getElementById('processing-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
 
                 } catch (error) {
                     console.error("Access check error:", error);
+                    // Hide processing screen and show main content
                     document.getElementById('processing-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
                 }
@@ -1677,6 +1829,7 @@
         function showProcessingScreen() {
             document.getElementById('online-content').style.display = 'none';
             document.getElementById('processing-screen').style.display = 'flex';
+            document.getElementById('processing-message').textContent = 'आपकी पेमेंट रिक्वेस्ट प्रोसेस हो रही है...';
         }
 
         function hideProcessingScreen() {
@@ -1799,6 +1952,9 @@
             const transactionId = document.getElementById('transaction_id').value.trim();
             const amount = document.getElementById('amount').value.trim();
             const paymentNote = document.getElementById('payment_note').value.trim();
+            
+            // Current user ID को set करें
+            currentUserId = userId;
             
             console.log("Data to submit:", { userId, mobileNumber, transactionId, amount, paymentNote }); // डिबग
 
@@ -1935,45 +2091,25 @@
             }
 
             showProcessingScreen();
+            document.getElementById('processing-message').textContent = 'पेमेंट स्टेटस जांच रहे हैं...';
             statusMessage.style.display = 'none'; // पुराने मैसेज को छुपाएं
             
             try {
-                // पुराने तरीके का उपयोग करें - user_session से डेटा लें
-                const userDataRef = database.ref('user_session/' + userId);
-                const userDataSnapshot = await userDataRef.once('value');
-                const storedData = userDataSnapshot.val();
-                
-                let transactionIdToCheck = '';
-                let mobileNumberToCheck = '';
-                
-                if (storedData && storedData.transactionId && storedData.mobileNumber) {
-                    transactionIdToCheck = storedData.transactionId;
-                    mobileNumberToCheck = storedData.mobileNumber;
-                } else {
-                    transactionIdToCheck = document.getElementById('transaction_id').value.trim();
-                    mobileNumberToCheck = document.getElementById('mobile_number').value.trim();
-                    
-                    if (!transactionIdToCheck || !mobileNumberToCheck) {
-                        hideProcessingScreen();
-                        // सुरक्षित संदेश - यह नहीं बताएं कि क्या गलत है
-                        showNotification('पेमेंट सत्यापन', 'पेमेंट विवरण सत्यापित नहीं हो सका। कृपया सभी विवरण सही ढंग से जांचें।', 'error');
-                        return;
-                    }
-                }
-
                 const paymentsRef = database.ref('payments');
                 
-                // यहाँ सबसे महत्वपूर्ण बदलाव है - हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों का उपयोग करके विशिष्ट पेमेंट रिकॉर्ड खोजेंगे
+                // FIXED: यहाँ user ID के साथ-साथ transaction ID और mobile number भी match करना जरूरी है
                 const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                 const payments = snapshot.val();
                 let foundPayment = null;
 
                 if (payments) {
                     for (let key in payments) {
-                        // यहाँ हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
-                        if (payments[key].transaction_id === transactionIdToCheck && 
-                            payments[key].mobile_number === mobileNumberToCheck) {
-                            foundPayment = payments[key];
+                        const payment = payments[key];
+                        // महत्वपूर्ण: तीनों values को match करना जरूरी है
+                        if (payment.user_id === userId && 
+                            payment.transaction_id === transactionId && 
+                            payment.mobile_number === mobileNumber) {
+                            foundPayment = payment;
                             break;
                         }
                     }
@@ -2208,11 +2344,14 @@
                 
                 if (payments) {
                     for (let key in payments) {
-                        // यहाँ हम यूजर आईडी और ट्रांजैक्शन आईडी दोनों की जांच कर रहे हैं
-                        if (payments[key].transaction_id === transactionId) {
-                            if (payments[key].status === 'approved') {
+                        const payment = payments[key];
+                        // महत्वपूर्ण: यहाँ भी तीनों values को match करना जरूरी है
+                        if (payment.user_id === userId && 
+                            payment.transaction_id === transactionId && 
+                            payment.mobile_number === mobileNumber) {
+                            if (payment.status === 'approved') {
                                 isStillApproved = true;
-                            } else if (payments[key].status === 'rejected') {
+                            } else if (payment.status === 'rejected') {
                                 isRejected = true;
                             }
                             break;
