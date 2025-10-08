@@ -1228,12 +1228,16 @@
                             const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                             const payments = snapshot.val();
                             let isStillApproved = false;
+                            let isRejected = false;
                             
                             if (payments) {
                                 for (let key in payments) {
-                                    if (payments[key].status === 'approved' && 
-                                        payments[key].transaction_id === transactionId) {
-                                        isStillApproved = true;
+                                    if (payments[key].transaction_id === transactionId) {
+                                        if (payments[key].status === 'approved') {
+                                            isStillApproved = true;
+                                        } else if (payments[key].status === 'rejected') {
+                                            isRejected = true;
+                                        }
                                         break;
                                     }
                                 }
@@ -1243,10 +1247,16 @@
                                 // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
                                 window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
                                 return true;
+                            } else if (isRejected) {
+                                // उपयोगकर्ता को रिजेक्ट कर दिया गया है, लोकल स्टोरेज से हटाएं
+                                deleteExpiredUserData();
+                                showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
+                                return false;
                             } else {
                                 // उपयोगकर्ता अब अप्रूव्ड नहीं है, लोकल स्टोरेज से हटाएं
                                 deleteExpiredUserData();
                                 showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'info');
+                                return false;
                             }
                         } catch (error) {
                             console.error("Error checking approval status:", error);
@@ -1384,6 +1394,26 @@
                             // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
                             saveAccessToLocalStorage(userId, mobileNumber, transactionId, expiryDate);
                         }
+                        // रिजेक्टेड पेमेंट्स की भी जांच करें
+                        else if (payment.status === 'rejected') {
+                            const userId = payment.user_id;
+                            const transactionId = payment.transaction_id;
+                            
+                            // लोकल स्टोरेज से डेटा जांचें
+                            const accessData = localStorage.getItem('premiumAccess');
+                            if (accessData) {
+                                const { userId: storedUserId, transactionId: storedTransactionId } = JSON.parse(accessData);
+                                
+                                // अगर यह वही उपयोगकर्ता है जिसे रिजेक्ट किया गया है
+                                if (userId === storedUserId && transactionId === storedTransactionId) {
+                                    // लोकल स्टोरेज से डेटा हटाएं
+                                    deleteExpiredUserData();
+                                    
+                                    // उपयोगकर्ता को सूचित करें
+                                    showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
+                                }
+                            }
+                        }
                     }
                 });
             }
@@ -1418,14 +1448,24 @@
                     const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                     const payments = snapshot.val();
                     let foundApprovedPayment = null;
+                    let foundRejectedPayment = null;
 
                     if (payments) {
                         for (let key in payments) {
                             if (payments[key].status === 'approved') {
                                 foundApprovedPayment = payments[key];
-                                break;
+                            } else if (payments[key].status === 'rejected') {
+                                foundRejectedPayment = payments[key];
                             }
                         }
+                    }
+
+                    // अगर रिजेक्टेड पेमेंट मिला, तो एक्सेस दें नहीं
+                    if (foundRejectedPayment) {
+                        document.getElementById('processing-screen').style.display = 'none';
+                        document.getElementById('online-content').style.display = 'block';
+                        showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
+                        return;
                     }
 
                     if (foundApprovedPayment) {
@@ -1968,6 +2008,8 @@
                     } else if (foundPayment.status === 'pending') {
                         showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।', 'info');
                     } else if (foundPayment.status === 'rejected') {
+                        // लोकल स्टोरेज से डेटा हटाएं
+                        deleteExpiredUserData();
                         showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।', 'error');
                     } else {
                         showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
@@ -2157,12 +2199,16 @@
                 const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
                 const payments = snapshot.val();
                 let isStillApproved = false;
+                let isRejected = false;
                 
                 if (payments) {
                     for (let key in payments) {
-                        if (payments[key].status === 'approved' && 
-                            payments[key].transaction_id === transactionId) {
-                            isStillApproved = true;
+                        if (payments[key].transaction_id === transactionId) {
+                            if (payments[key].status === 'approved') {
+                                isStillApproved = true;
+                            } else if (payments[key].status === 'rejected') {
+                                isRejected = true;
+                            }
                             break;
                         }
                     }
@@ -2171,6 +2217,10 @@
                 if (isStillApproved) {
                     // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
                     window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
+                } else if (isRejected) {
+                    // उपयोगकर्ता को रिजेक्ट कर दिया गया है, लोकल स्टोरेज से हटाएं
+                    deleteExpiredUserData();
+                    showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
                 } else {
                     // उपयोगकर्ता अब अप्रूव्ड नहीं है, लोकल स्टोरेज से हटाएं
                     deleteExpiredUserData();
