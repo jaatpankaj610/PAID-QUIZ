@@ -396,13 +396,6 @@ margin-left: auto;
 font-size: 18px;
 }
 
-.options li.selected {
-background: linear-gradient(135deg, #6366f1, #8b5cf6);
-border: 2px solid #6366f1;
-transform: scale(1.02);
-box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-}
-
 @keyframes pop3D {
 0% {
 transform: perspective(600px) rotateX(0deg) scale(1);
@@ -444,14 +437,7 @@ background: rgba(239, 68, 68, 0.1);
 border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-.navigation-buttons {
-display: flex;
-gap: 10px;
-margin-top: 10px;
-width: 100%;
-}
-
-.prev-btn, .next-btn {
+.next-btn {
 background: var(--paid-gradient);
 color: var(--light);
 border: none;
@@ -460,33 +446,15 @@ padding: 12px;
 font-size: 15px;
 font-weight: 700;
 cursor: pointer;
-flex: 1;
+width: 100%;
+margin-top: 10px;
 display: none;
 box-shadow: var(--button-shadow);
-transition: all 0.3s ease;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
 }
 
-.prev-btn {
-background: linear-gradient(135deg, #6b7280, #4b5563);
-}
-
-.prev-btn:hover, .next-btn:hover {
+.next-btn:hover {
 transform: translateY(-2px);
 box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
-}
-
-.prev-btn:hover {
-box-shadow: 0 6px 16px rgba(107, 114, 128, 0.25);
-}
-
-.prev-btn:disabled, .next-btn:disabled {
-opacity: 0.5;
-cursor: not-allowed;
-transform: none;
 }
 
 .offline-section, .error-section {
@@ -2045,7 +2013,7 @@ margin-top: 12px;
 font-size: 16px;
 padding: 14px;
 }
-.prev-btn, .next-btn {
+.next-btn {
 padding: 14px;
 font-size: 16px;
 margin-top: 12px;
@@ -2324,16 +2292,7 @@ height: 450px;
 </ul>
 <div id="result" class="result"></div>
 <div class="score-display" id="score-display">स्कोर: <span id="score-value">0</span></div>
-<div class="navigation-buttons">
-<button class="prev-btn" id="prev-btn" onclick="previousQuestion()" style="display: none;">
-<i class="fas fa-arrow-left"></i>
-<span>पिछला सवाल</span>
-</button>
-<button class="next-btn" id="next-btn" onclick="nextQuestion()" style="display: none;">
-<span>अगला सवाल</span>
-<i class="fas fa-arrow-right"></i>
-</button>
-</div>
+<button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला सवाल</button>
 </div>
 </div>
 <div id="score-section" class="score-section" style="display: none;">
@@ -2457,13 +2416,11 @@ let pullToRefresh = null;
 // Initialize sound effects - MIT App Inventor Assets के लिए paths
 const correctSound = new Audio('file:///android_asset/correct.mp3'); // सही जवाब का sound (assets में upload करें)
 const incorrectSound = new Audio('file:///android_asset/incorrect.mp3'); // गलत जवाब का sound (assets में upload करें)
-const fireworksSound = new Audio('file:///android_asset/fireworks.mp3'); // पटाखे का sound (assets में upload करें)
 
 // Ensure audio plays after user interaction
 function unlockAudio() {
 correctSound.load();
 incorrectSound.load();
-fireworksSound.load();
 document.removeEventListener('click', unlockAudio);
 }
 document.addEventListener('click', unlockAudio);
@@ -2919,9 +2876,8 @@ const questionText = document.getElementById('question-text');
 const optionsList = document.getElementById('options-list');
 const result = document.getElementById('result');
 const nextBtn = document.getElementById('next-btn');
-const prevBtn = document.getElementById('prev-btn');
 
-if (!questionText || !optionsList || !result || !nextBtn || !prevBtn) {
+if (!questionText || !optionsList || !result || !nextBtn) {
 console.error('Paid quiz elements not found');
 showErrorOverlay();
 return;
@@ -2945,23 +2901,12 @@ result.style.display = 'none';
 nextBtn.style.display = 'none';
 updateProgressBar();
 
-// Update navigation buttons
-updateNavigationButtons();
-
 // Reset the answered flag
 userAnswered = false;
 
 // Clear any existing timeout
 if (autoNextTimeout) {
 clearTimeout(autoNextTimeout);
-}
-
-// Check if user has already answered this question
-const previousAnswer = questionHistory.find(h => h.questionIndex === currentQuestionIndex);
-let previouslySelected = -1;
-if (previousAnswer) {
-previouslySelected = previousAnswer.selectedIndex;
-userAnswered = true; // Mark as answered if previous answer exists
 }
 
 question.options.forEach((option, index) => {
@@ -2972,84 +2917,12 @@ li.style.transform = 'scale(0.9) translateY(15px)';
 li.onclick = () => checkAnswer(index);
 optionsList.appendChild(li);
 
-// If this option was previously selected, highlight it
-if (index === previouslySelected) {
-li.classList.add('selected');
-}
-
-// If user has already answered this question, show the correct/incorrect styling
-if (previousAnswer) {
-if (index === question.correct) {
-li.classList.add('correct');
-} else if (index === previousAnswer.selectedIndex && index !== question.correct) {
-li.classList.add('incorrect');
-}
-// Disable further clicks if already answered
-li.onclick = null;
-}
-
 setTimeout(() => {
 li.style.transition = 'all 0.5s ease';
 li.style.opacity = '1';
 li.style.transform = 'scale(1) translateY(0)';
 }, index * 100);
 });
-
-// If user has already answered this question, show the result and next button
-if (previousAnswer) {
-if (previousAnswer.wasCorrect) {
-result.textContent = 'सही जवाब!';
-result.className = 'result success';
-} else {
-result.textContent = `गलत जवाब! सही: ${question.options[question.correct]}`;
-result.className = 'result error';
-}
-result.style.display = 'block';
-
-// Show next button if not on last question
-if (currentQuestionIndex < questions.length - 1) {
-nextBtn.style.display = 'flex';
-}
-}
-}
-
-function updateNavigationButtons() {
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-
-if (!prevBtn || !nextBtn) return;
-
-// Show previous button if not on first question
-if (currentQuestionIndex > 0) {
-prevBtn.style.display = 'flex';
-} else {
-prevBtn.style.display = 'none';
-}
-
-// Don't show next button initially - it will be shown after answering
-nextBtn.style.display = 'none';
-}
-
-function previousQuestion() {
-if (currentQuestionIndex > 0) {
-// Clear any existing timeout
-if (autoNextTimeout) {
-clearTimeout(autoNextTimeout);
-}
-
-currentQuestionIndex--;
-showQuestion();
-}
-}
-
-function nextQuestion() {
-// Clear any existing timeout
-if (autoNextTimeout) {
-clearTimeout(autoNextTimeout);
-}
-
-currentQuestionIndex++;
-showQuestion();
 }
 
 function triggerConfetti() {
@@ -3076,12 +2949,6 @@ ticks: 200
 }
 
 function checkAnswer(selectedIndex) {
-// If this question was already answered, don't allow re-answering
-const existingAnswer = questionHistory.find(h => h.questionIndex === currentQuestionIndex);
-if (existingAnswer) {
-return;
-}
-
 // Prevent multiple answers to the same question
 if (userAnswered) return;
 userAnswered = true;
@@ -3089,31 +2956,28 @@ userAnswered = true;
 const question = questions[currentQuestionIndex];
 const options = document.querySelectorAll('#options-list li');
 const result = document.getElementById('result');
-const nextBtn = document.getElementById('next-btn');
 
-if (!result || !options.length || !nextBtn) {
+if (!result || !options.length) {
 console.error('Result or options not found for paid quiz');
 showErrorOverlay();
 return;
 }
 
 // Store this question in history
-const wasCorrect = selectedIndex === question.correct;
 questionHistory.push({
 questionIndex: currentQuestionIndex,
 selectedIndex: selectedIndex,
 correctAnswer: question.correct,
-wasCorrect: wasCorrect
+wasCorrect: selectedIndex === question.correct
 });
 
 options.forEach((option, index) => {
 option.onclick = null;
 if (index === question.correct) option.classList.add('correct');
 if (index === selectedIndex && selectedIndex !== question.correct) option.classList.add('incorrect');
-if (index === selectedIndex) option.classList.add('selected');
 });
 
-if (wasCorrect) {
+if (selectedIndex === question.correct) {
 score++;
 // Only update initial score if this is the first time completing the quiz
 if (!quizCompleted) {
@@ -3142,17 +3006,11 @@ result.style.display = 'block';
 
 if ('vibrate' in navigator) navigator.vibrate(200);
 
-// Show next button if not on last question
-if (currentQuestionIndex < questions.length - 1) {
-nextBtn.style.display = 'flex';
-}
-
-// Auto move to next question after 1.5 seconds if not on last question
-if (currentQuestionIndex < questions.length - 1) {
+// Auto move to next question after 1.5 seconds
 autoNextTimeout = setTimeout(() => {
-nextQuestion();
+currentQuestionIndex++;
+showQuestion();
 }, 1500);
-}
 }
 
 function showFinalScore() {
@@ -4079,11 +3937,12 @@ const btn = document.getElementById('premium-rotating-btn');
 // Add rotating class
 btn.classList.add('rotating');
 
-// Play fireworks sound
+// Play a sound effect if available
 try {
-fireworksSound.play().catch(e => console.log('Fireworks sound play failed:', e));
+const sound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
+sound.play().catch(e => console.log('Sound play failed:', e));
 } catch (e) {
-console.log('Fireworks sound creation failed:', e);
+console.log('Sound creation failed:', e);
 }
 
 // After animation completes
