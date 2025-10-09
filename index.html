@@ -407,7 +407,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(135deg, rgba(74, 0, 224, 0.95), rgba(142, 45, 226, 0.95));
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             z-index: 1000;
@@ -419,28 +419,10 @@
             gap: 20px;
         }
 
-        .processing-screen .app-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-        .processing-screen .app-logo i {
-            font-size: 50px;
-            color: white;
-        }
-
         .processing-screen .app-logo-name {
             font-size: 24px;
             font-weight: 700;
-            color: white;
+            color: var(--primary);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -450,120 +432,22 @@
         .processing-screen .processing-message {
             font-size: 18px;
             font-weight: 600;
-            color: white;
+            color: var(--dark);
             margin-bottom: 20px;
         }
 
-        .spinner-container {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            margin: 20px auto;
-        }
-
         .spinner {
-            width: 80px;
-            height: 80px;
-            border: 6px solid rgba(255, 255, 255, 0.2);
-            border-top: 6px solid white;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
             border-radius: 50%;
-            animation: spin 1.5s linear infinite;
-        }
-
-        .spinner-inner {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 5px solid rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            animation: spin 2s linear infinite reverse;
+            animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .progress-bar {
-            width: 80%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: white;
-            border-radius: 3px;
-            width: 0%;
-            animation: progress 2s ease-in-out forwards;
-        }
-
-        @keyframes progress {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        .loading-dots {
-            display: inline-block;
-            position: relative;
-            width: 80px;
-            height: 20px;
-        }
-
-        .loading-dots div {
-            position: absolute;
-            top: 0;
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            background: white;
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-        }
-
-        .loading-dots div:nth-child(1) {
-            left: 8px;
-            animation: dots1 0.6s infinite;
-        }
-
-        .loading-dots div:nth-child(2) {
-            left: 8px;
-            animation: dots2 0.6s infinite;
-        }
-
-        .loading-dots div:nth-child(3) {
-            left: 32px;
-            animation: dots2 0.6s infinite;
-        }
-
-        .loading-dots div:nth-child(4) {
-            left: 56px;
-            animation: dots3 0.6s infinite;
-        }
-
-        @keyframes dots1 {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes dots3 {
-            0% { transform: scale(1); }
-            100% { transform: scale(0); }
-        }
-
-        @keyframes dots2 {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(24px, 0); }
         }
 
         .custom-design {
@@ -1025,6 +909,95 @@
             background: var(--warning);
         }
         
+        /* Payment Status Check Screen Styles */
+        .payment-status-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #4a00e0, #8e2de2);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+            z-index: 1000;
+        }
+
+        .payment-status-screen .status-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .payment-status-screen .status-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .payment-status-screen .status-message {
+            font-size: 16px;
+            text-align: center;
+            max-width: 80%;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .payment-status-screen .progress-container {
+            width: 80%;
+            max-width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .payment-status-screen .progress-bar {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            width: 0%;
+            animation: progressAnimation 10s linear forwards;
+        }
+
+        @keyframes progressAnimation {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .payment-status-screen .status-details {
+            font-size: 14px;
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .payment-status-screen .manual-check-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .payment-status-screen .manual-check-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
         @media (max-width: 480px) {
             .header { padding: 12px 8px; }
             .header h1 { font-size: 18px; max-width: calc(100vw - 20px); }
@@ -1060,6 +1033,9 @@
             .notification-message { font-size: 12px; }
             .notification-icon { font-size: 20px; width: 32px; height: 32px; }
             .security-warning { font-size: 12px; }
+            .payment-status-screen .status-title { font-size: 20px; }
+            .payment-status-screen .status-message { font-size: 14px; }
+            .payment-status-screen .status-details { font-size: 12px; }
         }
 
         @media (min-width: 768px) {
@@ -1092,6 +1068,9 @@
             .processing-screen .app-logo-name { font-size: 28px; }
             .processing-screen .processing-message { font-size: 20px; }
             .security-warning { font-size: 14px; }
+            .payment-status-screen .status-title { font-size: 28px; }
+            .payment-status-screen .status-message { font-size: 18px; }
+            .payment-status-screen .status-details { font-size: 16px; }
         }
     </style>
 </head>
@@ -1141,25 +1120,25 @@
 
     <div class="container">
         <div id="processing-screen" class="processing-screen">
-            <div class="app-logo">
-                <img src="file:///android_asset/logo.png" alt="Mind Grid Premium" onerror="this.style.display='none'; document.querySelector('.app-logo-fallback').style.display='block';">
-                <i class="fas fa-brain app-logo-fallback" style="display: none;"></i>
-            </div>
-            <div class="app-logo-name"><i class="fas fa-landmark"></i> Mind_Grid_premium</div>
+            <img src="rajasthan-gk-quiz-logo.png" alt="App Logo" style="width: 80px; height: 80px; margin-bottom: 20px;">
+            <div class="app-logo-name"><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</div>
             <div class="processing-message">आपकी पेमेंट रिक्वेस्ट प्रोसेस हो रही है...</div>
-            <div class="spinner-container">
-                <div class="spinner"></div>
-                <div class="spinner-inner"></div>
+            <div class="spinner"></div>
+            <div class="processing-message" style="margin-top: 20px;">कुछ ही सेकंड्स में...</div>
+        </div>
+        
+        <!-- Payment Status Check Screen -->
+        <div id="payment-status-screen" class="payment-status-screen">
+            <i class="fas fa-clock status-icon"></i>
+            <h2 class="status-title">पेमेंट स्टेटस चेक कर रहे हैं</h2>
+            <p class="status-message">आपकी पेमेंट की स्थिति की जांच की जा रही है। कृपया प्रतीक्षा करें।</p>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
             </div>
-            <div class="progress-bar">
-                <div class="progress"></div>
-            </div>
-            <div class="loading-dots">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+            <p class="status-details">यह प्रक्रिया कुछ समय ले सकती है। अगर पेमेंट स्टेटस अपडेट नहीं होता है, तो नीचे दिए गए बटन पर क्लिक करें।</p>
+            <button class="manual-check-btn" onclick="manualPaymentStatusCheck()">
+                <i class="fas fa-sync-alt"></i> मैन्युअली स्टेटस चेक करें
+            </button>
         </div>
         
         <div class="header">
@@ -1284,6 +1263,7 @@
         let database;
         let firebaseInitialized = false;
         let currentUserId = null; // Current user ID को track करने के लिए
+        let paymentStatusCheckInterval = null; // पेमेंट स्टेटस चेक के लिए इंटरवल
 
         // Firebase कॉन्फिगरेशन
         const firebaseConfig = {
@@ -1329,13 +1309,6 @@
         })();
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Show processing screen immediately when page loads
-            document.getElementById('processing-screen').style.display = 'flex';
-            document.getElementById('online-content').style.display = 'none';
-            
-            // Set initial message
-            document.getElementById('processing-message').textContent = 'Mind_Grid_premium लोड हो रहा है...';
-            
             // ऑटोमेटिक डेटा क्लीनअप सेटअप करें
             setupAutomaticDataCleanup();
             
@@ -1575,7 +1548,6 @@
                 const userEmail = params.get('user_id');
 
                 if (!userEmail) {
-                    // Hide processing screen and show main content
                     document.getElementById('processing-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
                     return;
@@ -1613,7 +1585,6 @@
 
                     // अगर रिजेक्टेड पेमेंट मिला और कोई approved नहीं है, तो एक्सेस दें नहीं
                     if (foundRejectedPayment && !foundApprovedPayment) {
-                        // Hide processing screen and show main content
                         document.getElementById('processing-screen').style.display = 'none';
                         document.getElementById('online-content').style.display = 'block';
                         showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
@@ -1645,13 +1616,11 @@
                     
                     // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
                     document.getElementById('user_id').value = userEmail;
-                    // Hide processing screen and show main content
                     document.getElementById('processing-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
 
                 } catch (error) {
                     console.error("Access check error:", error);
-                    // Hide processing screen and show main content
                     document.getElementById('processing-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
                 }
@@ -1828,12 +1797,145 @@
         function showProcessingScreen() {
             document.getElementById('online-content').style.display = 'none';
             document.getElementById('processing-screen').style.display = 'flex';
-            document.getElementById('processing-message').textContent = 'आपकी पेमेंट रिक्वेस्ट प्रोसेस हो रही है...';
         }
 
         function hideProcessingScreen() {
             document.getElementById('online-content').style.display = 'block';
             document.getElementById('processing-screen').style.display = 'none';
+        }
+        
+        // नया फंक्शन जो पेमेंट स्टेटस चेक स्क्रीन दिखाएगा
+        function showPaymentStatusScreen() {
+            document.getElementById('online-content').style.display = 'none';
+            document.getElementById('processing-screen').style.display = 'none';
+            document.getElementById('payment-status-screen').style.display = 'flex';
+            
+            // प्रोग्रेस बार को रीसेट करें
+            const progressBar = document.querySelector('.progress-bar');
+            progressBar.style.animation = 'none';
+            setTimeout(() => {
+                progressBar.style.animation = 'progressAnimation 10s linear forwards';
+            }, 100);
+            
+            // 10 सेकंड के बाद ऑटोमेटिक पेमेंट स्टेटस चेक करें
+            setTimeout(() => {
+                if (document.getElementById('payment-status-screen').style.display === 'flex') {
+                    checkPaymentStatusFromScreen();
+                }
+            }, 10000);
+        }
+        
+        function hidePaymentStatusScreen() {
+            document.getElementById('payment-status-screen').style.display = 'none';
+            document.getElementById('online-content').style.display = 'block';
+        }
+        
+        // मैन्युअल पेमेंट स्टेटस चेक करने का फंक्शन
+        function manualPaymentStatusCheck() {
+            checkPaymentStatusFromScreen();
+        }
+        
+        // पेमेंट स्टेटस स्क्रीन से पेमेंट स्टेटस चेक करने का फंक्शन
+        async function checkPaymentStatusFromScreen() {
+            const userId = document.getElementById('user_id').value.toLowerCase().trim().replace(/[\.\#\$\/\[\]]/g, "_");
+            const mobileNumber = document.getElementById('mobile_number').value.trim();
+            const transactionId = document.getElementById('transaction_id').value.trim();
+
+            // Firebase इनिशियलाइज़ेशन चेक
+            if (!firebaseInitialized || !database) {
+                console.log("Reinitializing Firebase for status check...");
+                const initSuccess = initializeFirebase();
+                if (!initSuccess) {
+                    showNotification('Firebase त्रुटि', 'Firebase कनेक्शन में समस्या। कृपया पेज रीफ्रेश करें।', 'error');
+                    return;
+                }
+            }
+            
+            try {
+                const paymentsRef = database.ref('payments');
+                
+                // FIXED: यहाँ user ID के साथ-साथ transaction ID और mobile number भी match करना जरूरी है
+                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
+                const payments = snapshot.val();
+                let foundPayment = null;
+
+                if (payments) {
+                    for (let key in payments) {
+                        const payment = payments[key];
+                        // महत्वपूर्ण: तीनों values को match करना जरूरी है
+                        if (payment.user_id === userId && 
+                            payment.transaction_id === transactionId && 
+                            payment.mobile_number === mobileNumber) {
+                            foundPayment = payment;
+                            break;
+                        }
+                    }
+                }
+
+                if (foundPayment) {
+                    if (foundPayment.status === 'approved') {
+                        // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
+                        let approvalDate;
+                        if (foundPayment.approved_at) {
+                            approvalDate = new Date(foundPayment.approved_at);
+                        } else {
+                            // अगर approved_at नहीं है, तो timestamp का उपयोग करें
+                            approvalDate = new Date(foundPayment.timestamp);
+                        }
+                        
+                        const expiryDate = new Date(approvalDate);
+                        expiryDate.setDate(approvalDate.getDate() + 30);
+                        
+                        // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
+                        localStorage.setItem('premiumAccess', JSON.stringify({
+                            userId: userId,
+                            mobileNumber: foundPayment.mobile_number,
+                            transactionId: foundPayment.transaction_id,
+                            expiryDate: expiryDate.toISOString(),
+                            expiryTimestamp: expiryDate.getTime() // एक्सपायरी टाइमस्टैम्प जोड़ें
+                        }));
+                        
+                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
+
+                        setTimeout(() => {
+                            window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + foundPayment.mobile_number + '&transaction=' + foundPayment.transaction_id;
+                        }, 5000);
+
+                    } else if (foundPayment.status === 'pending') {
+                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।', 'info');
+                        
+                        // प्रोग्रेस बार को रीसेट करें और फिर से शुरू करें
+                        const progressBar = document.querySelector('.progress-bar');
+                        progressBar.style.animation = 'none';
+                        setTimeout(() => {
+                            progressBar.style.animation = 'progressAnimation 10s linear forwards';
+                        }, 100);
+                        
+                        // 10 सेकंड के बाद फिर से चेक करें
+                        setTimeout(() => {
+                            if (document.getElementById('payment-status-screen').style.display === 'flex') {
+                                checkPaymentStatusFromScreen();
+                            }
+                        }, 10000);
+                    } else if (foundPayment.status === 'rejected') {
+                        // लोकल स्टोरेज से डेटा हटाएं
+                        deleteExpiredUserData();
+                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।', 'error');
+                        hidePaymentStatusScreen();
+                    } else {
+                        showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
+                        hidePaymentStatusScreen();
+                    }
+                } else {
+                    // सुरक्षित संदेश - यह नहीं बताएं कि क्या गलत है
+                    showNotification('पेमेंट सत्यापन', 'पेमेंट विवरण सत्यापित नहीं हो सका। कृपया सभी विवरण सही ढंग से जांचें।', 'error');
+                    hidePaymentStatusScreen();
+                }
+
+            } catch (error) {
+                showNotification('पेमेंट स्टेटस', 'पेमेंट स्टेटस चेक करने में त्रुटि। कृपया दोबारा कोशिश करें।', 'error');
+                console.error('Error checking payment status:', error);
+            }
         }
 
         function checkNetworkStatus() {
@@ -1845,6 +1947,7 @@
                 offlineSection.style.display = 'flex';
                 onlineContent.style.display = 'none';
                 document.getElementById('processing-screen').style.display = 'none';
+                document.getElementById('payment-status-screen').style.display = 'none';
                 errorSection.style.display = 'none';
             } else {
                 offlineSection.style.display = 'none';
@@ -1990,8 +2093,10 @@
                 });
 
                 hideProcessingScreen();
-                console.log("Processing screen hidden, showing success modal"); // डिबग
-                showSuccessModal(transactionId);
+                console.log("Processing screen hidden, showing payment status screen"); // डिबग
+                
+                // नई पेमेंट स्टेटस चेक स्क्रीन दिखाएं
+                showPaymentStatusScreen();
                 
             } catch (error) {
                 console.error("Firebase error:", error); // डिबग
@@ -2089,81 +2194,8 @@
                 }
             }
 
-            showProcessingScreen();
-            document.getElementById('processing-message').textContent = 'पेमेंट स्टेटस जांच रहे हैं...';
+            showPaymentStatusScreen();
             statusMessage.style.display = 'none'; // पुराने मैसेज को छुपाएं
-            
-            try {
-                const paymentsRef = database.ref('payments');
-                
-                // FIXED: यहाँ user ID के साथ-साथ transaction ID और mobile number भी match करना जरूरी है
-                const snapshot = await paymentsRef.orderByChild('user_id').equalTo(userId).once('value');
-                const payments = snapshot.val();
-                let foundPayment = null;
-
-                if (payments) {
-                    for (let key in payments) {
-                        const payment = payments[key];
-                        // महत्वपूर्ण: तीनों values को match करना जरूरी है
-                        if (payment.user_id === userId && 
-                            payment.transaction_id === transactionId && 
-                            payment.mobile_number === mobileNumber) {
-                            foundPayment = payment;
-                            break;
-                        }
-                    }
-                }
-
-                hideProcessingScreen();
-
-                if (foundPayment) {
-                    if (foundPayment.status === 'approved') {
-                        // अप्रूवल डेट की गणना करें - approved_at फील्ड की जांच करें
-                        let approvalDate;
-                        if (foundPayment.approved_at) {
-                            approvalDate = new Date(foundPayment.approved_at);
-                        } else {
-                            // अगर approved_at नहीं है, तो timestamp का उपयोग करें
-                            approvalDate = new Date(foundPayment.timestamp);
-                        }
-                        
-                        const expiryDate = new Date(approvalDate);
-                        expiryDate.setDate(approvalDate.getDate() + 30);
-                        
-                        // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
-                        localStorage.setItem('premiumAccess', JSON.stringify({
-                            userId: userId,
-                            mobileNumber: foundPayment.mobile_number,
-                            transactionId: foundPayment.transaction_id,
-                            expiryDate: expiryDate.toISOString(),
-                            expiryTimestamp: expiryDate.getTime() // एक्सपायरी टाइमस्टैम्प जोड़ें
-                        }));
-                        
-                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अप्रूव हो गई है! आपको 5 सेकंड में रीडायरेक्ट किया जाएगा।', 'success');
-
-                        setTimeout(() => {
-                            window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + foundPayment.mobile_number + '&transaction=' + foundPayment.transaction_id;
-                        }, 5000);
-
-                    } else if (foundPayment.status === 'pending') {
-                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट अभी पेंडिंग है। कृपया कुछ देर बाद फिर से कोशिश करें।', 'info');
-                    } else if (foundPayment.status === 'rejected') {
-                        // लोकल स्टोरेज से डेटा हटाएं
-                        deleteExpiredUserData();
-                        showNotification('पेमेंट स्टेटस', 'आपकी पेमेंट रिजेक्ट हो गई है। कृपया सही ट्रांजैक्शन ID के साथ दोबारा कोशिश करें।', 'error');
-                    } else {
-                        showNotification('पेमेंट स्टेटस', 'आपके पेमेंट का स्टेटस स्पष्ट नहीं है। कृपया एडमिन से संपर्क करें।', 'error');
-                    }
-                } else {
-                    // सुरक्षित संदेश - यह नहीं बताएं कि क्या गलत है
-                    showNotification('पेमेंट सत्यापन', 'पेमेंट विवरण सत्यापित नहीं हो सका। कृपया सभी विवरण सही ढंग से जांचें।', 'error');
-                }
-
-            } catch (error) {
-                hideProcessingScreen();
-                showNotification('पेमेंट स्टेटस', 'पेमेंट स्टेटस चेक करने में त्रुटि। कृपया दोबारा कोशिश करें।', 'error');
-                console.error('Error checking payment status:', error);
-            }
         }
 
         function validateForm() {
