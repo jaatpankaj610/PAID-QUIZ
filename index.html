@@ -908,6 +908,98 @@
             box-shadow: 0 6px 16px rgba(253, 203, 110, 0.2);
             background: var(--warning);
         }
+
+        /* New styles for verification loading screen */
+        .verification-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .verification-screen .app-logo-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .verification-screen .verification-message {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .verification-screen .verification-submessage {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .loading-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .loading-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: loadingDot 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% { 
+                transform: scale(0);
+                opacity: 0.5;
+            } 
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .verification-icon {
+            font-size: 64px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            animation: verificationPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes verificationPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
         
         @media (max-width: 480px) {
             .header { padding: 12px 8px; }
@@ -936,14 +1028,16 @@
             .offline-message, .error-message { font-size: 16px; }
             .checkbox-container { padding: 8px; }
             .checkbox-hint { font-size: 11px; }
-            .processing-screen .app-logo-name { font-size: 20px; }
-            .processing-screen .processing-message { font-size: 16px; }
+            .processing-screen .app-logo-name, .verification-screen .app-logo-name { font-size: 20px; }
+            .processing-screen .processing-message, .verification-screen .verification-message { font-size: 16px; }
+            .verification-screen .verification-submessage { font-size: 12px; }
             .notification-container { width: 95%; }
             .notification { padding: 12px; }
             .notification-title { font-size: 14px; }
             .notification-message { font-size: 12px; }
             .notification-icon { font-size: 20px; width: 32px; height: 32px; }
             .security-warning { font-size: 12px; }
+            .verification-icon { font-size: 48px; }
         }
 
         @media (min-width: 768px) {
@@ -973,9 +1067,11 @@
             .offline-message, .error-message { font-size: 20px; }
             .checkbox-container { padding: 12px; }
             .checkbox-hint { font-size: 13px; }
-            .processing-screen .app-logo-name { font-size: 28px; }
-            .processing-screen .processing-message { font-size: 20px; }
+            .processing-screen .app-logo-name, .verification-screen .app-logo-name { font-size: 28px; }
+            .processing-screen .processing-message, .verification-screen .verification-message { font-size: 20px; }
+            .verification-screen .verification-submessage { font-size: 16px; }
             .security-warning { font-size: 14px; }
+            .verification-icon { font-size: 80px; }
         }
     </style>
 </head>
@@ -1023,6 +1119,22 @@
         <p class="error-message" id="error-message">कुछ गड़बड़ हुई, कृपया पुनः प्रयास करें।</p>
     </div>
 
+    <!-- New Verification Loading Screen -->
+    <div id="verification-screen" class="verification-screen">
+        <img src="rajasthan-gk-quiz-logo.png" alt="App Logo" style="width: 80px; height: 80px; margin-bottom: 20px;">
+        <div class="app-logo-name"><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</div>
+        <div class="verification-icon">
+            <i class="fas fa-shield-check"></i>
+        </div>
+        <div class="verification-message">आपकी एक्सेस का सत्यापन हो रहा है...</div>
+        <div class="verification-submessage">कृपया प्रतीक्षा करें, आपको जल्द ही क्विज़ पेज पर भेजा जाएगा</div>
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+
     <div class="container">
         <div id="processing-screen" class="processing-screen">
             <img src="rajasthan-gk-quiz-logo.png" alt="App Logo" style="width: 80px; height: 80px; margin-bottom: 20px;">
@@ -1030,14 +1142,6 @@
             <div class="processing-message">आपकी पेमेंट रिक्वेस्ट प्रोसेस हो रही है...</div>
             <div class="spinner"></div>
             <div class="processing-message" style="margin-top: 20px;">कुछ ही सेकंड्स में...</div>
-        </div>
-        
-        <div id="approval-loading-screen" class="processing-screen">
-            <img src="rajasthan-gk-quiz-logo.png" alt="App Logo" style="width: 80px; height: 80px; margin-bottom: 20px;">
-            <div class="app-logo-name"><i class="fas fa-landmark"></i> राजस्थान GK क्विज़</div>
-            <div class="processing-message">आपकी पेमेंट अप्रूव्ड है! क्विज़ लोड हो रही है...</div>
-            <div class="spinner"></div>
-            <div class="processing-message" style="margin-top: 20px;">कृपया प्रतीक्षा करें...</div>
         </div>
         
         <div class="header">
@@ -1073,7 +1177,7 @@
                         </div>
                         <div class="upi-id">
                             <i class="fas fa-copy"></i>
-                            <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="83bab3b6b4b5b6b3b5b2b5c3e2eee2f9ecedadf3e2fa">[email&#160;protected]</a>
+                            9057650616@amazon.pay
                         </div>
                         <p>किसी भी UPI ऐप से स्कैन करें और पेमेंट करें</p>
                         <ol class="instructions">
@@ -1157,7 +1261,7 @@
         </div>
     </div>
     
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // Firebase को ग्लोबल स्कोप में इनिशियलाइज़ करें
         let database;
         let firebaseInitialized = false;
@@ -1195,32 +1299,31 @@
         // पेज लोड होते ही Firebase इनिशियलाइज़ करें
         initializeFirebase();
 
+        // Show verification screen instead of default processing screen for access checking
+        function showVerificationScreen() {
+            document.getElementById('verification-screen').style.display = 'flex';
+            document.getElementById('online-content').style.display = 'none';
+            document.getElementById('processing-screen').style.display = 'none';
+            document.getElementById('offline-section').style.display = 'none';
+            document.getElementById('error-section').style.display = 'none';
+        }
+
+        function hideVerificationScreen() {
+            document.getElementById('verification-screen').style.display = 'none';
+            document.getElementById('online-content').style.display = 'block';
+        }
+
         (function() {
             if (!navigator.onLine) {
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('offline-section').style.display = 'flex';
                     document.getElementById('online-content').style.display = 'none';
                     document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('approval-loading-screen').style.display = 'none';
+                    document.getElementById('verification-screen').style.display = 'none';
                     document.getElementById('error-section').style.display = 'none';
                 });
             }
         })();
-
-        // नया फंक्शन - Approval Loading Screen दिखाने के लिए
-        function showApprovalLoadingScreen() {
-            document.getElementById('offline-section').style.display = 'none';
-            document.getElementById('online-content').style.display = 'none';
-            document.getElementById('processing-screen').style.display = 'none';
-            document.getElementById('error-section').style.display = 'none';
-            document.getElementById('approval-loading-screen').style.display = 'flex';
-        }
-
-        // नया फंक्शन - Approval Loading Screen छुपाने के लिए
-        function hideApprovalLoadingScreen() {
-            document.getElementById('approval-loading-screen').style.display = 'none';
-            document.getElementById('online-content').style.display = 'block';
-        }
         
         document.addEventListener('DOMContentLoaded', function() {
             // ऑटोमेटिक डेटा क्लीनअप सेटअप करें
@@ -1230,9 +1333,6 @@
             async function checkLocalAccess() {
                 const accessData = localStorage.getItem('premiumAccess');
                 if (accessData) {
-                    // Approval loading screen दिखाएं
-                    showApprovalLoadingScreen();
-                    
                     const { userId, mobileNumber, transactionId, expiryDate, expiryTimestamp } = JSON.parse(accessData);
                     const now = new Date();
                     const expiry = new Date(expiryDate);
@@ -1241,12 +1341,14 @@
                     if (expiryTimestamp && now.getTime() > expiryTimestamp) {
                         // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                         deleteExpiredUserData();
-                        hideApprovalLoadingScreen();
                         showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
                         return false;
                     }
                     
                     if (now < expiry) {
+                        // Show verification screen instead of default processing screen
+                        showVerificationScreen();
+                        
                         // अब फायरबेस से भी जांच करें कि उपयोगकर्ता अभी भी अप्रूव्ड है या नहीं
                         try {
                             if (!firebaseInitialized || !database) {
@@ -1278,20 +1380,18 @@
                             
                             if (isStillApproved) {
                                 // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
-                                setTimeout(() => {
-                                    window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
-                                }, 2000); // 2 सेकंड बाद redirect करें
+                                window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
                                 return true;
                             } else if (isRejected) {
                                 // उपयोगकर्ता को रिजेक्ट कर दिया गया है, लोकल स्टोरेज से हटाएं
                                 deleteExpiredUserData();
-                                hideApprovalLoadingScreen();
+                                hideVerificationScreen();
                                 showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
                                 return false;
                             } else {
                                 // उपयोगकर्ता अब अप्रूव्ड नहीं है, लोकल स्टोरेज से हटाएं
                                 deleteExpiredUserData();
-                                hideApprovalLoadingScreen();
+                                hideVerificationScreen();
                                 showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'info');
                                 return false;
                             }
@@ -1299,17 +1399,13 @@
                             console.error("Error checking approval status:", error);
                             // एरर होने पर भी लोकल स्टोरेज से हटाएं
                             deleteExpiredUserData();
-                            hideApprovalLoadingScreen();
+                            hideVerificationScreen();
                         }
                     } else {
                         // एक्सेस समाप्त हो गई है, लोकल स्टोरेज से हटाएं
                         deleteExpiredUserData();
-                        hideApprovalLoadingScreen();
                         showNotification('एक्सेस समाप्त', 'आपकी प्रीमियम एक्सेस समाप्त हो गई है। कृपया फिर से पेमेंट करें।', 'info');
                     }
-                } else {
-                    // कोई access data नहीं है, normal payment form दिखाएं
-                    hideApprovalLoadingScreen();
                 }
                 return false;
             }
@@ -1476,7 +1572,7 @@
 
                 if (!userEmail) {
                     document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('approval-loading-screen').style.display = 'none';
+                    document.getElementById('verification-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
                     return;
                 }
@@ -1514,7 +1610,7 @@
                     // अगर रिजेक्टेड पेमेंट मिला और कोई approved नहीं है, तो एक्सेस दें नहीं
                     if (foundRejectedPayment && !foundApprovedPayment) {
                         document.getElementById('processing-screen').style.display = 'none';
-                        document.getElementById('approval-loading-screen').style.display = 'none';
+                        document.getElementById('verification-screen').style.display = 'none';
                         document.getElementById('online-content').style.display = 'block';
                         showNotification('एक्सेस रद्द', 'आपकी प्रीमियम एक्सेस रद्द कर दी गई है। कृपया फिर से पेमेंट करें।', 'error');
                         return;
@@ -1538,10 +1634,7 @@
                             // लोकल स्टोरेज में एक्सेस जानकारी सेव करें
                             saveAccessToLocalStorage(userId, foundApprovedPayment.mobile_number, foundApprovedPayment.transaction_id, expiryDate);
                             
-                            showApprovalLoadingScreen();
-                            setTimeout(() => {
-                                window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + foundApprovedPayment.mobile_number + '&transaction=' + foundApprovedPayment.transaction_id;
-                            }, 2000);
+                            window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + foundApprovedPayment.mobile_number + '&transaction=' + foundApprovedPayment.transaction_id;
                             return;
                         }
                     }
@@ -1549,13 +1642,13 @@
                     // यहाँ परिवर्तन किया गया है - केवल ईमेल ID देखकर रीडायरेक्ट नहीं होगा
                     document.getElementById('user_id').value = userEmail;
                     document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('approval-loading-screen').style.display = 'none';
+                    document.getElementById('verification-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
 
                 } catch (error) {
                     console.error("Access check error:", error);
                     document.getElementById('processing-screen').style.display = 'none';
-                    document.getElementById('approval-loading-screen').style.display = 'none';
+                    document.getElementById('verification-screen').style.display = 'none';
                     document.getElementById('online-content').style.display = 'block';
                 }
             }
@@ -1730,14 +1823,14 @@
         
         function showProcessingScreen() {
             document.getElementById('online-content').style.display = 'none';
-            document.getElementById('approval-loading-screen').style.display = 'none';
+            document.getElementById('verification-screen').style.display = 'none';
             document.getElementById('processing-screen').style.display = 'flex';
         }
 
         function hideProcessingScreen() {
             document.getElementById('online-content').style.display = 'block';
             document.getElementById('processing-screen').style.display = 'none';
-            document.getElementById('approval-loading-screen').style.display = 'none';
+            document.getElementById('verification-screen').style.display = 'none';
         }
 
         function checkNetworkStatus() {
@@ -1749,7 +1842,7 @@
                 offlineSection.style.display = 'flex';
                 onlineContent.style.display = 'none';
                 document.getElementById('processing-screen').style.display = 'none';
-                document.getElementById('approval-loading-screen').style.display = 'none';
+                document.getElementById('verification-screen').style.display = 'none';
                 errorSection.style.display = 'none';
             } else {
                 offlineSection.style.display = 'none';
@@ -2092,7 +2185,7 @@
             document.getElementById('amount_group').classList.remove('error');
             document.getElementById('payment_made_container').classList.remove('error');
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s]+$/;
             if (!userId) {
                 document.getElementById('user_id_group').classList.add('error');
                 document.getElementById('user_id_error').textContent = 'कृपया ईमेल ID दर्ज करें!';
@@ -2264,10 +2357,7 @@
                 
                 if (isStillApproved) {
                     // एक्सेस अभी भी वैध है, सीधे क्विज़ पेज पर जाएं
-                    showApprovalLoadingScreen();
-                    setTimeout(() => {
-                        window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
-                    }, 2000);
+                    window.location.href = 'quiz.html?user_id=' + userId + '&mobile=' + mobileNumber + '&transaction=' + transactionId;
                 } else if (isRejected) {
                     // उपयोगकर्ता को रिजेक्ट कर दिया गया है, लोकल स्टोरेज से हटाएं
                     deleteExpiredUserData();
@@ -2296,7 +2386,7 @@
         window.addEventListener('offline', checkNetworkStatus);
 
         document.querySelector('.upi-id').addEventListener('click', () => {
-            const upiId = '9057650616@amazon.pay';
+            const upiId = '9057650616amazon.pay';
             navigator.clipboard.writeText(upiId).then(() => {
                 showNotification('UPI ID कॉपी', 'UPI ID कॉपी हो गई है!', 'success');
             }).catch(err => {
