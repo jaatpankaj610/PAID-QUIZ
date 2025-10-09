@@ -2104,64 +2104,7 @@
         }
         document.addEventListener('click', unlockAudio);
 
-        // ========================================
-        // BACK BUTTON HANDLING FOR KODULAR APP
-        // ========================================
-        
-        // Push initial state to history when page loads
-        function initializeBackButtonHandling() {
-            // Push a state to history to handle back button
-            history.pushState({page: 'quiz'}, 'Quiz Page', '');
-            
-            // Listen for popstate events (triggered by back button)
-            window.addEventListener('popstate', function(event) {
-                // When back button is pressed, redirect to home.html
-                window.location.href = 'home.html';
-            });
-            
-            // Also handle the beforeunload event as backup
-            window.addEventListener('beforeunload', function(event) {
-                // This will trigger when the page is about to unload
-                // You can use this as a backup method
-                return;
-            });
-        }
-
-        // Alternative method using hashchange for older devices
-        function initializeHashBackHandling() {
-            // Add a hash to the URL
-            if (!window.location.hash) {
-                window.location.hash = 'quiz';
-            }
-            
-            // Listen for hash changes (back button)
-            window.addEventListener('hashchange', function() {
-                // If hash is removed (back button pressed), redirect to home
-                if (!window.location.hash || window.location.hash === '') {
-                    window.location.href = 'home.html';
-                }
-            });
-        }
-
-        // Prevent default back button behavior and redirect to home
-        function handleBackButton() {
-            try {
-                // Method 1: Using history API
-                initializeBackButtonHandling();
-                
-                // Method 2: Backup using hash (for older devices)
-                initializeHashBackHandling();
-                
-                console.log('Back button handling initialized successfully');
-            } catch (error) {
-                console.log('Error initializing back button handling:', error);
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize back button handling
-            handleBackButton();
-            
             initializeQuiz();
             checkUserName();
             startCountdownTimer();
@@ -3436,7 +3379,6 @@
 
         window.addEventListener('online', checkNetworkStatus);
         window.addEventListener('offline', checkNetworkStatus);
-        
     </script>
 </body>
 </html>
