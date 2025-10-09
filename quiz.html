@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -43,6 +43,7 @@
 --score-good: #3b82f6;
 --score-average: #f59e0b;
 --score-poor: #ef4444;
+--restart-gradient: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
 * {
@@ -53,19 +54,20 @@ font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
 font-weight: 600;
 }
 
+html, body {
+height: 100%;
+width: 100%;
+overflow: hidden;
+position: fixed;
+top: 0;
+left: 0;
+}
+
 body {
 background: linear-gradient(135deg, #f0f9ff, #e9d5ff);
-min-height: 100vh;
 display: flex;
 justify-content: center;
 align-items: center;
-padding: 0;
-overflow: hidden;
-position: fixed;
-width: 100vw;
-height: 100vh;
-top: 0;
-left: 0;
 touch-action: none;
 }
 
@@ -73,8 +75,6 @@ touch-action: none;
 width: 100vw;
 height: 100vh;
 background: var(--light);
-border-radius: 0;
-box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 overflow: hidden;
 display: flex;
 flex-direction: column;
@@ -137,11 +137,12 @@ overflow-wrap: break-word;
 
 .content {
 padding: 10px;
-padding-bottom: 80px;
 flex: 1;
 display: flex;
 flex-direction: column;
 max-width: 100%;
+height: calc(100vh - 70px);
+overflow: hidden;
 }
 
 .welcome-section {
@@ -694,7 +695,7 @@ display: none;
 background: linear-gradient(135deg, #fff8e1, #ffecb3);
 border-radius: 20px;
 padding: 0;
-margin: 15px 0;
+margin: 0;
 box-shadow: 0 15px 35px rgba(245, 158, 11, 0.15);
 border: 1px solid rgba(245, 158, 11, 0.1);
 text-align: center;
@@ -747,6 +748,9 @@ opacity: 0.9;
 padding: 25px 20px;
 position: relative;
 z-index: 1;
+flex: 1;
+display: flex;
+flex-direction: column;
 }
 
 .score-circle-container {
@@ -801,23 +805,6 @@ margin-bottom: 5px;
 font-size: 14px;
 font-weight: 600;
 color: #6b7280;
-}
-
-.score-percentage {
-position: absolute;
-top: 15px;
-right: 15px;
-background: var(--paid-gradient);
-color: white;
-font-size: 16px;
-font-weight: 700;
-width: 50px;
-height: 50px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
 .score-details {
@@ -922,12 +909,12 @@ box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 .score-actions {
 display: flex;
 gap: 15px;
-margin-top: 20px;
+margin-top: auto;
 }
 
 .action-btn {
 flex: 1;
-background: var(--paid-gradient);
+background: var(--restart-gradient);
 color: white;
 border: none;
 border-radius: 12px;
@@ -962,14 +949,6 @@ left: 100%;
 
 .action-btn:hover {
 transform: translateY(-3px);
-box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
-}
-
-.action-btn.secondary {
-background: linear-gradient(135deg, #ef4444, #dc2626);
-}
-
-.action-btn.secondary:hover {
 box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
 }
 
@@ -1133,7 +1112,7 @@ display: none;
 background: var(--light);
 border-radius: 16px;
 padding: 15px;
-margin: 15px 0;
+margin: 0;
 box-shadow: var(--card-shadow);
 border: 1px solid rgba(0,0,0,0.05);
 animation: fadeInUp 0.7s ease-out;
@@ -1141,6 +1120,9 @@ width: 100%;
 background: linear-gradient(145deg, #ffffff, #fff8e1);
 overflow: hidden;
 position: relative;
+flex: 1;
+display: flex;
+flex-direction: column;
 }
 
 .leaderboard-header {
@@ -1301,7 +1283,7 @@ margin: 0;
 /* Premium Scrolling Container - App-like Experience */
 .leaderboard-scroll-container {
 position: relative;
-height: 400px;
+flex: 1;
 overflow: hidden;
 border-radius: 12px;
 background: linear-gradient(145deg, #ffffff, #fff8e1);
@@ -1692,11 +1674,6 @@ align-items: flex-end;
 font-weight: 700;
 color: var(--paid-color);
 font-size: 16px;
-}
-
-.score-percentage {
-font-size: 11px;
-color: var(--paid-color);
 }
 
 .leaderboard-empty {
@@ -2115,7 +2092,6 @@ font-size: 16px;
 }
 .content {
 padding: 15px;
-padding-bottom: 90px;
 }
 .welcome-section {
 padding: 20px;
@@ -2238,9 +2214,6 @@ font-size: 12px;
 .score-value {
 font-size: 18px;
 }
-.score-percentage {
-font-size: 12px;
-}
 .premium-rotating-btn {
 width: 280px;
 height: 80px;
@@ -2301,12 +2274,6 @@ font-size: 48px;
 
 .score-circle-label {
 font-size: 16px;
-}
-
-.score-percentage {
-width: 60px;
-height: 60px;
-font-size: 18px;
 }
 
 .score-details {
@@ -2556,7 +2523,6 @@ margin-top: 30px;
 <div class="score-circle-value" id="final-score-circle">0/0</div>
 <div class="score-circle-label">स्कोर</div>
 </div>
-<div class="score-percentage" id="score-percentage">0%</div>
 </div>
 <div class="score-details">
 <div class="score-details-title">
@@ -2587,10 +2553,6 @@ margin-top: 30px;
 <button class="action-btn" onclick="restartQuiz()">
 <i class="fas fa-redo"></i>
 <span>क्विज़ पुनः शुरू करें</span>
-</button>
-<button class="action-btn secondary" onclick="goToLeaderboard()">
-<i class="fas fa-trophy"></i>
-<span>लीडरबोर्ड देखें</span>
 </button>
 </div>
 </div>
@@ -3429,7 +3391,6 @@ function showFinalScore() {
 const quizSection = document.getElementById('quiz-section');
 const scoreSection = document.getElementById('score-section');
 const finalScoreCircle = document.getElementById('final-score-circle');
-const scorePercentage = document.getElementById('score-percentage');
 const correctCount = document.getElementById('correct-count');
 const incorrectCount = document.getElementById('incorrect-count');
 const completionTime = document.getElementById('completion-time');
@@ -3463,7 +3424,6 @@ const percentage = ((score / questions.length) * 100).toFixed(1);
 
 // Update score display
 finalScoreCircle.textContent = `${score}/${questions.length}`;
-scorePercentage.textContent = `${percentage}%`;
 correctCount.textContent = score;
 incorrectCount.textContent = questions.length - score;
 completionTime.textContent = timeTaken;
@@ -3873,7 +3833,6 @@ else if (index === 2) rankClass = 'rank-3';
 
 // Calculate time ago with improved accuracy
 const timeAgo = getTimeAgo(score.timestamp);
-const percentage = ((score.score / score.totalQuestions) * 100).toFixed(1);
 
 // Add first-time badge if applicable
 const firstTimeBadge = score.isFirstTime ? '<span class="first-time-badge">First Time</span>' : '';
@@ -3889,7 +3848,6 @@ li.innerHTML = `
 </div>
 <div class="leaderboard-score">
 <div class="score-value">${score.score}/${score.totalQuestions}</div>
-<div class="score-percentage">${percentage}%</div>
 </div>
 `;
 
