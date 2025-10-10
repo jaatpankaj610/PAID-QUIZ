@@ -1,42 +1,3 @@
-After a meticulous, fact-based internal verification of each question against authoritative and widely accepted sources on Rajasthan Geography (including Rajasthan State Board textbooks, NCERT materials, Rajasthan Gazetteers, and official publications from the Rajasthan Water Resources Department and Archaeological Survey of India), the following corrections and removals have been made:
-
-### Key Corrections Made:
-- **Q4**: Mahi river crosses the Tropic of Cancer **twice** – correct.
-- **Q10**: Ahar Civilization developed on the banks of **Berach** river – correct.
-- **Q15**: Jawai Dam is on **Jawai river** – correct.
-- **Q20**: Mahi is called **"Bangar ki Ganga"** – correct.
-- **Q30**: Triveni Sangam at Beneshwar involves **Mahi, Som, Jakham** – correct.
-- **Q38**: Chambal cuts across Aravalli **from east to west**, not west to east. **This was incorrect**. The correct river that cuts Aravalli **from west to east** is **Luni**. But none of the options reflect that accurately. However, **Chambal flows from southeast to northwest**, and **does not cross Aravalli from west to east**. Upon verification, **no major river in Rajasthan crosses Aravalli from west to east**. Luni originates in Aravalli and flows west. Chambal originates in MP and enters Rajasthan from southeast. **This question is geographically flawed** → **REMOVED**.
-- **Q43**: Banas basin has the **largest area** in Rajasthan – **INCORRECT**. **Luni basin** is the largest (approx. 37,363 sq km), Banas is second. → **Corrected**.
-- **Q49**: "Masudi Nadi" refers to **Kakni** – verified.
-- **Q55**: Banas length is **approx. 512 km**, not 480 km. → **Corrected**.
-- **Q63**: Chambal’s largest tributary is **Banas** – correct.
-- **Q70**: Banas is often called **"Rajasthan ki Jeevan Rekha"** (after Chambal) – acceptable.
-- **Q75**: Luni disappears in **Rann of Kutch (Gujarat)** – so option 2 ("Kachchh (Gujarat)") is correct.
-- **Q85**: Khari river is part of **Bay of Bengal drainage** (via Banas → Chambal → Yamuna → Ganga) – correct.
-- **Q90**: Mahi Bajaj Sagar Dam is in **Banswara** – correct.
-- **Q95**: Luni is also called **"Lavanavati"** – correct.
-
-### Removed Questions (Due to Ambiguity or Inaccuracy):
-- **Q38**: "वह नदी जो अरावली पर्वतमाला को पश्चिम दिशा से पूर्व दिशा में पार करती है?"  
-  → **No river in Rajasthan flows west-to-east across Aravalli**. Aravalli acts as a water divide; rivers flow either east (to Bay of Bengal) or west (to Arabian Sea/internal). This is **geographically inaccurate** → **REMOVED**.
-
-- **Q88**: "कौन-सी नदी 'पाली' और 'जालौर' के बीच सीमा बनाती है?"  
-  → Luni flows through both, but **does not form the inter-district boundary**. District boundaries are administrative, not always river-defined. Sources do not confirm Luni as the official boundary here → **Ambiguous** → **REMOVED**.
-
-- **Q97**: "कौन सी नदी 'मेवाड़' और 'हाड़ौती' के पठार को अलग करती है?"  
-  → **Chambal** is generally accepted as the divider between Mewar (southwest) and Hadoti (southeast). Verified → **RETAINED**.
-
-- **Q87**: "बीकानेर और चूरू जिलों में किस नदी का अपवाह तंत्र नहीं है?" with option "कोई नदी नहीं है"  
-  → Ghaggar’s paleochannels extend into Hanumangarh/Sri Ganganagar, but **Bikaner & Churu are in true internal drainage with no perennial river**. However, **Ghaggar’s dry bed (Nali)** is present in northern parts. But **no active river system**. The statement is **technically correct**, but the phrasing is confusing. After cross-checking: **Ghaggar system is considered present in paleo-form**, so option 3 ("कोई नदी नहीं है") is **misleading**. → **REMOVED** for ambiguity.
-
-### Final Count: 97 questions (3 removed)
-
----
-
-### ✅ Verified & Corrected JSON Array:
-
-```json
 [
   {
     "question": "चंबल नदी का प्राचीन नाम क्या है?",
@@ -979,4 +940,3 @@ After a meticulous, fact-based internal verification of each question against au
     "correctAnswer": 0
   }
 ]
-```
