@@ -1,52 +1,52 @@
 [
   {
-    "question": "Rajasthan ki rajdhani kya hai?",
-    "options": ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
+    "question": "राजस्थान की राजधानी क्या है?",
+    "options": ["जयपुर", "जोधपुर", "उदयपुर", "कोटा"],
     "correctAnswer": 0
   },
   {
-    "question": "Rajasthan ka rajya pashu konsa hai?",
-    "options": ["Sher", "Chinkara", "Hiran", "Ghaat"],
+    "question": "राजस्थान का राज्य पशु कौन सा है?",
+    "options": ["शेर", "चिंकारा", "हिरण", "ऊंट"],
     "correctAnswer": 1
   },
   {
-    "question": "Thar ka marusthal kis rajya me sthit hai?",
-    "options": ["Gujarat", "Punjab", "Rajasthan", "Haryana"],
+    "question": "थार का मरुस्थल किस राज्य में स्थित है?",
+    "options": ["गुजरात", "पंजाब", "राजस्थान", "हरियाणा"],
     "correctAnswer": 2
   },
   {
-    "question": "Rajasthan ki sabse lambi nadi konsi hai?",
-    "options": ["Chambal", "Mahi", "Banas", "Luni"],
+    "question": "राजस्थान की सबसे लंबी नदी कौन सी है?",
+    "options": ["चंबल", "माही", "बनास", "लूणी"],
     "correctAnswer": 0
   },
   {
-    "question": "Hawa Mahal kahan sthit hai?",
-    "options": ["Udaipur", "Jaipur", "Bikaner", "Ajmer"],
+    "question": "हवा महल कहां स्थित है?",
+    "options": ["उदयपुर", "जयपुर", "बीकानेर", "अजमेर"],
     "correctAnswer": 1
   },
   {
-    "question": "Pink City ke naam se kis shahar ko jana jata hai?",
-    "options": ["Jodhpur", "Jaipur", "Jaisalmer", "Kota"],
+    "question": "पिंक सिटी के नाम से किस शहर को जाना जाता है?",
+    "options": ["जोधपुर", "जयपुर", "जैसलमेर", "कोटा"],
     "correctAnswer": 1
   },
   {
-    "question": "Rajasthan ka rajya pakshi konsa hai?",
-    "options": ["Godawan", "Mor", "Kabutar", "Koyal"],
+    "question": "राजस्थान का राज्य पक्षी कौन सा है?",
+    "options": ["गोडावण", "मोर", "कबूतर", "कोयल"],
     "correctAnswer": 0
   },
   {
-    "question": "Mehrangarh Kila kis shahar me hai?",
-    "options": ["Jaisalmer", "Bikaner", "Jodhpur", "Chittorgarh"],
+    "question": "मेहरानगढ़ किला किस शहर में स्थित है?",
+    "options": ["जैसलमेर", "बीकानेर", "जोधपुर", "चित्तौड़गढ़"],
     "correctAnswer": 2
   },
   {
-    "question": "Rajasthan ki jheelon ki nagari kisse kaha jata hai?",
-    "options": ["Udaipur", "Jaipur", "Pushkar", "Bharatpur"],
+    "question": "राजस्थान की झीलों की नगरी किसे कहा जाता है?",
+    "options": ["उदयपुर", "जयपुर", "पुष्कर", "भरतपुर"],
     "correctAnswer": 0
   },
   {
-    "question": "Dilwara Jain Mandir kahan sthit hai?",
-    "options": ["Mount Abu", "Ajmer", "Ranakpur", "Chittorgarh"],
+    "question": "दिलवाड़ा जैन मंदिर कहां स्थित है?",
+    "options": ["माउंट आबू", "अजमेर", "रणकपुर", "चित्तौड़गढ़"],
     "correctAnswer": 0
   }
 ]
