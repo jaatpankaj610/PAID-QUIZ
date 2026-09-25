@@ -1667,16 +1667,33 @@
 
         .admin-card h3 {
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 18px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .admin-token-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 13px;
+            font-family: monospace;
+            outline: none;
+            margin-bottom: 12px;
+            background: #f8fafc;
+        }
+
+        .admin-token-input:focus {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
         .admin-textarea {
             width: 100%;
-            height: 220px;
+            height: 180px;
             border: 2px solid #cbd5e1;
             border-radius: 12px;
             padding: 10px;
@@ -1732,7 +1749,7 @@
     <div class="container">
         <div class="header">
             <div class="header-content">
-                <!-- 5 बार क्लिक करने पर एडमिन पैनल खुलेगा -->
+                <!-- 5 बार क्लिक करने पर गुप्त एडमिन पैनल खुलेगा -->
                 <h1 onclick="triggerAdminClick()" style="cursor: pointer; user-select: none;">राजस्थान GK फ्री क्विज़</h1>
                 <p>अपने ज्ञान को टेस्ट करें और प्रीमियम क्विज़ अनलॉक करें</p>
             </div>
@@ -1890,13 +1907,19 @@
         </div>
     </div>
 
-    <!-- SECRET ADMIN MODAL (GITHUB AUTO UPDATER) -->
+    <!-- SECRET ADMIN MODAL (SAFE IN-APP GITHUB UPDATER) -->
     <div id="admin-modal" class="admin-modal-overlay">
         <div class="admin-card">
             <h3><i class="fas fa-tools"></i> प्रश्न अपडेटर (Admin Panel)</h3>
-            <p style="font-size: 12px; color: var(--gray); margin-bottom: 8px;">
-                नया JSON यहाँ पेस्ट करें और 'GitHub पर अपलोड करें' दबाएं:
-            </p>
+            
+            <label style="font-size: 11px; color: #475569; font-weight: 700; margin-bottom: 4px;">
+                GitHub Token (सिर्फ एक बार डालें, यह फोन में सेव रहेगा):
+            </label>
+            <input type="password" id="admin-token-input" class="admin-token-input" placeholder="यहाँ ghp_... टोकन पेस्ट करें">
+
+            <label style="font-size: 11px; color: #475569; font-weight: 700; margin-bottom: 4px;">
+                नया Questions JSON यहाँ पेस्ट करें:
+            </label>
             <textarea id="admin-json-input" class="admin-textarea" placeholder='[&#10;  {&#10;    "question": "राजस्थान की राजधानी क्या है?",&#10;    "options": ["जयपुर", "जोधपुर", "उदयपुर", "कोटा"],&#10;    "correctAnswer": 0&#10;  }&#10;]'></textarea>
             
             <div id="admin-status"></div>
@@ -1942,10 +1965,9 @@
 
     <script>
         // ========================================================
-        // 1. GITHUB AUTO-UPDATE CONFIGURATION (यहाँ अपना टोकन डालें)
+        // 1. GITHUB AUTO-UPDATE CONFIGURATION (नो रिस्क - सुरक्षित)
         // ========================================================
         const GITHUB_CONFIG = {
-            token: "YOUR_GITHUB_TOKEN_HERE", // <-- यहाँ GitHub Personal Access Token डालें
             owner: "jaatpankaj610",          // आपका GitHub Username
             repo: "PAID-QUIZ",              // Repository का नाम
             path: "freequestions.json",      // फ़ाइल का नाम
@@ -1969,6 +1991,12 @@
                 if (enteredPin === GITHUB_CONFIG.adminPin) {
                     document.getElementById('admin-modal').style.display = 'flex';
                     document.getElementById('admin-status').innerHTML = '';
+
+                    // अगर पहले से टोकन फोन में सेव है तो अपने आप लोड हो जाएगा
+                    const savedToken = localStorage.getItem('my_saved_github_token');
+                    if (savedToken) {
+                        document.getElementById('admin-token-input').value = savedToken;
+                    }
                 } else if (enteredPin !== null) {
                     alert("गलत पिन!");
                 }
@@ -1984,24 +2012,27 @@
             return window.btoa(unescape(encodeURIComponent(str)));
         }
 
-        // GitHub REST API से फाइल अपडेट करने का फंक्शन
+        // GitHub REST API से फाइल सीधे अपडेट करने का फंक्शन
         async function uploadQuestionsToGithub() {
+            const tokenInput = document.getElementById('admin-token-input').value.trim();
             const jsonInput = document.getElementById('admin-json-input').value.trim();
             const statusDiv = document.getElementById('admin-status');
             const uploadBtn = document.getElementById('upload-btn');
+
+            if (!tokenInput) {
+                alert("कृपया पहले अपना GitHub Token (ghp_...) डालें!");
+                return;
+            }
+
+            // टोकन को फोन में सेव कर लें ताकि अगली बार दोबारा न डालना पड़े
+            localStorage.setItem('my_saved_github_token', tokenInput);
 
             if (!jsonInput) {
                 alert("कृपया पहले प्रश्नों का JSON टेक्स्ट बॉक्स में पेस्ट करें!");
                 return;
             }
 
-            if (GITHUB_CONFIG.token === "YOUR_GITHUB_TOKEN_HERE" || !GITHUB_CONFIG.token) {
-                statusDiv.style.color = "red";
-                statusDiv.innerHTML = "❌ कृपया कोड में अपना GITHUB_TOKEN डालें!";
-                return;
-            }
-
-            // JSON चेक करें
+            // JSON फॉर्मेट चेक करें
             try {
                 const parsed = JSON.parse(jsonInput);
                 if (!Array.isArray(parsed) || parsed.length === 0) {
@@ -2023,7 +2054,7 @@
                 // 1. पुरानी फाइल का SHA निकालें
                 const getRes = await fetch(apiUrl, {
                     headers: {
-                        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
+                        "Authorization": `Bearer ${tokenInput}`,
                         "Accept": "application/vnd.github.v3+json"
                     }
                 });
@@ -2044,7 +2075,7 @@
                 const putRes = await fetch(apiUrl, {
                     method: "PUT",
                     headers: {
-                        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
+                        "Authorization": `Bearer ${tokenInput}`,
                         "Content-Type": "application/json",
                         "Accept": "application/vnd.github.v3+json"
                     },
@@ -2063,7 +2094,7 @@
                 statusDiv.style.color = "green";
                 statusDiv.innerHTML = "✅ प्रश्न GitHub पर सफलतापूर्वक अपडेट हो गए!";
                 
-                // नए सवाल लोड करें
+                // नए सवाल तुरंत रीलोड करें
                 loadQuestions();
 
                 setTimeout(() => {
@@ -2217,7 +2248,6 @@
                 return;
             }
             try {
-                // cache: 'no-store' से हर बार ताज़ा फाइल आएगी
                 const response = await fetch('https://jaatpankaj610.github.io/PAID-QUIZ/freequestions.json?t=' + Date.now(), {
                     method: 'GET',
                     mode: 'cors',
