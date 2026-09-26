@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>राजस्थान GK फ्री क्विज़</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@500;600;700;800&family=Inter:wght@500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
@@ -17,28 +17,24 @@
     <style>
         :root {
             --primary: #2563eb;
-            --primary-glow: rgba(37, 99, 235, 0.4);
+            --primary-dark: #1d4ed8;
             --secondary: #7c3aed;
             --accent: #ec4899;
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --light: #f8fafc;
             --dark: #0f172a;
-            --gray: #64748b;
-            --gradient: linear-gradient(135deg, #1d4ed8, #7c3aed);
-            --premium-gradient: linear-gradient(135deg, #f59e0b, #ea580c);
+            --gradient: linear-gradient(135deg, #2563eb, #7c3aed);
+            --header-gradient: linear-gradient(135deg, #3b52d4, #7928ca);
+            --champion-gradient: linear-gradient(135deg, #f59e0b, #ea580c);
             --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
-            --button-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
-            --neon-glow: 0 0 25px rgba(56, 189, 248, 0.6);
-            --premium-text: 'Poppins', 'Noto Sans Devanagari', sans-serif;
         }
         
         * { 
             margin: 0; 
             padding: 0; 
             box-sizing: border-box; 
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; 
+            font-family: 'Hind', 'Inter', sans-serif; 
             -webkit-tap-highlight-color: transparent;
         }
         
@@ -46,7 +42,7 @@
             height: 100%;
             width: 100%;
             overflow: hidden;
-            background: linear-gradient(145deg, #e0e7ff, #f3e8ff);
+            background: linear-gradient(135deg, #090d16, #1e1b4b);
         }
         
         body { 
@@ -62,36 +58,37 @@
             width: 100%;
             height: 100%;
             max-width: 480px;
-            background: #ffffff; 
+            background: #f8fafc; 
             display: flex; 
             flex-direction: column; 
             position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
         }
         
+        /* ------------------ HEADER ------------------ */
         .header { 
-            background: var(--gradient); 
-            padding: 16px 20px; 
+            background: var(--header-gradient); 
+            padding: 16px 18px 14px; 
             text-align: center; 
             color: #ffffff; 
             position: relative; 
             flex-shrink: 0;
-            border-bottom: 3px solid rgba(255,255,255,0.15);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 10;
         }
         
         .header h1 { 
             font-size: 21px; 
             font-weight: 800; 
             margin-bottom: 4px; 
-            letter-spacing: -0.2px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            letter-spacing: 0.2px;
         }
         
         .header p { 
             font-size: 13px; 
-            font-weight: 500;
-            color: #e0e7ff;
+            font-weight: 600;
+            color: #f1f5f9;
             opacity: 0.95;
         }
         
@@ -102,94 +99,107 @@
             flex-direction: column; 
             width: 100%;
             overflow-y: auto;
+            position: relative;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* ------------------ QUIZ INFO SECTION ------------------ */
+        /* ------------------ HOME CARD ------------------ */
         .quiz-info { 
-            background: linear-gradient(180deg, #ffffff, #f8fafc); 
-            border-radius: 24px; 
-            padding: 20px 16px; 
-            margin-bottom: 15px; 
+            background: #ffffff; 
+            border-radius: 26px; 
+            padding: 22px 18px; 
+            margin-bottom: 12px; 
             box-shadow: var(--card-shadow); 
             text-align: center; 
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid #e2e8f0;
         }
 
         .quiz-info h2 { 
             font-size: 22px; 
             font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 8px;
+            color: #1e293b;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
         
-        .quiz-info p { 
-            font-size: 14px; 
-            font-weight: 500;
-            color: var(--gray);
-            margin-bottom: 18px;
+        .quiz-info p.sub-title { 
+            font-size: 13.5px; 
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 20px;
         }
         
         .features { 
             list-style: none; 
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
         .features li { 
-            margin-bottom: 10px; 
             display: flex; 
             align-items: center; 
-            font-size: 14px; 
-            font-weight: 600;
-            color: #334155;
-            background: #f1f5f9;
-            padding: 12px 14px;
-            border-radius: 14px;
-            border-left: 4px solid var(--primary);
+            font-size: 14.5px; 
+            font-weight: 700;
+            color: #1e293b;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 1px solid #f1f5f9;
         }
         
-        .features li i { 
-            margin-right: 12px; 
-            color: var(--success); 
-            font-size: 16px;
+        .features li .icon-badge { 
+            width: 24px;
+            height: 24px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .features li .icon-badge i {
+            color: #10b981;
+            font-size: 14px;
         }
 
         .start-btn { 
-            background: var(--gradient); 
+            background: linear-gradient(135deg, #2b44d8, #6d28d9); 
             color: #ffffff; 
             border: none; 
-            border-radius: 16px; 
-            padding: 14px 20px; 
-            font-size: 16px; 
-            font-weight: 700;
+            border-radius: 18px; 
+            padding: 15px 20px; 
+            font-size: 16.5px; 
+            font-weight: 800;
             cursor: pointer; 
             width: 100%; 
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: var(--button-shadow);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(43, 68, 216, 0.35);
+            transition: all 0.1s ease;
             margin-bottom: 12px;
         }
         
         .start-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
 
         .leaderboard-toggle-btn {
-            background: var(--premium-gradient);
+            background: var(--champion-gradient);
             color: white;
             border: none;
-            border-radius: 14px;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 700;
+            border-radius: 18px;
+            padding: 13px 18px;
+            font-size: 15px;
+            font-weight: 800;
             cursor: pointer;
             width: 100%;
             display: flex;
@@ -197,21 +207,43 @@
             justify-content: center;
             gap: 8px;
             box-shadow: 0 4px 14px rgba(234, 88, 12, 0.25);
-            transition: all 0.3s ease;
+            margin-bottom: 18px;
         }
 
         .leaderboard-toggle-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
 
-        /* ------------------ NEW QUIZ STYLES (PRO LOOK) ------------------ */
+        .bottom-tagline-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding-top: 6px;
+        }
+
+        .bottom-divider-line {
+            width: 80%;
+            height: 2.5px;
+            background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+            border-radius: 10px;
+        }
+
+        .bottom-tagline {
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.2px;
+        }
+
+        /* ------------------ QUIZ SECTION ------------------ */
         .quiz-section { 
             display: none; 
             background: #ffffff; 
-            border-radius: 24px; 
-            padding: 16px; 
+            border-radius: 22px; 
+            padding: 14px; 
             box-shadow: var(--card-shadow); 
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border: 1px solid #e2e8f0;
             flex: 1;
             flex-direction: column; 
             position: relative;
@@ -222,18 +254,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .question-badge {
-            background: linear-gradient(135deg, #e0e7ff, #ede9fe);
-            color: var(--primary);
-            padding: 6px 14px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(37, 99, 235, 0.2);
+            border: 1px solid #bfdbfe;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -241,12 +272,12 @@
 
         .live-score-pill {
             background: #ecfdf5;
-            color: #059669;
-            padding: 6px 14px;
+            color: #047857;
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 800;
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            border: 1px solid #a7f3d0;
         }
 
         .progress-bar-container {
@@ -255,8 +286,7 @@
             background: #f1f5f9;
             border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 16px;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+            margin-bottom: 14px;
         }
 
         .progress-fill {
@@ -264,284 +294,268 @@
             width: 0%;
             background: var(--gradient);
             border-radius: 10px;
-            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: width 0.1s linear;
         }
 
-        /* प्रश्न कार्ड */
+        #question-card-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        /* ------------------ COLORFUL TEXT STYLES (ONLY TEXT COLOR) ------------------ */
         .question-card {
-            background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+            background: #ffffff;
             border-radius: 18px;
             padding: 16px 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border: 1px solid #e2e8f0;
-            border-left: 5px solid var(--primary);
+            margin-bottom: 14px;
+            border: 2px solid #e2e8f0;
+            border-left: 6px solid #2563eb;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
             position: relative;
-            transition: all 0.35s ease;
         }
 
         .question-text { 
-            font-size: 16px; 
+            font-size: 17px; 
             font-weight: 700;
             color: #1e293b;
-            line-height: 1.6;
+            line-height: 1.65;
             word-wrap: break-word;
         }
 
-        /* महत्वपूर्ण शब्दों का हाइलाइट स्टाइल */
-        .highlight-word {
-            display: inline-block;
-            background: linear-gradient(135deg, #fef3c7, #fee2e2);
-            color: #b45309;
-            padding: 1px 7px;
-            border-radius: 8px;
-            font-weight: 800;
-            margin: 0 2px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid rgba(245, 158, 11, 0.2);
+        /* मुख्य पूछे गए विषय का टेक्स्ट कलर (वाइब्रेंट लाल/गुलाबी) */
+        .txt-highlight-red {
+            color: #e11d48 !important;
+            font-weight: 800 !important;
         }
 
-        .highlight-date {
-            display: inline-block;
-            background: #ede9fe;
-            color: #6d28d9;
-            padding: 1px 6px;
-            border-radius: 6px;
-            font-weight: 700;
+        /* स्थल / जिला / दुर्ग का टेक्स्ट कलर (गहरा नीला) */
+        .txt-highlight-blue {
+            color: #2563eb !important;
+            font-weight: 800 !important;
         }
 
-        /* ऑप्शन्स सूची */
+        /* भौगोलिक व प्राकृतिक विषय (बैंगनी) */
+        .txt-highlight-purple {
+            color: #7c3aed !important;
+            font-weight: 800 !important;
+        }
+
+        /* प्रश्न सूचक लक्ष्य / विशेषता (एम्बर/ऑरेंज) */
+        .txt-highlight-amber {
+            color: #d97706 !important;
+            font-weight: 800 !important;
+        }
+
+        /* ------------------ 3D GOL DIBBA OPTIONS ------------------ */
         .options-list { 
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 11px;
             width: 100%;
         }
 
-        /* सुपर प्रीमियम चमकदार ऑप्शन्स */
         .option-item { 
             background: #ffffff;
-            padding: 12px 14px; 
-            border-radius: 16px; 
+            padding: 12px 16px; 
+            border-radius: 40px;
             cursor: pointer; 
             font-size: 15px; 
-            font-weight: 600;
+            font-weight: 700;
             color: #1e293b;
             border: 2px solid #e2e8f0;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+            box-shadow: 0 5px 0 #cbd5e1, 0 8px 12px rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             gap: 12px;
             position: relative;
-            overflow: hidden;
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: translateY(0);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
             user-select: none;
             touch-action: manipulation;
         }
 
-        /* विकल्प दबाने / उंगली रखने पर चमकना (Touch/Active Glow) */
-        .option-item:hover, .option-item:active { 
-            border-color: #38bdf8;
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: var(--neon-glow);
-            color: #0369a1;
+        .option-item:active:not(.locked) { 
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #cbd5e1, 0 3px 6px rgba(0,0,0,0.04);
         }
 
-        /* A, B, C, D बैज */
+        .option-item.opt-theme-0 {
+            border-left: 5px solid #2563eb;
+        }
+        .option-item.opt-theme-0 .option-letter {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.4);
+        }
+
+        .option-item.opt-theme-1 {
+            border-left: 5px solid #8b5cf6;
+        }
+        .option-item.opt-theme-1 .option-letter {
+            background: linear-gradient(135deg, #a855f7, #6d28d9);
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(139, 92, 246, 0.4);
+        }
+
+        .option-item.opt-theme-2 {
+            border-left: 5px solid #f59e0b;
+        }
+        .option-item.opt-theme-2 .option-letter {
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(245, 158, 11, 0.4);
+        }
+
+        .option-item.opt-theme-3 {
+            border-left: 5px solid #ec4899;
+        }
+        .option-item.opt-theme-3 .option-letter {
+            background: linear-gradient(135deg, #f43f5e, #be123c);
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(236, 72, 153, 0.4);
+        }
+
         .option-letter {
-            width: 32px;
-            height: 32px;
-            border-radius: 12px;
-            background: #f1f5f9;
-            color: #475569;
-            font-size: 13px;
-            font-weight: 800;
+            width: 33px;
+            height: 33px;
+            border-radius: 50%;
+            font-size: 13.5px;
+            font-weight: 900;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.25s ease;
-        }
-
-        .option-item:hover .option-letter,
-        .option-item:active .option-letter {
-            background: var(--primary);
-            color: #ffffff;
         }
 
         .option-text-wrapper {
             flex: 1;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
-        /* सही उत्तर होने पर चमकदार एनिमेशन */
         .option-item.correct { 
             background: linear-gradient(135deg, #10b981, #059669) !important;
-            border-color: #059669 !important;
+            border-color: #047857 !important;
+            border-left-color: #047857 !important;
             color: #ffffff !important;
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
-            transform: scale(1.02);
-            animation: pulseCorrect 0.5s ease;
+            box-shadow: 0 4px 0 #064e3b, 0 6px 16px rgba(16, 185, 129, 0.4) !important;
+            transform: translateY(2px);
         }
 
         .option-item.correct .option-letter {
-            background: rgba(255, 255, 255, 0.25);
-            color: #ffffff;
+            background: #ffffff !important;
+            color: #059669 !important;
+            box-shadow: none !important;
         }
 
-        /* गलत उत्तर होने पर वाइब्रेशन और लाल चमक */
         .option-item.incorrect { 
             background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-            border-color: #dc2626 !important;
+            border-color: #b91c1c !important;
+            border-left-color: #b91c1c !important;
             color: #ffffff !important;
-            box-shadow: 0 0 25px rgba(239, 68, 68, 0.6) !important;
-            animation: shakeError 0.4s ease;
+            box-shadow: 0 4px 0 #7f1d1d, 0 6px 16px rgba(239, 68, 68, 0.4) !important;
+            transform: translateY(2px);
         }
 
         .option-item.incorrect .option-letter {
-            background: rgba(255, 255, 255, 0.25);
-            color: #ffffff;
+            background: #ffffff !important;
+            color: #dc2626 !important;
+            box-shadow: none !important;
         }
 
         .option-status-icon {
             font-size: 18px;
             margin-left: auto;
             color: #ffffff;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* स्मूद प्रश्न ट्रांज़िशन एनिमेशन */
-        .slide-out-smooth {
-            opacity: 0;
-            transform: translateX(-40px) scale(0.96);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        .option-item.locked {
+            cursor: default;
         }
 
-        .slide-in-smooth {
-            opacity: 0;
-            transform: translateX(40px) scale(0.96);
-            animation: slideInFromRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes slideInFromRight {
-            to {
-                opacity: 1;
-                transform: translateX(0) scale(1);
-            }
-        }
-
-        @keyframes shakeError {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-6px); }
-            40% { transform: translateX(6px); }
-            60% { transform: translateX(-4px); }
-            80% { transform: translateX(4px); }
-        }
-
-        @keyframes pulseCorrect {
-            0% { transform: scale(0.97); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1.02); }
-        }
-
-        @keyframes slideUpFade {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .result-bar { 
-            margin-top: 14px; 
-            font-size: 14px; 
-            font-weight: 700;
-            text-align: center; 
-            display: none;
-            padding: 10px 14px;
-            border-radius: 12px;
-            animation: slideUpFade 0.3s ease;
+        /* ------------------ NAVIGATION CONTROLS ------------------ */
+        .nav-controls {
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
         }
         
-        .result-bar.success { 
-            color: #065f46;
-            background: #d1fae5;
-            border: 1px solid #a7f3d0;
-        }
-        
-        .result-bar.error { 
-            color: #991b1b;
-            background: #fee2e2;
-            border: 1px solid #fecaca;
-        }
-
-        .back-btn-container {
-            margin-top: 15px;
-            display: none;
-            justify-content: center;
-        }
-        
-        .back-btn {
-            background: #64748b;
-            color: white;
+        .nav-btn {
+            flex: 1;
             border: none;
-            border-radius: 12px;
-            padding: 10px 20px;
-            font-size: 13px;
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 13.5px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.1s ease;
         }
 
-        .back-btn:active {
-            transform: scale(0.95);
+        .prev-btn {
+            background: #f1f5f9;
+            color: #334155;
+            border: 2px solid #cbd5e1;
+            box-shadow: 0 3px 0 #94a3b8;
+        }
+
+        .prev-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #94a3b8;
+        }
+
+        .next-btn {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 3px 0 #1d4ed8;
+        }
+
+        .next-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #1d4ed8;
         }
 
         /* ------------------ SCORE SECTION ------------------ */
         .score-section {
             display: none;
             background: #ffffff;
-            border-radius: 24px;
-            padding: 24px 18px;
+            border-radius: 22px;
+            padding: 22px 16px;
             box-shadow: var(--card-shadow);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border: 1px solid #e2e8f0;
             text-align: center;
-            animation: slideUpFade 0.6s ease;
             flex: 1;
             flex-direction: column;
             overflow-y: auto;
         }
 
         .score-circle {
-            width: 100px;
-            height: 100px;
+            width: 95px;
+            height: 95px;
             background: var(--gradient);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
+            margin: 0 auto 12px;
             color: #ffffff;
             font-size: 24px;
             font-weight: 900;
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
         }
 
         .score-details {
             font-size: 14px;
             font-weight: 600;
-            color: var(--gray);
-            margin: 15px 0;
+            color: #475569;
+            margin: 14px 0;
             background: #f8fafc;
-            padding: 14px;
+            padding: 12px;
             border-radius: 14px;
             line-height: 1.8;
             border: 1px solid #e2e8f0;
@@ -554,26 +568,30 @@
             border-radius: 16px;
             padding: 14px;
             font-size: 15px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: var(--button-shadow);
+            box-shadow: 0 5px 0 #1e40af;
+        }
+
+        .restart-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #1e40af;
         }
 
         /* ------------------ LEADERBOARD ------------------ */
         .leaderboard-section {
             display: none;
             background: #ffffff;
-            border-radius: 24px;
+            border-radius: 22px;
             padding: 16px;
             box-shadow: var(--card-shadow);
             border: 1px solid #e2e8f0;
-            animation: slideUpFade 0.6s ease;
             width: 100%;
             overflow-y: auto;
         }
@@ -582,8 +600,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #f1f5f9;
         }
 
@@ -629,7 +647,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            margin-right: 12px;
+            margin-right: 10px;
             font-size: 13px;
         }
 
@@ -693,7 +711,7 @@
         }
 
         .user-action-btn.secondary {
-            background: var(--premium-gradient);
+            background: var(--champion-gradient);
         }
 
         .leaderboard-start-btn {
@@ -721,7 +739,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(4px);
             z-index: 9999;
             justify-content: center;
@@ -730,36 +748,35 @@
 
         .name-modal {
             background: white;
-            border-radius: 24px;
-            padding: 24px;
+            border-radius: 22px;
+            padding: 22px;
             width: 88%;
             max-width: 320px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
             text-align: center;
-            animation: slideUpFade 0.4s ease;
         }
 
         .name-modal h3 {
             font-size: 18px;
             font-weight: 800;
             color: var(--dark);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .name-modal p {
             font-size: 13px;
-            color: var(--gray);
-            margin-bottom: 16px;
+            color: #64748b;
+            margin-bottom: 14px;
         }
 
         .name-input {
             width: 100%;
             padding: 12px 14px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #cbd5e1;
             border-radius: 14px;
             font-size: 15px;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             outline: none;
         }
 
@@ -793,15 +810,15 @@
         .notification {
             background: #ffffff;
             border-radius: 16px;
-            padding: 14px 18px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 12px 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             max-width: 320px;
             width: 90%;
             display: flex;
             align-items: center;
             transform: translateY(60px);
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             pointer-events: auto;
             border-left: 5px solid var(--primary);
         }
@@ -824,7 +841,7 @@
 
         .notification-message {
             font-size: 12px;
-            color: var(--gray);
+            color: #64748b;
         }
 
         /* ------------------ ADMIN PANEL ------------------ */
@@ -848,7 +865,6 @@
             max-width: 420px;
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             max-height: 90vh;
@@ -893,7 +909,7 @@
         <!-- HEADER -->
         <div class="header">
             <h1 onclick="triggerAdminClick()" style="cursor: pointer; user-select: none;">राजस्थान GK फ्री क्विज़</h1>
-            <p>अभ्यास करें और अपनी रैंक देखें</p>
+            <p>अपने ज्ञान को टेस्ट करें और प्रीमियम क्विज़ अनलॉक करें</p>
         </div>
 
         <div class="content">
@@ -906,21 +922,42 @@
             <div id="free-online-content">
                 <!-- INTRO INFO SECTION -->
                 <div class="quiz-info">
-                    <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> डेली टेस्ट सीरीज़</h2>
-                    <p>राजस्थान GK के सभी महत्वपूर्ण प्रश्न</p>
+                    <h2><i class="fas fa-star" style="color: #eab308;"></i> फ्री क्विज़</h2>
+                    <p class="sub-title">राजस्थान GK के सवालों से तैयारी शुरू करें</p>
+                    
                     <ul class="features">
-                        <li><i class="fas fa-check-circle"></i> चुनिंदा और महत्वपूर्ण सवाल</li>
-                        <li><i class="fas fa-check-circle"></i> तुरंत रिजल्ट और उत्तर स्पष्टीकरण</li>
-                        <li><i class="fas fa-check-circle"></i> राजस्थान लेवल पर डेली रैंकिंग</li>
+                        <li>
+                            <div class="icon-badge"><i class="fas fa-check"></i></div>
+                            <span>मुफ्त 10+ सवाल</span>
+                        </li>
+                        <li>
+                            <div class="icon-badge"><i class="fas fa-check"></i></div>
+                            <span>तुरंत परिणाम</span>
+                        </li>
+                        <li>
+                            <div class="icon-badge"><i class="fas fa-check"></i></div>
+                            <span>मोबाइल-डेस्कटॉप सपोर्ट</span>
+                        </li>
+                        <li>
+                            <div class="icon-badge"><i class="fas fa-check"></i></div>
+                            <span>अपडेटेड कंटेंट</span>
+                        </li>
                     </ul>
+
                     <button class="start-btn" onclick="startQuiz()">
                         <span>क्विज़ शुरू करें</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
+
                     <button class="leaderboard-toggle-btn" onclick="toggleLeaderboard()">
                         <i class="fas fa-trophy"></i>
-                        <span>आज का लीडरबोर्ड देखें</span>
+                        <span>आज के चैंपियन देखें</span>
                     </button>
+
+                    <div class="bottom-tagline-container">
+                        <div class="bottom-divider-line"></div>
+                        <div class="bottom-tagline">अपने ज्ञान को आज़माने का सही समय!</div>
+                    </div>
                 </div>
 
                 <!-- QUIZ SECTION -->
@@ -942,15 +979,17 @@
                             <div class="question-text" id="free-question-text">प्रश्न लोड हो रहा है...</div>
                         </div>
 
-                        <!-- ऑप्शन्स सूची -->
+                        <!-- 3D रंग-बिरंगे ऑप्शन्स -->
                         <ul class="options-list" id="free-options-list"></ul>
                     </div>
 
-                    <div id="free-result" class="result-bar"></div>
-
-                    <div class="back-btn-container" id="back-btn-container">
-                        <button class="back-btn" onclick="goBackToQuestion()">
+                    <!-- बैक और नेक्स्ट नेविगेशन बार -->
+                    <div class="nav-controls" id="nav-controls">
+                        <button class="nav-btn prev-btn" id="prev-btn" onclick="prevQuestion()" style="display: none;">
                             <i class="fas fa-arrow-left"></i> पिछला सवाल
+                        </button>
+                        <button class="nav-btn next-btn" id="next-btn" onclick="nextQuestion()" style="display: none;">
+                            अगला सवाल <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
@@ -958,8 +997,8 @@
                 <!-- SCORE SECTION -->
                 <div id="score-section" class="score-section">
                     <div class="score-circle" id="final-score-circle">0/0</div>
-                    <h2 style="font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 6px;">शानदार प्रयास! 🎉</h2>
-                    <p style="font-size: 13px; color: #64748b;">आपका क्विज़ पूरा हो चुका है</p>
+                    <h2 style="font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 4px;">शानदार प्रयास! 🎉</h2>
+                    <p style="font-size: 13px; color: #64748b;">आपका टेस्ट पूरा हो चुका है</p>
                     <div class="score-details" id="score-details"></div>
                     
                     <button class="restart-btn" onclick="restartQuiz()">
@@ -975,7 +1014,7 @@
                     <div class="leaderboard-header">
                         <div class="leaderboard-title">
                             <i class="fas fa-trophy" style="color: #f59e0b; font-size: 20px;"></i>
-                            <h2>आज के टॉपर्स</h2>
+                            <h2>आज के चैंपियन</h2>
                         </div>
                     </div>
 
@@ -1066,18 +1105,17 @@
         let score = 0;
         let userName = '';
         let userId = '';
-        let questionHistory = [];
-        let userAnswered = false;
         let autoNextTimeout = null;
         let adminClickCount = 0;
         let adminClickTimer = null;
         let notificationTimeout = null;
         let todayScores = [];
 
+        let userAnswers = {}; 
+
         const correctSound = document.getElementById('correct-sound');
         const incorrectSound = document.getElementById('wrong-sound');
 
-        // ऑडियो अनलॉक (मोबाइल ब्राउज़र के लिए)
         function unlockAudio() {
             correctSound.load();
             incorrectSound.load();
@@ -1092,31 +1130,95 @@
             }
         });
 
-        // ================= QUESTION HIGHLIGHTER (PRO LOOK) =================
-        // महत्वपूर्ण शब्द, राजाओं के नाम, जिले और वर्ष अलग कलर में हाइलाइट होंगे
+        // ================= प्रत्येक सवाल के मुख्य पॉइंट को 100% रंगने वाला इंजन =================
         function highlightKeywords(text) {
             if (!text) return '';
-            
-            const specialWords = [
-                "महाराणा प्रताप", "राणा सांगा", "पृथ्वीराज", "अकबर", "जयपुर", "जोधपुर", 
-                "उदयपुर", "कोटा", "बीकानेर", "अजमेर", "अरावली", "थार", "चम्बल", "लूणी", 
-                "हल्दीघाटी", "चित्तौड़गढ़", "कुम्भलगढ़", "मेवाड़", "मारवाड़", "प्रथम", 
-                "सर्वाधिक", "न्यूनतम", "राजधानी", "स्थापना", "दिवस", "राष्ट्रीय उद्यान"
-            ];
-
             let formatted = text;
 
-            // कोट्स वाले शब्द जैसे '...' या "..." हाइलाइट करें
-            formatted = formatted.replace(/(['"])(.*?)\1/g, '<span class="highlight-word">$2</span>');
+            // 1. कोट्स वाले शब्द (उदा. '...', "...") को लाल रंग
+            formatted = formatted.replace(/(['"])(.*?)\1/g, '<span class="txt-highlight-red">$2</span>');
 
-            // 4 अंकों वाले वर्ष हाइलाइट करें (जैसे 1576, 1947)
-            formatted = formatted.replace(/\b(1\d{3}|20\d{2})\b/g, '<span class="highlight-date">$1</span>');
+            // 2. 4 अंकों वाली तिथियाँ/वर्ष (उदा. 1576, 1947, 1956)
+            formatted = formatted.replace(/\b(1\d{3}|20\d{2})\b/g, '<span class="txt-highlight-blue">$1</span>');
 
-            // विशेष शब्दों को रंगीन बनाएं
-            specialWords.forEach(word => {
-                const regex = new RegExp(`(${word})`, 'gi');
-                formatted = formatted.replace(regex, '<span class="highlight-word">$1</span>');
+            // 3. राजस्थान के सभी राज्य प्रतीक (स्टेट सिंबल्स)
+            const stateSymbols = [
+                "राज्य पशु", "राज्य पक्षी", "राज्य वृक्ष", "राज्य पुष्प", "राज्य खेल", 
+                "राज्य नृत्य", "राज्य गीत", "राज्य कवि", "राज्य वाद्ययंत्र", "धरोहर पशु"
+            ];
+            stateSymbols.forEach(word => {
+                formatted = formatted.replace(new RegExp(`(${word})`, 'gi'), '<span class="txt-highlight-red">$1</span>');
             });
+
+            // 4. ऐतिहासिक व्यक्तित्व और प्रमुख शासक
+            const personalities = [
+                "महाराणा प्रताप", "राणा सांगा", "राणा कुम्भा", "पृथ्वीराज चौहान", "अकबर", 
+                "मानसिंह", "सवाई जयसिंह", "राव जोधा", "राव मालदेव", "मीराबाई", "पन्नाधाय", 
+                "अमृता देवी", "दुर्गादास राठौड़", "सूर्यमल मिश्रण", "विजय सिंह पथिक", 
+                "बाबर", "भारमल", "अमरसिंह", "राव बीका", "गोकुल भाई भट्ट", "मोतीलाल तेजावत"
+            ];
+            personalities.forEach(word => {
+                formatted = formatted.replace(new RegExp(`(${word})`, 'gi'), '<span class="txt-highlight-red">$1</span>');
+            });
+
+            // 5. प्रसिद्ध स्थल, दुर्ग व महल
+            const monuments = [
+                "हवामहल", "विजय स्तंभ", "कीर्ति स्तंभ", "मेहरानगढ़", "चित्तौड़गढ़", 
+                "कुम्भलगढ़", "रणथंभौर", "जूनागढ़", "सोनार किला", "तारागढ़", "आमेर", 
+                "गागरोन", "भटनेर", "नाहरगढ़", "जलमहल", "उम्मेद भवन", "पटवों की हवेली"
+            ];
+            monuments.forEach(word => {
+                formatted = formatted.replace(new RegExp(`(${word})`, 'gi'), '<span class="txt-highlight-blue">$1</span>');
+            });
+
+            // 6. भूगोल, नदियाँ व अभयारण्य
+            const geography = [
+                "अरावली पर्वतमाला", "अरावली", "थार का मरुस्थल", "मरुस्थल", "राष्ट्रीय उद्यान", 
+                "अभयारण्य", "सांभर झील", "पिछोला झील", "जयसमंद", "फतेहसागर", "चम्बल नदी", 
+                "लूणी नदी", "बनास नदी", "माही नदी", "इंदिरा गांधी नहर", "गुरु शिखर", 
+                "केवलादेव", "सरिस्का", "मुकुंदरा", "रामगढ़ विषधारी"
+            ];
+            geography.forEach(word => {
+                formatted = formatted.replace(new RegExp(`(${word})`, 'gi'), '<span class="txt-highlight-purple">$1</span>');
+            });
+
+            // 7. जिले व क्षेत्र
+            const locations = [
+                "जयपुर", "जोधपुर", "उदयपुर", "कोटा", "बीकानेर", "अजमेर", "जैसलमेर", 
+                "बाड़मेर", "सीकर", "अलवर", "भरतपुर", "नागौर", "मेवाड़", "मारवाड़", 
+                "हाड़ौती", "शेखावाटी", "ढूंढाड़", "वागड़"
+            ];
+            locations.forEach(word => {
+                formatted = formatted.replace(new RegExp(`(${word})`, 'gi'), '<span class="txt-highlight-blue">$1</span>');
+            });
+
+            // 8. मुख्य प्रश्न लक्ष्य शब्दावली
+            const targets = [
+                "राजधानी", "संस्थापक", "उपनाम", "प्राचीन नाम", "क्षेत्रफल", "जनसंख्या", 
+                "साक्षरता", "लिंगानुपात", "सर्वाधिक", "न्यूनतम", "प्रथम", "स्थापना दिवस", 
+                "स्थापना", "निर्माण", "रचयिता", "मुख्यालय", "प्रमुख", "वास्तविक नाम"
+            ];
+            targets.forEach(word => {
+                formatted = formatted.replace(new RegExp(`(${word})`, 'gi'), '<span class="txt-highlight-amber">$1</span>');
+            });
+
+            // 9. स्मार्ट लिंग्विस्टिक ऑटो-डिटेक्टर:
+            // "का/की/के/में" और प्रश्नवाचक शब्द (कौन सा/क्या/कहाँ/कब/किसने) के बीच का मुख्य विषय स्वतः निकालना
+            // जैसे: "राजस्थान का [राज्य पशु] कौन सा है?" में "राज्य पशु" 100% लाल रंग में रंग जाएगा
+            formatted = formatted.replace(/(?:का|की|के|में)\s+([^\s,?.!]+(?:\s+[^\s,?.!]+){0,2})\s+(?=कौन|क्या|कहाँ|कब|किसने|किस|किसे|कितना|कितने|कितनी)/gi, (match, p1) => {
+                if (p1.includes('<span')) return match;
+                return match.replace(p1, `<span class="txt-highlight-red">${p1}</span>`);
+            });
+
+            // 10. 100% Fail-Safe Guarantee (यदि किसी भी सवाल में कुछ भी मैच न हुआ हो):
+            if (!formatted.includes('txt-highlight-')) {
+                const qRegex = /([^\s,?.!]+(?:\s+[^\s,?.!]+)?)\s+(?=कौन|क्या|कहाँ|कब|किसने|किस|किसे|कितना|कितने|कितनी)/i;
+                if (qRegex.test(formatted)) {
+                    formatted = formatted.replace(qRegex, '<span class="txt-highlight-red">$1</span> ');
+                } else {
+                    formatted = formatted.replace(/^([^\s,?.!]+(?:\s+[^\s,?.!]+)?)/, '<span class="txt-highlight-red">$1</span>');
+                }
+            }
 
             return formatted;
         }
@@ -1152,78 +1254,91 @@
 
             currentQuestionIndex = 0;
             score = 0;
-            questionHistory = [];
-            userAnswered = false;
+            userAnswers = {};
             updateLiveScore();
-            showQuestion();
+            renderQuestion(0);
         }
 
-        function showQuestion() {
-            if (currentQuestionIndex >= questions.length) {
+        function goToQuestion(newIndex) {
+            currentQuestionIndex = newIndex;
+            renderQuestion(newIndex);
+        }
+
+        function renderQuestion(index) {
+            if (index >= questions.length) {
                 showFinalScore();
                 return;
             }
 
-            const q = questions[currentQuestionIndex];
-            const qCardWrapper = document.getElementById('question-card-wrapper');
+            const q = questions[index];
             const qText = document.getElementById('free-question-text');
             const optList = document.getElementById('free-options-list');
             const badge = document.getElementById('question-badge');
             const progressBar = document.getElementById('progress-bar');
-            const resultBar = document.getElementById('free-result');
-            const backBtn = document.getElementById('back-btn-container');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
 
-            userAnswered = false;
-            resultBar.style.display = 'none';
-            
-            // स्मूद फ़ेड और स्लाइड इन इफ़ेक्ट
-            qCardWrapper.className = 'slide-in-smooth';
-
-            // प्रश्न टेक्स्ट और हाइलाइट्स
             qText.innerHTML = highlightKeywords(q.question);
-            badge.innerHTML = `<i class="fas fa-compass"></i> प्रश्न ${currentQuestionIndex + 1}/${questions.length}`;
+            badge.innerHTML = `<i class="fas fa-compass"></i> प्रश्न ${index + 1}/${questions.length}`;
 
-            // प्रोग्रेस बार अपडेट
-            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            const progress = ((index + 1) / questions.length) * 100;
             progressBar.style.width = `${progress}%`;
 
-            // ऑप्शन्स जनरेट करें (A, B, C, D के साथ)
             optList.innerHTML = '';
             const letters = ['A', 'B', 'C', 'D'];
+            const savedAnswer = userAnswers[index];
 
             q.options.forEach((opt, idx) => {
                 const li = document.createElement('li');
-                li.className = 'option-item';
+                li.className = `option-item opt-theme-${idx % 4}`;
+                
+                let iconHtml = '';
+
+                // पहले से दिया गया उत्तर सुरक्षित दिखाना (बैक करने पर)
+                if (savedAnswer !== undefined) {
+                    li.classList.add('locked');
+                    if (idx === q.correctAnswer) {
+                        li.classList.add('correct');
+                        iconHtml = `<i class="fas fa-check-circle option-status-icon"></i>`;
+                    }
+                    if (idx === savedAnswer.selected && !savedAnswer.isCorrect) {
+                        li.classList.add('incorrect');
+                        iconHtml = `<i class="fas fa-times-circle option-status-icon"></i>`;
+                    }
+                } else {
+                    li.onclick = () => checkAnswer(idx, li);
+                }
+
                 li.innerHTML = `
                     <div class="option-letter">${letters[idx] || (idx + 1)}</div>
                     <div class="option-text-wrapper">${opt}</div>
+                    ${iconHtml}
                 `;
-                li.onclick = () => checkAnswer(idx, li);
                 optList.appendChild(li);
             });
 
-            // बैक बटन विजिबिलिटी
-            backBtn.style.display = currentQuestionIndex > 0 ? 'flex' : 'none';
+            // नेविगेशन बटन
+            prevBtn.style.display = index > 0 ? 'flex' : 'none';
+            nextBtn.style.display = (savedAnswer !== undefined && index + 1 < questions.length) ? 'flex' : 'none';
         }
 
+        // ================= उत्तर जाँच & सुपरफास्ट अगला सवाल =================
         function checkAnswer(selectedIndex, selectedElement) {
-            if (userAnswered) return;
-            userAnswered = true;
+            if (userAnswers[currentQuestionIndex] !== undefined) return;
 
             const q = questions[currentQuestionIndex];
             const options = document.querySelectorAll('.option-item');
-            const resultBar = document.getElementById('free-result');
             const isCorrect = selectedIndex === q.correctAnswer;
 
-            questionHistory.push({
-                index: currentQuestionIndex,
+            userAnswers[currentQuestionIndex] = {
                 selected: selectedIndex,
-                wasCorrect: isCorrect
-            });
+                isCorrect: isCorrect
+            };
 
-            // सही/गलत कलर और आइकन
             options.forEach((el, idx) => {
-                el.style.pointerEvents = 'none'; // दोबारा क्लिक न हो
+                el.classList.add('locked');
+                el.style.pointerEvents = 'none';
+
                 if (idx === q.correctAnswer) {
                     el.classList.add('correct');
                     el.innerHTML += `<i class="fas fa-check-circle option-status-icon"></i>`;
@@ -1237,45 +1352,46 @@
             if (isCorrect) {
                 score++;
                 updateLiveScore();
-                resultBar.textContent = "बिलकुल सही जवाब! 🌟";
-                resultBar.className = "result-bar success";
-                try { correctSound.play(); } catch(e){}
-                triggerConfetti();
+                try { 
+                    correctSound.currentTime = 0;
+                    correctSound.play(); 
+                } catch(e){}
             } else {
-                resultBar.textContent = `गलत! सही उत्तर: ${q.options[q.correctAnswer]}`;
-                resultBar.className = "result-bar error";
-                try { incorrectSound.play(); } catch(e){}
-                if ('vibrate' in navigator) navigator.vibrate(100);
+                try { 
+                    incorrectSound.currentTime = 0;
+                    incorrectSound.play(); 
+                } catch(e){}
+                if ('vibrate' in navigator) navigator.vibrate(60);
             }
 
-            resultBar.style.display = 'block';
-
-            // स्मूद ट्रांज़िशन के साथ अगला सवाल (बिना किसी झटके के)
+            // बिना देरी (मात्र 90ms में अगला सवाल)
             autoNextTimeout = setTimeout(() => {
-                const wrapper = document.getElementById('question-card-wrapper');
-                wrapper.classList.remove('slide-in-smooth');
-                wrapper.classList.add('slide-out-smooth');
+                if (currentQuestionIndex + 1 < questions.length) {
+                    goToQuestion(currentQuestionIndex + 1);
+                } else {
+                    showFinalScore();
+                }
+            }, 90);
+        }
 
-                setTimeout(() => {
-                    currentQuestionIndex++;
-                    showQuestion();
-                }, 300);
-            }, 1300);
+        function prevQuestion() {
+            if (autoNextTimeout) clearTimeout(autoNextTimeout);
+            if (currentQuestionIndex > 0) {
+                goToQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (autoNextTimeout) clearTimeout(autoNextTimeout);
+            if (currentQuestionIndex + 1 < questions.length) {
+                goToQuestion(currentQuestionIndex + 1);
+            } else {
+                showFinalScore();
+            }
         }
 
         function updateLiveScore() {
             document.getElementById('live-score-pill').textContent = `स्कोर: ${score}`;
-        }
-
-        function goBackToQuestion() {
-            if (autoNextTimeout) clearTimeout(autoNextTimeout);
-            if (questionHistory.length > 0) {
-                const last = questionHistory.pop();
-                if (last.wasCorrect) score--;
-                currentQuestionIndex = last.index;
-                updateLiveScore();
-                showQuestion();
-            }
         }
 
         function showFinalScore() {
